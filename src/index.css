@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Mono:ital,wght@0,700;1,700&display=swap");
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+@theme {
+  --font-jbmono: "JetBrains Mono", monospace;
+  --font-consolas: "Consolas", monospace;
+}
+
+@font-face {
+  font-family: "Consolas";
+  src: url("./assets/fonts/consolas.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  background: #ede8de;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* line-height: 1.5;
+  font-weight: 400; */
+
+  color-scheme: light dark;
+
+  max-width: 1920px;
+  max-height: 1080px;
+
+  /* font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
+}
+
+.dark {
+  background: #0c0b0b;
+  --bg-btn-primary: #a1ff62;
+  --bg-btn-cancel: #dd4d4d;
+  --bg-primary-second: #0e0e0e;
+  --bg-border: #201e1e;
+  --bg-tertiary: #0f0f0f;
+
+  --bg-secondary: #121212;
+  --bg-inactive-btn: #4f4c4c;
+
+  --text-primary: #ede8de;
+  --text-secondary: #908e8e;
+  --text-tertiary: #c3c0ba;
+
+  --bg-task-new: #50a1db;
+  --bg-task-inprogress: #9872f1;
+  --bg-task-paused: #dfdb65;
+  --bg-task-complete: #44a74c;
+  --bg-task-closed: #969090;
+  --bg-task-cancelled: #dd4d4d;
+}

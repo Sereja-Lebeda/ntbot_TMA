@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Установить-приостановить",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure, ullam ratione animi iusto voluptatum ea illum, fugit maxime voluptatem ipsam necessitatibus ut neque doloremque numquam, repellat sunt in corrupti quae! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque nesciunt, sit modi, voluptatem eaque voluptatibus nihil iste, illum eligendi distinctio quam accusamus amet fugit corporis voluptatum? Laudantium delectus consequatur praesentium!",
+    "ticketId": 420,
+    "createDate": "12.12.2026",
+    "status": "In progress",
+    "priority": "Low",
+    "category": "Это другое",
+    "attachment": true
+  },
+  {
+    "title": "Написать ПСЖ",
+    "description": "Надо было в бухгалтерию, а написал в ЛС",
+    "ticketId": 413,
+    "createDate": "30.03.1984",
+    "status": "Paused",
+    "priority": "High",
+    "category": "Коммуникация",
+    "attachment": false
+  },
+  {
+    "title": "Скинуть багет",
+    "description": "Миротворец",
+    "ticketId": 12,
+    "createDate": "12.12.2012",
+    "status": "Complete",
+    "priority": "Medium",
+    "category": "Zdarova gaymeri",
+    "attachment": true
+  },
+  {
+    "title": "Подготовить Алешку для переговорки",
+    "description": "Закупить ингридиенты",
+    "ticketId": 88,
+    "createDate": "22.02.2032",
+    "status": "New",
+    "priority": "Low",
+    "category": "Party",
+    "attachment": true
+  },
+  {
+    "title": "Закрыть окно",
+    "description": "Чтобы не расслаблялись",
+    "ticketId": 52,
+    "createDate": "02.04.2018",
+    "status": "Closed",
+    "priority": "Medium",
+    "category": "Office",
+    "attachment": false
+  },
+  {
+    "title": "Написать заявку в бота",
+    "description": "Напишу в ЛС",
+    "ticketId": 80,
+    "createDate": "20.05.2026",
+    "status": "Cancelled",
+    "priority": "High",
+    "category": "Workflow",
+    "attachment": false
+  }
+]
