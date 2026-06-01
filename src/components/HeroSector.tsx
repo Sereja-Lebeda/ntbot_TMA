@@ -1,5 +1,5 @@
 import DeleteFilterIcon from "../icons/searchmenu/DeleteFilterIcon";
-import FavoriteIcon from "../icons/searchmenu/FavoriteIcon";
+import FavoriteFilterBtn from "../icons/searchmenu/FavoriteFilterBtn";
 import PrioritySortIcon from "../icons/searchmenu/PrioritySortIcon";
 import TimeSortIcon from "../icons/searchmenu/TimeSortIcon";
 import UserIcon from "../icons/searchmenu/UserIcon";
@@ -16,6 +16,10 @@ interface selectedTicketStatusesProps {
   setSearchQuery: (req: string) => void;
   ticketStatuses: string[];
   ticketCategories: string[];
+  favoriteTickets: number[];
+  setFavoriteTickets: (id: number[]) => void;
+  showFavorites: boolean;
+  setShowFavorites: (show: boolean) => void;
 }
 
 export default function HeroSector({
@@ -23,6 +27,10 @@ export default function HeroSector({
   setSearchQuery,
   ticketStatuses,
   ticketCategories,
+  favoriteTickets,
+  setFavoriteTickets,
+  showFavorites,
+  setShowFavorites,
 }: selectedTicketStatusesProps) {
   // const [title, id, date, description, status, priority, category] = mock;
   const mock = mockData as Ticket[];
@@ -47,17 +55,23 @@ export default function HeroSector({
         />
         {/* Row of buttons */}
         <div className="flex justify-center items-center gap-1">
-          <SearchMenuBtn icon={<FavoriteIcon />} />
+          <SearchMenuBtn
+            onClick={() => setShowFavorites(!showFavorites)}
+            icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
+          />
           <SearchMenuBtn icon={<UserIcon />} />
           <SearchMenuBtn icon={<TimeSortIcon />} />
           <SearchMenuBtn icon={<PrioritySortIcon />} />
           {/* TODO: Add logic to change bg color */}
-          <SearchMenuBtn icon={<DeleteFilterIcon />} />
+          <SearchMenuBtn
+            icon={<DeleteFilterIcon />}
+            className={`dark:bg-[#4F4C4C]`}
+          />
         </div>
       </div>
 
       {/* Ticket cards */}
-      <div className="w-216 h-222 flex flex-col justify-start items-center gap-2">
+      <div className="w-216 h-222 flex flex-col justify-start items-center gap-2 select-none">
         {mock
           // Filter by Searchbar
           .filter((ticket) => ticketMatchesSearch(ticket, searchQuery))
@@ -71,8 +85,17 @@ export default function HeroSector({
               (ticketCategories.includes("Все") ||
                 ticketCategories.includes(ticket.category)),
           )
+          .filter(
+            (ticket) =>
+              !showFavorites || favoriteTickets.includes(ticket.ticketId),
+          )
           .map((ticket) => (
-            <TicketCard key={ticket.ticketId} ticket={ticket} />
+            <TicketCard
+              key={ticket.ticketId}
+              ticket={ticket}
+              favoriteTickets={favoriteTickets}
+              setFavoriteTickets={setFavoriteTickets}
+            />
           ))}
       </div>
     </div>

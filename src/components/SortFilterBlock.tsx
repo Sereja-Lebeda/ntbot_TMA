@@ -49,7 +49,10 @@ function SortFilterBlock({
 
   return (
     // TODO: delete shrink 0 for adaptive interface
-    <div className="h-246 w-79 flex flex-col items-center my-3 gap-3 border border-(--bg-border) bg-(--bg-primary-second) rounded-xs shrink-0">
+    <div
+      onMouseDown={(e) => e.preventDefault()}
+      className="h-246 w-79 flex flex-col items-center my-3 gap-3 border border-(--bg-border) bg-(--bg-primary-second) rounded-xs shrink-0"
+    >
       <div className="w-full flex flex-col items-start pt-5 px-2.5">
         <DropdownList
           title="Статус"

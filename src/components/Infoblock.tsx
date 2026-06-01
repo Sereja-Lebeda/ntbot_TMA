@@ -62,11 +62,14 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
 
   return (
     // Whole left side
-    <div className="h-246 w-79 flex flex-col items-center my-3 gap-3">
+    <div
+      onMouseDown={(e) => e.preventDefault()}
+      className="h-246 w-79 flex flex-col items-center my-3 gap-3"
+    >
       {/* Info block  */}
       <div className="h-223 w-full flex flex-col items-center p-5 pt-5 pb-90 border border-(--bg-border) bg-(--bg-primary-second) rounded-xs gap-3">
         {/* User Info */}
-        <div className="w-69 flex flex-col justify-center items-start px-4 py-6 gap-3 border border-(--bg-border) bg-(--bg-tertiary) rounded-xs">
+        <div className="w-69 flex flex-col justify-center items-start px-4 py-6 gap-3 border border-(--bg-border) bg-(--bg-tertiary) rounded-xs select-none">
           {/* User name */}
           <div className="h-10 w-full flex items-center px-1 border-b border-[#1D1D1D]">
             <span className="font-jbmono text-(--text-primary) text-lg font-bold leading-5.5">

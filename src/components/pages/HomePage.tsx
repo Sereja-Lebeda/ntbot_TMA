@@ -14,6 +14,9 @@ export default function HomePage() {
     "Все",
   ]);
 
+  const [favoriteTickets, setFavoriteTickets] = useState<number[]>([]);
+  const [showFavorites, setShowFavorites] = useState(false);
+
   return (
     <div>
       <Header />
@@ -27,6 +30,10 @@ export default function HomePage() {
           setSearchQuery={setKeyword}
           ticketStatuses={selectedStatuses}
           ticketCategories={selectedCategories}
+          favoriteTickets={favoriteTickets}
+          setFavoriteTickets={setFavoriteTickets}
+          showFavorites={showFavorites}
+          setShowFavorites={setShowFavorites}
         />
         <SortFilterBlock
           openDropdownFilter={filter}

@@ -9,7 +9,16 @@ import FavoriteIcon from "../icons/searchmenu/FavoriteIcon";
 import type { StatusType, TicketCardProps } from "../types/ticket.types";
 import getStatusTitle from "../utils/statusNameHelper";
 
-export default function TicketCard({ ticket }: TicketCardProps) {
+interface TicketCardWithActionsProps extends TicketCardProps {
+  favoriteTickets: number[];
+  setFavoriteTickets: (id: number[]) => void;
+}
+
+export default function TicketCard({
+  ticket,
+  favoriteTickets,
+  setFavoriteTickets,
+}: TicketCardWithActionsProps) {
   function getStatusColor(status: StatusType) {
     const baseStyle =
       "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs text-(--bg-primary-second) font-bold leading-3 select-none";
@@ -40,6 +49,14 @@ export default function TicketCard({ ticket }: TicketCardProps) {
     }
   }
 
+  const favoriteBtn = (
+    <FavoriteIcon
+      ticketId={ticket.ticketId}
+      favoriteTickets={favoriteTickets}
+      setFavoriteTickets={setFavoriteTickets}
+    />
+  );
+
   function getStatusIcon(status: StatusType): React.ReactNode {
     const baseStyle = "flex items-center gap-2";
 
@@ -47,20 +64,21 @@ export default function TicketCard({ ticket }: TicketCardProps) {
       case "New":
         return (
           <div className={baseStyle}>
-            <CancelIcon /> <EditIcon /> <RepeatIcon /> <FavoriteIcon />{" "}
+            <CancelIcon /> <EditIcon /> <RepeatIcon /> {favoriteBtn}
             <TelegramIcon />
           </div>
         );
       case "In progress":
         return (
           <div className={baseStyle}>
-            <RepeatIcon /> <FavoriteIcon /> <TelegramIcon />
+            <RepeatIcon /> {favoriteBtn}
+            <TelegramIcon />
           </div>
         );
       case "Paused":
         return (
           <div className={baseStyle}>
-            <RepeatIcon /> <FavoriteIcon /> <TelegramIcon />
+            <RepeatIcon /> {favoriteBtn} <TelegramIcon />
           </div>
         );
       case "Complete":
@@ -89,13 +107,13 @@ export default function TicketCard({ ticket }: TicketCardProps) {
       case "Closed":
         return (
           <div className={baseStyle}>
-            <RepeatIcon /> <FavoriteIcon />
+            <RepeatIcon /> {favoriteBtn}
           </div>
         );
       case "Cancelled":
         return (
           <div className={baseStyle}>
-            <RepeatIcon /> <FavoriteIcon />
+            <RepeatIcon /> {favoriteBtn}
           </div>
         );
     }
@@ -105,53 +123,56 @@ export default function TicketCard({ ticket }: TicketCardProps) {
     "cursor-pointer transition-all duration-600 ease-in-out hover:text-(--text-primary) active:opacity-0";
 
   return (
-    <div className="w-215 h-37 flex flex-col justify-between items-start bg-(--bg-secondary) rounded-xs border border-(--bg-border) px-5 py-3 gap-2">
-      {/* Title and Meta info */}
-      <div className="w-full flex justify-between items-center py-0.5">
-        {/* title */}
-        <div className="flex flex-1 items-center gap-1.5">
-          <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer">
-            {ticket.title}
+    // white background
+    <div className="w-215 h-37 bg-(--text-tertiary) rounded-xs relative select-none">
+      <div className="w-full h-full flex flex-col justify-between items-start bg-(--bg-secondary) rounded-xs border border-(--bg-border) px-5 py-3 gap-2 cursor-pointer transition-all duration-600 ease-in-out hover:-translate-x-1 hover:-translate-y-1 hover:z-10 hover:border-(--text-tertiary)">
+        {/* Title and Meta info */}
+        <div className="w-full flex justify-between items-center py-0.5">
+          {/* title */}
+          <div className="flex flex-1 items-center gap-1.5">
+            <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer">
+              {ticket.title}
+            </div>
+            {ticket.attachment && <AttachIcon />}
           </div>
-          {ticket.attachment && <AttachIcon />}
-        </div>
-        {/* meta info */}
-        <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">
-          <div
-            onClick={() =>
-              navigator.clipboard.writeText(ticket.ticketId.toString())
-            }
-            className={`flex gap-1.5 hover:text-(--text-primary) ${textStyleAnimation}`}
-          >
-            ID: {ticket.ticketId}
+          {/* meta info */}
+          <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">
+            <div
+              onClick={() =>
+                navigator.clipboard.writeText(ticket.ticketId.toString())
+              }
+              className={`flex gap-1.5 hover:text-(--text-primary) ${textStyleAnimation}`}
+            >
+              ID: {ticket.ticketId}
+            </div>
+            <p>|</p>
+            <div>{ticket.createDate}</div>
           </div>
-          <p>|</p>
-          <div>{ticket.createDate}</div>
         </div>
-      </div>
 
-      {/* Description */}
-      <div className="w-full text-(--text-secondary) text-sm font-consolas font-normal leading-5 line-clamp-2">
-        {ticket.description}
-      </div>
-
-      {/* Status, priorirty, category, icons */}
-      <div className="w-full py-2 flex justify-between items-center">
-        {/* Status, priorirty, category */}
-        <div className="flex items-center gap-3 font-jbmono text-xs">
-          <div className={getStatusColor(ticket.status)}>
-            {getStatusTitle(ticket.status, "singular")}
-          </div>
-          <div className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5 border border-(--text-tertiary) text-(--text-tertiary) rounded-xs font-bold leading-3 select-none">
-            {getPriorityTitle(ticket.priority)}
-          </div>
-          <div className="h-6 flex justify-center items-center py-1.5 gap-2.5 font-medium leading-3 text-(--text-tertiary) select-none">
-            {ticket.category}
-          </div>
+        {/* Description */}
+        <div className="w-full text-(--text-secondary) text-sm font-consolas font-normal leading-5 line-clamp-2 select-none">
+          {ticket.description}
         </div>
-        {/* icons */}
-        {/* TODO: Make icons as buttons and add logic */}
-        <div>{getStatusIcon(ticket.status)}</div>
+
+        {/* Status, priorirty, category, icons */}
+        <div className="w-full py-2 flex justify-between items-center">
+          {/* Status, priorirty, category */}
+          <div className="flex items-center gap-3 font-jbmono text-xs">
+            <div className={getStatusColor(ticket.status)}>
+              {getStatusTitle(ticket.status, "singular")}
+            </div>
+            <div className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5 border border-(--text-tertiary) text-(--text-tertiary) rounded-xs font-bold leading-3 select-none">
+              {getPriorityTitle(ticket.priority)}
+            </div>
+            <div className="h-6 flex justify-center items-center py-1.5 gap-2.5 font-medium leading-3 text-(--text-tertiary) select-none">
+              {ticket.category}
+            </div>
+          </div>
+          {/* icons */}
+          {/* TODO: Make icons as buttons and add logic */}
+          <div>{getStatusIcon(ticket.status)}</div>
+        </div>
       </div>
     </div>
   );

@@ -56,7 +56,7 @@ function StatusInfoBtn({
   return (
     <div
       onClick={onClick}
-      className={`${plateHeight} ${isSelected ? "border-(--text-primary) " : "border-(--bg-border) hover:border-[#595959]"} bg-(--bg-primary-secondary) border rounded-xs group`}
+      className={`${plateHeight} ${isSelected ? "border-(--text-primary) " : "border-(--bg-border) hover:border-(--border-hover-btn)"} bg-(--bg-primary-secondary) border rounded-xs group`}
     >
       <div className="flex items-center justify-center h-full select-none cursor-pointer ">
         <div
