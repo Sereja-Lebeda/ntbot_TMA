@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { SortByStatusType } from "../../types/ticket.types";
 
 import HeroSector from "../HeroSector";
 import Header from "../layouts/Header";
@@ -14,8 +15,12 @@ export default function HomePage() {
     "Все",
   ]);
 
+  // States for btvs near searchbar
   const [favoriteTickets, setFavoriteTickets] = useState<number[]>([]);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [viewAsManager, setViewAsManager] = useState(false);
+  const [sortOldToNew, setSortOldToNew] = useState(false);
+  const [sortByStatus, setSortByStatus] = useState<SortByStatusType>("default");
 
   return (
     <div>
@@ -34,6 +39,12 @@ export default function HomePage() {
           setFavoriteTickets={setFavoriteTickets}
           showFavorites={showFavorites}
           setShowFavorites={setShowFavorites}
+          viewAsManager={viewAsManager}
+          setViewAsManager={setViewAsManager}
+          sortOldToNew={sortOldToNew}
+          setSortOldToNew={setSortOldToNew}
+          sortByStatus={sortByStatus}
+          setSortByStatus={setSortByStatus}
         />
         <SortFilterBlock
           openDropdownFilter={filter}

@@ -5,7 +5,7 @@ interface FavoriteProps {
   className?: string;
 }
 
-export default function FavoriteIcon({
+export default function FavoriteTicketIcon({
   className,
   ticketId,
   favoriteTickets,
@@ -34,7 +34,7 @@ export default function FavoriteIcon({
       }}
     >
       <path
-        style={{ transition: "fill 0.3s ease, stroke 0.3s ease" }}
+        // style={{ transition: "fill 0.3s ease, stroke 0.3s ease" }}
         d="M9.75 0.75L7.27921 6.80607L0.75 7.28972L5.75467 11.5164L4.18808 17.8668L9.75 14.4182M9.75 0.75L12.2208 6.80607L18.75 7.28972L13.7453 11.5164L15.3119 17.8668L9.75 14.4182"
         stroke="currentColor"
         strokeWidth="1.5"

@@ -20,3 +20,6 @@ export type StatusType =
 export interface TicketCardProps {
   ticket: Ticket;
 }
+
+// Type for ticket sort new/complete/default
+export type SortByStatusType = "default" | "new" | "complete";

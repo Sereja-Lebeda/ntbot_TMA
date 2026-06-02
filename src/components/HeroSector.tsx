@@ -1,15 +1,20 @@
 import DeleteFilterIcon from "../icons/searchmenu/DeleteFilterIcon";
 import FavoriteFilterBtn from "../icons/searchmenu/FavoriteFilterBtn";
 import PrioritySortIcon from "../icons/searchmenu/PrioritySortIcon";
+import PriorityNewSortIcon from "../icons/searchmenu/PriorityNewSortIcon";
+import PriorityCompleteSortIcon from "../icons/searchmenu/PriorityCompleteSortIcon";
 import TimeSortIcon from "../icons/searchmenu/TimeSortIcon";
+import TimeSortActiveIcon from "../icons/searchmenu/TimeSortActiveIcon";
+
 import UserIcon from "../icons/searchmenu/UserIcon";
 import TicketCard from "./TicketCard";
 import Searchbar from "./ui/Searchbar";
 import SearchMenuBtn from "./ui/SearchMenuBtn";
 
 import mockData from "../../mockTicketInfo.json";
-import type { Ticket } from "../types/ticket.types";
+import type { Ticket, SortByStatusType } from "../types/ticket.types";
 import getStatusTitle from "../utils/statusNameHelper";
+import ManagerIcon from "../icons/searchmenu/ManagerIcon";
 
 interface selectedTicketStatusesProps {
   searchQuery: string;
@@ -20,6 +25,12 @@ interface selectedTicketStatusesProps {
   setFavoriteTickets: (id: number[]) => void;
   showFavorites: boolean;
   setShowFavorites: (show: boolean) => void;
+  viewAsManager: boolean;
+  setViewAsManager: (isManager: boolean) => void;
+  sortOldToNew: boolean;
+  setSortOldToNew: (sortByTime: boolean) => void;
+  sortByStatus: string;
+  setSortByStatus: (sortByStatus: SortByStatusType) => void;
 }
 
 export default function HeroSector({
@@ -31,6 +42,12 @@ export default function HeroSector({
   setFavoriteTickets,
   showFavorites,
   setShowFavorites,
+  viewAsManager,
+  setViewAsManager,
+  sortOldToNew,
+  setSortOldToNew,
+  sortByStatus,
+  setSortByStatus,
 }: selectedTicketStatusesProps) {
   // const [title, id, date, description, status, priority, category] = mock;
   const mock = mockData as Ticket[];
@@ -45,6 +62,32 @@ export default function HeroSector({
     ].some((value) => value.toLowerCase().includes(query.toLowerCase()));
   }
 
+  function changePrioritySort() {
+    switch (sortByStatus) {
+      case "default":
+        return setSortByStatus("new");
+      case "new":
+        return setSortByStatus("complete");
+      case "complete":
+        return setSortByStatus("default");
+    }
+  }
+
+  const statusPriority = {
+    New: 0,
+    "In progress": 1,
+    Paused: 2,
+    Closed: 3,
+    Cancelled: 4,
+    Complete: 5,
+  };
+
+  const hasActiveFilters =
+    showFavorites ||
+    viewAsManager ||
+    sortOldToNew ||
+    sortByStatus !== "default";
+  // console.log(hasActiveFilters);
   return (
     <div className="w-225 h-246 flex flex-col justify-self-center items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5">
       {/* Searchbar and icons for sort */}
@@ -58,14 +101,41 @@ export default function HeroSector({
           <SearchMenuBtn
             onClick={() => setShowFavorites(!showFavorites)}
             icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
+            isActive={true}
           />
-          <SearchMenuBtn icon={<UserIcon />} />
-          <SearchMenuBtn icon={<TimeSortIcon />} />
-          <SearchMenuBtn icon={<PrioritySortIcon />} />
-          {/* TODO: Add logic to change bg color */}
+          <SearchMenuBtn
+            icon={viewAsManager ? <ManagerIcon /> : <UserIcon />}
+            onClick={() => setViewAsManager(!viewAsManager)}
+            isActive={true}
+          />
+          <SearchMenuBtn
+            icon={sortOldToNew ? <TimeSortActiveIcon /> : <TimeSortIcon />}
+            onClick={() => setSortOldToNew(!sortOldToNew)}
+            isActive={true}
+          />
+          <SearchMenuBtn
+            icon={
+              sortByStatus === "default" ? (
+                <PrioritySortIcon />
+              ) : sortByStatus === "new" ? (
+                <PriorityNewSortIcon />
+              ) : (
+                <PriorityCompleteSortIcon />
+              )
+            }
+            onClick={() => changePrioritySort()}
+            isActive={true}
+          />
           <SearchMenuBtn
             icon={<DeleteFilterIcon />}
-            className={`dark:bg-[#4F4C4C]`}
+            onClick={() => {
+              setShowFavorites(false);
+              setViewAsManager(false);
+              setSortOldToNew(false);
+              setSortByStatus("default");
+            }}
+            isActive={hasActiveFilters}
+            inactiveClassName="dark:bg-(--bg-inactive-btn)"
           />
         </div>
       </div>
@@ -89,6 +159,24 @@ export default function HeroSector({
             (ticket) =>
               !showFavorites || favoriteTickets.includes(ticket.ticketId),
           )
+          .sort((a, b) =>
+            sortOldToNew
+              ? Date.parse(a.createDate.split(".").reverse().join("-")) -
+                Date.parse(b.createDate.split(".").reverse().join("-"))
+              : Date.parse(b.createDate.split(".").reverse().join("-")) -
+                Date.parse(a.createDate.split(".").reverse().join("-")),
+          )
+          .sort((a, b) => {
+            if (sortByStatus === "default") return 0;
+            if (sortByStatus === "new") {
+              return statusPriority[a.status] - statusPriority[b.status];
+            }
+
+            if (sortByStatus === "complete") {
+              return statusPriority[b.status] - statusPriority[a.status];
+            }
+            return 0;
+          })
           .map((ticket) => (
             <TicketCard
               key={ticket.ticketId}

@@ -5,7 +5,7 @@ import CrossIcon from "../icons/card/CrossIcon";
 import EditIcon from "../icons/card/EditIcon";
 import RepeatIcon from "../icons/card/RepeatIcon";
 import TelegramIcon from "../icons/card/TelegramIcon";
-import FavoriteIcon from "../icons/searchmenu/FavoriteIcon";
+import FavoriteIcon from "../icons/searchmenu/FavoriteTicketIcon";
 import type { StatusType, TicketCardProps } from "../types/ticket.types";
 import getStatusTitle from "../utils/statusNameHelper";
 
