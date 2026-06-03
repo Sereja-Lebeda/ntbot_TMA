@@ -52,11 +52,51 @@
   {
     "title": "Написать заявку в бота",
     "description": "Напишу в ЛС",
-    "ticketId": 80,
+    "ticketId": 8,
     "createDate": "20.05.2026",
     "status": "Cancelled",
     "priority": "High",
-    "category": "Workflow",
+    "category": "123",
+    "attachment": false
+  },
+  {
+    "title": "Написать заявку в бота",
+    "description": "Напишу в ЛС",
+    "ticketId": 808,
+    "createDate": "20.05.2026",
+    "status": "Cancelled",
+    "priority": "High",
+    "category": "321",
+    "attachment": false
+  },
+  {
+    "title": "Написать заявку в бота",
+    "description": "Напишу в ЛС",
+    "ticketId": 870,
+    "createDate": "20.05.2026",
+    "status": "Cancelled",
+    "priority": "High",
+    "category": "222",
+    "attachment": false
+  },
+  {
+    "title": "Написать заявку в бота",
+    "description": "Напишу в ЛС",
+    "ticketId": 820,
+    "createDate": "20.05.2026",
+    "status": "Cancelled",
+    "priority": "High",
+    "category": "111",
+    "attachment": false
+  },
+  {
+    "title": "Написать заявку в бота",
+    "description": "Напишу в ЛС",
+    "ticketId": 890,
+    "createDate": "20.05.2026",
+    "status": "Cancelled",
+    "priority": "High",
+    "category": "333",
     "attachment": false
   }
 ]

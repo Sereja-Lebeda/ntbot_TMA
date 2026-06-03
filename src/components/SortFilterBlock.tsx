@@ -35,6 +35,10 @@ function SortFilterBlock({
     "Party",
     "Office",
     "Workflow",
+    "Zdarova gaymeri",
+    "Party",
+    "Office",
+    "Workflow",
   ];
 
   function changeFilter(name: string) {

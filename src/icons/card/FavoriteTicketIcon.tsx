@@ -24,20 +24,18 @@ export default function FavoriteTicketIcon({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="19"
-      viewBox="0 0 20 19"
+      width="17"
+      height="17"
+      viewBox="0 0 17 17"
       fill="none"
-      className={`${favoriteTickets?.includes(ticketId) ? "fill-(--text-tertiary) text-(--text-tertiary) hover:fill-(--text-primary) hover:text-(--text-primary)" : "text-(--text-secondary) hover:text-(--text-primary)"} ${className}`}
+      className={`${favoriteTickets?.includes(ticketId) ? "fill-(--text-tertiary) text-(--text-tertiary) hover:fill-(--text-primary) hover:text-(--text-primary)" : "text-(--text-tertiary) hover:text-(--text-primary)"} ${className}`}
       onClick={() => {
         toggleFavorite(ticketId);
       }}
     >
       <path
-        // style={{ transition: "fill 0.3s ease, stroke 0.3s ease" }}
-        d="M9.75 0.75L7.27921 6.80607L0.75 7.28972L5.75467 11.5164L4.18808 17.8668L9.75 14.4182M9.75 0.75L12.2208 6.80607L18.75 7.28972L13.7453 11.5164L15.3119 17.8668L9.75 14.4182"
+        d="M8.5 0.5L6.30374 6.16093L0.5 6.61302L4.9486 10.5639L3.55607 16.5L8.5 13.2764M8.5 0.5L10.6963 6.16093L16.5 6.61302L12.0514 10.5639L13.4439 16.5L8.5 13.2764"
         stroke="currentColor"
-        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

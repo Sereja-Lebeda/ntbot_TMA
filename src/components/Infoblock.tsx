@@ -1,5 +1,9 @@
 import type { UserType } from "../types/user.types";
 import type { StatusType, Ticket } from "../types/ticket.types";
+import {
+  textPressAnimationStyle,
+  btnPressAnimationStyle,
+} from "../styles/pressAnimation";
 
 import handleStatusSelect from "../utils/statusSelectedHelper";
 import getStatusTitle from "../utils/statusNameHelper";
@@ -26,8 +30,6 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
   const baseStyle = "flex items-center px-0.5 gap-2";
   const textStyle =
     "font-consolas text-sm font-normal text-(--text-secondary) select-none";
-  const textStyleAnimation =
-    "cursor-pointer transition-all duration-600 ease-in-out hover:text-(--text-primary) active:opacity-0";
 
   const spans = [
     "col-span-2",
@@ -85,7 +87,7 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
               {/* TODO: Make pretty hint about copy */}
               <span
                 title="Стукни по мне"
-                className={`${textStyle} ${textStyleAnimation}`}
+                className={`${textStyle} ${textPressAnimationStyle}`}
                 onClick={() => navigator.clipboard.writeText(mock.localIp)}
               >
                 {mock.localIp}
@@ -99,7 +101,7 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
 
               {/* TODO: Make pretty hint about copy */}
               <span
-                className={`${textStyle} ${textStyleAnimation}`}
+                className={`${textStyle} ${textPressAnimationStyle}`}
                 onClick={() => navigator.clipboard.writeText(mock.localIp)}
               >
                 {mock.pcName}
@@ -141,12 +143,17 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
 
       {/* Toggle and telegram block  */}
       <div className="w-full h-full flex justify-center items-center p-5 bg-(--bg-primary-second) border border-(--bg-border) rounded-xs gap-2.5">
-        <button className="flex items-center bg-(--bg-primary-second) border border-(--bg-border) rounded-xs p-2">
+        <button
+          className={`flex items-center bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none
+      group rounded-xs p-2 ${btnPressAnimationStyle}`}
+        >
           <ToggleBtn />
         </button>
-        <button className="w-full flex justify-center items-center px-3 py-2.5 bg-(--bg-primary-second) border border-(--bg-border) rounded-xs gap-2">
-          <TelegramIcon />
-          <span className="font-jbmono text-(--text-secondary) text-sm font-medium leading-normal select-none">
+        <button
+          className={`w-full flex justify-center items-center px-3 py-2.5 bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none group rounded-xs gap-2 ${btnPressAnimationStyle}`}
+        >
+          <TelegramIcon className="group-hover:text-(--text-primary) text-(--text-secondary) " />
+          <span className="font-jbmono text-(--text-secondary) group-hover:text-(--text-primary) text-sm font-medium leading-normal select-none">
             Задать вопрос
           </span>
         </button>

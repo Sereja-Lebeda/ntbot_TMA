@@ -87,7 +87,7 @@ export default function HeroSector({
     viewAsManager ||
     sortOldToNew ||
     sortByStatus !== "default";
-  // console.log(hasActiveFilters);
+
   return (
     <div className="w-225 h-246 flex flex-col justify-self-center items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5">
       {/* Searchbar and icons for sort */}

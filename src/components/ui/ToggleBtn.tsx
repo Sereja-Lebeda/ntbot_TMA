@@ -7,17 +7,18 @@
 import { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 
-import ToggleIcon from "../../icons/ToggleIcon";
+import ToggleDarkIcon from "../../icons/ToggleDarkIcon";
+import ToggleLightIcon from "../../icons/ToggleLightIcon";
 
 function ToggleBtn() {
-  const { toggleTheme } = useContext(ThemeContext);
+  const { toggleTheme, theme } = useContext(ThemeContext);
 
   return (
     <div
       onClick={toggleTheme}
       className="flex items-center cursor-pointer select-none"
     >
-      <ToggleIcon />
+      {theme === "light" ? <ToggleDarkIcon /> : <ToggleLightIcon />}
     </div>
   );
 }

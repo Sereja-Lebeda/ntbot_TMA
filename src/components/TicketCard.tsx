@@ -1,3 +1,7 @@
+import type { StatusType, TicketCardProps } from "../types/ticket.types";
+import getStatusTitle from "../utils/statusNameHelper";
+import { textPressAnimationStyle } from "../styles/pressAnimation";
+
 import AttachIcon from "../icons/card/AttachIcon";
 import CancelIcon from "../icons/card/CancelIcon";
 import CheckIcon from "../icons/card/CheckIcon";
@@ -5,9 +9,7 @@ import CrossIcon from "../icons/card/CrossIcon";
 import EditIcon from "../icons/card/EditIcon";
 import RepeatIcon from "../icons/card/RepeatIcon";
 import TelegramIcon from "../icons/card/TelegramIcon";
-import FavoriteIcon from "../icons/searchmenu/FavoriteTicketIcon";
-import type { StatusType, TicketCardProps } from "../types/ticket.types";
-import getStatusTitle from "../utils/statusNameHelper";
+import FavoriteIcon from "../icons/card/FavoriteTicketIcon";
 
 interface TicketCardWithActionsProps extends TicketCardProps {
   favoriteTickets: number[];
@@ -65,20 +67,21 @@ export default function TicketCard({
         return (
           <div className={baseStyle}>
             <CancelIcon /> <EditIcon /> <RepeatIcon /> {favoriteBtn}
-            <TelegramIcon />
+            <TelegramIcon className="text-(--text-tertiary) " />
           </div>
         );
       case "In progress":
         return (
           <div className={baseStyle}>
             <RepeatIcon /> {favoriteBtn}
-            <TelegramIcon />
+            <TelegramIcon className="text-(--text-tertiary) " />
           </div>
         );
       case "Paused":
         return (
           <div className={baseStyle}>
-            <RepeatIcon /> {favoriteBtn} <TelegramIcon />
+            <RepeatIcon /> {favoriteBtn}{" "}
+            <TelegramIcon className="text-(--text-tertiary) " />
           </div>
         );
       case "Complete":
@@ -119,9 +122,6 @@ export default function TicketCard({
     }
   }
 
-  const textStyleAnimation =
-    "cursor-pointer transition-all duration-600 ease-in-out hover:text-(--text-primary) active:opacity-0";
-
   return (
     // white background
     <div className="w-215 h-37 bg-(--text-tertiary) rounded-xs relative select-none">
@@ -141,7 +141,7 @@ export default function TicketCard({
               onClick={() =>
                 navigator.clipboard.writeText(ticket.ticketId.toString())
               }
-              className={`flex gap-1.5 hover:text-(--text-primary) ${textStyleAnimation}`}
+              className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
             >
               ID: {ticket.ticketId}
             </div>
