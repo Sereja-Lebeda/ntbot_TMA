@@ -17,6 +17,8 @@ import getStatusTitle from "../utils/statusNameHelper";
 import ManagerIcon from "../icons/searchmenu/ManagerIcon";
 
 interface selectedTicketStatusesProps {
+  className?: string;
+  inputRef: React.RefObject<HTMLInputElement | null>;
   searchQuery: string;
   setSearchQuery: (req: string) => void;
   ticketStatuses: string[];
@@ -48,6 +50,8 @@ export default function HeroSector({
   setSortOldToNew,
   sortByStatus,
   setSortByStatus,
+  className,
+  inputRef,
 }: selectedTicketStatusesProps) {
   // const [title, id, date, description, status, priority, category] = mock;
   const mock = mockData as Ticket[];
@@ -89,12 +93,15 @@ export default function HeroSector({
     sortByStatus !== "default";
 
   return (
-    <div className="w-225 h-246 flex flex-col justify-self-center items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5">
+    <div
+      className={`relative w-225 h-246 flex flex-col justify-self-center items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5 ${className} `}
+    >
       {/* Searchbar and icons for sort */}
-      <div className="w-215 flex items-center gap-2 mb-3.5">
+      <div className="w-215 flex items-center gap-2 mb-3.5 ">
         <Searchbar
           searchRequest={searchQuery}
           setSearchRequest={setSearchQuery}
+          ref={inputRef}
         />
         {/* Row of buttons */}
         <div className="flex justify-center items-center gap-1">
@@ -141,7 +148,8 @@ export default function HeroSector({
       </div>
 
       {/* Ticket cards */}
-      <div className="w-216 h-222 flex flex-col justify-start items-center gap-2 select-none">
+      {/* <div className="overflow-y-auto scrollbar-none  w-216 h-222 flex flex-col justify-start items-center gap-2 select-none"> */}
+      <div className="overflow-y-auto scrollbar-none w-216 flex flex-1 flex-col justify-start items-center gap-2 select-none">
         {mock
           // Filter by Searchbar
           .filter((ticket) => ticketMatchesSearch(ticket, searchQuery))

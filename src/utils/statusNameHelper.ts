@@ -34,7 +34,7 @@ const titles: Record<string, Record<FormType, string>> = {
   Cancelled: {
     singular: "ОТКЛОНЕНА",
     plural: "ОТКЛОНЁННЫХ",
-    statusBlock: "Отклоненны",
+    statusBlock: "Отклонены",
     infoBlock: "отклонена",
   },
 };

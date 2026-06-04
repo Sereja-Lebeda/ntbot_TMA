@@ -137,15 +137,16 @@ export default function TicketCard({
           </div>
           {/* meta info */}
           <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">
+            <span>ID: </span>
             <div
               onClick={() =>
                 navigator.clipboard.writeText(ticket.ticketId.toString())
               }
               className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
             >
-              ID: {ticket.ticketId}
+              {ticket.ticketId}
             </div>
-            <p>|</p>
+            <span>|</span>
             <div>{ticket.createDate}</div>
           </div>
         </div>

@@ -10,11 +10,12 @@ function SquareIcon({ className }: SquareIconProps) {
       height="20"
       viewBox="0 0 20 20"
       fill="none"
-      className={className}
+      // className={className}
+      className={`text-(--text-secondary) group-hover/item:text-(--text-primary) ${className}`}
     >
       <path
         d="M16.25 2.5H3.75C3.41848 2.5 3.10054 2.6317 2.86612 2.86612C2.6317 3.10054 2.5 3.41848 2.5 3.75V16.25C2.5 16.5815 2.6317 16.8995 2.86612 17.1339C3.10054 17.3683 3.41848 17.5 3.75 17.5H16.25C16.5815 17.5 16.8995 17.3683 17.1339 17.1339C17.3683 16.8995 17.5 16.5815 17.5 16.25V3.75C17.5 3.41848 17.3683 3.10054 17.1339 2.86612C16.8995 2.6317 16.5815 2.5 16.25 2.5ZM16.25 16.25H3.75V3.75H16.25V16.25Z"
-        fill="#908E8E"
+        fill="currentColor"
       />
     </svg>
   );

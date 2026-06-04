@@ -29,6 +29,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; */
+
+  scrollbar-width: none;
 }
 
 .dark {
@@ -54,4 +56,23 @@
   --bg-task-complete: #44a74c;
   --bg-task-closed: #969090;
   --bg-task-cancelled: #dd4d4d;
+}
+
+/* body {
+  scrollbar-width: none;
+} */
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown-scroll::-webkit-scrollbar {
+  width: 2px;
+}
+.dropdown-scroll::-webkit-scrollbar-thumb {
+  background: var(--bg-inactive-btn);
+  border-radius: 2px;
+}
+.dropdown-scroll::-webkit-scrollbar-track {
+  background: transparent;
 }

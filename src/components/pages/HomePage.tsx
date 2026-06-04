@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { SortByStatusType } from "../../types/ticket.types";
+import type { activeSectionType } from "../../types/header.types";
 
 import HeroSector from "../HeroSector";
 import Header from "../layouts/Header";
@@ -22,15 +23,33 @@ export default function HomePage() {
   const [sortOldToNew, setSortOldToNew] = useState(false);
   const [sortByStatus, setSortByStatus] = useState<SortByStatusType>("default");
 
+  const [activeSection, setActiveSection] =
+    useState<activeSectionType>("tickets");
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
-    <div>
-      <Header />
+    <div
+      onMouseDown={(e) => {
+        if (e.target !== inputRef.current) {
+          e.preventDefault();
+          inputRef.current?.blur();
+        }
+      }}
+      className=""
+    >
+      <Header
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+      />
       <div className="flex px-44">
         <Infoblock
           ticketStatuses={selectedStatuses}
           setTicketStatuses={setSelectedStatuses}
         />
         <HeroSector
+          className={"sticky top-0"}
+          inputRef={inputRef}
           searchQuery={keyword}
           setSearchQuery={setKeyword}
           ticketStatuses={selectedStatuses}

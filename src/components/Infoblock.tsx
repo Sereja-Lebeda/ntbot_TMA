@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import type { UserType } from "../types/user.types";
 import type { StatusType, Ticket } from "../types/ticket.types";
 import {
@@ -13,6 +15,7 @@ import mockTicket from "../../mockTicketInfo.json";
 import ToggleBtn from "../components/ui/ToggleBtn";
 import StatusInfoBtn from "./ui/StatusInfoBtn";
 
+import CopyHint from "../components/ui/CopyHint";
 import IpIcon from "../icons/infoblock/IpIcon";
 import PcIcon from "../icons/infoblock/PcIcon";
 import AccessIcon from "../icons/infoblock/AccessIcon";
@@ -24,12 +27,20 @@ interface InfoblockProps {
 }
 
 function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
+  const [copiedField, setCopiedField] = useState<"ip" | "pcName" | null>(null);
+
   const mock = mockUser as UserType;
   const allTickets = mockTicket;
 
-  const baseStyle = "flex items-center px-0.5 gap-2";
+  const baseStyle = "w-full flex items-center px-0.5 gap-2";
   const textStyle =
     "font-consolas text-sm font-normal text-(--text-secondary) select-none";
+
+  // Style for hints near user info
+  const copyHintBase =
+    "rounded-sm ml-auto px-1 transition-opacity duration-600 ease-in-out";
+  const copyHintIpAnimation = `${copyHintBase} ${copiedField === "ip" ? "opacity-100" : "opacity-0"} `;
+  const copyHintPcNameAnimation = `${copyHintBase} ${copiedField === "pcName" ? "opacity-100" : "opacity-0"} `;
 
   const spans = [
     "col-span-2",
@@ -82,29 +93,40 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
           {/* User pc Info */}
           <div className="w-full flex flex-col items-start gap-3.5">
             {/* user ip  */}
-            <div className={baseStyle}>
+            <div
+              onClick={() => {
+                navigator.clipboard.writeText(mock.localIp);
+                setCopiedField("ip");
+                setTimeout(() => setCopiedField(null), 1000);
+              }}
+              className={`${baseStyle} cursor-pointer`}
+            >
               <IpIcon />
-              {/* TODO: Make pretty hint about copy */}
-              <span
-                title="Стукни по мне"
-                className={`${textStyle} ${textPressAnimationStyle}`}
-                onClick={() => navigator.clipboard.writeText(mock.localIp)}
-              >
+              <span className={`${textStyle} ${textPressAnimationStyle} `}>
                 {mock.localIp}
+              </span>
+              <span className={`${copyHintIpAnimation}`}>
+                <CopyHint />
               </span>
             </div>
             {/* pc name  */}
-            <div className={baseStyle}>
+            <div
+              onClick={() => {
+                navigator.clipboard.writeText(mock.pcName);
+                setCopiedField("pcName");
+                setTimeout(() => setCopiedField(null), 1000);
+              }}
+              className={`${baseStyle} cursor-pointer`}
+            >
               <div className="w-5 h-5 flex justify-center items-center">
                 <PcIcon />
               </div>
 
-              {/* TODO: Make pretty hint about copy */}
-              <span
-                className={`${textStyle} ${textPressAnimationStyle}`}
-                onClick={() => navigator.clipboard.writeText(mock.localIp)}
-              >
+              <span className={`${textStyle} ${textPressAnimationStyle}`}>
                 {mock.pcName}
+              </span>
+              <span className={`${copyHintPcNameAnimation}`}>
+                <CopyHint />
               </span>
             </div>
             {/* access date  */}
@@ -112,6 +134,7 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
               <div className="w-5 h-5 flex justify-center items-center bg-[#A1FF6226] rounded-xs">
                 <AccessIcon />
               </div>
+              {/* TODO: Add ternar for access  */}
               <span className={textStyle}>
                 Доступ до {mock.remoteAccessDate}
               </span>
