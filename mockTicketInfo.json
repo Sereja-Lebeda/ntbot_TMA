@@ -7,7 +7,9 @@
     "status": "In progress",
     "priority": "Low",
     "category": "Это другое",
-    "attachment": true
+    "attachment": true,
+    "department": "IT",
+    "userName": "Ваня Иванов"
   },
   {
     "title": "Написать ПСЖ",
@@ -17,7 +19,9 @@
     "status": "Paused",
     "priority": "High",
     "category": "Коммуникация",
-    "attachment": false
+    "attachment": false,
+    "department": "Разметка",
+    "userName": "Сантиметр Линейкович"
   },
   {
     "title": "Скинуть багет",
@@ -27,7 +31,9 @@
     "status": "Complete",
     "priority": "Medium",
     "category": "Zdarova gaymeri",
-    "attachment": true
+    "attachment": true,
+    "department": "Халтуры",
+    "userName": "Валя Неваляйка"
   },
   {
     "title": "Подготовить Алешку для переговорки",
@@ -37,7 +43,9 @@
     "status": "New",
     "priority": "Low",
     "category": "Party",
-    "attachment": true
+    "attachment": true,
+    "department": "IT",
+    "userName": "Макрос Скриптов"
   },
   {
     "title": "Закрыть окно",
@@ -47,7 +55,9 @@
     "status": "Closed",
     "priority": "Medium",
     "category": "Office",
-    "attachment": false
+    "attachment": false,
+    "department": "Разметка",
+    "userName": "Сантиметр Линейкович"
   },
   {
     "title": "Написать заявку в бота",
@@ -57,17 +67,21 @@
     "status": "Cancelled",
     "priority": "High",
     "category": "123",
-    "attachment": false
+    "attachment": false,
+    "department": "IT",
+    "userName": "Анонимный Пидрилкин"
   },
   {
-    "title": "Написать заявку в бота",
+    "title": "Удалить бота",
     "description": "Напишу в ЛС",
     "ticketId": 808,
     "createDate": "20.05.2026",
     "status": "Cancelled",
     "priority": "High",
     "category": "321",
-    "attachment": false
+    "attachment": false,
+    "department": "Отдельный отдел",
+    "userName": "Хусейн Вольфович"
   },
   {
     "title": "Написать заявку в бота",
@@ -77,26 +91,56 @@
     "status": "Cancelled",
     "priority": "High",
     "category": "222",
-    "attachment": false
+    "attachment": false,
+    "department": "ЭйЧар Отдел",
+    "userName": "Баба Клава"
   },
   {
-    "title": "Написать заявку в бота",
+    "title": "Продажная продажа",
     "description": "Напишу в ЛС",
     "ticketId": 820,
     "createDate": "20.05.2026",
     "status": "Cancelled",
     "priority": "High",
     "category": "111",
-    "attachment": false
+    "attachment": false,
+    "department": "Продажи",
+    "userName": "Главный специалист"
   },
   {
-    "title": "Написать заявку в бота",
+    "title": "Закупка бульдака х5",
     "description": "Напишу в ЛС",
     "ticketId": 890,
     "createDate": "20.05.2026",
     "status": "Cancelled",
     "priority": "High",
     "category": "333",
-    "attachment": false
+    "attachment": false,
+    "department": "Тестирование",
+    "userName": "Повелитель правой кабинки"
+  },
+  {
+    "title": "Датабэйз дроп",
+    "description": "Ждете?",
+    "ticketId": 523,
+    "createDate": "02.04.2027",
+    "status": "In progress",
+    "priority": "High",
+    "category": "Office",
+    "attachment": false,
+    "department": "IT",
+    "userName": "Абоба Макарович"
+  },
+  {
+    "title": "Тренд",
+    "description": "Уточнить что сейчас в трендах",
+    "ticketId": 982,
+    "createDate": "02.08.2026",
+    "status": "New",
+    "priority": "Medium",
+    "category": "Office",
+    "attachment": false,
+    "department": "Отдел Мемов",
+    "userName": "Абоба Макарович"
   }
 ]

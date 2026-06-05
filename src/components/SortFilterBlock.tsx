@@ -1,4 +1,6 @@
 import DropdownList from "./ui/DropdownList";
+import mockData from "../../mockTicketInfo.json";
+import type { Ticket } from "../types/ticket.types";
 
 export interface OpenDropdownFilterProps {
   openDropdownFilter: string | null;
@@ -7,7 +9,14 @@ export interface OpenDropdownFilterProps {
   setTicketStatuses: (status: string[]) => void;
   ticketCategories: string[];
   setTicketCategories: (category: string[]) => void;
+  selectedDepartments: string[];
+  setSelectedDepartments: (department: string[]) => void;
+  selectedEmployees: string[];
+  setSelectedEmployees: (employee: string[]) => void;
+  viewAsManager: boolean;
 }
+
+const mock = mockData as Ticket[];
 
 function SortFilterBlock({
   openDropdownFilter,
@@ -16,6 +25,11 @@ function SortFilterBlock({
   setTicketStatuses,
   ticketCategories,
   setTicketCategories,
+  selectedDepartments,
+  setSelectedDepartments,
+  selectedEmployees,
+  setSelectedEmployees,
+  viewAsManager,
 }: OpenDropdownFilterProps) {
   const statuses = [
     "Все",
@@ -27,18 +41,36 @@ function SortFilterBlock({
     "Закрыты",
   ];
 
+  // TODO: pull categories from backend
   const categories = [
     "Все",
-    "Это другое",
-    "Коммуникация",
-    "Zdarova gaymeri",
-    "Party",
-    "Office",
-    "Workflow",
-    "Zdarova gaymeri",
-    "Party",
-    "Office",
-    "Workflow",
+    ...new Set(mock.map((ticket: Ticket) => ticket.category)),
+  ];
+
+  // const categories = [
+  //   "Все",
+  //   "Это другое",
+  //   "Коммуникация",
+  //   "Zdarova gaymeri",
+  //   "Party",
+  //   "Office",
+  //   "Workflow",
+  //   "Zdarova gaymeri",
+  //   "Party",
+  //   "Office",
+  //   "Workflow",
+  // ];
+
+  // TODO: pull names from backend
+  const usernames = [
+    "Все",
+    ...new Set(mock.map((ticket: Ticket) => ticket.userName)),
+  ];
+
+  // TODO: pull departments from backend
+  const departments = [
+    "Все",
+    ...new Set(mock.map((ticket: Ticket) => ticket.department)),
   ];
 
   function changeFilter(name: string) {
@@ -82,6 +114,26 @@ function SortFilterBlock({
           selectedItems={ticketCategories}
           setSelectedItems={setTicketCategories}
         />
+        {viewAsManager && (
+          <DropdownList
+            title="Отделы"
+            isOpen={openDropdownFilter === "Отделы"}
+            items={departments}
+            onChange={(title) => changeFilter(title)}
+            selectedItems={selectedDepartments}
+            setSelectedItems={setSelectedDepartments}
+          />
+        )}
+        {viewAsManager && (
+          <DropdownList
+            title="Сотрудники"
+            isOpen={openDropdownFilter === "Сотрудники"}
+            items={usernames}
+            onChange={(title) => changeFilter(title)}
+            selectedItems={selectedEmployees}
+            setSelectedItems={setSelectedEmployees}
+          />
+        )}
       </div>
     </div>
   );

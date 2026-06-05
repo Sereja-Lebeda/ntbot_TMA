@@ -7,6 +7,8 @@ export interface Ticket {
   priority: string;
   category: string;
   attachment: boolean;
+  department: string;
+  userName: string;
 }
 
 export type StatusType =

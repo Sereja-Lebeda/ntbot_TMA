@@ -1,3 +1,12 @@
+import { useState } from "react";
+
+import type { Ticket, SortByStatusType } from "../types/ticket.types";
+import type { UserType } from "../types/user.types";
+import getStatusTitle from "../utils/statusNameHelper";
+import ManagerIcon from "../icons/searchmenu/ManagerIcon";
+// import mockData from "../../mockTicketInfo.json";
+import mockUser from "../../mockUserInfo.json";
+
 import DeleteFilterIcon from "../icons/searchmenu/DeleteFilterIcon";
 import FavoriteFilterBtn from "../icons/searchmenu/FavoriteFilterBtn";
 import PrioritySortIcon from "../icons/searchmenu/PrioritySortIcon";
@@ -6,33 +15,37 @@ import PriorityCompleteSortIcon from "../icons/searchmenu/PriorityCompleteSortIc
 import TimeSortIcon from "../icons/searchmenu/TimeSortIcon";
 import TimeSortActiveIcon from "../icons/searchmenu/TimeSortActiveIcon";
 
-import UserIcon from "../icons/searchmenu/UserIcon";
 import TicketCard from "./TicketCard";
 import Searchbar from "./ui/Searchbar";
 import SearchMenuBtn from "./ui/SearchMenuBtn";
-
-import mockData from "../../mockTicketInfo.json";
-import type { Ticket, SortByStatusType } from "../types/ticket.types";
-import getStatusTitle from "../utils/statusNameHelper";
-import ManagerIcon from "../icons/searchmenu/ManagerIcon";
+import UserIcon from "../icons/searchmenu/UserIcon";
 
 interface selectedTicketStatusesProps {
   className?: string;
   inputRef: React.RefObject<HTMLInputElement | null>;
   searchQuery: string;
   setSearchQuery: (req: string) => void;
+
   ticketStatuses: string[];
   ticketCategories: string[];
+  ticketDepartments: string[];
+  ticketEmployees: string[];
+
   favoriteTickets: number[];
   setFavoriteTickets: (id: number[]) => void;
   showFavorites: boolean;
   setShowFavorites: (show: boolean) => void;
+
   viewAsManager: boolean;
   setViewAsManager: (isManager: boolean) => void;
+
   sortOldToNew: boolean;
   setSortOldToNew: (sortByTime: boolean) => void;
   sortByStatus: string;
   setSortByStatus: (sortByStatus: SortByStatusType) => void;
+
+  tickets: Ticket[];
+  setTickets: React.Dispatch<React.SetStateAction<Ticket[]>>;
 }
 
 export default function HeroSector({
@@ -40,6 +53,8 @@ export default function HeroSector({
   setSearchQuery,
   ticketStatuses,
   ticketCategories,
+  ticketDepartments,
+  ticketEmployees,
   favoriteTickets,
   setFavoriteTickets,
   showFavorites,
@@ -52,9 +67,14 @@ export default function HeroSector({
   setSortByStatus,
   className,
   inputRef,
+  tickets,
+  setTickets,
 }: selectedTicketStatusesProps) {
   // const [title, id, date, description, status, priority, category] = mock;
-  const mock = mockData as Ticket[];
+  // const mock = mockData as Ticket[];
+  const mockUserManager = mockUser as UserType;
+
+  const [ticketView, setTicketView] = useState<"my" | "team">("my");
 
   function ticketMatchesSearch(ticket: Ticket, query: string): boolean {
     return [
@@ -91,6 +111,7 @@ export default function HeroSector({
     viewAsManager ||
     sortOldToNew ||
     sortByStatus !== "default";
+  // console.log(ticketDepartments, ticketEmployees);
 
   return (
     <div
@@ -110,11 +131,13 @@ export default function HeroSector({
             icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
             isActive={true}
           />
-          <SearchMenuBtn
-            icon={viewAsManager ? <ManagerIcon /> : <UserIcon />}
-            onClick={() => setViewAsManager(!viewAsManager)}
-            isActive={true}
-          />
+          {viewAsManager && (
+            <SearchMenuBtn
+              icon={ticketView === "my" ? <UserIcon /> : <ManagerIcon />}
+              onClick={() => setTicketView(ticketView === "my" ? "team" : "my")}
+              isActive={true}
+            />
+          )}
           <SearchMenuBtn
             icon={sortOldToNew ? <TimeSortActiveIcon /> : <TimeSortIcon />}
             onClick={() => setSortOldToNew(!sortOldToNew)}
@@ -148,9 +171,8 @@ export default function HeroSector({
       </div>
 
       {/* Ticket cards */}
-      {/* <div className="overflow-y-auto scrollbar-none  w-216 h-222 flex flex-col justify-start items-center gap-2 select-none"> */}
-      <div className="overflow-y-auto scrollbar-none w-216 flex flex-1 flex-col justify-start items-center gap-2 select-none">
-        {mock
+      <div className="overflow-y-auto scrollbar-none w-217 flex flex-1 flex-col justify-start items-center gap-2 select-none p-1">
+        {tickets
           // Filter by Searchbar
           .filter((ticket) => ticketMatchesSearch(ticket, searchQuery))
           // Filter by filter side layout
@@ -161,11 +183,22 @@ export default function HeroSector({
                   getStatusTitle(ticket.status, "statusBlock"),
                 )) &&
               (ticketCategories.includes("Все") ||
-                ticketCategories.includes(ticket.category)),
+                ticketCategories.includes(ticket.category)) &&
+              (ticketDepartments.includes("Все") ||
+                ticketDepartments.includes(ticket.department ?? "")) &&
+              (ticketEmployees.includes("Все") ||
+                ticketEmployees.includes(ticket.userName ?? "")),
           )
           .filter(
             (ticket) =>
               !showFavorites || favoriteTickets.includes(ticket.ticketId),
+          )
+          .filter((ticket) =>
+            !viewAsManager
+              ? true
+              : ticketView === "my"
+                ? ticket.userName === mockUserManager.name
+                : ticket.userName !== mockUserManager.name,
           )
           .sort((a, b) =>
             sortOldToNew
@@ -191,6 +224,8 @@ export default function HeroSector({
               ticket={ticket}
               favoriteTickets={favoriteTickets}
               setFavoriteTickets={setFavoriteTickets}
+              ticketView={ticketView}
+              setTickets={setTickets}
             />
           ))}
       </div>

@@ -15,7 +15,6 @@ const Searchbar = forwardRef<HTMLInputElement, searchRequestProps>(
         className="h-10 flex items-center flex-1 px-5 py-3 gap-2 rounded-xs border border-(--bg-border) hover:border-(--border-hover-btn) group"
       >
         <MagnifyIcon className="w-5 h-5 " />
-        {/* TODO: использовать useRef на input и программно управлять фокусом. */}
         {/* TODO: add debounce */}
 
         <input
