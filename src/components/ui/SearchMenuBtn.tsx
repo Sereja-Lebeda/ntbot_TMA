@@ -19,7 +19,7 @@ export default function SearchMenuBtn({
     <div
       onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
-      className={`w-10 h-10 flex justify-center items-center rounded-xs border dark:border-(--bg-border) ${isActive ? `dark:bg-(--bg-secondary) hover:border-(--border-hover-btn) select-none group ${className} ${btnPressAnimationStyle}` : ` ${inactiveClassName} select-none ${className}`}`}
+      className={`w-10 h-10 flex justify-center items-center rounded-xs border border-(--bg-border) ${isActive ? `bg-(--bg-secondary) hover:border-(--border-hover-btn) select-none group ${className} ${btnPressAnimationStyle}` : ` ${inactiveClassName} select-none ${className}`}`}
     >
       {icon}
     </div>

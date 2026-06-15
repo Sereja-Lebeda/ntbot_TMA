@@ -1,6 +1,10 @@
-import { useState } from "react";
+// import { useState } from "react";
 
-import type { Ticket, SortByStatusType } from "../types/ticket.types";
+import type {
+  Ticket,
+  SortByStatusType,
+  TicketViewType,
+} from "../types/ticket.types";
 import type { UserType } from "../types/user.types";
 import getStatusTitle from "../utils/statusNameHelper";
 import ManagerIcon from "../icons/searchmenu/ManagerIcon";
@@ -30,14 +34,17 @@ interface selectedTicketStatusesProps {
   ticketCategories: string[];
   ticketDepartments: string[];
   ticketEmployees: string[];
+  setOpenDropdownFilter: (filter: string | null) => void;
 
   favoriteTickets: number[];
   setFavoriteTickets: (id: number[]) => void;
   showFavorites: boolean;
   setShowFavorites: (show: boolean) => void;
 
-  viewAsManager: boolean;
-  setViewAsManager: (isManager: boolean) => void;
+  isManager: boolean;
+  ticketView: TicketViewType;
+  setTicketView: React.Dispatch<React.SetStateAction<TicketViewType>>;
+  resetFilters: () => void;
 
   sortOldToNew: boolean;
   setSortOldToNew: (sortByTime: boolean) => void;
@@ -55,12 +62,15 @@ export default function HeroSector({
   ticketCategories,
   ticketDepartments,
   ticketEmployees,
+  resetFilters,
+  setOpenDropdownFilter,
   favoriteTickets,
   setFavoriteTickets,
   showFavorites,
   setShowFavorites,
-  viewAsManager,
-  setViewAsManager,
+  isManager,
+  ticketView,
+  setTicketView,
   sortOldToNew,
   setSortOldToNew,
   sortByStatus,
@@ -72,9 +82,7 @@ export default function HeroSector({
 }: selectedTicketStatusesProps) {
   // const [title, id, date, description, status, priority, category] = mock;
   // const mock = mockData as Ticket[];
-  const mockUserManager = mockUser as UserType;
-
-  const [ticketView, setTicketView] = useState<"my" | "team">("my");
+  const mockCurrentUser = mockUser as UserType;
 
   function ticketMatchesSearch(ticket: Ticket, query: string): boolean {
     return [
@@ -107,18 +115,18 @@ export default function HeroSector({
   };
 
   const hasActiveFilters =
-    showFavorites ||
-    viewAsManager ||
-    sortOldToNew ||
-    sortByStatus !== "default";
-  // console.log(ticketDepartments, ticketEmployees);
+    ticketStatuses.some((i) => i !== "Все") ||
+    ticketCategories.some((i) => i !== "Все") ||
+    (ticketView === "team" &&
+      (ticketDepartments.some((i) => i !== "Все") ||
+        ticketEmployees.some((i) => i !== "Все")));
 
   return (
     <div
-      className={`relative w-225 h-246 flex flex-col justify-self-center items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5 ${className} `}
+      className={`relative flex-1 max-w-225 min-w-130 h-246 flex flex-col items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5 ${className} `}
     >
       {/* Searchbar and icons for sort */}
-      <div className="w-215 flex items-center gap-2 mb-3.5 ">
+      <div className="w-full flex items-center gap-2 mb-3.5 p-1">
         <Searchbar
           searchRequest={searchQuery}
           setSearchRequest={setSearchQuery}
@@ -131,15 +139,30 @@ export default function HeroSector({
             icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
             isActive={true}
           />
-          {viewAsManager && (
+          {isManager && (
             <SearchMenuBtn
-              icon={ticketView === "my" ? <UserIcon /> : <ManagerIcon />}
-              onClick={() => setTicketView(ticketView === "my" ? "team" : "my")}
+              icon={
+                ticketView === "my" ? (
+                  <UserIcon />
+                ) : (
+                  <ManagerIcon className="text-(--bg-btn-primary)" />
+                )
+              }
+              onClick={() => {
+                setTicketView(ticketView === "my" ? "team" : "my");
+                setOpenDropdownFilter("Статус");
+              }}
               isActive={true}
             />
           )}
           <SearchMenuBtn
-            icon={sortOldToNew ? <TimeSortActiveIcon /> : <TimeSortIcon />}
+            icon={
+              sortOldToNew ? (
+                <TimeSortActiveIcon className="text-(--bg-btn-primary)" />
+              ) : (
+                <TimeSortIcon />
+              )
+            }
             onClick={() => setSortOldToNew(!sortOldToNew)}
             isActive={true}
           />
@@ -148,9 +171,9 @@ export default function HeroSector({
               sortByStatus === "default" ? (
                 <PrioritySortIcon />
               ) : sortByStatus === "new" ? (
-                <PriorityNewSortIcon />
+                <PriorityNewSortIcon className="text-(--bg-btn-primary)" />
               ) : (
-                <PriorityCompleteSortIcon />
+                <PriorityCompleteSortIcon className="text-(--bg-btn-primary)" />
               )
             }
             onClick={() => changePrioritySort()}
@@ -159,19 +182,16 @@ export default function HeroSector({
           <SearchMenuBtn
             icon={<DeleteFilterIcon />}
             onClick={() => {
-              setShowFavorites(false);
-              setViewAsManager(false);
-              setSortOldToNew(false);
-              setSortByStatus("default");
+              resetFilters();
             }}
             isActive={hasActiveFilters}
-            inactiveClassName="dark:bg-(--bg-inactive-btn)"
+            inactiveClassName="bg-(--bg-border) dark:bg-(--bg-inactive-btn)"
           />
         </div>
       </div>
 
       {/* Ticket cards */}
-      <div className="overflow-y-auto scrollbar-none w-217 flex flex-1 flex-col justify-start items-center gap-2 select-none p-1">
+      <div className="overflow-y-auto scrollbar-none w-full flex flex-1 flex-col justify-start items-center gap-2 select-none p-1">
         {tickets
           // Filter by Searchbar
           .filter((ticket) => ticketMatchesSearch(ticket, searchQuery))
@@ -184,9 +204,11 @@ export default function HeroSector({
                 )) &&
               (ticketCategories.includes("Все") ||
                 ticketCategories.includes(ticket.category)) &&
-              (ticketDepartments.includes("Все") ||
+              (ticketView !== "team" ||
+                ticketDepartments.includes("Все") ||
                 ticketDepartments.includes(ticket.department ?? "")) &&
-              (ticketEmployees.includes("Все") ||
+              (ticketView !== "team" ||
+                ticketEmployees.includes("Все") ||
                 ticketEmployees.includes(ticket.userName ?? "")),
           )
           .filter(
@@ -194,11 +216,9 @@ export default function HeroSector({
               !showFavorites || favoriteTickets.includes(ticket.ticketId),
           )
           .filter((ticket) =>
-            !viewAsManager
-              ? true
-              : ticketView === "my"
-                ? ticket.userName === mockUserManager.name
-                : ticket.userName !== mockUserManager.name,
+            isManager && ticketView === "team"
+              ? ticket.userId !== mockCurrentUser.id
+              : ticket.userId === mockCurrentUser.id,
           )
           .sort((a, b) =>
             sortOldToNew

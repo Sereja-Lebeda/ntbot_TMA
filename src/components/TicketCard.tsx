@@ -31,7 +31,7 @@ export default function TicketCard({
 }: TicketCardWithActionsProps) {
   function getStatusColor(status: StatusType) {
     const baseStyle =
-      "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs text-(--bg-primary-second) font-bold leading-3 select-none";
+      "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) font-bold leading-3 select-none";
     switch (status) {
       case "New":
         return `${baseStyle} bg-(--bg-task-new)`;
@@ -99,8 +99,9 @@ export default function TicketCard({
               Заявка выполнена?
             </span>
             <div className={`${baseStyle} `}>
+              {/* // TODO: Which bg. should be for hover to btns */}
               <button
-                className="h-6 bg-(--bg-btn-primary) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary)"
+                className="h-6 bg-(--bg-task-complete) dark:bg-(--bg-btn-primary) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
                 onClick={() =>
                   setTickets((prev) =>
                     prev.map((t) =>
@@ -111,14 +112,14 @@ export default function TicketCard({
                   )
                 }
               >
-                <CheckIcon />
-                <span className="font-bold leading-3 text-xs text-(--bg-primary-second)">
+                <CheckIcon className="text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
+                <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
                   Да
                 </span>
               </button>
               <button
                 // onClick={() => }
-                className="h-6 bg-(--bg-btn-cancel) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary)"
+                className="h-6 bg-(--bg-task-cancelled) dark:bg-(--bg-task-cancelled) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
                 onClick={() =>
                   setTickets((prev) =>
                     prev.map((t) =>
@@ -129,8 +130,8 @@ export default function TicketCard({
                   )
                 }
               >
-                <CrossIcon />
-                <span className="font-bold leading-3 text-xs text-(--bg-primary-second)">
+                <CrossIcon className="w-2.5 h-2.5 text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
+                <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
                   Нет
                 </span>
               </button>
@@ -155,7 +156,7 @@ export default function TicketCard({
   return (
     // white background
     <div
-      className={`w-215 ${ticketView === "my" ? "h-38" : "h-47 "} bg-(--text-tertiary) rounded-xs relative select-none shrink-0`}
+      className={` w-full ${ticketView === "my" ? "h-38" : "h-47 "} bg-(--text-tertiary) rounded-xs relative select-none shrink-0`}
     >
       <div
         className={`w-full h-full flex flex-col justify-between items-start bg-(--bg-secondary) rounded-xs border border-(--bg-border) px-5 py-3 gap-2 cursor-pointer transition-all duration-600 ease-in-out hover:-translate-x-1 hover:-translate-y-1 hover:z-10 hover:border-(--text-tertiary)`}
@@ -231,7 +232,12 @@ export default function TicketCard({
             <div className={getStatusColor(ticket.status)}>
               {getStatusTitle(ticket.status, "singular")}
             </div>
-            <div className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5 border border-(--text-tertiary) text-(--text-tertiary) rounded-xs font-bold leading-3 select-none">
+            <div
+              className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5
+            bg-(--text-primary) text-(--bg-primary)
+            dark:bg-transparent dark:border dark:border-(--text-tertiary) dark:text-(--text-tertiary)
+            rounded-xs font-bold leading-3 select-none"
+            >
               {getPriorityTitle(ticket.priority)}
             </div>
             <div className="h-6 flex justify-center items-center py-1.5 gap-2.5 font-medium leading-3 text-(--text-tertiary) select-none">

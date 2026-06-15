@@ -24,12 +24,13 @@ export default function HomePage() {
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>(["Все"]);
 
   const mock = mockUser as UserType;
+  const isManager = mock.role === "manager";
   // States for btns near searchbar
   const [favoriteTickets, setFavoriteTickets] = useState<number[]>([]);
   const [showFavorites, setShowFavorites] = useState(false);
-  const [viewAsManager, setViewAsManager] = useState(mock.isManager);
   const [sortOldToNew, setSortOldToNew] = useState(false);
   const [sortByStatus, setSortByStatus] = useState<SortByStatusType>("default");
+  const [ticketView, setTicketView] = useState<"my" | "team">("my");
 
   // States for btns "yes/no" for complete tickets
   const [tickets, setTickets] = useState<Ticket[]>(mockData as Ticket[]);
@@ -39,6 +40,13 @@ export default function HomePage() {
     useState<activeSectionType>("tickets");
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  function resetFilters() {
+    setSelectedStatuses(["Все"]);
+    setSelectedCategories(["Все"]);
+    setSelectedDepartments(["Все"]);
+    setSelectedEmployees(["Все"]);
+  }
 
   return (
     <div
@@ -54,13 +62,13 @@ export default function HomePage() {
         activeSection={activeSection}
         setActiveSection={setActiveSection}
       />
-      <div className="flex px-44">
+      <div className="flex justify-center max-w-395 mx-auto">
         <Infoblock
           ticketStatuses={selectedStatuses}
           setTicketStatuses={setSelectedStatuses}
         />
         <HeroSector
-          className={"sticky top-0"}
+          className={" sticky top-0"}
           // searchbar
           inputRef={inputRef}
           searchQuery={keyword}
@@ -70,14 +78,17 @@ export default function HomePage() {
           ticketCategories={selectedCategories}
           ticketDepartments={selectedDepartments}
           ticketEmployees={selectedEmployees}
+          resetFilters={resetFilters}
+          setOpenDropdownFilter={setFilter}
           // favorite btn
           favoriteTickets={favoriteTickets}
           setFavoriteTickets={setFavoriteTickets}
           showFavorites={showFavorites}
           setShowFavorites={setShowFavorites}
           // manager feat btn
-          viewAsManager={viewAsManager}
-          setViewAsManager={setViewAsManager}
+          isManager={isManager}
+          ticketView={ticketView}
+          setTicketView={setTicketView}
           // sort btns near searchbar
           sortOldToNew={sortOldToNew}
           setSortOldToNew={setSortOldToNew}
@@ -101,7 +112,8 @@ export default function HomePage() {
           selectedEmployees={selectedEmployees}
           setSelectedEmployees={setSelectedEmployees}
           // manager feat btn
-          viewAsManager={viewAsManager}
+          isManager={isManager}
+          ticketView={ticketView}
         />
       </div>
       <p></p>

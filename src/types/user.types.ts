@@ -1,7 +1,9 @@
+type role = "employee" | "manager" | "admin";
+
 export interface UserType {
   id: number;
   name: string;
-  isManager: boolean;
+  role: role;
   localIp: string;
   pcName: string;
   remoteAccessDate: string;

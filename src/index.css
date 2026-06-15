@@ -15,47 +15,73 @@
 }
 
 :root {
-  background: #ede8de;
+  /* Color bg */
+  background: var(--bg-primary);
+  --bg-primary: #ede8de;
+  --bg-primary-second: #e1ddd4;
+  --bg-secondary: #e8e3d9;
+  --bg-tertiary: #e9e3d9;
+  --bg-border: #bebab3;
+  --border-hover-btn: #757575;
+
+  /* Color text */
+  --text-primary: #141414;
+  --text-secondary: #585757;
+  --text-tertiary: #484848;
+
+  /* Color btns */
+  --bg-btn-primary: #f50;
+  --bg-inactive-btn: #d4d0c8;
+  --bg-disable-btn: #b0ada5;
+
+  /* Color status tags */
+  --bg-task-new: #73baed;
+  --bg-task-inprogress: #b093f4;
+  --bg-task-paused: #dbd87e;
+  --bg-task-complete: #7abe7f;
+  --bg-task-cancelled: #e47777;
+  --bg-task-closed: #aaa7a3;
+  --bg-task-error: #d14747;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  /* line-height: 1.5;
-  font-weight: 400; */
 
   color-scheme: light dark;
 
   max-width: 1920px;
   max-height: 1080px;
 
-  /* font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
-
   scrollbar-width: none;
 }
 
 .dark {
-  background: #0c0b0b;
-  --bg-btn-primary: #a1ff62;
-  --bg-btn-cancel: #dd4d4d;
+  /* Color bg */
+  background: var(--bg-primary);
+  --bg-primary: #0c0b0b;
   --bg-primary-second: #0e0e0e;
-  --bg-border: #201e1e;
-  --bg-tertiary: #0f0f0f;
-
   --bg-secondary: #121212;
-  --bg-inactive-btn: #4f4c4c;
-
+  --bg-tertiary: #0f0f0f;
+  --bg-border: #201e1e;
   --border-hover-btn: #595959;
 
+  /* Color text */
   --text-primary: #ede8de;
   --text-secondary: #908e8e;
   --text-tertiary: #c3c0ba;
+  --text-btn: #0c0b0b;
 
+  /* Color btns */
+  --bg-btn-primary: #a1ff62;
+  --bg-inactive-btn: #4f4c4c;
+  --bg-disable-btn: #1d1d1d;
+
+  /* Color status tags */
   --bg-task-new: #50a1db;
   --bg-task-inprogress: #9872f1;
   --bg-task-paused: #dfdb65;
   --bg-task-complete: #44a74c;
-  --bg-task-closed: #969090;
   --bg-task-cancelled: #dd4d4d;
+  --bg-task-closed: #969090;
+  --bg-task-error: #842222;
 }
 
 /* body {

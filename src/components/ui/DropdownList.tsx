@@ -1,4 +1,5 @@
 // import { useState } from "react";
+import CrossIcon from "../../icons/card/CrossIcon";
 import ArrowIcon from "../../icons/filterblock/ArrowIcon";
 import SquareCheckIcon from "../../icons/filterblock/SquareCheckIcon";
 import SquareIcon from "../../icons/filterblock/SquareIcon";
@@ -10,6 +11,7 @@ interface DropdownListProps {
   title: string;
   selectedItems?: string[];
   setSelectedItems?: (filter: string[]) => void;
+  showResetButton?: boolean;
 }
 
 function DropdownList({
@@ -19,6 +21,7 @@ function DropdownList({
   title,
   selectedItems,
   setSelectedItems,
+  showResetButton,
 }: DropdownListProps) {
   const handleSelect = (item: string) => {
     if (setSelectedItems && selectedItems) {
@@ -41,18 +44,41 @@ function DropdownList({
     }
   };
 
+  const amountOfItems = () =>
+    selectedItems?.filter((i) => i !== "Все").length ?? 0;
+
   return (
-    <div className="w-full  flex flex-col items-start bg-(--bg-primary-second) group/dropdown cursor-pointer">
+    <div className="w-full flex flex-col items-start bg-(--bg-primary-second) group/dropdown cursor-pointer">
       <div
         className={`w-full flex justify-between items-center border-b border-(--bg-border) bg-(--bg-primary-second) px-5 py-3.75 ${isOpen ? "" : "group-hover/dropdown:border-b group-hover/dropdown:border-(--text-primary)"}`}
         onClick={() => onChange(title)}
       >
-        <span
-          className={`font-jbmono text-sm  font-normal leading-4 select-none ${isOpen ? "text-(--text-primary)" : "group-hover/dropdown:text-(--text-primary) text-(--text-secondary)"}`}
-        >
-          {title}
-        </span>
-        <ArrowIcon className={isOpen ? "" : "rotate-180"} />
+        <div className="flex gap-2 items-center">
+          <span
+            className={`font-jbmono text-sm  font-normal leading-4 select-none ${isOpen ? "text-(--text-primary)" : "group-hover/dropdown:text-(--text-primary) text-(--text-secondary)"}`}
+          >
+            {title}
+          </span>
+
+          {/* reset filter btn */}
+          {showResetButton && selectedItems && amountOfItems() > 0 && (
+            <button
+              className="w-7.5 h-4 flex justify-center items-center bg-(--text-secondary) rounded-xs px-1 py-0.5 gap-1.5 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSelect("Все");
+              }}
+            >
+              <span className="font-consolas font-normal text-xs text-(--bg-primary) leading-4">
+                {amountOfItems()}
+              </span>
+              <CrossIcon className="w-2 h-2 text-(--bg-primary) block" />
+            </button>
+          )}
+        </div>
+        <ArrowIcon
+          className={`${isOpen ? "text-(--text-primary)" : "rotate-180 dark:text-(--text-secondary) text-(--text-secondary)"}  group-hover/dropdown:text-(--text-primary)`}
+        />
       </div>
 
       <div
@@ -67,7 +93,7 @@ function DropdownList({
             >
               {selectedItems?.includes(item) ? (
                 <div className="h-full flex-1 flex items-center gap-2 px-3 py-2">
-                  <SquareCheckIcon />
+                  <SquareCheckIcon className="text-(--bg-btn-primary)" />
                   <span className="text-sm text-(--bg-btn-primary) font-consolas font-bold leading-4.5">
                     {item}
                   </span>

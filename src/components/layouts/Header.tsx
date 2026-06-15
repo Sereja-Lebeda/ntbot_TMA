@@ -52,11 +52,11 @@ export default function Header({
             </button>
           </div>
 
-          <div className="h-10 w-47.5 bg-(--text-primary) rounded-xs select-none">
+          <div className="h-10 w-47.5 bg-[#ede8de] rounded-xs select-none">
             <button className="h-10 w-47.5 bg-(--bg-btn-primary) rounded-xs flex justify-center items-center px-6 py-3 gap-2 cursor-pointer transition-all duration-600 ease-in-out hover:-translate-x-1 hover:-translate-y-1 hover:z-10 ">
               <div className="flex items-center gap-1">
                 <PlusIcon className="w-5 h-5" />
-                <span className="text-sm text-(--bg-primary-second) font-jbmono font-extrabold select-none">
+                <span className="text-sm dark:text-(--bg-primary) text-(--text-primary) font-jbmono font-extrabold select-none">
                   Создать заявку
                 </span>
               </div>

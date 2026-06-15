@@ -77,14 +77,14 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
     // Whole left side
     <div
       onMouseDown={(e) => e.preventDefault()}
-      className="h-246 w-79 flex flex-col items-center my-3 gap-3"
+      className="h-246 w-79 flex flex-col items-center my-3 gap-3 shrink-0"
     >
       {/* Info block  */}
       <div className="h-223 w-full flex flex-col items-center p-5 pt-5 pb-90 border border-(--bg-border) bg-(--bg-primary-second) rounded-xs gap-3">
         {/* User Info */}
         <div className="w-69 flex flex-col justify-center items-start px-4 py-6 gap-3 border border-(--bg-border) bg-(--bg-tertiary) rounded-xs select-none">
           {/* User name */}
-          <div className="h-10 w-full flex items-center px-1 border-b border-[#1D1D1D]">
+          <div className="h-10 w-full flex items-center px-1 border-b border-(--bg-disable-btn)">
             <span className="font-jbmono text-(--text-primary) text-lg font-bold leading-5.5">
               {mock.name}
             </span>
@@ -131,8 +131,11 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
             </div>
             {/* access date  */}
             <div className={baseStyle}>
-              <div className="w-5 h-5 flex justify-center items-center bg-[#A1FF6226] rounded-xs">
-                <AccessIcon />
+              <div className="w-5 h-5 flex justify-center items-center dark:bg-[#A1FF6226] bg-[#71C13B40] rounded-xs">
+                <AccessIcon
+                  className=" text-(--bg-task-complete)
+dark:text-(--bg-btn-primary)"
+                />
               </div>
               {/* TODO: Add ternar for access  */}
               <span className={textStyle}>

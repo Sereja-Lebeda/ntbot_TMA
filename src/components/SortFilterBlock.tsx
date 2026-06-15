@@ -1,6 +1,6 @@
 import DropdownList from "./ui/DropdownList";
 import mockData from "../../mockTicketInfo.json";
-import type { Ticket } from "../types/ticket.types";
+import type { Ticket, TicketViewType } from "../types/ticket.types";
 
 export interface OpenDropdownFilterProps {
   openDropdownFilter: string | null;
@@ -13,7 +13,9 @@ export interface OpenDropdownFilterProps {
   setSelectedDepartments: (department: string[]) => void;
   selectedEmployees: string[];
   setSelectedEmployees: (employee: string[]) => void;
-  viewAsManager: boolean;
+  isManager: boolean;
+  ticketView: TicketViewType;
+  // setTicketView: React.Dispatch<React.SetStateAction<TicketViewType>>;
 }
 
 const mock = mockData as Ticket[];
@@ -29,7 +31,9 @@ function SortFilterBlock({
   setSelectedDepartments,
   selectedEmployees,
   setSelectedEmployees,
-  viewAsManager,
+  isManager,
+  ticketView,
+  // setTicketView,
 }: OpenDropdownFilterProps) {
   const statuses = [
     "Все",
@@ -84,7 +88,7 @@ function SortFilterBlock({
   }
 
   return (
-    // TODO: delete shrink 0 for adaptive interface
+    // TODO: delete shrink 0 for adaptive interface?
     <div
       onMouseDown={(e) => e.preventDefault()}
       className="h-246 w-79 flex flex-col items-center my-3 gap-3 border border-(--bg-border) bg-(--bg-primary-second) rounded-xs shrink-0"
@@ -114,7 +118,7 @@ function SortFilterBlock({
           selectedItems={ticketCategories}
           setSelectedItems={setTicketCategories}
         />
-        {viewAsManager && (
+        {isManager && ticketView === "team" && (
           <DropdownList
             title="Отделы"
             isOpen={openDropdownFilter === "Отделы"}
@@ -122,9 +126,10 @@ function SortFilterBlock({
             onChange={(title) => changeFilter(title)}
             selectedItems={selectedDepartments}
             setSelectedItems={setSelectedDepartments}
+            showResetButton={true}
           />
         )}
-        {viewAsManager && (
+        {isManager && ticketView === "team" && (
           <DropdownList
             title="Сотрудники"
             isOpen={openDropdownFilter === "Сотрудники"}
@@ -132,6 +137,7 @@ function SortFilterBlock({
             onChange={(title) => changeFilter(title)}
             selectedItems={selectedEmployees}
             setSelectedItems={setSelectedEmployees}
+            showResetButton={true}
           />
         )}
       </div>
