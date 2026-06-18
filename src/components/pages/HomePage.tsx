@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
 import type { SortByStatusType, Ticket } from "../../types/ticket.types";
-import type { activeSectionType } from "../../types/header.types";
+// import type { activeSectionType } from "../../types/header.types";
 import type { UserType } from "../../types/user.types";
 import mockUser from "../../../mockUserInfo.json";
 import mockData from "../../../mockTicketInfo.json";
 
 import HeroSector from "../HeroSector";
-import Header from "../layouts/Header";
+// import Header from "../layouts/Header";
 import Infoblock from "../Infoblock";
 import SortFilterBlock from "../SortFilterBlock";
 
@@ -25,6 +25,7 @@ export default function HomePage() {
 
   const mock = mockUser as UserType;
   const isManager = mock.role === "manager";
+
   // States for btns near searchbar
   const [favoriteTickets, setFavoriteTickets] = useState<number[]>([]);
   const [showFavorites, setShowFavorites] = useState(false);
@@ -36,8 +37,8 @@ export default function HomePage() {
   const [tickets, setTickets] = useState<Ticket[]>(mockData as Ticket[]);
 
   // State for which section should be reflected
-  const [activeSection, setActiveSection] =
-    useState<activeSectionType>("tickets");
+  // const [activeSection, setActiveSection] =
+  //   useState<activeSectionType>("tickets");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -58,10 +59,10 @@ export default function HomePage() {
       }}
       className=""
     >
-      <Header
+      {/* <Header
         activeSection={activeSection}
         setActiveSection={setActiveSection}
-      />
+      /> */}
       <div className="flex justify-center max-w-395 mx-auto">
         <Infoblock
           ticketStatuses={selectedStatuses}

@@ -4,7 +4,7 @@ import type { UserType } from "../types/user.types";
 import type { StatusType, Ticket } from "../types/ticket.types";
 import {
   textPressAnimationStyle,
-  btnPressAnimationStyle,
+  // btnPressAnimationStyle,
 } from "../styles/pressAnimation";
 
 import handleStatusSelect from "../utils/statusSelectedHelper";
@@ -12,14 +12,15 @@ import getStatusTitle from "../utils/statusNameHelper";
 
 import mockUser from "../../mockUserInfo.json";
 import mockTicket from "../../mockTicketInfo.json";
-import ToggleBtn from "../components/ui/ToggleBtn";
+// import ToggleBtn from "../components/ui/ToggleBtn";
 import StatusInfoBtn from "./ui/StatusInfoBtn";
 
 import CopyHint from "../components/ui/CopyHint";
+import SupportButtons from "../components/ui/SupportButtons";
 import IpIcon from "../icons/infoblock/IpIcon";
 import PcIcon from "../icons/infoblock/PcIcon";
 import AccessIcon from "../icons/infoblock/AccessIcon";
-import TelegramIcon from "../icons/card/TelegramIcon";
+// import TelegramIcon from "../icons/card/TelegramIcon";
 
 interface InfoblockProps {
   ticketStatuses: string[];
@@ -167,22 +168,9 @@ dark:text-(--bg-btn-primary)"
         </div>
       </div>
 
-      {/* Toggle and telegram block  */}
+      {/* // Toggle and telegram block */}
       <div className="w-full h-full flex justify-center items-center p-5 bg-(--bg-primary-second) border border-(--bg-border) rounded-xs gap-2.5">
-        <button
-          className={`flex items-center bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none
-      group rounded-xs p-2 ${btnPressAnimationStyle}`}
-        >
-          <ToggleBtn />
-        </button>
-        <button
-          className={`w-full flex justify-center items-center px-3 py-2.5 bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none group rounded-xs gap-2 ${btnPressAnimationStyle}`}
-        >
-          <TelegramIcon className="group-hover:text-(--text-primary) text-(--text-secondary) " />
-          <span className="font-jbmono text-(--text-secondary) group-hover:text-(--text-primary) text-sm font-medium leading-normal select-none">
-            Задать вопрос
-          </span>
-        </button>
+        <SupportButtons />
       </div>
     </div>
   );
