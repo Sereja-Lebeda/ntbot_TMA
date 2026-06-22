@@ -1,0 +1,60 @@
+[
+  {
+    "id": 1,
+    "category": "Доступы и коммуникация",
+    "subcategory": "Папки и файлы",
+    "name": "Получить доступ",
+    "fields": [
+      {
+        "name": "link",
+        "label": "Ссылка на папку/файл",
+        "type": "short text",
+        "required": true,
+        "placeholder": "Вставьте ссылку"
+      },
+      {
+        "name": "level",
+        "label": "Уровень доступа",
+        "type": "dropdown",
+        "required": true,
+        "options": ["Просмотр", "Редактирование"]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "category": "Доступы и коммуникация",
+    "subcategory": "Папки и файлы",
+    "name": "Изменить доступ"
+  },
+  {
+    "id": 3,
+    "category": "Доступы и коммуникация",
+    "subcategory": "Папки и файлы",
+    "name": "Закрыть доступ"
+  },
+  {
+    "id": 4,
+    "category": "Доступы и коммуникация",
+    "subcategory": "Базы данных",
+    "name": "Создать базу"
+  },
+  {
+    "id": 5,
+    "category": "NTMincer",
+    "subcategory": "Парсинг",
+    "name": "Парсинг Мой дом"
+  },
+  {
+    "id": 6,
+    "category": "NTMincer",
+    "subcategory": "Парсинг",
+    "name": "Парсинг Твоя баня"
+  },
+  {
+    "id": 7,
+    "category": "NTMincer",
+    "subcategory": "Нейроразметка",
+    "name": "Не работает"
+  }
+]

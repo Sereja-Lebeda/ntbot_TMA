@@ -4,19 +4,24 @@ import { useNavigate } from "react-router";
 import type {
   CurrentStepType,
   CategoriesPool,
+  Action,
 } from "../../types/createTicket.type";
 
 import StepCategory from "./ticketSteps/StepCategory";
 import SupportButtons from "../ui/SupportButtons";
 import ProgressBar from "../ui/ProgressBar";
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
+import StepProblem from "./ticketSteps/StepProblem";
 
 // type LabelStepProps = "Category" | "Problem" | "Details" | "Done";
 
 function CreateTicketPage() {
   const [currentStep, setCurrentStep] = useState<CurrentStepType>(1);
+
   const [selectedCategory, setSelectedCategory] =
     useState<CategoriesPool>(null);
+  const [selectedAction, setSelectedAction] = useState<Action | null>();
+
   const navigate = useNavigate();
 
   function nextStep() {
@@ -24,7 +29,13 @@ function CreateTicketPage() {
       prev < 4 ? ((prev + 1) as CurrentStepType) : prev,
     );
   }
-  console.log(selectedCategory);
+  function prevStep() {
+    setCurrentStep((prev) =>
+      prev > 1 ? ((prev - 1) as CurrentStepType) : prev,
+    );
+  }
+
+  console.log(selectedAction);
   return (
     <div className="flex flex-col justify-center items-center min-w-130 max-w-225 mx-auto pt-4">
       {/* Step container */}
@@ -61,11 +72,19 @@ function CreateTicketPage() {
         </div>
       </div>
 
-      <div>
+      <div className="w-full">
         {currentStep === 1 && (
           <StepCategory
             onNext={nextStep}
             setSelectedCategory={setSelectedCategory}
+          />
+        )}
+        {currentStep === 2 && (
+          <StepProblem
+            onPrev={prevStep}
+            onNext={nextStep}
+            selectedCategory={selectedCategory}
+            setSelectedAction={setSelectedAction}
           />
         )}
       </div>

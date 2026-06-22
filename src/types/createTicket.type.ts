@@ -15,3 +15,22 @@ export type CategoryName =
   | "Разработка и нестандартные запросы";
 
 export type CategoriesPool = CategoryName | null;
+
+export interface Action {
+  id: number;
+  category: CategoryName;
+  subcategory: string;
+  name: string;
+  fields: Field;
+}
+
+interface Field {
+  name: string;
+  label: string;
+  type: FieldType;
+  required: boolean;
+  placeholder?: string;
+  options?: string[];
+}
+
+export type FieldType = "bool" | "short text" | "long text" | "dropdown";

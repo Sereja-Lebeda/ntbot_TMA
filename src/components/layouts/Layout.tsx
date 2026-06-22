@@ -11,8 +11,8 @@ export default function Layout() {
 
   return (
     <div
-      onMouseDown={(e) => e.preventDefault()}
-      /* твой onMouseDown для blur инпута, если нужен глобально */
+    // onMouseDown={(e) => e.preventDefault()}
+    /* твой onMouseDown для blur инпута, если нужен глобально */
     >
       <Header
         activeSection={activeSection}

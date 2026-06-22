@@ -23,6 +23,7 @@ import TicketCard from "./TicketCard";
 import Searchbar from "./ui/Searchbar";
 import SearchMenuBtn from "./ui/SearchMenuBtn";
 import UserIcon from "../icons/searchmenu/UserIcon";
+import { hoverAnimationStyle } from "../styles/pressAnimation";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -131,6 +132,7 @@ export default function HeroSector({
           searchRequest={searchQuery}
           setSearchRequest={setSearchQuery}
           ref={inputRef}
+          className={hoverAnimationStyle}
         />
         {/* Row of buttons */}
         <div className="flex justify-center items-center gap-1">

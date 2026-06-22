@@ -66,7 +66,8 @@ export default function Header({
             <button
               disabled={isOnCreatePage}
               onClick={() => navigate("/tickets/new")}
-              className="h-10 w-47.5 bg-(--bg-btn-primary) rounded-xs flex justify-center items-center px-6 py-3 gap-2  transition-all duration-600 ease-in-out enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10
+              className="h-10 w-47.5 bg-(--bg-btn-primary) rounded-xs flex justify-center items-center px-6 py-3 gap-2 cursor-pointer
+              transition-all duration-600 ease-in-out enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10
             disabled:bg-(--bg-disable-btn)"
             >
               <div className="flex items-center gap-1">
