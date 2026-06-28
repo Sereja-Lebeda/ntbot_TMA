@@ -13,14 +13,14 @@ interface StepProblemProps {
   onPrev: () => void;
   onNext: () => void;
   selectedCategory: CategoriesPool;
-  setSelectedAction: (action: Action) => void;
+  selectAction: (action: Action) => void;
 }
 //TODO: add modal window for closing
 function StepProblem({
   onPrev,
   onNext,
   selectedCategory,
-  setSelectedAction,
+  selectAction,
 }: StepProblemProps) {
   const [openSubcategories, setOpenSubcategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,7 +30,7 @@ function StepProblem({
     return null;
   }
 
-  const mockAction = mockActionInfo as Action[];
+  const mockAction = mockActionInfo as unknown as Action[];
 
   const categoryActions = mockAction.filter(
     (a) => a.category === selectedCategory,
@@ -103,13 +103,13 @@ function StepProblem({
 
               return (
                 <div
-                  className={`w-full flex flex-col justify-start bg-(--bg-secondary) px-5 py-4 transition-transform duration-900 border border-(--bg-border) ${isOpen ? "border-(--border-hover-btn)!" : "hover:border-(--border-hover-btn)"}`}
+                  className={`w-full flex flex-col justify-start bg-(--bg-secondary) px-5 py-4 transition-transform duration-900 border border-(--bg-border) cursor-pointer ${isOpen ? "border-(--border-hover-btn)!" : "hover:border-(--border-hover-btn)"}`}
                   key={sub}
+                  onClick={() => toggleSubcategory(sub)}
                 >
                   {/* Заголовок аккордеона */}
                   <div
-                    className={`w-full flex justify-between items-center cursor-pointer ${isOpen ? "pb-6" : ""}`}
-                    onClick={() => toggleSubcategory(sub)}
+                    className={`w-full flex justify-between items-center ${isOpen ? "pb-6" : ""}`}
                   >
                     <div className="space-x-2 select-none">
                       <span className="font-jbmono font-normal text-sm text-(--text-primary) tracking-[0.8px]">
@@ -140,7 +140,7 @@ function StepProblem({
                             hover:text-(--text-primary)
                             "
                             onClick={() => {
-                              setSelectedAction(action);
+                              selectAction(action);
                               onNext();
                             }}
                           >

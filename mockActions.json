@@ -4,20 +4,52 @@
     "category": "Доступы и коммуникация",
     "subcategory": "Папки и файлы",
     "name": "Получить доступ",
+    "attachment": true,
     "fields": [
       {
         "name": "link",
         "label": "Ссылка на папку/файл",
-        "type": "short text",
+        "type": "multi text",
         "required": true,
         "placeholder": "Вставьте ссылку"
       },
       {
         "name": "level",
         "label": "Уровень доступа",
-        "type": "dropdown",
+        "type": "radio",
         "required": true,
         "options": ["Просмотр", "Редактирование"]
+      },
+      {
+        "name": "name",
+        "label": "ФИО сотрудника",
+        "type": "dropdown",
+        "subtype": "employeeFullname",
+        "required": true,
+        "placeholder": "Абоба Макарович ИИшников",
+        "options": [
+          "Иванов Иван Иванович",
+          "Ярославенько Ярослав Ярославович",
+          "Попенко Попа Попович",
+          "Курлыков Курылык Курлыкович",
+          "Магаданов Чебурашка Апельсинович",
+          "Слонов Хомяк Грызунович"
+        ]
+      },
+      {
+        "name": "short text",
+        "label": "Короткий текст",
+        "type": "short text",
+        "placeholder": "Короткий текст",
+        "required": true
+      },
+      {
+        "name": "long text",
+        "label": "Длинный текст",
+        "type": "long text",
+        "placeholder": "Длинный текст",
+        "required": true,
+        "attachment": true
       }
     ]
   },
@@ -25,36 +57,42 @@
     "id": 2,
     "category": "Доступы и коммуникация",
     "subcategory": "Папки и файлы",
-    "name": "Изменить доступ"
+    "name": "Изменить доступ",
+    "fields": []
   },
   {
     "id": 3,
     "category": "Доступы и коммуникация",
     "subcategory": "Папки и файлы",
-    "name": "Закрыть доступ"
+    "name": "Закрыть доступ",
+    "fields": []
   },
   {
     "id": 4,
     "category": "Доступы и коммуникация",
     "subcategory": "Базы данных",
-    "name": "Создать базу"
+    "name": "Создать базу",
+    "fields": []
   },
   {
     "id": 5,
     "category": "NTMincer",
     "subcategory": "Парсинг",
-    "name": "Парсинг Мой дом"
+    "name": "Парсинг Мой дом",
+    "fields": []
   },
   {
     "id": 6,
     "category": "NTMincer",
     "subcategory": "Парсинг",
-    "name": "Парсинг Твоя баня"
+    "name": "Парсинг Твоя баня",
+    "fields": []
   },
   {
     "id": 7,
     "category": "NTMincer",
     "subcategory": "Нейроразметка",
-    "name": "Не работает"
+    "name": "Не работает",
+    "fields": []
   }
 ]

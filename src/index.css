@@ -94,6 +94,7 @@ body::-webkit-scrollbar {
 
 .dropdown-scroll::-webkit-scrollbar {
   width: 2px;
+  height: 2px;
 }
 .dropdown-scroll::-webkit-scrollbar-thumb {
   background: var(--bg-inactive-btn);

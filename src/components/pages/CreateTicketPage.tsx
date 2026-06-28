@@ -5,9 +5,13 @@ import type {
   CurrentStepType,
   CategoriesPool,
   Action,
+  priorityLevel,
+  AttachedFile,
 } from "../../types/createTicket.type";
 
 import StepCategory from "./ticketSteps/StepCategory";
+import StepDetails from "./ticketSteps/StepDetails";
+
 import SupportButtons from "../ui/SupportButtons";
 import ProgressBar from "../ui/ProgressBar";
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
@@ -18,9 +22,14 @@ import StepProblem from "./ticketSteps/StepProblem";
 function CreateTicketPage() {
   const [currentStep, setCurrentStep] = useState<CurrentStepType>(1);
 
+  const [formData, setFormData] = useState<Record<string, string>>({});
   const [selectedCategory, setSelectedCategory] =
     useState<CategoriesPool>(null);
   const [selectedAction, setSelectedAction] = useState<Action | null>();
+  const [priority, setPriority] = useState<priorityLevel>(null);
+  // const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<AttachedFile[]>([]);
+  const [multiData, setMultiData] = useState<Record<string, string[]>>({});
 
   const navigate = useNavigate();
 
@@ -35,9 +44,14 @@ function CreateTicketPage() {
     );
   }
 
-  console.log(selectedAction);
+  function selectAction(action: Action) {
+    setSelectedAction(action);
+    setFormData({});
+  }
+
+  // console.log(formData);
   return (
-    <div className="flex flex-col justify-center items-center min-w-130 max-w-225 mx-auto pt-4">
+    <div className="flex flex-col justify-center items-center min-w-130 max-w-225 mx-auto pt-4 pb-7">
       {/* Step container */}
       <div className="w-full flex flex-col items-center select-none">
         {/* Title section */}
@@ -84,7 +98,22 @@ function CreateTicketPage() {
             onPrev={prevStep}
             onNext={nextStep}
             selectedCategory={selectedCategory}
-            setSelectedAction={setSelectedAction}
+            selectAction={selectAction}
+          />
+        )}
+        {currentStep === 3 && selectedAction && (
+          <StepDetails
+            onPrev={prevStep}
+            onNext={nextStep}
+            selectedAction={selectedAction}
+            formData={formData}
+            setFormData={setFormData}
+            priority={priority}
+            setPriority={setPriority}
+            files={files}
+            setFiles={setFiles}
+            multiData={multiData}
+            setMultiData={setMultiData}
           />
         )}
       </div>
