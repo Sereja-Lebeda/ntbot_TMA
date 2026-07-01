@@ -1,6 +1,6 @@
 export type CurrentStepType = 1 | 2 | 3 | 4;
 
-export type priorityLevel = "Low" | "Medium" | "High" | null;
+export type PriorityLevel = "Low" | "Medium" | "High" | null;
 
 export type CategoryName =
   | "Доступы и коммуникация"
@@ -15,6 +15,8 @@ export type CategoryName =
   | "Закупка"
   | "Сотрудники"
   | "Разработка и нестандартные запросы";
+
+export type ValidationType = "url" | "email" | "phone" | "path";
 
 export type AttachedFile = { file: File; url: string };
 
@@ -35,6 +37,7 @@ export interface Field {
   type: FieldType;
   subtype?: string;
   required: boolean;
+  validation?: ValidationType;
   placeholder?: string;
   options?: string[];
 }

@@ -4,8 +4,10 @@ import type {
   Action,
   AttachedFile,
   Field,
-  priorityLevel,
+  PriorityLevel,
 } from "../../../types/createTicket.type";
+
+import { validators } from "../../../utils/validators";
 import FormDropdown from "../../ui/FormDropdown";
 import mockUserInfo from "../../../../mockUserInfo.json";
 
@@ -31,8 +33,8 @@ interface StepDetailsProps {
   selectedAction: Action;
   formData: Record<string, string>;
   setFormData: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-  priority: priorityLevel;
-  setPriority: (priority: priorityLevel) => void;
+  priority: PriorityLevel;
+  setPriority: (priority: PriorityLevel) => void;
   files: AttachedFile[];
   setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
   multiData: Record<string, string[]>;
@@ -56,6 +58,7 @@ function StepDetails({
   setMultiData,
 }: StepDetailsProps) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   if (!selectedAction) return null;
 
@@ -67,21 +70,24 @@ function StepDetails({
     focus-within:border-(--text-primary)!
     group rounded-xs cursor-text`;
 
-  //TODO: add gap between fields
   function renderField(field: Field) {
     switch (field.type) {
       case "short text":
         return (
           <div className="w-full flex items-center gap-3">
-            <div className={`${defaultInputStyle}`}>
+            <div
+              className={`${defaultInputStyle}
+              ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
+            >
               <input
                 value={formData[field.name] ?? ""}
-                onChange={(e) =>
+                onChange={(e) => {
                   setFormData((prev) => ({
                     ...prev,
                     [field.name]: e.target.value,
-                  }))
-                }
+                  }));
+                  clearError(field.name);
+                }}
                 type="text"
                 placeholder={field.placeholder}
                 className="w-full
@@ -99,16 +105,20 @@ function StepDetails({
           <div className="w-full flex flex-col gap-3">
             {values.map((value, index) => (
               <div key={index} className="w-full flex items-center gap-3">
-                <div className={`${defaultInputStyle}`}>
+                <div
+                  className={`${defaultInputStyle}
+              ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
+                >
                   <input
                     value={value}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setMultiData((prev) => {
                         const arr = [...(prev[field.name] ?? [""])];
                         arr[index] = e.target.value;
                         return { ...prev, [field.name]: arr };
-                      })
-                    }
+                      });
+                      clearError(field.name);
+                    }}
                     type="text"
                     placeholder={field.placeholder}
                     className="w-full font-consolas font-normal text-sm leading-normal outline-none"
@@ -159,15 +169,19 @@ function StepDetails({
 
       case "long text":
         return (
-          <div className={`h-27 ${defaultInputStyle}`}>
+          <div
+            className={`h-27 ${defaultInputStyle}
+              ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
+          >
             <textarea
               value={formData[field.name] ?? ""}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData((prev) => ({
                   ...prev,
                   [field.name]: e.target.value,
-                }))
-              }
+                }));
+                clearError(field.name);
+              }}
               placeholder={field.placeholder}
               className="w-full h-full
               font-consolas font-normal text-sm leading-normal
@@ -190,21 +204,26 @@ function StepDetails({
             onChange={(val) => {
               const realValue = val === "Я" ? userFullName : val;
               setFormData((prev) => ({ ...prev, [field.name]: realValue }));
+              clearError(field.name);
             }}
             placeholder={field.placeholder}
+            hasError={!!errors[field.name]}
           />
         );
       }
 
       case "radio": // или внутри dropdown по флагу
         return (
-          <div className="flex items-start gap-6 mt-4">
+          <div
+            className={`flex items-start gap-6 py-2 mt-4 border border-transparent ${errors[field.name] ? "border-(--bg-task-error)! rounded-xs" : ""}`}
+          >
             {field.options?.map((option) => (
               <label
                 key={option}
-                onClick={() =>
-                  setFormData((prev) => ({ ...prev, [field.name]: option }))
-                }
+                onClick={() => {
+                  setFormData((prev) => ({ ...prev, [field.name]: option }));
+                  clearError(field.name);
+                }}
                 className=""
               >
                 <div className="flex items-center cursor-pointer gap-1">
@@ -238,7 +257,7 @@ function StepDetails({
 
   function renderPriority() {
     const priorities: {
-      value: priorityLevel;
+      value: PriorityLevel;
       icon: React.ComponentType<{ className?: string }>;
       label: string;
     }[] = [
@@ -255,8 +274,11 @@ function StepDetails({
           return (
             <button
               key={p.value}
-              onClick={() => setPriority(p.value)}
-              className={`${priorityDivBtnStyle} ${isActive ? "border border-(--text-primary)" : "border border-(--border-hover-btn) group hover:border-(--text-secondary)"}`}
+              onClick={() => {
+                setPriority(p.value);
+                clearError("priority");
+              }}
+              className={`${priorityDivBtnStyle} ${isActive ? "border border-(--text-primary)" : "border border-(--border-hover-btn) group hover:border-(--text-secondary)"} ${errors["priority"] ? "border-(--bg-task-error)!" : ""}`}
             >
               <Icon
                 className={`shrink-0 ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}
@@ -273,6 +295,14 @@ function StepDetails({
     );
   }
 
+  function clearError(fieldName: string) {
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[fieldName];
+      return next;
+    });
+  }
+
   // Drag n drop attachment
   function addFiles(fileList: FileList) {
     const newFiles = Array.from(fileList);
@@ -282,6 +312,57 @@ function StepDetails({
         .map((nf) => ({ file: nf, url: URL.createObjectURL(nf) }));
       return [...prev, ...unique];
     });
+  }
+
+  //TODO: Change validation rules to get em with Action structure from backend
+  function validateForm() {
+    const newErrors: Record<string, string> = {};
+    selectedAction.fields.forEach((field) => {
+      if (field.type === "multi text") {
+        const values = multiData[field.name] ?? [];
+
+        // required: хотя бы одно непустое?
+        if (field.required && values.every((v) => !v)) {
+          newErrors[field.name] = "Обязательное поле";
+        }
+
+        // формат: каждый непустой элемент валиден?
+        if (field.validation) {
+          const hasInvalid = values.some(
+            (v) => v && !validators[field.validation!](v),
+          );
+          if (hasInvalid) {
+            newErrors[field.name] = "Неверный формат в одном из полей";
+          }
+        }
+      } else {
+        const value = formData[field.name];
+        if (field.required && !value) {
+          newErrors[field.name] = "Обязательное поле";
+        }
+
+        if (field.validation && value) {
+          const validationResult = validators[field.validation](value);
+
+          if (!validationResult) {
+            newErrors[field.name] = "Неверный формат";
+          }
+        }
+      }
+    });
+
+    if (!priority) {
+      newErrors["priority"] = "error"; // текст не важен, раз без подсказки
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
+
+  function submitForm() {
+    if (validateForm()) {
+      onNext();
+    }
   }
 
   // console.log({ multiData });
@@ -404,7 +485,7 @@ function StepDetails({
             {/* Send ticket btn */}
             {/* White background */}
             <button
-              // onClick={onNext}
+              onClick={submitForm}
               className="h-8.5 flex justify-center items-center
             bg-(--text-primary) rounded-xs cursor-pointer group"
             >

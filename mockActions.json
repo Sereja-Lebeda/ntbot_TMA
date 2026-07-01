@@ -11,7 +11,8 @@
         "label": "Ссылка на папку/файл",
         "type": "multi text",
         "required": true,
-        "placeholder": "Вставьте ссылку"
+        "placeholder": "Вставьте ссылку",
+        "validation": "url"
       },
       {
         "name": "level",

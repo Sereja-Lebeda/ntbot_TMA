@@ -5,7 +5,7 @@ import type {
   CurrentStepType,
   CategoriesPool,
   Action,
-  priorityLevel,
+  PriorityLevel,
   AttachedFile,
 } from "../../types/createTicket.type";
 
@@ -26,7 +26,7 @@ function CreateTicketPage() {
   const [selectedCategory, setSelectedCategory] =
     useState<CategoriesPool>(null);
   const [selectedAction, setSelectedAction] = useState<Action | null>();
-  const [priority, setPriority] = useState<priorityLevel>(null);
+  const [priority, setPriority] = useState<PriorityLevel>(null);
   // const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [files, setFiles] = useState<AttachedFile[]>([]);
   const [multiData, setMultiData] = useState<Record<string, string[]>>({});
