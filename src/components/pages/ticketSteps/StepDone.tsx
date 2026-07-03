@@ -15,6 +15,7 @@ import SuccessCreateIcon from "../../../icons/createTicket/SuccessCreateIcon";
 function StepDone({ ticketId, ticketStatus }: StepDoneProps) {
   const navigate = useNavigate();
 
+  //TODO: Make error on 3rd step by modal or popup window
   useEffect(() => {
     const timeout = setTimeout(() => {
       navigate("/");
