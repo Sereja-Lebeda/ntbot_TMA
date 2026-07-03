@@ -22,6 +22,8 @@ export type AttachedFile = { file: File; url: string };
 
 export type CategoriesPool = CategoryName | null;
 
+export type TicketStatusType = "Success" | "Failed";
+
 export interface Action {
   id: number;
   category: CategoryName;
@@ -32,8 +34,8 @@ export interface Action {
 }
 
 export interface Field {
-  name: string;
-  label: string;
+  name: string; // то, под чем значение уйдёт на бэк и будет отображаться в json
+  label: string; // подпись для поля, которое заполняет юзер
   type: FieldType;
   subtype?: string;
   required: boolean;

@@ -38,19 +38,18 @@
         ]
       },
       {
-        "name": "short text",
+        "name": "comment",
         "label": "Короткий текст",
         "type": "short text",
         "placeholder": "Короткий текст",
         "required": true
       },
       {
-        "name": "long text",
+        "name": "description",
         "label": "Длинный текст",
         "type": "long text",
         "placeholder": "Длинный текст",
-        "required": true,
-        "attachment": true
+        "required": true
       }
     ]
   },

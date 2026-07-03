@@ -39,6 +39,7 @@ interface StepDetailsProps {
   setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
   multiData: Record<string, string[]>;
   setMultiData: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  submitTicket: () => void;
 }
 
 // TODO: Add feat to save info in fields until user cancel/submit ticket
@@ -56,6 +57,7 @@ function StepDetails({
   setFiles,
   multiData,
   setMultiData,
+  submitTicket,
 }: StepDetailsProps) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -63,6 +65,11 @@ function StepDetails({
   if (!selectedAction) return null;
 
   const userFullName = mockUserInfo.name;
+
+  const priorityDivBtnStyle =
+    "w-35 flex justify-center items-center px-7 py-3 gap-2.5 rounded-xs cursor-pointer";
+  const priorityTextBtnStyle =
+    "font-jbmono font-extrabold leading-normal text-sm ";
 
   const defaultInputStyle = `w-full h-10 flex items-center mt-4 px-4 py-2.5
     border border-(--bg-border)
@@ -250,11 +257,6 @@ function StepDetails({
     }
   }
 
-  const priorityDivBtnStyle =
-    "w-35 flex justify-center items-center px-7 py-3 gap-2.5 rounded-xs cursor-pointer";
-  const priorityTextBtnStyle =
-    "font-jbmono font-extrabold leading-normal text-sm ";
-
   function renderPriority() {
     const priorities: {
       value: PriorityLevel;
@@ -361,6 +363,7 @@ function StepDetails({
 
   function submitForm() {
     if (validateForm()) {
+      submitTicket();
       onNext();
     }
   }

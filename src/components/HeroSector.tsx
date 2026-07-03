@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { useState } from "react";
 
 import type {
   Ticket,
@@ -24,6 +24,7 @@ import Searchbar from "./ui/Searchbar";
 import SearchMenuBtn from "./ui/SearchMenuBtn";
 import UserIcon from "../icons/searchmenu/UserIcon";
 import { hoverAnimationStyle } from "../styles/pressAnimation";
+import ModalWindow from "./ui/ModalWindow";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -83,6 +84,8 @@ export default function HeroSector({
 }: selectedTicketStatusesProps) {
   // const [title, id, date, description, status, priority, category] = mock;
   // const mock = mockData as Ticket[];
+  const [modalTicketId, setModalTicketId] = useState<number | null>(null);
+
   const mockCurrentUser = mockUser as UserType;
 
   function ticketMatchesSearch(ticket: Ticket, query: string): boolean {
@@ -122,10 +125,39 @@ export default function HeroSector({
       (ticketDepartments.some((i) => i !== "Все") ||
         ticketEmployees.some((i) => i !== "Все")));
 
+  const inputText =
+    "Вы уверены, что хотите отменить заявку?\n\nЗаново запустить её в работу будет невозможно.";
+
+  function onConfirm() {
+    setTickets((prev) =>
+      prev.map((t) =>
+        t.ticketId === modalTicketId ? { ...t, status: "Cancelled" } : t,
+      ),
+    );
+    setModalTicketId(null);
+  }
+
+  function onCancel() {
+    setModalTicketId(null);
+  }
+
+  function handleRequestCancel(id: number) {
+    setModalTicketId(id);
+  }
+
+  //TODO: Arrange functionality that manager can close (and cancel) employee tickets!!!
   return (
     <div
       className={`relative flex-1 max-w-225 min-w-130 h-246 flex flex-col items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5 ${className} `}
     >
+      {modalTicketId !== null && (
+        <ModalWindow
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+          inputText={inputText}
+        />
+      )}
+
       {/* Searchbar and icons for sort */}
       <div className="w-full flex items-center gap-2 mb-3.5 p-1">
         <Searchbar
@@ -248,6 +280,7 @@ export default function HeroSector({
               setFavoriteTickets={setFavoriteTickets}
               ticketView={ticketView}
               setTickets={setTickets}
+              onRequestCancel={handleRequestCancel}
             />
           ))}
       </div>

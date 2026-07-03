@@ -20,6 +20,7 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   setFavoriteTickets: (id: number[]) => void;
   ticketView: string;
   setTickets: React.Dispatch<React.SetStateAction<Ticket[]>>;
+  onRequestCancel: (ticketId: number) => void;
 }
 
 export default function TicketCard({
@@ -28,6 +29,7 @@ export default function TicketCard({
   setFavoriteTickets,
   ticketView,
   setTickets,
+  onRequestCancel,
 }: TicketCardWithActionsProps) {
   function getStatusColor(status: StatusType) {
     const baseStyle =
@@ -74,7 +76,13 @@ export default function TicketCard({
       case "New":
         return (
           <div className={baseStyle}>
-            <CancelIcon /> <EditIcon /> <RepeatIcon /> {favoriteBtn}
+            <button
+              className="cursor-pointer"
+              onClick={() => onRequestCancel(ticket.ticketId)}
+            >
+              <CancelIcon />
+            </button>
+            <EditIcon /> <RepeatIcon /> {favoriteBtn}
             <TelegramIcon className="text-(--text-tertiary) " />
           </div>
         );

@@ -1,7 +1,8 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import type { AttachedFile } from "../../types/createTicket.type";
 import { isSameFile } from "../../utils/fileDublicateHelper";
+import ModalWindow from "./ModalWindow";
 
 import {
   hoverAnimationStyle,
@@ -38,6 +39,11 @@ function AttachmentaField({
 
   const refFileAttach = useRef<HTMLInputElement>(null);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState<AttachedFile | null>(null);
+
+  const inputText = "Вы уверены, что хотите удалить прикрепленный файл?";
+
   function getFileIcon(fileName: string) {
     const ext = fileName.split(".").pop()?.toLowerCase();
     switch (ext) {
@@ -54,8 +60,32 @@ function AttachmentaField({
     }
   }
 
+  function onConfirm() {
+    if (fileToDelete) {
+      URL.revokeObjectURL(fileToDelete.url);
+      setFiles((prev) =>
+        prev.filter((item) => !isSameFile(item.file, fileToDelete.file)),
+      );
+    }
+    setFileToDelete(null);
+    setIsModalOpen(false);
+  }
+
+  function onCancel() {
+    setFileToDelete(null);
+    setIsModalOpen(false);
+  }
+
   return (
     <div className="w-full">
+      {isModalOpen && (
+        <ModalWindow
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+          inputText={inputText}
+        />
+      )}
+
       <input
         type="file"
         multiple
@@ -128,12 +158,8 @@ function AttachmentaField({
 
                   <div
                     onClick={() => {
-                      URL.revokeObjectURL(attached.url);
-                      setFiles((prev) =>
-                        prev.filter(
-                          (item) => !isSameFile(item.file, attached.file),
-                        ),
-                      );
+                      setFileToDelete(attached);
+                      setIsModalOpen(true);
                     }}
                     className="absolute top-2 right-2 w-5 h-5
                         flex justify-center items-center
