@@ -8,6 +8,8 @@ import { getStatusColor } from "../utils/ticketBadgeHelpers";
 import { getPriorityTitle } from "../utils/ticketBadgeHelpers";
 import { textPressAnimationStyle } from "../styles/pressAnimation";
 
+import CardActionButton from "./ui/Buttons/CardActionButton";
+
 import AttachIcon from "../icons/card/AttachIcon";
 import CancelIcon from "../icons/card/CancelIcon";
 import CheckIcon from "../icons/card/CheckIcon";
@@ -26,6 +28,17 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   handleOpenView: (ticketId: number) => void;
 }
 
+type actionRegistryType = "cancel" | "edit" | "repeat" | "telegram";
+
+const statusActions: Record<StatusType, actionRegistryType[]> = {
+  New: ["cancel", "edit", "repeat", "telegram"],
+  "In progress": ["repeat", "telegram"],
+  Paused: ["repeat", "telegram"],
+  Closed: ["repeat"],
+  Cancelled: ["repeat"],
+  Complete: [],
+};
+
 export default function TicketCard({
   ticket,
   favoriteTickets,
@@ -43,113 +56,101 @@ export default function TicketCard({
     />
   );
 
+  const actionRegistry = {
+    cancel: {
+      Icon: CancelIcon,
+      onClick: () => onRequestCancel(ticket.ticketId),
+    },
+    edit: {
+      Icon: EditIcon,
+      onClick: () => console.log("TODO: edit", ticket.ticketId),
+    },
+    repeat: {
+      Icon: RepeatIcon,
+      onClick: () => console.log("TODO: repeat", ticket.ticketId),
+    },
+    telegram: {
+      Icon: TelegramIcon,
+      onClick: () => console.log("TODO: telegram", ticket.ticketId),
+    },
+  };
+
   function getStatusIcon(status: StatusType): React.ReactNode {
     const baseStyle = "flex items-center gap-2";
 
-    switch (status) {
-      case "New":
-        return (
-          <div className={baseStyle}>
+    if (status === "Complete") {
+      return (
+        <div className="flex items-center gap-2 font-jbmono">
+          <span className="text-(--text-primary)  text-xs font-medium leading-3 select-none">
+            Заявка выполнена?
+          </span>
+          <div className={`${baseStyle} `}>
+            {/* // TODO: Which bg. should be for hover to btns */}
             <button
-              className="cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                onRequestCancel(ticket.ticketId);
-              }}
+              className="h-6 bg-(--bg-task-complete) dark:bg-(--bg-btn-primary) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
+              onClick={() =>
+                setTickets((prev) =>
+                  prev.map((t) =>
+                    t.ticketId === ticket.ticketId
+                      ? { ...t, status: "Closed" }
+                      : t,
+                  ),
+                )
+              }
             >
-              <CancelIcon />
+              <CheckIcon className="text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
+              <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
+                Да
+              </span>
             </button>
-            <button>
-              {" "}
-              <EditIcon />
-            </button>{" "}
-            <button>
-              <RepeatIcon />
-            </button>{" "}
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
+              // onClick={() => }
+              className="h-6 bg-(--bg-task-cancelled) dark:bg-(--bg-task-cancelled) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
+              onClick={() =>
+                setTickets((prev) =>
+                  prev.map((t) =>
+                    t.ticketId === ticket.ticketId
+                      ? { ...t, status: "In progress" }
+                      : t,
+                  ),
+                )
+              }
             >
-              {" "}
-              {favoriteBtn}
+              <CrossIcon className="w-2.5 h-2.5 text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
+              <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
+                Нет
+              </span>
             </button>
-            <TelegramIcon className="text-(--text-tertiary) " />
           </div>
-        );
-      case "In progress":
-        return (
-          <div className={baseStyle}>
-            <RepeatIcon /> {favoriteBtn}
-            <TelegramIcon className="text-(--text-tertiary) " />
-          </div>
-        );
-      case "Paused":
-        return (
-          <div className={baseStyle}>
-            <RepeatIcon /> {favoriteBtn}{" "}
-            <TelegramIcon className="text-(--text-tertiary) " />
-          </div>
-        );
-      case "Complete":
-        return (
-          <div className="flex items-center gap-2 font-jbmono">
-            <span className="text-(--text-primary)  text-xs font-medium leading-3 select-none">
-              Заявка выполнена?
-            </span>
-            <div className={`${baseStyle} `}>
-              {/* // TODO: Which bg. should be for hover to btns */}
-              <button
-                className="h-6 bg-(--bg-task-complete) dark:bg-(--bg-btn-primary) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
-                onClick={() =>
-                  setTickets((prev) =>
-                    prev.map((t) =>
-                      t.ticketId === ticket.ticketId
-                        ? { ...t, status: "Closed" }
-                        : t,
-                    ),
-                  )
-                }
-              >
-                <CheckIcon className="text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
-                <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
-                  Да
-                </span>
-              </button>
-              <button
-                // onClick={() => }
-                className="h-6 bg-(--bg-task-cancelled) dark:bg-(--bg-task-cancelled) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
-                onClick={() =>
-                  setTickets((prev) =>
-                    prev.map((t) =>
-                      t.ticketId === ticket.ticketId
-                        ? { ...t, status: "In progress" }
-                        : t,
-                    ),
-                  )
-                }
-              >
-                <CrossIcon className="w-2.5 h-2.5 text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
-                <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
-                  Нет
-                </span>
-              </button>
-            </div>
-          </div>
-        );
-      case "Closed":
-        return (
-          <div className={baseStyle}>
-            <RepeatIcon /> {favoriteBtn}
-          </div>
-        );
-      case "Cancelled":
-        return (
-          <div className={baseStyle}>
-            <RepeatIcon /> {favoriteBtn}
-          </div>
-        );
+        </div>
+      );
     }
+    return (
+      <div className={baseStyle}>
+        {statusActions[status]
+          .filter((key) => key !== "telegram")
+          .map((key) => {
+            const { Icon, onClick } = actionRegistry[key];
+            return (
+              <CardActionButton
+                key={key}
+                onClick={onClick}
+                className="cursor-pointer"
+              >
+                <Icon />
+              </CardActionButton>
+            );
+          })}
+        <CardActionButton className="cursor-pointer">
+          {favoriteBtn}
+        </CardActionButton>
+        {statusActions[status].includes("telegram") && (
+          <CardActionButton onClick={actionRegistry.telegram.onClick}>
+            <TelegramIcon className="text-(--text-tertiary) cursor-pointer" />
+          </CardActionButton>
+        )}
+      </div>
+    );
   }
 
   return (

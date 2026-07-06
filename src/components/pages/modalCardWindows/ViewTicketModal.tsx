@@ -10,7 +10,7 @@ import getStatusTitle from "../../../utils/ticketBadgeHelpers";
 import { getStatusColor } from "../../../utils/ticketBadgeHelpers";
 import { getPriorityTitle } from "../../../utils/ticketBadgeHelpers";
 
-import FunctionBtn from "../../ui/viewTicket/FunctionBtn";
+import FunctionBtn from "../../ui/Buttons/FunctionBtn";
 
 import TelegramIcon from "../../../icons/card/TelegramIcon";
 import RepeatIcon from "../../../icons/card/RepeatIcon";

@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router";
 
 import type { activeSectionType } from "../../types/header.types";
 
-import FunctionBtn from "../ui/viewTicket/FunctionBtn";
+import FunctionBtn from "../ui/Buttons/FunctionBtn";
 
 import KnowledgeBaseIcon from "../../icons/header/KnowledgeBaseIcon";
 import MascootIcon from "../../icons/header/MascootIcon";
