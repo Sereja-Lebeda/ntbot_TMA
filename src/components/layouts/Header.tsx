@@ -1,5 +1,8 @@
-import type { activeSectionType } from "../../types/header.types";
 import { useNavigate, useLocation } from "react-router";
+
+import type { activeSectionType } from "../../types/header.types";
+
+import FunctionBtn from "../ui/viewTicket/FunctionBtn";
 
 import KnowledgeBaseIcon from "../../icons/header/KnowledgeBaseIcon";
 import MascootIcon from "../../icons/header/MascootIcon";
@@ -51,7 +54,7 @@ export default function Header({
                 onClick={() => setActiveSection("rating")}
               />
             </button>
-            <button className="cursor-pointer">
+            <button className="cursor-pointer ">
               <KnowledgeBaseIcon
                 activeSection={activeSection}
                 // setActiveSection={setActiveSection}
@@ -60,7 +63,23 @@ export default function Header({
             </button>
           </div>
 
-          <div
+          <FunctionBtn
+            Icon={PlusIcon}
+            iconClassName={"w-5 h-5"}
+            text={"Создать заявку"}
+            textClassName={
+              "text-sm dark:text-(--bg-primary) text-(--text-primary) font-jbmono font-extrabold select-none"
+            }
+            outerDivClassName={`h-10 w-47.5 ${isOnCreatePage ? "bg-(--bg-disable-btn)" : "bg-[#ede8de] cursor-pointer"} rounded-xs select-none `}
+            outerBtnClassName={
+              "h-10 w-47.5 bg-(--bg-btn-primary) rounded-xs flex justify-center items-center px-6 py-3 gap-2 transition-all duration-600 ease-in-out enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10 enabled:cursor-pointer disabled:bg-(--bg-disable-btn)"
+            }
+            innerDivClassName={"flex items-center gap-1"}
+            onClick={() => navigate("/tickets/new")}
+            disabled={isOnCreatePage}
+          />
+
+          {/* <div
             className={`h-10 w-47.5 ${isOnCreatePage ? "bg-(--bg-disable-btn)" : "bg-[#ede8de] cursor-pointer"} rounded-xs select-none`}
           >
             <button
@@ -77,7 +96,7 @@ export default function Header({
                 </span>
               </div>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

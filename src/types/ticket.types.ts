@@ -3,11 +3,13 @@ export interface Ticket {
   title: string;
   ticketId: number;
   createDate: string;
-  description: string;
+  description?: string; // TODO: заменить на body: Record<string,string> когда определимся с хранением произвольных полей
   status: StatusType;
   priority: string;
   category: string;
-  attachment: boolean;
+  breadcrumbs: string[];
+  // attachment: boolean;
+  attachedFiles: TicketAttachmentType;
   department: string;
   userName: string;
 }
@@ -23,6 +25,12 @@ export type StatusType =
 export interface TicketCardProps {
   ticket: Ticket;
 }
+
+export type TicketAttachmentType = {
+  name: string;
+  url: string;
+  uploadedAt: string;
+}[];
 
 // Type for ticket sort new/complete/default
 export type SortByStatusType = "default" | "new" | "complete";

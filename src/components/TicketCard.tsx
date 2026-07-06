@@ -3,7 +3,9 @@ import type {
   StatusType,
   TicketCardProps,
 } from "../types/ticket.types";
-import getStatusTitle from "../utils/statusNameHelper";
+import getStatusTitle from "../utils/ticketBadgeHelpers";
+import { getStatusColor } from "../utils/ticketBadgeHelpers";
+import { getPriorityTitle } from "../utils/ticketBadgeHelpers";
 import { textPressAnimationStyle } from "../styles/pressAnimation";
 
 import AttachIcon from "../icons/card/AttachIcon";
@@ -21,6 +23,7 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   ticketView: string;
   setTickets: React.Dispatch<React.SetStateAction<Ticket[]>>;
   onRequestCancel: (ticketId: number) => void;
+  handleOpenView: (ticketId: number) => void;
 }
 
 export default function TicketCard({
@@ -30,37 +33,8 @@ export default function TicketCard({
   ticketView,
   setTickets,
   onRequestCancel,
+  handleOpenView,
 }: TicketCardWithActionsProps) {
-  function getStatusColor(status: StatusType) {
-    const baseStyle =
-      "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) font-bold leading-3 select-none";
-    switch (status) {
-      case "New":
-        return `${baseStyle} bg-(--bg-task-new)`;
-      case "In progress":
-        return `${baseStyle} bg-(--bg-task-inprogress)`;
-      case "Paused":
-        return `${baseStyle} bg-(--bg-task-paused)`;
-      case "Complete":
-        return `${baseStyle} bg-(--bg-task-complete)`;
-      case "Closed":
-        return `${baseStyle} bg-(--bg-task-closed)`;
-      case "Cancelled":
-        return `${baseStyle} bg-(--bg-task-cancelled)`;
-    }
-  }
-
-  function getPriorityTitle(priority: string) {
-    switch (priority) {
-      case "Low":
-        return "НИЗКИЙ";
-      case "Medium":
-        return "СРЕДНИЙ";
-      case "High":
-        return "ВЫСОКИЙ";
-    }
-  }
-
   const favoriteBtn = (
     <FavoriteIcon
       ticketId={ticket.ticketId}
@@ -78,11 +52,28 @@ export default function TicketCard({
           <div className={baseStyle}>
             <button
               className="cursor-pointer"
-              onClick={() => onRequestCancel(ticket.ticketId)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onRequestCancel(ticket.ticketId);
+              }}
             >
               <CancelIcon />
             </button>
-            <EditIcon /> <RepeatIcon /> {favoriteBtn}
+            <button>
+              {" "}
+              <EditIcon />
+            </button>{" "}
+            <button>
+              <RepeatIcon />
+            </button>{" "}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {" "}
+              {favoriteBtn}
+            </button>
             <TelegramIcon className="text-(--text-tertiary) " />
           </div>
         );
@@ -164,6 +155,7 @@ export default function TicketCard({
   return (
     // white background
     <div
+      onClick={() => handleOpenView(ticket.ticketId)}
       className={` w-full ${ticketView === "my" ? "h-38" : "h-47 "} bg-(--text-tertiary) rounded-xs relative select-none shrink-0`}
     >
       <div
@@ -198,7 +190,7 @@ export default function TicketCard({
               <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer">
                 {ticket.title}
               </div>
-              {ticket.attachment && <AttachIcon />}
+              {ticket.attachedFiles.length && <AttachIcon />}
             </div>
           </div>
         ) : (
@@ -209,7 +201,7 @@ export default function TicketCard({
               <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer">
                 {ticket.title}
               </div>
-              {ticket.attachment && <AttachIcon />}
+              {ticket.attachedFiles.length > 0 && <AttachIcon />}
             </div>
             {/* meta info */}
             <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">

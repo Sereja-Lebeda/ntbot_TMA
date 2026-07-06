@@ -8,7 +8,7 @@ import {
 } from "../styles/pressAnimation";
 
 import handleStatusSelect from "../utils/statusSelectedHelper";
-import getStatusTitle from "../utils/statusNameHelper";
+import getStatusTitle from "../utils/ticketBadgeHelpers";
 
 import mockUser from "../../mockUserInfo.json";
 import mockTicket from "../../mockTicketInfo.json";

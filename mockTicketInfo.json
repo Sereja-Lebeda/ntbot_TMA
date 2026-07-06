@@ -7,8 +7,13 @@
     "createDate": "12.12.2026",
     "status": "In progress",
     "priority": "Low",
-    "category": "Это другое",
-    "attachment": true,
+    "category": "Программы и сервисы",
+    "breadcrumbs": [
+      "Программы и сервисы",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "IT",
     "userName": "Ваня Иванов"
   },
@@ -20,8 +25,13 @@
     "createDate": "30.03.1984",
     "status": "Paused",
     "priority": "High",
-    "category": "Коммуникация",
-    "attachment": false,
+    "category": "Компьютер и устройства",
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "Разметка",
     "userName": "Сантиметр Линейкович"
   },
@@ -34,7 +44,12 @@
     "status": "Complete",
     "priority": "Medium",
     "category": "Zdarova gaymeri",
-    "attachment": true,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "Халтуры",
     "userName": "Валя Неваляйка"
   },
@@ -47,7 +62,12 @@
     "status": "New",
     "priority": "Low",
     "category": "Party",
-    "attachment": true,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "IT",
     "userName": "Макрос Скриптов"
   },
@@ -60,7 +80,12 @@
     "status": "Closed",
     "priority": "Medium",
     "category": "Office",
-    "attachment": false,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "Разметка",
     "userName": "Сантиметр Линейкович"
   },
@@ -73,7 +98,12 @@
     "status": "Cancelled",
     "priority": "High",
     "category": "123",
-    "attachment": false,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "IT",
     "userName": "Анонимный Пидрилкин"
   },
@@ -86,7 +116,12 @@
     "status": "Cancelled",
     "priority": "High",
     "category": "321",
-    "attachment": false,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "Отдельный отдел",
     "userName": "Хусейн Вольфович"
   },
@@ -99,7 +134,12 @@
     "status": "Cancelled",
     "priority": "High",
     "category": "222",
-    "attachment": false,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "ЭйЧар Отдел",
     "userName": "Баба Клава"
   },
@@ -112,7 +152,12 @@
     "status": "Cancelled",
     "priority": "High",
     "category": "111",
-    "attachment": false,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "Продажи",
     "userName": "Главный специалист"
   },
@@ -125,7 +170,12 @@
     "status": "Cancelled",
     "priority": "High",
     "category": "333",
-    "attachment": false,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "Тестирование",
     "userName": "Повелитель правой кабинки"
   },
@@ -138,7 +188,23 @@
     "status": "In progress",
     "priority": "High",
     "category": "Office",
-    "attachment": false,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [
+      {
+        "name": "screenshot_error.png",
+        "url": "https://picsum.photos/id/64/400/300",
+        "uploadedAt": "2026-07-01T14:23:00"
+      },
+      {
+        "name": "report.pdf",
+        "url": "https://example.com/files/report.pdf",
+        "uploadedAt": "2026-06-28T09:10:00"
+      }
+    ],
     "department": "IT",
     "userName": "Абоба Макарович"
   },
@@ -151,7 +217,12 @@
     "status": "New",
     "priority": "Medium",
     "category": "Office",
-    "attachment": false,
+    "breadcrumbs": [
+      "Компьютер и устройства",
+      "Авторизация и доступы",
+      "Проблема со входом в учетную запись"
+    ],
+    "attachedFiles": [],
     "department": "Отдел Мемов",
     "userName": "Абоба Макарович"
   }

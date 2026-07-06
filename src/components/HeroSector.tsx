@@ -6,7 +6,7 @@ import type {
   TicketViewType,
 } from "../types/ticket.types";
 import type { UserType } from "../types/user.types";
-import getStatusTitle from "../utils/statusNameHelper";
+import getStatusTitle from "../utils/ticketBadgeHelpers";
 import ManagerIcon from "../icons/searchmenu/ManagerIcon";
 // import mockData from "../../mockTicketInfo.json";
 import mockUser from "../../mockUserInfo.json";
@@ -25,6 +25,7 @@ import SearchMenuBtn from "./ui/SearchMenuBtn";
 import UserIcon from "../icons/searchmenu/UserIcon";
 import { hoverAnimationStyle } from "../styles/pressAnimation";
 import ModalWindow from "./ui/ModalWindow";
+import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -84,7 +85,10 @@ export default function HeroSector({
 }: selectedTicketStatusesProps) {
   // const [title, id, date, description, status, priority, category] = mock;
   // const mock = mockData as Ticket[];
-  const [modalTicketId, setModalTicketId] = useState<number | null>(null);
+  const [activeModal, setActiveModal] = useState<{
+    type: "view" | "edit" | "repeat" | "cancel";
+    ticketId: number;
+  } | null>(null);
 
   const mockCurrentUser = mockUser as UserType;
 
@@ -129,20 +133,29 @@ export default function HeroSector({
     "Вы уверены, что хотите отменить заявку?\n\nЗаново запустить её в работу будет невозможно.";
 
   function onConfirm() {
-    setTickets((prev) =>
-      prev.map((t) =>
-        t.ticketId === modalTicketId ? { ...t, status: "Cancelled" } : t,
-      ),
-    );
-    setModalTicketId(null);
+    // отмена заявки: статус → Cancelled, id из activeModal
+    if (activeModal?.type === "cancel") {
+      setTickets((prev) =>
+        prev.map((t) =>
+          t.ticketId === activeModal.ticketId
+            ? { ...t, status: "Cancelled" }
+            : t,
+        ),
+      );
+    }
+    setActiveModal(null); // закрыть
   }
 
   function onCancel() {
-    setModalTicketId(null);
+    setActiveModal(null); // закрыть
   }
 
-  function handleRequestCancel(id: number) {
-    setModalTicketId(id);
+  function handleRequestCancel(ticketId: number) {
+    setActiveModal({ type: "cancel", ticketId });
+  }
+
+  function handleOpenView(ticketId: number) {
+    setActiveModal({ type: "view", ticketId });
   }
 
   //TODO: Arrange functionality that manager can close (and cancel) employee tickets!!!
@@ -150,11 +163,20 @@ export default function HeroSector({
     <div
       className={`relative flex-1 max-w-225 min-w-130 h-246 flex flex-col items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5 ${className} `}
     >
-      {modalTicketId !== null && (
+      {activeModal?.type === "cancel" && (
         <ModalWindow
           onConfirm={onConfirm}
           onCancel={onCancel}
           inputText={inputText}
+        />
+      )}
+      {activeModal?.type === "view" && (
+        <ViewTicketModal
+          ticket={tickets.find((t) => t.ticketId === activeModal.ticketId)}
+          onClose={() => setActiveModal(null)}
+          favoriteTickets={favoriteTickets}
+          setFavoriteTickets={setFavoriteTickets}
+          // ... (позже кнопки edit/repeat/cancel)
         />
       )}
 
@@ -281,6 +303,7 @@ export default function HeroSector({
               ticketView={ticketView}
               setTickets={setTickets}
               onRequestCancel={handleRequestCancel}
+              handleOpenView={handleOpenView}
             />
           ))}
       </div>

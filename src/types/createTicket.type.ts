@@ -50,3 +50,13 @@ export type FieldType =
   | "long text"
   | "dropdown"
   | "radio";
+
+//Types for nested actions
+export interface CategoryNode {
+  category: string;
+  subcategories: SubcategoryNode[];
+}
+export interface SubcategoryNode {
+  subcategory: string;
+  actions: Action[];
+}

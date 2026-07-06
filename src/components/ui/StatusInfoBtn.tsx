@@ -1,4 +1,4 @@
-import getStatusTitle from "../../utils/statusNameHelper";
+import getStatusTitle from "../../utils/ticketBadgeHelpers";
 
 import type { StatusType } from "../../types/ticket.types";
 

@@ -1,0 +1,114 @@
+[
+  {
+    "category": "Доступы и коммуникация",
+    "subcategories": [
+      {
+        "subcategory": "Папки и файлы",
+        "actions": [
+          {
+            "id": 1,
+            "name": "Получить доступ",
+            "attachment": true,
+            "fields": [
+              {
+                "name": "link",
+                "label": "Ссылка на папку/файл",
+                "type": "multi text",
+                "required": true,
+                "placeholder": "Вставьте ссылку",
+                "validation": "url"
+              },
+              {
+                "name": "level",
+                "label": "Уровень доступа",
+                "type": "radio",
+                "required": true,
+                "options": ["Просмотр", "Редактирование"]
+              },
+              {
+                "name": "name",
+                "label": "ФИО сотрудника",
+                "type": "dropdown",
+                "subtype": "employeeFullname",
+                "required": true,
+                "placeholder": "Абоба Макарович ИИшников",
+                "options": [
+                  "Иванов Иван Иванович",
+                  "Ярославенько Ярослав Ярославович",
+                  "Попенко Попа Попович",
+                  "Курлыков Курылык Курлыкович",
+                  "Магаданов Чебурашка Апельсинович",
+                  "Слонов Хомяк Грызунович"
+                ]
+              },
+              {
+                "name": "comment",
+                "label": "Короткий текст",
+                "type": "short text",
+                "placeholder": "Короткий текст",
+                "required": true
+              },
+              {
+                "name": "description",
+                "label": "Длинный текст",
+                "type": "long text",
+                "placeholder": "Длинный текст",
+                "required": true
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "name": "Изменить доступ",
+            "fields": []
+          },
+          {
+            "id": 3,
+            "name": "Закрыть доступ",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "subcategory": "Базы данных",
+        "actions": [
+          {
+            "id": 4,
+            "name": "Создать базу",
+            "fields": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "NTMincer",
+    "subcategories": [
+      {
+        "subcategory": "Парсинг",
+        "actions": [
+          {
+            "id": 5,
+            "name": "Парсинг Мой дом",
+            "fields": []
+          },
+          {
+            "id": 6,
+            "name": "Парсинг Твоя баня",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "subcategory": "Нейроразметка",
+        "actions": [
+          {
+            "id": 7,
+            "name": "Не работает",
+            "fields": []
+          }
+        ]
+      }
+    ]
+  }
+]

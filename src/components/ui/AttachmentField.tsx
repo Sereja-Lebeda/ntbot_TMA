@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 
 import type { AttachedFile } from "../../types/createTicket.type";
 import { isSameFile } from "../../utils/fileDublicateHelper";
+import { getFileIcon } from "../../utils/getFileIcon";
 import ModalWindow from "./ModalWindow";
 
 import {
@@ -10,10 +11,6 @@ import {
 } from "../../styles/pressAnimation";
 import CrossIcon from "../../icons/card/CrossIcon";
 import PlusAttachIcon from "../../icons/createTicket/PlusAttachIcon";
-import PdfIcon from "../../icons/createTicket/fileExtensions/PdfIcon";
-import WordIcon from "../../icons/createTicket/fileExtensions/WordIcon";
-import XlsIcon from "../../icons/createTicket/fileExtensions/XlsIcon";
-import DefaultExtIcon from "../../icons/createTicket/fileExtensions/DefaultExtIcon";
 
 interface AttachmentaFieldProps {
   files: AttachedFile[];
@@ -43,22 +40,6 @@ function AttachmentaField({
   const [fileToDelete, setFileToDelete] = useState<AttachedFile | null>(null);
 
   const inputText = "Вы уверены, что хотите удалить прикрепленный файл?";
-
-  function getFileIcon(fileName: string) {
-    const ext = fileName.split(".").pop()?.toLowerCase();
-    switch (ext) {
-      case "pdf":
-        return PdfIcon;
-      case "doc":
-      case "docx":
-        return WordIcon;
-      case "xls":
-      case "xlsx":
-        return XlsIcon;
-      default:
-        return DefaultExtIcon;
-    }
-  }
 
   function onConfirm() {
     if (fileToDelete) {
@@ -190,6 +171,7 @@ function AttachmentaField({
               </div>
             ))}
           {/* Button add another attachment */}
+
           <button
             onClick={() => refFileAttach.current?.click()}
             className={`w-47 h-53
