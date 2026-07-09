@@ -1,17 +1,22 @@
+import type { PriorityLevel } from "./createTicket.type";
+
 export interface Ticket {
   userId: number;
   title: string;
   ticketId: number;
-  createDate: string;
-  description?: string; // TODO: заменить на body: Record<string,string> когда определимся с хранением произвольных полей
+  createDate: string; // TODO: change this to UNIX createStamp
+  actionId: number;
+  body: Record<string, string>;
+  description: string;
+  multiBody: Record<string, string[]>;
   status: StatusType;
-  priority: string;
-  category: string;
+  priority: PriorityLevel;
+  // category: string;
   breadcrumbs: string[];
   // attachment: boolean;
   attachedFiles: TicketAttachmentType;
-  department: string;
-  userName: string;
+  department: string; // NOTE: decide from where we will pull this / delete this row
+  userName: string; // NOTE: decide from where we will pull this / delete this row
 }
 
 export type StatusType =

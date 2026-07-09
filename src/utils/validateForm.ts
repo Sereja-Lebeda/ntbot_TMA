@@ -12,32 +12,31 @@ export default function validateForm(
     if (field.type === "multi text") {
       const values = multiData[field.name] ?? [];
 
-      // required: хотя бы одно непустое?
       if (field.required && values.every((v) => !v)) {
         newErrors[field.name] = "Обязательное поле";
       }
-
-      // формат: каждый непустой элемент валиден?
       if (field.validation) {
         const hasInvalid = values.some(
           (v) => v && !validators[field.validation!](v),
         );
-        if (hasInvalid) {
+        if (hasInvalid)
           newErrors[field.name] = "Неверный формат в одном из полей";
-        }
       }
+    } else if (field.type === "multiselect") {
+      const values = multiData[field.name] ?? [];
+
+      if (field.required && values.length === 0) {
+        newErrors[field.name] = "Обязательное поле";
+      }
+      // multiselect обычно не имеет field.validation (это не текстовый ввод) — проверку формата можно не делать вовсе
     } else {
       const value = formData[field.name];
       if (field.required && !value) {
         newErrors[field.name] = "Обязательное поле";
       }
-
       if (field.validation && value) {
         const validationResult = validators[field.validation](value);
-
-        if (!validationResult) {
-          newErrors[field.name] = "Неверный формат";
-        }
+        if (!validationResult) newErrors[field.name] = "Неверный формат";
       }
     }
   });

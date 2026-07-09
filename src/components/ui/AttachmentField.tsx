@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import type { AttachedFile } from "../../types/createTicket.type";
 import { isSameFile } from "../../utils/fileDublicateHelper";
 import { getFileIcon } from "../../utils/getFileIcon";
-import ModalWindow from "./ModalWindow";
+import ConfirmModal from "./ConfirmModal";
 
 import {
   hoverAnimationStyle,
@@ -60,7 +60,7 @@ function AttachmentaField({
   return (
     <div className="w-full">
       {isModalOpen && (
-        <ModalWindow
+        <ConfirmModal
           onConfirm={onConfirm}
           onCancel={onCancel}
           inputText={inputText}

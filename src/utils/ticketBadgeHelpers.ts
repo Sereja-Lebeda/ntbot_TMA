@@ -1,3 +1,4 @@
+import type { PriorityLevel } from "../types/createTicket.type";
 import type { StatusType } from "../types/ticket.types";
 
 type FormType = "plural" | "singular" | "statusBlock" | "infoBlock";
@@ -46,7 +47,7 @@ export default function getStatusTitle(status: string, form: FormType) {
 }
 export function getStatusColor(status: StatusType) {
   const baseStyle =
-    "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) font-bold leading-3 select-none";
+    "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) text-xs font-bold leading-3 select-none";
   switch (status) {
     case "New":
       return `${baseStyle} bg-(--bg-task-new)`;
@@ -63,7 +64,7 @@ export function getStatusColor(status: StatusType) {
   }
 }
 
-export function getPriorityTitle(priority: string) {
+export function getPriorityTitle(priority: PriorityLevel) {
   switch (priority) {
     case "Low":
       return "НИЗКИЙ";
@@ -71,5 +72,7 @@ export function getPriorityTitle(priority: string) {
       return "СРЕДНИЙ";
     case "High":
       return "ВЫСОКИЙ";
+    case null:
+      return "";
   }
 }

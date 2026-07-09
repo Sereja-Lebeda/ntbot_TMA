@@ -5,12 +5,23 @@ import type {
   SortByStatusType,
   TicketViewType,
 } from "../types/ticket.types";
-import type { UserType } from "../types/user.types";
-import getStatusTitle from "../utils/ticketBadgeHelpers";
-import ManagerIcon from "../icons/searchmenu/ManagerIcon";
-// import mockData from "../../mockTicketInfo.json";
-import mockUser from "../../mockUserInfo.json";
 
+import type { UserType } from "../types/user.types";
+import type { CategoryNode, PriorityLevel } from "../types/createTicket.type";
+
+import TicketCard from "./TicketCard";
+import Searchbar from "./ui/Searchbar";
+import SearchMenuBtn from "./ui/SearchMenuBtn";
+import ConfirmModal from "./ui/ConfirmModal";
+import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
+
+import getStatusTitle from "../utils/ticketBadgeHelpers";
+import mockUser from "../../mockUserInfo.json";
+import mockActionsNested from "../../mockActionsNested.json";
+
+import { hoverAnimationStyle } from "../styles/pressAnimation";
+
+import ManagerIcon from "../icons/searchmenu/ManagerIcon";
 import DeleteFilterIcon from "../icons/searchmenu/DeleteFilterIcon";
 import FavoriteFilterBtn from "../icons/searchmenu/FavoriteFilterBtn";
 import PrioritySortIcon from "../icons/searchmenu/PrioritySortIcon";
@@ -18,14 +29,10 @@ import PriorityNewSortIcon from "../icons/searchmenu/PriorityNewSortIcon";
 import PriorityCompleteSortIcon from "../icons/searchmenu/PriorityCompleteSortIcon";
 import TimeSortIcon from "../icons/searchmenu/TimeSortIcon";
 import TimeSortActiveIcon from "../icons/searchmenu/TimeSortActiveIcon";
-
-import TicketCard from "./TicketCard";
-import Searchbar from "./ui/Searchbar";
-import SearchMenuBtn from "./ui/SearchMenuBtn";
 import UserIcon from "../icons/searchmenu/UserIcon";
-import { hoverAnimationStyle } from "../styles/pressAnimation";
-import ModalWindow from "./ui/ModalWindow";
-import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
+import flattenActions from "../utils/flattenActions";
+import getTicketDescription from "../utils/getTicketDescription";
+import EditRepeatModal from "./pages/modalCardWindows/EditRepeatModal";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -88,9 +95,53 @@ export default function HeroSector({
   const [activeModal, setActiveModal] = useState<{
     type: "view" | "edit" | "repeat" | "cancel";
     ticketId: number;
+    from?: "view";
   } | null>(null);
 
   const mockCurrentUser = mockUser as UserType;
+  const allActions = flattenActions(mockActionsNested as CategoryNode[]);
+
+  const viewedTicket =
+    activeModal?.type === "view"
+      ? tickets.find((t) => t.ticketId === activeModal.ticketId)
+      : undefined;
+
+  const viewedAction = viewedTicket
+    ? allActions.find((a) => a.id === viewedTicket.actionId)
+    : undefined;
+
+  const repeatTicket =
+    activeModal?.type === "repeat"
+      ? tickets.find((t) => t.ticketId === activeModal.ticketId)
+      : undefined;
+
+  const repeatAction = repeatTicket
+    ? allActions.find((a) => a.id === repeatTicket.actionId)
+    : undefined;
+
+  function handleRepeatSubmit(data: {
+    formData: Record<string, string>;
+    multiData: Record<string, string[]>;
+    priority: PriorityLevel;
+  }) {
+    if (!repeatTicket) return;
+
+    const newTicket: Ticket = {
+      ...repeatTicket,
+      // TODO: change logic to receive ticketid from server
+      ticketId: Math.max(...tickets.map((t) => t.ticketId)) + 1,
+      createDate: new Date().toLocaleDateString("ru-RU"),
+      status: "New",
+      body: data.formData,
+      multiBody: data.multiData,
+      priority: data.priority,
+      description: getTicketDescription(data.formData, repeatAction!),
+      attachedFiles: [],
+    };
+
+    setTickets((prev) => [...prev, newTicket]);
+    setActiveModal(null);
+  }
 
   function ticketMatchesSearch(ticket: Ticket, query: string): boolean {
     return [
@@ -98,8 +149,8 @@ export default function HeroSector({
       ticket.description,
       ticket.createDate,
       ticket.ticketId.toString(),
-      ticket.category,
-    ].some((value) => value.toLowerCase().includes(query.toLowerCase()));
+      ticket.breadcrumbs[0],
+    ].some((value) => value?.toLowerCase().includes(query.toLowerCase()));
   }
 
   function changePrioritySort() {
@@ -154,6 +205,18 @@ export default function HeroSector({
     setActiveModal({ type: "cancel", ticketId });
   }
 
+  function handleRequestRepeat(ticketId: number) {
+    setActiveModal({ type: "repeat", ticketId }); // без from — прямое открытие
+  }
+
+  function handleRepeatCancel() {
+    if (activeModal?.from === "view") {
+      setActiveModal({ type: "view", ticketId: activeModal.ticketId });
+    } else {
+      setActiveModal(null);
+    }
+  }
+
   function handleOpenView(ticketId: number) {
     setActiveModal({ type: "view", ticketId });
   }
@@ -164,7 +227,7 @@ export default function HeroSector({
       className={`relative flex-1 max-w-225 min-w-130 h-246 flex flex-col items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5 ${className} `}
     >
       {activeModal?.type === "cancel" && (
-        <ModalWindow
+        <ConfirmModal
           onConfirm={onConfirm}
           onCancel={onCancel}
           inputText={inputText}
@@ -172,11 +235,32 @@ export default function HeroSector({
       )}
       {activeModal?.type === "view" && (
         <ViewTicketModal
-          ticket={tickets.find((t) => t.ticketId === activeModal.ticketId)}
+          ticket={viewedTicket}
+          action={viewedAction}
           onClose={() => setActiveModal(null)}
           favoriteTickets={favoriteTickets}
           setFavoriteTickets={setFavoriteTickets}
+          onCancel={handleRequestCancel}
+          onRepeat={() => {
+            if (viewedTicket) {
+              setActiveModal({
+                type: "repeat",
+                ticketId: viewedTicket.ticketId,
+                from: "view",
+              });
+            }
+          }}
+
           // ... (позже кнопки edit/repeat/cancel)
+        />
+      )}
+      {activeModal?.type === "repeat" && (
+        <EditRepeatModal
+          ticket={repeatTicket}
+          action={repeatAction}
+          onClose={handleRepeatCancel}
+          onSubmit={handleRepeatSubmit}
+          mode="repeat"
         />
       )}
 
@@ -259,7 +343,7 @@ export default function HeroSector({
                   getStatusTitle(ticket.status, "statusBlock"),
                 )) &&
               (ticketCategories.includes("Все") ||
-                ticketCategories.includes(ticket.category)) &&
+                ticketCategories.includes(ticket.breadcrumbs[0])) &&
               (ticketView !== "team" ||
                 ticketDepartments.includes("Все") ||
                 ticketDepartments.includes(ticket.department ?? "")) &&
@@ -303,6 +387,7 @@ export default function HeroSector({
               ticketView={ticketView}
               setTickets={setTickets}
               onRequestCancel={handleRequestCancel}
+              onRequestRepeat={handleRequestRepeat}
               handleOpenView={handleOpenView}
             />
           ))}

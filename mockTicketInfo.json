@@ -2,16 +2,26 @@
   {
     "userId": 11,
     "title": "Установить-приостановить",
-    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure, ullam ratione animi iusto voluptatum ea illum, fugit maxime voluptatem ipsam necessitatibus ut neque doloremque numquam, repellat sunt in corrupti quae! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque nesciunt, sit modi, voluptatem eaque voluptatibus nihil iste, illum eligendi distinctio quam accusamus amet fugit corporis voluptatum? Laudantium delectus consequatur praesentium!",
+    "description": "Нужен доступ на просмотр к общей папке отдела",
     "ticketId": 420,
     "createDate": "12.12.2026",
+    "actionId": 1,
+    "body": {
+      "comment": "Срочно нужен доступ",
+      "description": "Не могу открыть общую папку отдела, пишет отказано в доступе",
+      "name": "Иванов Иван Иванович",
+      "level": "Просмотр"
+    },
+    "multiBody": {
+      "link": ["https://drive.example.com/folder/it-common"],
+      "sections": ["Документы", "Общее"]
+    },
     "status": "In progress",
     "priority": "Low",
-    "category": "Программы и сервисы",
     "breadcrumbs": [
-      "Программы и сервисы",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
+      "Доступы и коммуникация",
+      "Папки и файлы",
+      "Получить доступ"
     ],
     "attachedFiles": [],
     "department": "IT",
@@ -20,16 +30,22 @@
   {
     "userId": 12,
     "title": "Написать ПСЖ",
-    "description": "Надо было в бухгалтерию, а написал в ЛС",
+    "description": "Смена уровня доступа сотруднику",
     "ticketId": 413,
     "createDate": "30.03.1984",
+    "actionId": 2,
+    "body": {
+      "name": "Попенко Попа Попович",
+      "new_level": "Редактирование",
+      "reason": "Повышение до руководителя направления"
+    },
+    "multiBody": {},
     "status": "Paused",
     "priority": "High",
-    "category": "Компьютер и устройства",
     "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
+      "Доступы и коммуникация",
+      "Папки и файлы",
+      "Изменить доступ"
     ],
     "attachedFiles": [],
     "department": "Разметка",
@@ -38,16 +54,23 @@
   {
     "userId": 13,
     "title": "Скинуть багет",
-    "description": "Миротворец",
+    "description": "Закрытие доступа уволенному сотруднику",
     "ticketId": 12,
     "createDate": "12.12.2012",
+    "actionId": 3,
+    "body": {
+      "name": "Курлыков Курылык Курлыкович",
+      "reason": "Сотрудник уволен, доступ больше не требуется"
+    },
+    "multiBody": {
+      "sections": ["Финансы", "HR"]
+    },
     "status": "Complete",
     "priority": "Medium",
-    "category": "Zdarova gaymeri",
     "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
+      "Доступы и коммуникация",
+      "Папки и файлы",
+      "Закрыть доступ"
     ],
     "attachedFiles": [],
     "department": "Халтуры",
@@ -56,17 +79,20 @@
   {
     "userId": 14,
     "title": "Подготовить Алешку для переговорки",
-    "description": "Закупить ингридиенты",
+    "description": "Создание новой базы под проект",
     "ticketId": 88,
     "createDate": "22.02.2032",
+    "actionId": 4,
+    "body": {
+      "db_name": "meeting_prep_db",
+      "db_type": "PostgreSQL",
+      "responsible": "Магаданов Чебурашка Апельсинович",
+      "comment": "База для хранения данных по подготовке переговорной"
+    },
+    "multiBody": {},
     "status": "New",
     "priority": "Low",
-    "category": "Party",
-    "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
-    ],
+    "breadcrumbs": ["Доступы и коммуникация", "Базы данных", "Создать базу"],
     "attachedFiles": [],
     "department": "IT",
     "userName": "Макрос Скриптов"
@@ -74,17 +100,20 @@
   {
     "userId": 15,
     "title": "Закрыть окно",
-    "description": "Чтобы не расслаблялись",
+    "description": "Парсинг данных по региону",
     "ticketId": 52,
     "createDate": "02.04.2018",
+    "actionId": 5,
+    "body": {
+      "region": "Астана",
+      "comment": "Раз в неделю достаточно"
+    },
+    "multiBody": {
+      "urls": ["https://example.com/source1", "https://example.com/source2"]
+    },
     "status": "Closed",
     "priority": "Medium",
-    "category": "Office",
-    "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
-    ],
+    "breadcrumbs": ["NTMincer", "Парсинг", "Парсинг Мой дом"],
     "attachedFiles": [],
     "department": "Разметка",
     "userName": "Сантиметр Линейкович"
@@ -92,17 +121,19 @@
   {
     "userId": 16,
     "title": "Написать заявку в бота",
-    "description": "Напишу в ЛС",
+    "description": "Регулярный парсинг источников",
     "ticketId": 8,
     "createDate": "20.05.2026",
+    "actionId": 6,
+    "body": {
+      "frequency": "Раз в день"
+    },
+    "multiBody": {
+      "sources": ["Сайт 1", "Сайт 3"]
+    },
     "status": "Cancelled",
     "priority": "High",
-    "category": "123",
-    "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
-    ],
+    "breadcrumbs": ["NTMincer", "Парсинг", "Парсинг Твоя баня"],
     "attachedFiles": [],
     "department": "IT",
     "userName": "Анонимный Пидрилкин"
@@ -110,17 +141,18 @@
   {
     "userId": 18,
     "title": "Удалить бота",
-    "description": "Напишу в ЛС",
+    "description": "Нейроразметка не запускается",
     "ticketId": 808,
     "createDate": "20.05.2026",
+    "actionId": 7,
+    "body": {
+      "problem": "При запуске разметки бот падает с ошибкой таймаута на третьей итерации",
+      "priority_reason": "Блокирует всю команду разметки"
+    },
+    "multiBody": {},
     "status": "Cancelled",
     "priority": "High",
-    "category": "321",
-    "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
-    ],
+    "breadcrumbs": ["NTMincer", "Нейроразметка", "Не работает"],
     "attachedFiles": [],
     "department": "Отдельный отдел",
     "userName": "Хусейн Вольфович"
@@ -128,16 +160,26 @@
   {
     "userId": 10,
     "title": "Написать заявку в бота",
-    "description": "Напишу в ЛС",
+    "description": "Нужен доступ на редактирование для нового сотрудника",
     "ticketId": 870,
     "createDate": "20.05.2026",
+    "actionId": 1,
+    "body": {
+      "comment": "Новый сотрудник, нужен доступ",
+      "description": "Добавить полный доступ на редактирование к папке HR",
+      "name": "Слонов Хомяк Грызунович",
+      "level": "Редактирование"
+    },
+    "multiBody": {
+      "link": ["https://drive.example.com/folder/hr"],
+      "sections": ["HR", "Документы"]
+    },
     "status": "Cancelled",
     "priority": "High",
-    "category": "222",
     "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
+      "Доступы и коммуникация",
+      "Папки и файлы",
+      "Получить доступ"
     ],
     "attachedFiles": [],
     "department": "ЭйЧар Отдел",
@@ -146,16 +188,26 @@
   {
     "userId": 20,
     "title": "Продажная продажа",
-    "description": "Напишу в ЛС",
+    "description": "Доступ к общей папке продаж",
     "ticketId": 820,
     "createDate": "20.05.2026",
+    "actionId": 1,
+    "body": {
+      "comment": "Открыть доступ",
+      "description": "Нужен доступ на просмотр прайс-листов",
+      "name": "Ярославенько Ярослав Ярославович",
+      "level": "Просмотр"
+    },
+    "multiBody": {
+      "link": ["https://drive.example.com/folder/sales"],
+      "sections": ["Финансы"]
+    },
     "status": "Cancelled",
     "priority": "High",
-    "category": "111",
     "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
+      "Доступы и коммуникация",
+      "Папки и файлы",
+      "Получить доступ"
     ],
     "attachedFiles": [],
     "department": "Продажи",
@@ -164,16 +216,22 @@
   {
     "userId": 23,
     "title": "Закупка бульдака х5",
-    "description": "Напишу в ЛС",
+    "description": "Изменение уровня доступа",
     "ticketId": 890,
     "createDate": "20.05.2026",
+    "actionId": 2,
+    "body": {
+      "name": "Иванов Иван Иванович",
+      "new_level": "Просмотр",
+      "reason": "Понижение уровня доступа по итогам проверки"
+    },
+    "multiBody": {},
     "status": "Cancelled",
     "priority": "High",
-    "category": "333",
     "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
+      "Доступы и коммуникация",
+      "Папки и файлы",
+      "Изменить доступ"
     ],
     "attachedFiles": [],
     "department": "Тестирование",
@@ -182,16 +240,26 @@
   {
     "userId": 1,
     "title": "Датабэйз дроп",
-    "description": "Ждете?",
+    "description": "Просят снести staging базу",
     "ticketId": 523,
     "createDate": "02.04.2027",
+    "actionId": 1,
+    "body": {
+      "comment": "Ждете?",
+      "description": "Нужен доступ администратора к staging базе для очистки",
+      "name": "Магаданов Чебурашка Апельсинович",
+      "level": "Редактирование"
+    },
+    "multiBody": {
+      "link": ["https://db.example.com/staging"],
+      "sections": ["Документы", "Финансы", "HR", "Общее"]
+    },
     "status": "In progress",
     "priority": "High",
-    "category": "Office",
     "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
+      "Доступы и коммуникация",
+      "Папки и файлы",
+      "Получить доступ"
     ],
     "attachedFiles": [
       {
@@ -211,16 +279,23 @@
   {
     "userId": 1,
     "title": "Тренд",
-    "description": "Уточнить что сейчас в трендах",
+    "description": "Закрытие доступа по отделу мемов",
     "ticketId": 982,
     "createDate": "02.08.2026",
+    "actionId": 3,
+    "body": {
+      "name": "Слонов Хомяк Грызунович",
+      "reason": "Переход в другой отдел"
+    },
+    "multiBody": {
+      "sections": ["Общее"]
+    },
     "status": "New",
     "priority": "Medium",
-    "category": "Office",
     "breadcrumbs": [
-      "Компьютер и устройства",
-      "Авторизация и доступы",
-      "Проблема со входом в учетную запись"
+      "Доступы и коммуникация",
+      "Папки и файлы",
+      "Закрыть доступ"
     ],
     "attachedFiles": [],
     "department": "Отдел Мемов",

@@ -21,11 +21,15 @@ import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import AttachmentIcon from "../../../icons/createTicket/AttachmentIcon";
 import TicketAttachmentsView from "../../ui/Attachment/TicketAttachmentsView";
+import getBreadcrumb from "../../../utils/getBreadcrumbs";
+// import getBreadcrumb from "../../../utils/getBreadcrumbs";Да
 
 interface ViewTicketModalProps {
   ticket: Ticket | undefined;
-  action: Action;
+  action: Action | undefined;
   onClose: () => void;
+  onRepeat: () => void;
+  onCancel: (ticketId: number) => void;
 
   favoriteTickets: number[];
   setFavoriteTickets: (id: number[]) => void;
@@ -33,15 +37,17 @@ interface ViewTicketModalProps {
 
 function ViewTicketModal({
   ticket,
-  // action,
+  action,
   onClose,
+  onRepeat,
+  onCancel,
   favoriteTickets,
   setFavoriteTickets,
 }: ViewTicketModalProps) {
   useLockBodyScroll();
   useEscapeKey(onClose);
 
-  if (!ticket) return null;
+  if (!ticket || !action) return null;
 
   const isBtnDisabled = ticket.status !== "New";
 
@@ -57,20 +63,6 @@ function ViewTicketModal({
   // const outerBtnClassName = `h-full flex justify-center items-center px-4 py-2 rounded-xs enabled:bg-(--bg-inactive-btn) disabled:bg-(--bg-disable-btn) enabled:cursor-pointer enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10 transition-all duration-600 ease-in-out`;
   const innerDivClassName = "flex items-center gap-1";
 
-  function getBreadcrumb(crumb: string) {
-    return (
-      <div
-        key={crumb}
-        className="flex justify-center items-center px-3 py-1.5
-      border-[0.5px] border=(--text-secondary) bg-(--bg-secondary) rounded-xs"
-      >
-        <span className="font-jbmono font-medium text-xs text-(--text-primary) leading-3">
-          {crumb}
-        </span>
-      </div>
-    );
-  }
-
   return createPortal(
     <div
       onClick={onClose}
@@ -80,16 +72,16 @@ function ViewTicketModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[90vw] h-[90vh] flex flex-col items-center
-      bg-(--bg-secondary) border border-(--bg-border) rounded-xs px-12.5 py-10"
+        className="w-[50vw] max-w-[90vw] max-h-[90vh] flex flex-col items-center
+      bg-(--bg-secondary) border border-(--bg-border) rounded-xs py-10 select-none"
       >
         {/* Header with btns */}
         <div
-          className="w-full h-8.5
+          className="w-full h-8.5 mb-2 px-12.5
     flex justify-between items-center"
         >
           {/* Functional btns */}
-          <div className="w-full flex justify-start gap-1.5">
+          <div className="w-full flex justify-start gap-1.5 select-none">
             <FunctionBtn
               Icon={TelegramIcon}
               iconClassName={iconClassName}
@@ -109,7 +101,7 @@ function ViewTicketModal({
               outerDivClassName={outerDivClassName}
               outerBtnClassName={outerBtnClassName}
               innerDivClassName={innerDivClassName}
-              onClick={() => console.log("TODO: repeat ticket")}
+              onClick={onRepeat}
               disabled={false}
             />
             <FunctionBtn
@@ -131,7 +123,7 @@ function ViewTicketModal({
               outerDivClassName={outerDivClassName}
               outerBtnClassName={outerBtnClassName}
               innerDivClassName={innerDivClassName}
-              onClick={() => console.log("TODO: cancel ticket")}
+              onClick={() => onCancel(ticket.ticketId)}
               disabled={isBtnDisabled}
             />
           </div>
@@ -157,7 +149,7 @@ function ViewTicketModal({
 
         {/* Ticket header and content */}
         <div
-          className="w-full gap-7
+          className="w-full gap-7 pl-12.5 
         flex flex-col items-start overflow-y-auto dropdown-scroll"
         >
           {/* Header */}
@@ -177,7 +169,7 @@ function ViewTicketModal({
                 <span className="font-jbmono font-medium text-[15px] text-(--text-primary) leading-6">
                   {ticket.title}
                 </span>
-                <div className={`${getStatusColor(ticket.status)} text-xs`}>
+                <div className={`${getStatusColor(ticket.status)}`}>
                   {getStatusTitle(ticket.status, "singular")}
                 </div>
                 <div
@@ -209,24 +201,34 @@ function ViewTicketModal({
               </span>
             </div>
             <div className="w-full flex flex-col items-start justify-center gap-8">
-              <div className="w-full flex flex-col items-start gap-4">
+              <div className="w-full flex flex-col items-start gap-2">
                 <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                   Категории
                 </span>
-                {/* Bread crumbs */}
                 <div className="flex justify-start items-center gap-2">
                   {ticket.breadcrumbs.map(getBreadcrumb)}
                 </div>
               </div>
-              <div>//TODO: decide how to get info like "Prgramm/service"</div>
-              <div>
-                <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
-                  Описание проблемы
-                </span>
-                <span>
-                  {/* //TODO: decide how to get desctiption from the ticket */}
-                </span>
-              </div>
+              {action.fields.map((field) => {
+                const value =
+                  field.type === "multi text" || field.type === "multiselect"
+                    ? (ticket.multiBody[field.name] ?? []).join(", ")
+                    : (ticket.body[field.name] ?? "");
+
+                return (
+                  <div
+                    key={field.name}
+                    className="w-full flex flex-col items-start gap-2"
+                  >
+                    <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
+                      {field.label}
+                    </span>
+                    <span className="font-consolas font-normal text-sm text-(--text-primary)">
+                      {value}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Divider */}

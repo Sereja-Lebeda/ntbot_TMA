@@ -52,7 +52,11 @@ export default function HomePage() {
   return (
     <div
       onMouseDown={(e) => {
-        if (e.target !== inputRef.current) {
+        const target = e.target as HTMLElement;
+        const isFormElement = target.closest(
+          'input, textarea, select, [contenteditable="true"]',
+        );
+        if (e.target !== inputRef.current && !isFormElement) {
           e.preventDefault();
           inputRef.current?.blur();
         }

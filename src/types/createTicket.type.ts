@@ -48,7 +48,8 @@ export type FieldType =
   | "short text"
   | "multi text"
   | "long text"
-  | "dropdown"
+  | "select"
+  | "multiselect"
   | "radio";
 
 //Types for nested actions

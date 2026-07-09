@@ -7,24 +7,42 @@
     "attachment": true,
     "fields": [
       {
-        "name": "link",
-        "label": "Ссылка на папку/файл",
-        "type": "multi text",
+        "name": "database",
+        "label": "СУБД",
+        "type": "select",
+        "subtype": "subd",
         "required": true,
-        "placeholder": "Вставьте ссылку",
-        "validation": "url"
+        "placeholder": "MongoDB",
+        "options": ["PostgreSQL", "ClickHouse"]
       },
       {
-        "name": "level",
-        "label": "Уровень доступа",
-        "type": "radio",
+        "name": "database name",
+        "label": "Название БД",
+        "type": "select",
         "required": true,
-        "options": ["Просмотр", "Редактирование"]
+        "placeholder": "DB",
+        "options": ["BD1", "BD2", "BD3", "BD4"]
+      },
+      {
+        "name": "scheme name",
+        "label": "Название схемы",
+        "type": "select",
+        "required": true,
+        "placeholder": "scheme",
+        "options": ["scheme1", "scheme2", "scheme3", "scheme4"]
+      },
+      {
+        "name": "table name",
+        "label": "Название таблицы",
+        "type": "multiselect",
+        "required": true,
+        "placeholder": "table",
+        "options": ["table1", "table2", "table3", "table4"]
       },
       {
         "name": "name",
         "label": "ФИО сотрудника",
-        "type": "dropdown",
+        "type": "select",
         "subtype": "employeeFullname",
         "required": true,
         "placeholder": "Абоба Макарович ИИшников",
@@ -38,17 +56,10 @@
         ]
       },
       {
-        "name": "comment",
-        "label": "Короткий текст",
-        "type": "short text",
-        "placeholder": "Короткий текст",
-        "required": true
-      },
-      {
         "name": "description",
-        "label": "Длинный текст",
+        "label": "Комментарий",
         "type": "long text",
-        "placeholder": "Длинный текст",
+        "placeholder": "Комментарий",
         "required": true
       }
     ]

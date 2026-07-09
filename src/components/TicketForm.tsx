@@ -21,6 +21,7 @@ import MidPriorityIcon from "../icons/createTicket/MidPriorityIcon";
 import HighPriorityIcon from "../icons/createTicket/HighPriorityIcon";
 import AttachmentaField from "./ui/AttachmentField";
 import AttachmentIcon from "../icons/createTicket/AttachmentIcon";
+import MultiSelectDropdown from "./ui/MultiSelectDropdown";
 
 interface TicketFormProps {
   selectedAction: Action;
@@ -53,7 +54,7 @@ function TicketForm({
 
   const userFullName = mockUserInfo.name;
 
-  const defaultInputStyle = `w-full h-10 flex items-center mt-4 px-4 py-2.5
+  const defaultInputStyle = `w-full h-10 flex items-center px-4 py-2.5
     border border-(--bg-border)
     hover:border-(--border-hover-btn)
     focus-within:border-(--text-primary)!
@@ -120,7 +121,7 @@ function TicketForm({
                 </div>
 
                 <div
-                  className={`w-10 h-10 mt-4 flex justify-center items-center
+                  className={`w-10 h-10 flex justify-center items-center
             border-[0.8px] border-(--bg-border)
             group hover:border-(--border-hover-btn) cursor-pointer
             ${btnPressAnimationStyle}`}
@@ -186,7 +187,7 @@ function TicketForm({
           </div>
         );
 
-      case "dropdown": {
+      case "select": {
         let options = field.options ?? [];
         if (field.subtype === "employeeFullname") {
           options = ["Я", ...[...options].sort((a, b) => a.localeCompare(b))];
@@ -206,10 +207,25 @@ function TicketForm({
         );
       }
 
+      case "multiselect": {
+        return (
+          <MultiSelectDropdown
+            options={field.options ?? []}
+            value={multiData[field.name] ?? []}
+            onChange={(val) => {
+              setMultiData((prev) => ({ ...prev, [field.name]: val }));
+              clearError(field.name);
+            }}
+            placeholder={field.placeholder}
+            hasError={!!errors[field.name]}
+          />
+        );
+      }
+
       case "radio": // или внутри dropdown по флагу
         return (
           <div
-            className={`flex items-start gap-6 py-2 mt-4 border border-transparent ${errors[field.name] ? "border-(--bg-task-error)! rounded-xs" : ""}`}
+            className={`flex items-start gap-6 border border-transparent ${errors[field.name] ? "border-(--bg-task-error)! rounded-xs" : ""}`}
           >
             {field.options?.map((option) => (
               <label
@@ -313,54 +329,58 @@ function TicketForm({
       }}
       className="w-full"
     >
-      <div className="w-full space-y-4">
-        {selectedAction.fields.map((field: Field) => (
-          <div key={field.name} className="w-full flex flex-col">
-            <label
-              className="font-consolas font-normal text-[15px]
-              flex items-center gap-0.5"
-            >
-              <span className="text-(--text-primary) leading-4.5">
-                {field.label}
-              </span>
-              <span className="text-(--bg-btn-primary) leading-4">
-                {field.required && "*"}
-              </span>
-            </label>
-            {renderField(field)}
-          </div>
-        ))}
-      </div>
-      <div className="w-full flex flex-col">
-        <label
-          className="font-consolas font-normal text-[15px]
+      <div className="w-full flex flex-col gap-8">
+        <div className="w-full flex flex-col gap-8">
+          {selectedAction.fields.map((field: Field) => (
+            <div key={field.name} className="w-full flex flex-col gap-2">
+              <label className="flex items-center gap-0.5">
+                <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
+                  {field.label}
+                </span>
+                <span className="text-(--bg-btn-primary) leading-4">
+                  {field.required && "*"}
+                </span>
+              </label>
+              {renderField(field)}
+            </div>
+          ))}
+        </div>
+        <div className="w-full flex flex-col">
+          <label
+            className="font-consolas font-normal text-xs
               flex items-center gap-0.5 mb-4"
-        >
-          <span className="text-(--text-primary) leading-4.5">Приоритет</span>
-          <span className="text-(--bg-btn-primary) leading-4">*</span>
-        </label>
-        {renderPriority()}
-      </div>
-
-      {/* Divider */}
-      <div className="w-full h-px bg-(--bg-border)"></div>
-
-      {/* Attachment */}
-      <div className="w-full flex flex-col items-start gap-7">
-        {/* Label */}
-        <div className="w-full flex items-center gap-1">
-          <AttachmentIcon />
-          <span className="font-jbmono font-normal text-sm text-(--text-primary) leading-5">
-            Прикрепленные файлы
-          </span>
+          >
+            <span className="text-(--text-secondary) leading-4.5">
+              Приоритет
+            </span>
+            <span className="text-(--bg-btn-primary) leading-4">*</span>
+          </label>
+          {renderPriority()}
         </div>
 
-        <AttachmentaField
-          files={files}
-          setFiles={setFiles}
-          isDragging={isDragging}
-          addFiles={addFiles}
-        />
+        {/* Divider */}
+        <div className="w-full h-px bg-(--bg-border)"></div>
+
+        {/* Attachment */}
+        <div className="w-full flex flex-col items-start gap-7">
+          {/* Label */}
+          <div className="w-full flex items-center gap-1">
+            <AttachmentIcon />
+            <span className="font-jbmono font-normal text-sm text-(--text-primary) leading-5">
+              Прикрепленные файлы
+            </span>
+          </div>
+
+          <AttachmentaField
+            files={files}
+            setFiles={setFiles}
+            isDragging={isDragging}
+            addFiles={addFiles}
+          />
+        </div>
+
+        {/* Divider */}
+        {/* <div className="w-full h-px bg-(--bg-border)"></div> */}
       </div>
     </div>
   );

@@ -4,13 +4,13 @@ import CheckIcon from "../../icons/card/CheckIcon";
 import CrossIcon from "../../icons/card/CrossIcon";
 import ModalIcon from "../../icons/createTicket/ModalIcon";
 
-interface ModalWindowProps {
+interface ConfirmModalProps {
   onConfirm: () => void;
   onCancel: () => void;
   inputText: string;
 }
 
-function ModalWindow({ onConfirm, onCancel, inputText }: ModalWindowProps) {
+function ConfirmModal({ onConfirm, onCancel, inputText }: ConfirmModalProps) {
   return createPortal(
     <div
       className="fixed inset-0
@@ -73,4 +73,4 @@ function ModalWindow({ onConfirm, onCancel, inputText }: ModalWindowProps) {
   );
 }
 
-export default ModalWindow;
+export default ConfirmModal;

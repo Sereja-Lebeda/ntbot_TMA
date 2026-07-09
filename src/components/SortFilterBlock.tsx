@@ -48,7 +48,7 @@ function SortFilterBlock({
   // TODO: pull categories from backend
   const categories = [
     "Все",
-    ...new Set(mock.map((ticket: Ticket) => ticket.category)),
+    ...new Set(mock.map((ticket: Ticket) => ticket.breadcrumbs[0])),
   ];
 
   // const categories = [

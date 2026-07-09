@@ -25,6 +25,7 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   ticketView: string;
   setTickets: React.Dispatch<React.SetStateAction<Ticket[]>>;
   onRequestCancel: (ticketId: number) => void;
+  onRequestRepeat: (ticketId: number) => void;
   handleOpenView: (ticketId: number) => void;
 }
 
@@ -47,6 +48,7 @@ export default function TicketCard({
   setTickets,
   onRequestCancel,
   handleOpenView,
+  onRequestRepeat,
 }: TicketCardWithActionsProps) {
   const favoriteBtn = (
     <FavoriteIcon
@@ -67,7 +69,7 @@ export default function TicketCard({
     },
     repeat: {
       Icon: RepeatIcon,
-      onClick: () => console.log("TODO: repeat", ticket.ticketId),
+      onClick: () => onRequestRepeat(ticket.ticketId),
     },
     telegram: {
       Icon: TelegramIcon,
@@ -191,7 +193,7 @@ export default function TicketCard({
               <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer">
                 {ticket.title}
               </div>
-              {ticket.attachedFiles.length && <AttachIcon />}
+              {ticket.attachedFiles.length > 0 && <AttachIcon />}
             </div>
           </div>
         ) : (
@@ -242,7 +244,7 @@ export default function TicketCard({
               {getPriorityTitle(ticket.priority)}
             </div>
             <div className="h-6 flex justify-center items-center py-1.5 gap-2.5 font-medium leading-3 text-(--text-tertiary) select-none">
-              {ticket.category}
+              {ticket.breadcrumbs[0]}
             </div>
           </div>
           {/* icons */}

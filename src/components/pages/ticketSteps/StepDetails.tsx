@@ -29,6 +29,7 @@ interface StepDetailsProps {
 
 // TODO: Add feat to save info in fields until user cancel/submit ticket
 // TODO: Try to find out is it possible to transfer info from one action to another with same fields
+// TODO: Add network errors and others, so 4th step will have only success
 
 function StepDetails({
   onPrev,

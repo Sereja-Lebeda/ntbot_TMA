@@ -16,6 +16,7 @@ interface StepProblemProps {
   selectAction: (action: Action) => void;
 }
 //TODO: add modal window for closing
+//TODO: need to change logic to new nested action mock
 function StepProblem({
   onPrev,
   onNext,
@@ -49,7 +50,7 @@ function StepProblem({
     );
   }
 
-  console.log(categoryActions, subcategories);
+  // console.log(categoryActions, subcategories);
   return (
     <div className="w-full">
       {/* Header */}

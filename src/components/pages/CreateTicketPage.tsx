@@ -12,13 +12,15 @@ import type {
 
 import StepCategory from "./ticketSteps/StepCategory";
 import StepDetails from "./ticketSteps/StepDetails";
-
-import SupportButtons from "../ui/SupportButtons";
-import ProgressBar from "../ui/ProgressBar";
-import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 import StepProblem from "./ticketSteps/StepProblem";
 import StepDone from "./ticketSteps/StepDone";
-import ModalWindow from "../ui/ModalWindow";
+
+import getTicketDescription from "../../utils/getTicketDescription";
+import SupportButtons from "../ui/SupportButtons";
+import ProgressBar from "../ui/ProgressBar";
+import ConfirmModal from "../ui/ConfirmModal";
+
+import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 
 // type LabelStepProps = "Category" | "Problem" | "Details" | "Done";
 
@@ -45,10 +47,6 @@ function CreateTicketPage() {
   function submitTicket() {
     if (!selectedAction) return;
 
-    const body = {
-      ...formData,
-      ...multiData,
-    };
     const breadcrumbs = [
       selectedAction.category,
       selectedAction.subcategory,
@@ -57,11 +55,12 @@ function CreateTicketPage() {
     const ticket = {
       //TODO: userID:  NOTE: take id from db?
       //TODO: ticketID: NOTE: need to take id from db
-      actionID: selectedAction.id,
-      ticketName: selectedAction.name,
-      breadcrumbs: breadcrumbs,
-      priority: priority,
-      body: body,
+      actionId: selectedAction.id,
+      breadcrumbs,
+      priority,
+      body: formData,
+      multiBody: multiData,
+      description: getTicketDescription(formData, selectedAction),
     };
 
     const formDataToSend = new FormData(); // браузерный FormData (не стейт formData)
@@ -103,7 +102,7 @@ function CreateTicketPage() {
     <div className="flex flex-col justify-center items-center min-w-130 max-w-225 mx-auto pt-4 pb-7">
       {/* Modal window  */}
       {isModalOpen && (
-        <ModalWindow
+        <ConfirmModal
           onConfirm={onConfirm}
           onCancel={onCancel}
           inputText={inputText}

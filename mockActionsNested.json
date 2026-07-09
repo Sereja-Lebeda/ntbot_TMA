@@ -26,9 +26,17 @@
                 "options": ["Просмотр", "Редактирование"]
               },
               {
+                "name": "sections",
+                "label": "Доступные разделы",
+                "type": "multiselect",
+                "required": true,
+                "placeholder": "Выберите разделы",
+                "options": ["Документы", "Финансы", "HR", "Общее"]
+              },
+              {
                 "name": "name",
                 "label": "ФИО сотрудника",
-                "type": "dropdown",
+                "type": "select",
                 "subtype": "employeeFullname",
                 "required": true,
                 "placeholder": "Абоба Макарович ИИшников",
@@ -60,12 +68,75 @@
           {
             "id": 2,
             "name": "Изменить доступ",
-            "fields": []
+            "fields": [
+              {
+                "name": "name",
+                "label": "ФИО сотрудника",
+                "type": "select",
+                "subtype": "employeeFullname",
+                "required": true,
+                "placeholder": "Абоба Макарович ИИшников",
+                "options": [
+                  "Иванов Иван Иванович",
+                  "Ярославенько Ярослав Ярославович",
+                  "Попенко Попа Попович",
+                  "Курлыков Курылык Курлыкович",
+                  "Магаданов Чебурашка Апельсинович",
+                  "Слонов Хомяк Грызунович"
+                ]
+              },
+              {
+                "name": "new_level",
+                "label": "Новый уровень доступа",
+                "type": "radio",
+                "required": true,
+                "options": ["Просмотр", "Редактирование"]
+              },
+              {
+                "name": "reason",
+                "label": "Причина изменения",
+                "type": "short text",
+                "placeholder": "Причина",
+                "required": true
+              }
+            ]
           },
           {
             "id": 3,
             "name": "Закрыть доступ",
-            "fields": []
+            "fields": [
+              {
+                "name": "name",
+                "label": "ФИО сотрудника",
+                "type": "select",
+                "subtype": "employeeFullname",
+                "required": true,
+                "placeholder": "Абоба Макарович ИИшников",
+                "options": [
+                  "Иванов Иван Иванович",
+                  "Ярославенько Ярослав Ярославович",
+                  "Попенко Попа Попович",
+                  "Курлыков Курылык Курлыкович",
+                  "Магаданов Чебурашка Апельсинович",
+                  "Слонов Хомяк Грызунович"
+                ]
+              },
+              {
+                "name": "sections",
+                "label": "Разделы для закрытия",
+                "type": "multiselect",
+                "required": true,
+                "placeholder": "Выберите разделы",
+                "options": ["Документы", "Финансы", "HR", "Общее"]
+              },
+              {
+                "name": "reason",
+                "label": "Причина закрытия доступа",
+                "type": "long text",
+                "placeholder": "Опишите причину",
+                "required": false
+              }
+            ]
           }
         ]
       },
@@ -75,7 +146,47 @@
           {
             "id": 4,
             "name": "Создать базу",
-            "fields": []
+            "attachment": false,
+            "fields": [
+              {
+                "name": "db_name",
+                "label": "Название базы",
+                "type": "short text",
+                "placeholder": "Например, orders_db",
+                "required": true
+              },
+              {
+                "name": "db_type",
+                "label": "Тип СУБД",
+                "type": "select",
+                "required": true,
+                "placeholder": "Выберите СУБД",
+                "options": ["PostgreSQL", "ClickHouse", "MongoDB"]
+              },
+              {
+                "name": "responsible",
+                "label": "ФИО ответственного",
+                "type": "select",
+                "subtype": "employeeFullname",
+                "required": true,
+                "placeholder": "Абоба Макарович ИИшников",
+                "options": [
+                  "Иванов Иван Иванович",
+                  "Ярославенько Ярослав Ярославович",
+                  "Попенко Попа Попович",
+                  "Курлыков Курылык Курлыкович",
+                  "Магаданов Чебурашка Апельсинович",
+                  "Слонов Хомяк Грызунович"
+                ]
+              },
+              {
+                "name": "comment",
+                "label": "Комментарий",
+                "type": "long text",
+                "placeholder": "Дополнительная информация",
+                "required": false
+              }
+            ]
           }
         ]
       }
@@ -90,12 +201,52 @@
           {
             "id": 5,
             "name": "Парсинг Мой дом",
-            "fields": []
+            "fields": [
+              {
+                "name": "region",
+                "label": "Регион парсинга",
+                "type": "select",
+                "required": true,
+                "placeholder": "Выберите регион",
+                "options": ["Алматы", "Астана", "Шымкент"]
+              },
+              {
+                "name": "urls",
+                "label": "Ссылки на источники",
+                "type": "multi text",
+                "required": true,
+                "placeholder": "Вставьте ссылку",
+                "validation": "url"
+              },
+              {
+                "name": "comment",
+                "label": "Комментарий",
+                "type": "short text",
+                "placeholder": "Короткий текст",
+                "required": false
+              }
+            ]
           },
           {
             "id": 6,
             "name": "Парсинг Твоя баня",
-            "fields": []
+            "fields": [
+              {
+                "name": "frequency",
+                "label": "Периодичность",
+                "type": "radio",
+                "required": true,
+                "options": ["Раз в день", "Раз в неделю", "Раз в месяц"]
+              },
+              {
+                "name": "sources",
+                "label": "Источники данных",
+                "type": "multiselect",
+                "required": true,
+                "placeholder": "Выберите источники",
+                "options": ["Сайт 1", "Сайт 2", "Сайт 3", "Сайт 4"]
+              }
+            ]
           }
         ]
       },
@@ -105,7 +256,22 @@
           {
             "id": 7,
             "name": "Не работает",
-            "fields": []
+            "fields": [
+              {
+                "name": "problem",
+                "label": "Описание проблемы",
+                "type": "long text",
+                "placeholder": "Опишите проблему подробно",
+                "required": true
+              },
+              {
+                "name": "priority_reason",
+                "label": "Короткое описание",
+                "type": "short text",
+                "placeholder": "Короткий текст",
+                "required": true
+              }
+            ]
           }
         ]
       }
