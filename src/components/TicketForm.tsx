@@ -19,7 +19,7 @@ import UncheckRadioIcon from "../icons/createTicket/UncheckRadioIcon";
 import LowPriorityIcon from "../icons/createTicket/LowPriorityIcon";
 import MidPriorityIcon from "../icons/createTicket/MidPriorityIcon";
 import HighPriorityIcon from "../icons/createTicket/HighPriorityIcon";
-import AttachmentaField from "./ui/AttachmentField";
+import AttachmentaField from "./ui/Attachment/AttachmentField";
 import AttachmentIcon from "../icons/createTicket/AttachmentIcon";
 import MultiSelectDropdown from "./ui/MultiSelectDropdown";
 

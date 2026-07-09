@@ -16,9 +16,9 @@ import StepProblem from "./ticketSteps/StepProblem";
 import StepDone from "./ticketSteps/StepDone";
 
 import getTicketDescription from "../../utils/getTicketDescription";
-import SupportButtons from "../ui/SupportButtons";
+import SupportButtons from "../ui/Buttons/SupportButtons";
 import ProgressBar from "../ui/ProgressBar";
-import ConfirmModal from "../ui/ConfirmModal";
+import ConfirmModal from "./modalCardWindows/ConfirmModal";
 
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 

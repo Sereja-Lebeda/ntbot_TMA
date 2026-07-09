@@ -1,4 +1,4 @@
-import { btnPressAnimationStyle } from "../../styles/pressAnimation";
+import { btnPressAnimationStyle } from "../../../styles/pressAnimation";
 
 interface SearchMenuBtnProps {
   icon: React.ReactNode;

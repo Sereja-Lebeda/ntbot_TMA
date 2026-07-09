@@ -1,16 +1,16 @@
 import { useRef, useEffect, useState } from "react";
 
-import type { AttachedFile } from "../../types/createTicket.type";
-import { isSameFile } from "../../utils/fileDublicateHelper";
-import { getFileIcon } from "../../utils/getFileIcon";
-import ConfirmModal from "./ConfirmModal";
+import type { AttachedFile } from "../../../types/createTicket.type";
+import { isSameFile } from "../../../utils/fileDublicateHelper";
+import { getFileIcon } from "../../../utils/getFileIcon";
+import ConfirmModal from "../../pages/modalCardWindows/ConfirmModal";
 
 import {
   hoverAnimationStyle,
   btnPressAnimationStyle,
-} from "../../styles/pressAnimation";
-import CrossIcon from "../../icons/card/CrossIcon";
-import PlusAttachIcon from "../../icons/createTicket/PlusAttachIcon";
+} from "../../../styles/pressAnimation";
+import CrossIcon from "../../../icons/card/CrossIcon";
+import PlusAttachIcon from "../../../icons/createTicket/PlusAttachIcon";
 
 interface AttachmentaFieldProps {
   files: AttachedFile[];

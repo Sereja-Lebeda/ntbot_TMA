@@ -11,8 +11,8 @@ import type { CategoryNode, PriorityLevel } from "../types/createTicket.type";
 
 import TicketCard from "./TicketCard";
 import Searchbar from "./ui/Searchbar";
-import SearchMenuBtn from "./ui/SearchMenuBtn";
-import ConfirmModal from "./ui/ConfirmModal";
+import SearchMenuBtn from "./ui/Buttons/SearchMenuBtn";
+import ConfirmModal from "./pages/modalCardWindows/ConfirmModal";
 import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
 
 import getStatusTitle from "../utils/ticketBadgeHelpers";

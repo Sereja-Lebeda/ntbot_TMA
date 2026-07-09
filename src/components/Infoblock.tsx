@@ -13,10 +13,10 @@ import getStatusTitle from "../utils/ticketBadgeHelpers";
 import mockUser from "../../mockUserInfo.json";
 import mockTicket from "../../mockTicketInfo.json";
 // import ToggleBtn from "../components/ui/ToggleBtn";
-import StatusInfoBtn from "./ui/StatusInfoBtn";
+import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
 import CopyHint from "../components/ui/CopyHint";
-import SupportButtons from "../components/ui/SupportButtons";
+import SupportButtons from "./ui/Buttons/SupportButtons";
 import IpIcon from "../icons/infoblock/IpIcon";
 import PcIcon from "../icons/infoblock/PcIcon";
 import AccessIcon from "../icons/infoblock/AccessIcon";

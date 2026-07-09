@@ -1,7 +1,7 @@
-import { btnPressAnimationStyle } from "../../styles/pressAnimation";
-import ToggleBtn from "../ui/ToggleBtn";
+import { btnPressAnimationStyle } from "../../../styles/pressAnimation";
+import ToggleBtn from "./ToggleBtn";
 
-import TelegramIcon from "../../icons/card/TelegramIcon";
+import TelegramIcon from "../../../icons/card/TelegramIcon";
 
 function SupportButtons() {
   return (

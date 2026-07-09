@@ -1,8 +1,8 @@
 import { createPortal } from "react-dom";
 
-import CheckIcon from "../../icons/card/CheckIcon";
-import CrossIcon from "../../icons/card/CrossIcon";
-import ModalIcon from "../../icons/createTicket/ModalIcon";
+import CheckIcon from "../../../icons/card/CheckIcon";
+import CrossIcon from "../../../icons/card/CrossIcon";
+import ModalIcon from "../../../icons/createTicket/ModalIcon";
 
 interface ConfirmModalProps {
   onConfirm: () => void;

@@ -1,6 +1,6 @@
-import getStatusTitle from "../../utils/ticketBadgeHelpers";
+import getStatusTitle from "../../../utils/ticketBadgeHelpers";
 
-import type { StatusType } from "../../types/ticket.types";
+import type { StatusType } from "../../../types/ticket.types";
 
 interface StatusInfoBtnProps {
   quantity: number;
