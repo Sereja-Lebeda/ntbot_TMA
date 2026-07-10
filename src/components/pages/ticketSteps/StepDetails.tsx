@@ -6,11 +6,14 @@ import type {
   PriorityLevel,
 } from "../../../types/createTicket.type";
 import validateForm from "../../../utils/validateForm";
+import { isSameFile } from "../../../utils/fileDublicateHelper";
+
+import TicketForm from "../../TicketForm";
+import AttachmentaField from "../../ui/Attachment/AttachmentField";
 
 import BackArrowIcon from "../../../icons/createTicket/BackArrowIcon";
 import ForwardArrowIcon from "../../../icons/createTicket/ForwardArrowIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
-import TicketForm from "../../TicketForm";
 
 interface StepDetailsProps {
   onPrev: () => void;
@@ -46,6 +49,7 @@ function StepDetails({
   submitTicket,
 }: StepDetailsProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   if (!selectedAction) return null;
 
@@ -72,6 +76,16 @@ function StepDetails({
       submitTicket();
       onNext();
     }
+  }
+
+  function addFiles(fileList: FileList) {
+    const newFiles = Array.from(fileList);
+    setFiles((prev) => {
+      const unique = newFiles
+        .filter((nf) => !prev.some((item) => isSameFile(item.file, nf)))
+        .map((nf) => ({ file: nf, url: URL.createObjectURL(nf) }));
+      return [...prev, ...unique];
+    });
   }
 
   // console.log({ multiData });
@@ -115,11 +129,36 @@ function StepDetails({
           setMultiData={setMultiData}
           priority={priority}
           setPriority={setPriority}
-          files={files}
-          setFiles={setFiles}
+          // files={files}
+          // setFiles={setFiles}
           errors={errors}
           clearError={clearError}
         />
+
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              setIsDragging(false);
+            }
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragging(false);
+            addFiles(e.dataTransfer.files);
+          }}
+          className="w-full"
+        >
+          <AttachmentaField
+            files={files}
+            setFiles={setFiles}
+            isDragging={isDragging}
+            addFiles={addFiles}
+          />
+        </div>
 
         {/* Bottom of form - buttons */}
         <div className="w-full flex flex-col items-start gap-7">

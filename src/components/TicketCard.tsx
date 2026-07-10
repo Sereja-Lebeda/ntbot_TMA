@@ -26,6 +26,7 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   setTickets: React.Dispatch<React.SetStateAction<Ticket[]>>;
   onRequestCancel: (ticketId: number) => void;
   onRequestRepeat: (ticketId: number) => void;
+  onRequestEdit: (ticketId: number) => void;
   handleOpenView: (ticketId: number) => void;
 }
 
@@ -47,8 +48,9 @@ export default function TicketCard({
   ticketView,
   setTickets,
   onRequestCancel,
-  handleOpenView,
   onRequestRepeat,
+  onRequestEdit,
+  handleOpenView,
 }: TicketCardWithActionsProps) {
   const favoriteBtn = (
     <FavoriteIcon
@@ -65,7 +67,7 @@ export default function TicketCard({
     },
     edit: {
       Icon: EditIcon,
-      onClick: () => console.log("TODO: edit", ticket.ticketId),
+      onClick: () => onRequestEdit(ticket.ticketId),
     },
     repeat: {
       Icon: RepeatIcon,

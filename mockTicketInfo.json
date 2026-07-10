@@ -297,7 +297,13 @@
       "Папки и файлы",
       "Закрыть доступ"
     ],
-    "attachedFiles": [],
+    "attachedFiles": [
+      {
+        "name": "screenshot_error.png",
+        "url": "https://picsum.photos/id/64/400/300",
+        "uploadedAt": "2026-07-01T14:23:00"
+      }
+    ],
     "department": "Отдел Мемов",
     "userName": "Абоба Макарович"
   }

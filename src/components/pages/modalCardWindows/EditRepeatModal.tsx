@@ -1,21 +1,33 @@
 import { createPortal } from "react-dom";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
 import useEscapeKey from "../../../hooks/useEscapeKey";
 
 import type {
   Action,
   AttachedFile,
-  Field,
   PriorityLevel,
+  CategoryNode,
+  CategoryName,
 } from "../../../types/createTicket.type";
-import type { Ticket } from "../../../types/ticket.types";
+import type { Ticket, TicketFileItem } from "../../../types/ticket.types";
+import TicketForm from "../../TicketForm";
 
 import getBreadcrumb from "../../../utils/getBreadcrumbs";
 import validateForm from "../../../utils/validateForm";
+import { isSameFile } from "../../../utils/fileDublicateHelper";
+
+import TicketHeaderInfo from "./TicketHeaderInfo";
+import ConfirmModal from "./ConfirmModal";
+import FormDropdown from "../../ui/FormDropdown";
+import EditableAttachmentField from "../../ui/Attachment/EditableAttachmentField";
+import AttachmentaField from "../../ui/Attachment/AttachmentField";
+
+import mockActionsNested from "../../../../mockActionsNested.json";
+
+import FloppydiskIcon from "../../../icons/FloppydiskIcon";
 import RepeatIcon from "../../../icons/card/RepeatIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
-import TicketForm from "../../TicketForm";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
 
@@ -28,8 +40,12 @@ interface EditRepeatModalProps {
     formData: Record<string, string>;
     multiData: Record<string, string[]>;
     priority: PriorityLevel;
+    action: Action;
   }) => void;
   mode: ModeType;
+
+  favoriteTickets: number[];
+  setFavoriteTickets: (id: number[]) => void;
 }
 
 type ModeType = "edit" | "repeat";
@@ -40,9 +56,11 @@ function EditRepeatModal({
   onClose,
   onSubmit,
   mode,
+  favoriteTickets,
+  setFavoriteTickets,
 }: EditRepeatModalProps) {
   useLockBodyScroll();
-  useEscapeKey(onClose);
+  useEscapeKey(handleCloseAttempt);
 
   const [formData, setFormData] = useState<Record<string, string>>(
     ticket?.body ?? {},
@@ -54,9 +72,112 @@ function EditRepeatModal({
     ticket?.priority ?? null,
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [files, setFiles] = useState<AttachedFile[]>([]);
+  const [files, setFiles] = useState<AttachedFile[]>([]); // для repeat, работает с AttachmentaField
+  const [editFiles, setEditFiles] = useState<TicketFileItem[]>(
+    ticket?.attachedFiles.map(
+      (f): TicketFileItem => ({ kind: "existing", ...f }),
+    ) ?? [],
+  ); // для edit, работает с EditableAttachmentField
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
+  //For close modal unsaved changes
+  const [isConfirmCloseOpen, setIsConfirmCloseOpen] = useState(false);
+  const initialSnapshot = useRef({
+    formData: ticket?.body ?? {},
+    multiData: ticket?.multiBody ?? {},
+    priority: ticket?.priority ?? null,
+  });
+  const inputText =
+    "Вы уверены, что хотите прервать редактирование заявки?\n\nИзмененная информация не сохранится.";
+  function hasUnsavedChanges(): boolean {
+    return (
+      JSON.stringify(formData) !==
+        JSON.stringify(initialSnapshot.current.formData) ||
+      JSON.stringify(multiData) !==
+        JSON.stringify(initialSnapshot.current.multiData) ||
+      priority !== initialSnapshot.current.priority
+    );
+  }
+  function handleCloseAttempt() {
+    if (hasUnsavedChanges()) {
+      setIsConfirmCloseOpen(true);
+    } else {
+      onClose();
+    }
+  }
+
+  //edit state
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    ticket?.breadcrumbs[0] ?? null,
+  );
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(
+    ticket?.breadcrumbs[1] ?? null,
+  );
+  const [selectedActionState, setSelectedActionState] = useState<Action | null>(
+    action ?? null,
+  );
 
   if (!ticket || !action) return null;
+
+  const typedActions = mockActionsNested as CategoryNode[];
+
+  const categoryOptions = typedActions.map((c) => c.category);
+
+  const subcategoryOptions = selectedCategory
+    ? (typedActions
+        .find((c) => c.category === selectedCategory)
+        ?.subcategories.map((s) => s.subcategory) ?? [])
+    : [];
+
+  const actionOptions =
+    selectedSubcategory && selectedCategory
+      ? (typedActions
+          .find((c) => c.category === selectedCategory)
+          ?.subcategories.find((s) => s.subcategory === selectedSubcategory)
+          ?.actions.map((a) => a.name) ?? [])
+      : [];
+
+  const currentAction = mode === "edit" ? selectedActionState : action;
+
+  function resetFormState() {
+    setFormData({});
+    setMultiData({});
+    setFiles([]);
+    setPriority(null);
+    setErrors({});
+  }
+
+  function handleCategoryChange(category: string) {
+    setSelectedCategory(category);
+    setSelectedSubcategory(null);
+    setSelectedActionState(null);
+    resetFormState();
+  }
+
+  function handleSubcategoryChange(subcategory: string) {
+    setSelectedSubcategory(subcategory);
+    setSelectedActionState(null);
+    resetFormState();
+  }
+
+  function handleActionChange(actionName: string) {
+    const found = typedActions
+      .find((c) => c.category === selectedCategory)
+      ?.subcategories.find((s) => s.subcategory === selectedSubcategory)
+      ?.actions.find((a) => a.name === actionName);
+
+    if (found && selectedCategory && selectedSubcategory) {
+      setSelectedActionState({
+        ...found,
+        category: selectedCategory as CategoryName,
+        subcategory: selectedSubcategory,
+      });
+    } else {
+      setSelectedActionState(null);
+    }
+
+    resetFormState();
+  }
 
   function clearError(field: string) {
     setErrors((prev) => {
@@ -67,21 +188,70 @@ function EditRepeatModal({
   }
 
   function handleSubmit() {
-    const newErrors = validateForm(formData, multiData, priority, action);
+    if (!currentAction) return; // на всякий случай, хотя кнопка вряд ли будет нажата в этом состоянии
+
+    const newErrors = validateForm(
+      formData,
+      multiData,
+      priority,
+      currentAction,
+    );
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) return;
 
-    onSubmit({ formData, multiData, priority });
+    onSubmit({ formData, multiData, priority, action: currentAction });
+  }
+
+  function addFiles(fileList: FileList) {
+    const newFiles = Array.from(fileList);
+    setFiles((prev) => {
+      const unique = newFiles
+        .filter((nf) => !prev.some((item) => isSameFile(item.file, nf)))
+        .map((nf) => ({ file: nf, url: URL.createObjectURL(nf) }));
+      return [...prev, ...unique];
+    });
+  }
+
+  function addEditFiles(fileList: FileList) {
+    const newFiles = Array.from(fileList);
+    setEditFiles((prev) => {
+      const unique = newFiles
+        .filter(
+          (nf) =>
+            !prev.some(
+              (item) => item.kind === "new" && isSameFile(item.file, nf),
+            ),
+        )
+        .map(
+          (nf): TicketFileItem => ({
+            kind: "new",
+            file: nf,
+            url: URL.createObjectURL(nf),
+          }),
+        );
+      return [...prev, ...unique];
+    });
   }
 
   return createPortal(
     <div
-      onClick={onClose}
+      onClick={handleCloseAttempt}
       className="fixed inset-0
   bg-black/50 z-50
   flex justify-center items-center"
     >
+      {isConfirmCloseOpen && (
+        <ConfirmModal
+          inputText={inputText}
+          onConfirm={() => {
+            setIsConfirmCloseOpen(false);
+            onClose();
+          }}
+          onCancel={() => setIsConfirmCloseOpen(false)}
+        />
+      )}
+
       <div
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => {
@@ -91,23 +261,37 @@ function EditRepeatModal({
             (document.activeElement as HTMLElement)?.blur();
           }
         }}
-        className="w-[50vw] max-h-[90vh] flex flex-col items-center gap-7
-      bg-(--bg-secondary) border border-(--bg-border) rounded-xs px-12.5 py-10 select-none
+        className="w-[50vw] max-h-[90vh] flex flex-col items-center gap-4
+      bg-(--bg-secondary) border border-(--bg-border) rounded-xs py-10 select-none
       "
       >
         {/* Header */}
-        <div className="w-full flex flex-col justify-center items-start gap-3">
-          <div className="w-full flex items-center gap-1">
-            <RepeatIcon className="text(--text-secondary) w-4 h-4" />
-            <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-4">{`Повтор заявки #${ticket.ticketId}`}</span>
+        {mode === "edit" ? (
+          <div
+            className="w-full gap-7
+          flex flex-col items-start"
+          >
+            <TicketHeaderInfo
+              favoriteTickets={favoriteTickets}
+              setFavoriteTickets={setFavoriteTickets}
+              ticket={ticket}
+              modalMode="edit"
+            />
           </div>
+        ) : (
+          <div className="w-full flex flex-col justify-center items-start gap-3 px-12.5">
+            <div className="w-full flex items-center gap-1">
+              <RepeatIcon className="text(--text-secondary) w-4 h-4" />
+              <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-4">{`Повтор заявки #${ticket.ticketId}`}</span>
+            </div>
 
-          {/* Divider */}
-          <div className="w-full h-px bg-(--bg-disable-btn)"></div>
-        </div>
+            {/* Divider */}
+            <div className="w-full h-px bg-(--bg-disable-btn)"></div>
+          </div>
+        )}
 
         {/* Content */}
-        <div className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll">
+        <div className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll px-12.5">
           {/* Ticket information */}
           <div className="w-full flex items-start gap-1">
             <TicketInfoIcon className="text-(--text-primary)" />
@@ -120,35 +304,91 @@ function EditRepeatModal({
               <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                 Категории
               </span>
-              {/* Bread crumbs */}
-              <div className="flex justify-start items-center gap-2">
-                {ticket.breadcrumbs.map(getBreadcrumb)}
-              </div>
+
+              {mode === "repeat" ? (
+                <div className="flex justify-start items-center gap-2">
+                  {ticket.breadcrumbs.map(getBreadcrumb)}
+                </div>
+              ) : (
+                <div className="w-full flex flex-col gap-3">
+                  <FormDropdown
+                    options={categoryOptions}
+                    value={selectedCategory ?? ""}
+                    onChange={handleCategoryChange}
+                    placeholder="Выберите категорию"
+                  />
+                  <FormDropdown
+                    options={subcategoryOptions}
+                    value={selectedSubcategory ?? ""}
+                    onChange={handleSubcategoryChange}
+                    placeholder="Выберите подкатегорию"
+                    disabled={!selectedCategory}
+                  />
+                  <FormDropdown
+                    options={actionOptions}
+                    value={selectedActionState?.name ?? ""}
+                    onChange={handleActionChange}
+                    placeholder="Выберите действие"
+                    disabled={!selectedSubcategory}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <TicketForm
-            selectedAction={action}
+            selectedAction={currentAction}
             formData={formData}
             setFormData={setFormData}
             multiData={multiData}
             setMultiData={setMultiData}
             priority={priority}
             setPriority={setPriority}
-            files={files}
-            setFiles={setFiles}
             errors={errors}
             clearError={clearError}
           />
 
+          {mode === "edit" ? (
+            <EditableAttachmentField
+              files={editFiles}
+              setFiles={setEditFiles}
+              addFiles={addEditFiles}
+            />
+          ) : (
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setIsDragging(false);
+                }
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragging(false);
+                addFiles(e.dataTransfer.files);
+              }}
+              className="w-full"
+            >
+              <AttachmentaField
+                files={files}
+                setFiles={setFiles}
+                isDragging={isDragging}
+                addFiles={addFiles}
+              />
+            </div>
+          )}
+
           {/* Divider */}
-          <div className="w-full h-px bg-(--bg-disable-btn) my-"></div>
+          <div className="w-full h-px bg-(--bg-disable-btn)"></div>
         </div>
 
         {/* Buttons */}
-        <div className="w-full flex justify-between items-center">
+        <div className="w-full flex justify-between items-center px-12.5">
           {/* Back btn */}
           <button
-            onClick={onClose}
+            onClick={handleCloseAttempt}
             className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
           >
             <CrossIcon className="text-(--text-secondary) group-hover:text-(--text-primary) w-2.25 h-2.25" />
@@ -169,10 +409,21 @@ function EditRepeatModal({
               bg-(--bg-btn-primary) rounded-xs px-4
               transition-all duration-600 ease-in-out hover:-translate-x-1 hover:-translate-y-1 hover:z-10"
             >
-              <SendFormIcon className="w-4.5 h-4.5 text-(--text-btn)" />
-              <span className="font-jbmono font-medium text-xs text-(--text-btn) leading-normal">
-                Отправить заявку
-              </span>
+              {mode === "edit" ? (
+                <>
+                  <FloppydiskIcon className="w-4.5 h-4.5 text-(--text-btn)" />
+                  <span className="font-jbmono font-medium text-xs text-(--text-btn) leading-normal">
+                    Сохранить
+                  </span>
+                </>
+              ) : (
+                <>
+                  <SendFormIcon className="w-4.5 h-4.5 text-(--text-btn)" />
+                  <span className="font-jbmono font-medium text-xs text-(--text-btn) leading-normal">
+                    Отправить заявку
+                  </span>
+                </>
+              )}
             </div>
           </button>
         </div>

@@ -182,7 +182,7 @@ function AttachmentaField({
           group hover:border-(--border-hover-btn) shrink-0
           ${isDragging ? "border-(--border-hover-btn)" : ""}`}
           >
-            <PlusAttachIcon className="w-2.5 h-2.5" />
+            <PlusAttachIcon className="w-2.5 h-2.5 text-(--text-primary)" />
             <span>Загрузить файл</span>
           </button>
         </div>

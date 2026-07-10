@@ -1,38 +1,39 @@
-import { useState } from "react";
+// import { useState } from "react";
 
 import type {
   Action,
-  AttachedFile,
+  // AttachedFile,
   PriorityLevel,
   Field,
 } from "../types/createTicket.type";
-import { isSameFile } from "../utils/fileDublicateHelper";
+// import { isSameFile } from "../utils/fileDublicateHelper";
 import mockUserInfo from "../../mockUserInfo.json";
 
 import { btnPressAnimationStyle } from "../styles/pressAnimation";
 
+import FormDropdown from "./ui/FormDropdown";
+// import AttachmentaField from "./ui/Attachment/AttachmentField";
+import MultiSelectDropdown from "./ui/MultiSelectDropdown";
+
 import PlusFieldIcon from "../icons/createTicket/PlusFieldIcon";
 import MinusIcon from "../icons/createTicket/MinusIcon";
-import FormDropdown from "./ui/FormDropdown";
 import CheckRadioIcon from "../icons/createTicket/CheckRadioIcon";
 import UncheckRadioIcon from "../icons/createTicket/UncheckRadioIcon";
 import LowPriorityIcon from "../icons/createTicket/LowPriorityIcon";
 import MidPriorityIcon from "../icons/createTicket/MidPriorityIcon";
 import HighPriorityIcon from "../icons/createTicket/HighPriorityIcon";
-import AttachmentaField from "./ui/Attachment/AttachmentField";
-import AttachmentIcon from "../icons/createTicket/AttachmentIcon";
-import MultiSelectDropdown from "./ui/MultiSelectDropdown";
+// import AttachmentIcon from "../icons/createTicket/AttachmentIcon";
 
 interface TicketFormProps {
-  selectedAction: Action;
+  selectedAction: Action | null;
   formData: Record<string, string>;
   setFormData: React.Dispatch<React.SetStateAction<Record<string, string>>>;
   multiData: Record<string, string[]>;
   setMultiData: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
   priority: PriorityLevel;
   setPriority: (priority: PriorityLevel) => void;
-  files: AttachedFile[];
-  setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
+  // files: AttachedFile[];
+  // setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
   errors: Record<string, string>;
   clearError: (field: string) => void;
 }
@@ -45,12 +46,20 @@ function TicketForm({
   setMultiData,
   priority,
   setPriority,
-  files,
-  setFiles,
+  // files,
+  // setFiles,
   errors,
   clearError,
 }: TicketFormProps) {
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  // const [isDragging, setIsDragging] = useState<boolean>(false);
+
+  if (!selectedAction) {
+    return (
+      <div className="w-full text-center font-consolas text-sm text-(--text-secondary) py-8">
+        Выберите действие выше, чтобы продолжить заполнение формы
+      </div>
+    );
+  }
 
   const userFullName = mockUserInfo.name;
 
@@ -181,7 +190,9 @@ function TicketForm({
               className="w-full h-full
               font-consolas font-normal text-sm leading-normal
               outline-none
+              placeholder:text-(--text-secondary)
               group-hover:placeholder:text-(--text-primary)
+              text-(--text-primary)
               resize-none overscroll-contain dropdown-scroll"
             ></textarea>
           </div>
@@ -301,32 +312,32 @@ function TicketForm({
   }
 
   // Drag n drop attachment
-  function addFiles(fileList: FileList) {
-    const newFiles = Array.from(fileList);
-    setFiles((prev) => {
-      const unique = newFiles
-        .filter((nf) => !prev.some((item) => isSameFile(item.file, nf)))
-        .map((nf) => ({ file: nf, url: URL.createObjectURL(nf) }));
-      return [...prev, ...unique];
-    });
-  }
+  // function addFiles(fileList: FileList) {
+  //   const newFiles = Array.from(fileList);
+  //   setFiles((prev) => {
+  //     const unique = newFiles
+  //       .filter((nf) => !prev.some((item) => isSameFile(item.file, nf)))
+  //       .map((nf) => ({ file: nf, url: URL.createObjectURL(nf) }));
+  //     return [...prev, ...unique];
+  //   });
+  // }
 
   return (
     <div
-      onDragOver={(e) => {
-        e.preventDefault();
-        setIsDragging(true);
-      }}
-      onDragLeave={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-          setIsDragging(false);
-        }
-      }}
-      onDrop={(e) => {
-        e.preventDefault();
-        setIsDragging(false);
-        addFiles(e.dataTransfer.files);
-      }}
+      // onDragOver={(e) => {
+      //   e.preventDefault();
+      //   setIsDragging(true);
+      // }}
+      // onDragLeave={(e) => {
+      //   if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      //     setIsDragging(false);
+      //   }
+      // }}
+      // onDrop={(e) => {
+      //   e.preventDefault();
+      //   setIsDragging(false);
+      //   addFiles(e.dataTransfer.files);
+      // }}
       className="w-full"
     >
       <div className="w-full flex flex-col gap-8">
@@ -362,22 +373,22 @@ function TicketForm({
         <div className="w-full h-px bg-(--bg-border)"></div>
 
         {/* Attachment */}
-        <div className="w-full flex flex-col items-start gap-7">
-          {/* Label */}
-          <div className="w-full flex items-center gap-1">
-            <AttachmentIcon />
+        {/* <div className="w-full flex flex-col items-start gap-7"> */}
+        {/* Label */}
+        {/* <div className="w-full flex items-center gap-1">
+            <AttachmentIcon className="text-(--text-primary)" />
             <span className="font-jbmono font-normal text-sm text-(--text-primary) leading-5">
               Прикрепленные файлы
             </span>
-          </div>
+          </div> */}
 
-          <AttachmentaField
+        {/* <AttachmentaField
             files={files}
             setFiles={setFiles}
             isDragging={isDragging}
             addFiles={addFiles}
           />
-        </div>
+        </div> */}
 
         {/* Divider */}
         {/* <div className="w-full h-px bg-(--bg-border)"></div> */}

@@ -14,7 +14,7 @@ const Searchbar = forwardRef<HTMLInputElement, searchRequestProps>(
       <div
         // onMouseDown={(e) => e.preventDefault()}
         // onFocus={() => console.log("focus", document.activeElement)}
-        className={`h-10 flex items-center flex-1 px-5 py-3 gap-2 rounded-xs bg-(--bg-secondary) border border-(--bg-border) hover:border-(--border-hover-btn) group ${className}`}
+        className={`h-10 flex items-center flex-1 px-5 py-3 gap-2 rounded-xs bg-(--bg-secondary) border border-(--bg-border) hover:border-(--border-hover-btn) group ${className} select-none`}
       >
         <MagnifyIcon className="w-5 h-5 " />
         {/* TODO: add debounce */}

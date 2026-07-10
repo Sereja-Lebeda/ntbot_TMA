@@ -72,7 +72,7 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
     );
   }
 
-  const ticketQuantities = getTicketQuantity(allTickets as Ticket[]);
+  const ticketQuantities = getTicketQuantity(allTickets as unknown as Ticket[]);
 
   return (
     // Whole left side
@@ -85,8 +85,8 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
         {/* User Info */}
         <div className="w-69 flex flex-col justify-center items-start px-4 py-6 gap-3 border border-(--bg-border) bg-(--bg-tertiary) rounded-xs select-none">
           {/* User name */}
-          <div className="h-10 w-full flex items-center px-1 border-b border-(--bg-disable-btn)">
-            <span className="font-jbmono text-(--text-primary) text-lg font-bold leading-5.5">
+          <div className="h-10 w-full flex items-center px-1 border-b border-(--bg-disable-btn) ">
+            <span className="font-jbmono text-(--text-primary) text-lg font-bold leading-5.5 mb-6">
               {mock.name}
             </span>
           </div>
@@ -138,7 +138,7 @@ function Infoblock({ ticketStatuses, setTicketStatuses }: InfoblockProps) {
 dark:text-(--bg-btn-primary)"
                 />
               </div>
-              {/* TODO: Add ternar for access  */}
+              {/* //TODO: Add ternar for access  */}
               <span className={textStyle}>
                 Доступ до {mock.remoteAccessDate}
               </span>
@@ -146,6 +146,7 @@ dark:text-(--bg-btn-primary)"
           </div>
         </div>
 
+        {/* //TODO: Add to reflect actual statuses (Team / mine) */}
         {/* Status of tickets */}
         <div className="w-69 grid grid-cols-5 gap-2">
           {ticketStatusOrder.map((status, index) => (

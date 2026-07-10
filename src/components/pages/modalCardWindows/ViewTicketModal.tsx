@@ -6,9 +6,9 @@ import useEscapeKey from "../../../hooks/useEscapeKey";
 import type { Ticket } from "../../../types/ticket.types";
 import type { Action } from "../../../types/createTicket.type";
 
-import getStatusTitle from "../../../utils/ticketBadgeHelpers";
-import { getStatusColor } from "../../../utils/ticketBadgeHelpers";
-import { getPriorityTitle } from "../../../utils/ticketBadgeHelpers";
+// import getStatusTitle from "../../../utils/ticketBadgeHelpers";
+// import { getStatusColor } from "../../../utils/ticketBadgeHelpers";
+// import { getPriorityTitle } from "../../../utils/ticketBadgeHelpers";
 
 import FunctionBtn from "../../ui/Buttons/FunctionBtn";
 
@@ -17,11 +17,12 @@ import RepeatIcon from "../../../icons/card/RepeatIcon";
 import EditIcon from "../../../icons/card/EditIcon";
 import CancelIcon from "../../../icons/card/CancelIcon";
 import CrossTicketIcon from "../../../icons/createTicket/CrossTicketIcon";
-import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
+// import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import AttachmentIcon from "../../../icons/createTicket/AttachmentIcon";
 import TicketAttachmentsView from "../../ui/Attachment/TicketAttachmentsView";
 import getBreadcrumb from "../../../utils/getBreadcrumbs";
+import TicketHeaderInfo from "./TicketHeaderInfo";
 // import getBreadcrumb from "../../../utils/getBreadcrumbs";Да
 
 interface ViewTicketModalProps {
@@ -30,6 +31,7 @@ interface ViewTicketModalProps {
   onClose: () => void;
   onRepeat: () => void;
   onCancel: (ticketId: number) => void;
+  onEdit: () => void;
 
   favoriteTickets: number[];
   setFavoriteTickets: (id: number[]) => void;
@@ -41,6 +43,7 @@ function ViewTicketModal({
   onClose,
   onRepeat,
   onCancel,
+  onEdit,
   favoriteTickets,
   setFavoriteTickets,
 }: ViewTicketModalProps) {
@@ -57,7 +60,8 @@ function ViewTicketModal({
   // const outerDivClassName = `w-fit h-8.5 rounded-xs select-none bg-(--text-primary) `;
   //TODO: take this logic of box shadow and implement in other places
 
-  const outerDivClassName = `w-fit h-8.5`;
+  //TODO: findout why tg icon is small if u use vert monitor in view ticket
+  const outerDivClassName = ` w-fit h-8.5`;
   const outerBtnClassName = `w-full h-full flex justify-center items-center px-4 py-2 rounded-xs enabled:bg-(--bg-inactive-btn) disabled:bg-(--bg-disable-btn) enabled:cursor-pointer transition-all duration-600 ease-in-out enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10 enabled:hover:shadow-[4px_4px_0_0_var(--text-primary)]`;
 
   // const outerBtnClassName = `h-full flex justify-center items-center px-4 py-2 rounded-xs enabled:bg-(--bg-inactive-btn) disabled:bg-(--bg-disable-btn) enabled:cursor-pointer enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10 transition-all duration-600 ease-in-out`;
@@ -112,7 +116,7 @@ function ViewTicketModal({
               outerDivClassName={outerDivClassName}
               outerBtnClassName={outerBtnClassName}
               innerDivClassName={innerDivClassName}
-              onClick={() => console.log("TODO: edit ticket")}
+              onClick={onEdit}
               disabled={isBtnDisabled}
             />
             <FunctionBtn
@@ -143,59 +147,24 @@ function ViewTicketModal({
             </span>
           </button>
         </div>
-
         {/* Divider */}
         <div className="w-full h-px bg-(--bg-disable-btn) my-3"></div>
-
         {/* Ticket header and content */}
         <div
-          className="w-full gap-7 pl-12.5 
-        flex flex-col items-start overflow-y-auto dropdown-scroll"
+          className="w-full gap-7 px-12.5 
+          flex flex-col items-start overflow-y-auto dropdown-scroll"
         >
-          {/* Header */}
-          <div className="w-full flex flex-col items-start gap-1">
-            {/* Title ticket */}
-            <div className="w-full flex justify-start items-center gap-2">
-              {/* Icon */}
-              <button className="cursor-pointer">
-                <FavoriteTicketIcon
-                  ticketId={ticket.ticketId}
-                  favoriteTickets={favoriteTickets}
-                  setFavoriteTickets={setFavoriteTickets}
-                />
-              </button>
-              {/* Title, status, priority */}
-              <div className=" w-full flex justify-start items-center gap-3 py-3">
-                <span className="font-jbmono font-medium text-[15px] text-(--text-primary) leading-6">
-                  {ticket.title}
-                </span>
-                <div className={`${getStatusColor(ticket.status)}`}>
-                  {getStatusTitle(ticket.status, "singular")}
-                </div>
-                <div
-                  className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5
-            bg-(--text-primary) text-(--bg-primary) text-xs
-            dark:bg-transparent dark:border dark:border-(--text-tertiary) dark:text-(--text-tertiary)
-            rounded-xs font-bold leading-3 select-none"
-                >
-                  {getPriorityTitle(ticket.priority)}
-                </div>
-              </div>
-            </div>
-            {/* Ticket meta info */}
-            <div
-              className="w-full flex justify-start items-center
-            font-consolas font-normal text-[11px] text-(--text-secondary) leading-4"
-            >
-              {`ID: ${ticket.ticketId} | Дата создания: ${ticket.createDate} | Автор: ${ticket.userName}`}
-            </div>
-          </div>
-
+          <TicketHeaderInfo
+            favoriteTickets={favoriteTickets}
+            setFavoriteTickets={setFavoriteTickets}
+            ticket={ticket}
+            className="px-0!"
+          />
           {/* Content */}
           <div className="w-full flex flex-col items-start gap-7">
             {/* Section container */}
             <div className="w-full flex items-start gap-1">
-              <TicketInfoIcon className="text-(text-primary)" />
+              <TicketInfoIcon className="text-(--text-primary)" />
               <span className="font-jbmono font-normal text-sm text-(--text-primary) leading-5">
                 Информация о заявке
               </span>

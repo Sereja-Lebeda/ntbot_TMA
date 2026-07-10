@@ -37,6 +37,10 @@ export type TicketAttachmentType = {
   uploadedAt: string;
 }[];
 
+export type TicketFileItem =
+  | { kind: "existing"; name: string; url: string; uploadedAt: string }
+  | { kind: "new"; file: File; url: string };
+
 // Type for ticket sort new/complete/default
 export type SortByStatusType = "default" | "new" | "complete";
 

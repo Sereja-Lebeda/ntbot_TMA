@@ -7,6 +7,7 @@ interface FormDropownProps {
   onChange: (value: string) => void;
   placeholder?: string;
   hasError?: boolean;
+  disabled?: boolean;
 }
 
 function FormDropdown({
@@ -15,6 +16,7 @@ function FormDropdown({
   onChange,
   placeholder,
   hasError,
+  disabled = false,
 }: FormDropownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -36,14 +38,14 @@ function FormDropdown({
       ref={dropdownRef}
       tabIndex={0}
       onClick={() => {
-        setIsOpen((prev) => !prev);
+        if (!disabled) setIsOpen((prev) => !prev);
       }}
-      className={`relative 
-    w-full h-10 flex flex-col justify-center items-start 
+      className={`relative
+    w-full h-10 flex flex-col justify-center items-start
     border ${isOpen ? "border-[#E7E6E6]!" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
     ${hasError ? "border-(--bg-task-error)!" : ""}
-    group hover:border-(--border-hover-btn)
-    px-4 py-2.5 cursor-pointer ${isOpen ? "z-50" : "z-20"}`}
+    ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer group hover:border-(--border-hover-btn)"}
+    px-4 py-2.5 ${isOpen ? "z-50" : "z-20"}`}
     >
       <div
         // onClick={() => setIsOpen(!isOpen)}

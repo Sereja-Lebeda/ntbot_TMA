@@ -121,7 +121,7 @@ function StepProblem({
                       </span>
                     </div>
                     <ArrowIcon
-                      className={`transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`}
+                      className={`text-(--text-secondary) transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`}
                     />
                   </div>
 

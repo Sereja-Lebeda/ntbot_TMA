@@ -7,7 +7,11 @@ import type {
 } from "../types/ticket.types";
 
 import type { UserType } from "../types/user.types";
-import type { CategoryNode, PriorityLevel } from "../types/createTicket.type";
+import type {
+  CategoryNode,
+  PriorityLevel,
+  Action,
+} from "../types/createTicket.type";
 
 import TicketCard from "./TicketCard";
 import Searchbar from "./ui/Searchbar";
@@ -119,6 +123,15 @@ export default function HeroSector({
     ? allActions.find((a) => a.id === repeatTicket.actionId)
     : undefined;
 
+  const editTicket =
+    activeModal?.type === "edit"
+      ? tickets.find((t) => t.ticketId === activeModal.ticketId)
+      : undefined;
+
+  const editAction = editTicket
+    ? allActions.find((a) => a.id === editTicket.actionId)
+    : undefined;
+
   function handleRepeatSubmit(data: {
     formData: Record<string, string>;
     multiData: Record<string, string[]>;
@@ -140,6 +153,38 @@ export default function HeroSector({
     };
 
     setTickets((prev) => [...prev, newTicket]);
+    setActiveModal(null);
+  }
+
+  function handleEditSubmit(data: {
+    formData: Record<string, string>;
+    multiData: Record<string, string[]>;
+    priority: PriorityLevel;
+    action: Action;
+  }) {
+    if (!editTicket) return;
+
+    const newBreadcrumbs = [
+      data.action.category,
+      data.action.subcategory,
+      data.action.name,
+    ];
+
+    setTickets((prev) =>
+      prev.map((t) =>
+        t.ticketId === editTicket.ticketId
+          ? {
+              ...t,
+              body: data.formData,
+              multiBody: data.multiData,
+              priority: data.priority,
+              actionId: data.action.id,
+              breadcrumbs: newBreadcrumbs,
+              description: getTicketDescription(data.formData, data.action),
+            }
+          : t,
+      ),
+    );
     setActiveModal(null);
   }
 
@@ -209,7 +254,19 @@ export default function HeroSector({
     setActiveModal({ type: "repeat", ticketId }); // без from — прямое открытие
   }
 
+  function handleRequestEdit(ticketId: number) {
+    setActiveModal({ type: "edit", ticketId }); // без from
+  }
+
   function handleRepeatCancel() {
+    if (activeModal?.from === "view") {
+      setActiveModal({ type: "view", ticketId: activeModal.ticketId });
+    } else {
+      setActiveModal(null);
+    }
+  }
+
+  function handleEditCancel() {
     if (activeModal?.from === "view") {
       setActiveModal({ type: "view", ticketId: activeModal.ticketId });
     } else {
@@ -250,6 +307,15 @@ export default function HeroSector({
               });
             }
           }}
+          onEdit={() => {
+            if (viewedTicket) {
+              setActiveModal({
+                type: "edit",
+                ticketId: viewedTicket.ticketId,
+                from: "view",
+              });
+            }
+          }}
 
           // ... (позже кнопки edit/repeat/cancel)
         />
@@ -261,6 +327,20 @@ export default function HeroSector({
           onClose={handleRepeatCancel}
           onSubmit={handleRepeatSubmit}
           mode="repeat"
+          favoriteTickets={favoriteTickets}
+          setFavoriteTickets={setFavoriteTickets}
+        />
+      )}
+
+      {activeModal?.type === "edit" && (
+        <EditRepeatModal
+          ticket={editTicket}
+          action={editAction}
+          onClose={handleEditCancel}
+          onSubmit={handleEditSubmit}
+          mode="edit"
+          favoriteTickets={favoriteTickets}
+          setFavoriteTickets={setFavoriteTickets}
         />
       )}
 
@@ -388,6 +468,7 @@ export default function HeroSector({
               setTickets={setTickets}
               onRequestCancel={handleRequestCancel}
               onRequestRepeat={handleRequestRepeat}
+              onRequestEdit={handleRequestEdit}
               handleOpenView={handleOpenView}
             />
           ))}

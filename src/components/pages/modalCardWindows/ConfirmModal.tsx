@@ -42,7 +42,10 @@ function ConfirmModal({ onConfirm, onCancel, inputText }: ConfirmModalProps) {
         {/* buttons */}
         <div className="w-full h-full flex justify-center items-center gap-18">
           <button
-            onClick={onCancel}
+            onClick={(e) => {
+              e.stopPropagation();
+              onCancel();
+            }}
             className="
           flex justify-center items-center gap-1 py-2.25
           cursor-pointer
@@ -55,7 +58,10 @@ function ConfirmModal({ onConfirm, onCancel, inputText }: ConfirmModalProps) {
           </button>
 
           <button
-            onClick={onConfirm}
+            onClick={(e) => {
+              e.stopPropagation();
+              onConfirm();
+            }}
             className="
           flex justify-center items-center gap-1 py-2.25
           cursor-pointer
