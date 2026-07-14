@@ -12,18 +12,51 @@ import pcDevicesPng from "../icons/createTicket/categoryIconsDark/pcDevicesPng.p
 import programsPng from "../icons/createTicket/categoryIconsDark/programsPng.png";
 import purchasesPng from "../icons/createTicket/categoryIconsDark/purchasesPng.png";
 import websitesPng from "../icons/createTicket/categoryIconsDark/websitesPng.png";
+
+import accessPngLight from "../icons/createTicket/categoryIconsLight/accessPngLight.png";
+import databasePngLight from "../icons/createTicket/categoryIconsLight/databasePngLight.png";
+import developingPngLight from "../icons/createTicket/categoryIconsLight/developingPngLight.png";
+import employeesPngLight from "../icons/createTicket/categoryIconsLight/employeesPngLight.png";
+import foldersPngLight from "../icons/createTicket/categoryIconsLight/foldersPngLight.png";
+import internetPngLight from "../icons/createTicket/categoryIconsLight/internetPngLight.png";
+import mincerPngLight from "../icons/createTicket/categoryIconsLight/mincerPngLight.png";
+import parsingPngLight from "../icons/createTicket/categoryIconsLight/parsingPngLight.png";
+import pcDevicesPngLight from "../icons/createTicket/categoryIconsLight/pcDevicesPngLight.png";
+import programsPngLight from "../icons/createTicket/categoryIconsLight/programsPngLight.png";
+import purchasesPngLight from "../icons/createTicket/categoryIconsLight/purchasesPngLight.png";
+import websitesPngLight from "../icons/createTicket/categoryIconsLight/websitesPngLight.png";
 //TODO: add icons for light theme
-export const categories: { name: CategoryName; icon: string }[] = [
-  { name: "Доступы и коммуникация", icon: accessPng },
-  { name: "NTMincer", icon: mincerPng },
-  { name: "Базы данных", icon: databasePng },
-  { name: "Папки и файлы", icon: foldersPng },
-  { name: "Компьютер и устройства", icon: pcDevicesPng },
-  { name: "Программы и сервисы", icon: programsPng },
-  { name: "Парсинг", icon: parsingPng },
-  { name: "Интернет", icon: internetPng },
-  { name: "Сайты", icon: websitesPng },
-  { name: "Закупка", icon: purchasesPng },
-  { name: "Сотрудники", icon: employeesPng },
-  { name: "Разработка и нестандартные запросы", icon: developingPng },
+export const categories: {
+  name: CategoryName;
+  icon: string;
+  iconLight: string;
+}[] = [
+  {
+    name: "Доступы и коммуникация",
+    icon: accessPng,
+    iconLight: accessPngLight,
+  },
+  { name: "NTMincer", icon: mincerPng, iconLight: mincerPngLight },
+  { name: "Базы данных", icon: databasePng, iconLight: databasePngLight },
+  { name: "Папки и файлы", icon: foldersPng, iconLight: foldersPngLight },
+  {
+    name: "Компьютер и устройства",
+    icon: pcDevicesPng,
+    iconLight: pcDevicesPngLight,
+  },
+  {
+    name: "Программы и сервисы",
+    icon: programsPng,
+    iconLight: programsPngLight,
+  },
+  { name: "Парсинг", icon: parsingPng, iconLight: parsingPngLight },
+  { name: "Интернет", icon: internetPng, iconLight: internetPngLight },
+  { name: "Сайты", icon: websitesPng, iconLight: websitesPngLight },
+  { name: "Закупка", icon: purchasesPng, iconLight: purchasesPngLight },
+  { name: "Сотрудники", icon: employeesPng, iconLight: employeesPngLight },
+  {
+    name: "Разработка и нестандартные запросы",
+    icon: developingPng,
+    iconLight: developingPngLight,
+  },
 ];

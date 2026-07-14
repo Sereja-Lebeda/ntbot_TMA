@@ -1,3 +1,5 @@
+import useTheme from "../../../hooks/useTheme";
+
 import type { CategoriesPool } from "../../../types/createTicket.type";
 import { categories } from "../../../data/categories";
 
@@ -9,6 +11,8 @@ interface StepCategoryProps {
 }
 
 function StepCategory({ onNext, setSelectedCategory }: StepCategoryProps) {
+  const { theme } = useTheme();
+
   return (
     <div className="w-full select-none">
       {/* Header component */}
@@ -25,7 +29,7 @@ function StepCategory({ onNext, setSelectedCategory }: StepCategoryProps) {
         {categories.map((category) => (
           <CategoryGridCard
             key={category.name}
-            iconPng={category.icon}
+            iconPng={theme === "light" ? category.iconLight : category.icon}
             title={category.name}
             onClick={() => {
               setSelectedCategory(category.name);

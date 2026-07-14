@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import useTheme from "../../../hooks/useTheme";
 import type {
   CategoriesPool,
   Action,
@@ -32,10 +33,13 @@ function StepProblem({
   const [openSubcategories, setOpenSubcategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const { theme } = useTheme();
 
   if (!selectedCategory) {
     return null;
   }
+
+  const categoryData = categories.find((c) => c.name === selectedCategory);
 
   const typedActions = mockActionsNested as CategoryNode[];
   const allActions = flattenActions(typedActions);
@@ -65,7 +69,9 @@ function StepProblem({
         {/* Category name and icon */}
         <div className="flex justify-center items-center gap-3">
           <img
-            src={`${categories.find((c) => c.name === selectedCategory)?.icon}`}
+            src={
+              theme === "light" ? categoryData?.iconLight : categoryData?.icon
+            }
             alt=""
             className="bg-(--text-primary) rounded-xs w-5 h-5"
           />
