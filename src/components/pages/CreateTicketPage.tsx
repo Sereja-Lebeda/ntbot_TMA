@@ -23,7 +23,7 @@ import ConfirmModal from "./modalCardWindows/ConfirmModal";
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 
 // type LabelStepProps = "Category" | "Problem" | "Details" | "Done";
-
+//TODO: add esc button to exit or step back?
 function CreateTicketPage() {
   const [currentStep, setCurrentStep] = useState<CurrentStepType>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,6 +36,7 @@ function CreateTicketPage() {
   const [priority, setPriority] = useState<PriorityLevel>(null);
   // const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [files, setFiles] = useState<AttachedFile[]>([]);
+  //TODO: check what to do w this setters
   const [ticketId, setTicletId] = useState<number>(542);
   const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Failed");
 

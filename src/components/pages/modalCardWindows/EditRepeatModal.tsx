@@ -89,6 +89,7 @@ function EditRepeatModal({
   });
   const inputText =
     "Вы уверены, что хотите прервать редактирование заявки?\n\nИзмененная информация не сохранится.";
+
   function hasUnsavedChanges(): boolean {
     return (
       JSON.stringify(formData) !==
@@ -139,6 +140,14 @@ function EditRepeatModal({
 
   const currentAction = mode === "edit" ? selectedActionState : action;
 
+  //For disable submit button
+  // после блока с currentAction
+  const currentErrors = currentAction
+    ? validateForm(formData, multiData, priority, currentAction)
+    : {};
+  const isFormInvalid =
+    currentAction === null || Object.keys(currentErrors).length > 0;
+
   function resetFormState() {
     setFormData({});
     setMultiData({});
@@ -185,6 +194,10 @@ function EditRepeatModal({
       delete next[field];
       return next;
     });
+  }
+
+  function setFieldError(field: string, message: string) {
+    setErrors((prev) => ({ ...prev, [field]: message }));
   }
 
   function handleSubmit() {
@@ -345,6 +358,7 @@ function EditRepeatModal({
             setPriority={setPriority}
             errors={errors}
             clearError={clearError}
+            setFieldError={setFieldError}
           />
 
           {mode === "edit" ? (
@@ -401,13 +415,19 @@ function EditRepeatModal({
           {/* White background */}
           <button
             onClick={handleSubmit}
+            disabled={isFormInvalid}
             className="h-8.5 flex justify-center items-center
-            bg-(--text-primary) rounded-xs cursor-pointer group"
+            transition-all duration-600 ease-in-out
+            enabled:bg-(--text-primary) disabled:bg-(--bg-disable-btn) 
+            enabled:cursor-pointer disabled:cursor-not-allowed
+            rounded-xs group"
           >
             <div
               className="h-8.5 flex justify-center items-center gap-2
-              bg-(--bg-btn-primary) rounded-xs px-4
-              transition-all duration-600 ease-in-out hover:-translate-x-1 hover:-translate-y-1 hover:z-10"
+              rounded-xs px-4
+              transition-all duration-600 ease-in-out
+              group-enabled:bg-(--bg-btn-primary)
+              group-enabled:hover:-translate-x-1 group-enabled:hover:-translate-y-1 group-enabled:hover:z-10"
             >
               {mode === "edit" ? (
                 <>

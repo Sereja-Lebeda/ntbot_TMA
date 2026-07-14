@@ -1,10 +1,12 @@
 import type { Action, PriorityLevel, Field } from "../types/createTicket.type";
 import mockUserInfo from "../../mockUserInfo.json";
 
-import { btnPressAnimationStyle } from "../styles/pressAnimation";
+import { validateSingleField } from "../utils/validateForm";
 
 import FormDropdown from "./ui/FormDropdown";
 import MultiSelectDropdown from "./ui/MultiSelectDropdown";
+
+import { btnPressAnimationStyle } from "../styles/pressAnimation";
 
 import PlusFieldIcon from "../icons/createTicket/PlusFieldIcon";
 import MinusIcon from "../icons/createTicket/MinusIcon";
@@ -24,6 +26,7 @@ interface TicketFormProps {
   setPriority: (priority: PriorityLevel) => void;
   errors: Record<string, string>;
   clearError: (field: string) => void;
+  setFieldError: (field: string, message: string) => void;
 }
 
 function TicketForm({
@@ -36,6 +39,7 @@ function TicketForm({
   setPriority,
   errors,
   clearError,
+  setFieldError,
 }: TicketFormProps) {
   if (!selectedAction) {
     return (
@@ -69,6 +73,14 @@ function TicketForm({
             >
               <input
                 value={formData[field.name] ?? ""}
+                onBlur={() => {
+                  const err = validateSingleField(field, formData, multiData);
+                  if (err) {
+                    setFieldError(field.name, err);
+                  } else {
+                    clearError(field.name);
+                  }
+                }}
                 onChange={(e) => {
                   setFormData((prev) => ({
                     ...prev,
@@ -99,6 +111,18 @@ function TicketForm({
                 >
                   <input
                     value={value}
+                    onBlur={() => {
+                      const err = validateSingleField(
+                        field,
+                        formData,
+                        multiData,
+                      );
+                      if (err) {
+                        setFieldError(field.name, err);
+                      } else {
+                        clearError(field.name);
+                      }
+                    }}
                     onChange={(e) => {
                       setMultiData((prev) => {
                         const arr = [...(prev[field.name] ?? [""])];
@@ -168,6 +192,14 @@ function TicketForm({
           >
             <textarea
               value={formData[field.name] ?? ""}
+              onBlur={() => {
+                const err = validateSingleField(field, formData, multiData);
+                if (err) {
+                  setFieldError(field.name, err);
+                } else {
+                  clearError(field.name);
+                }
+              }}
               onChange={(e) => {
                 setFormData((prev) => ({
                   ...prev,
@@ -215,7 +247,15 @@ function TicketForm({
             value={multiData[field.name] ?? []}
             onChange={(val) => {
               setMultiData((prev) => ({ ...prev, [field.name]: val }));
-              clearError(field.name);
+              const err = validateSingleField(field, formData, {
+                ...multiData,
+                [field.name]: val,
+              });
+              if (err) {
+                setFieldError(field.name, err);
+              } else {
+                clearError(field.name);
+              }
             }}
             placeholder={field.placeholder}
             hasError={!!errors[field.name]}
@@ -307,13 +347,18 @@ function TicketForm({
         <div className="w-full flex flex-col gap-8">
           {selectedAction.fields.map((field: Field) => (
             <div key={field.name} className="w-full flex flex-col gap-2">
-              <label className="flex items-center gap-0.5">
+              <label className="flex items-center gap-1 font-consolas leading-3">
                 <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                   {field.label}
                 </span>
-                <span className="text-(--bg-btn-primary) leading-4">
+                <span className="font-consolas font-normal text-[15px] text-(--bg-btn-primary) leading-4">
                   {field.required && "*"}
                 </span>
+                {errors[field.name] && (
+                  <span className="font-consolas font-normal text-xs text-(--bg-task-error) leading-3">
+                    {errors[field.name]}
+                  </span>
+                )}
               </label>
               {renderField(field)}
             </div>

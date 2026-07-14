@@ -12,7 +12,7 @@ import pcDevicesPng from "../icons/createTicket/categoryIconsDark/pcDevicesPng.p
 import programsPng from "../icons/createTicket/categoryIconsDark/programsPng.png";
 import purchasesPng from "../icons/createTicket/categoryIconsDark/purchasesPng.png";
 import websitesPng from "../icons/createTicket/categoryIconsDark/websitesPng.png";
-
+//TODO: add icons for light theme
 export const categories: { name: CategoryName; icon: string }[] = [
   { name: "Доступы и коммуникация", icon: accessPng },
   { name: "NTMincer", icon: mincerPng },

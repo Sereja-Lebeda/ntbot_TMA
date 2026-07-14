@@ -55,12 +55,24 @@ function StepDetails({
 
   //TODO: Change validation rules to get em with Action structure from backend
 
+  const currentErrors = validateForm(
+    formData,
+    multiData,
+    priority,
+    selectedAction,
+  );
+  const isFormInvalid = Object.keys(currentErrors).length > 0;
+
   function clearError(fieldName: string) {
     setErrors((prev) => {
       const next = { ...prev };
       delete next[fieldName];
       return next;
     });
+  }
+
+  function setFieldError(field: string, message: string) {
+    setErrors((prev) => ({ ...prev, [field]: message }));
   }
 
   function submitForm() {
@@ -129,10 +141,9 @@ function StepDetails({
           setMultiData={setMultiData}
           priority={priority}
           setPriority={setPriority}
-          // files={files}
-          // setFiles={setFiles}
           errors={errors}
           clearError={clearError}
+          setFieldError={setFieldError}
         />
 
         <div
@@ -182,13 +193,18 @@ function StepDetails({
             {/* White background */}
             <button
               onClick={submitForm}
+              disabled={isFormInvalid}
               className="h-8.5 flex justify-center items-center
-            bg-(--text-primary) rounded-xs cursor-pointer group"
+              transition-all duration-600 ease-in-out
+            enabled:bg-(--text-primary) disabled:bg-(--bg-disable-btn)
+            enabled:cursor-pointer disabled:cursor-not-allowed
+            rounded-xs group"
             >
               <div
-                className="h-8.5 flex justify-center items-center gap-2
-              bg-(--bg-btn-primary) rounded-xs px-4
-              transition-all duration-600 ease-in-out hover:-translate-x-1 hover:-translate-y-1 hover:z-10"
+                className="h-8.5 flex justify-center items-center gap-2 rounded-xs px-4
+              transition-all duration-600 ease-in-out
+              group-enabled:bg-(--bg-btn-primary)
+              group-enabled:hover:-translate-x-1 group-enabled:hover:-translate-y-1 group-enabled:hover:z-10"
               >
                 <SendFormIcon className="w-4.5 h-4.5 text-(--text-btn)" />
                 <span className="font-jbmono font-medium text-xs text-(--text-btn) leading-normal">

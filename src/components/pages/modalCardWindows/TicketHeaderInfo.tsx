@@ -61,6 +61,7 @@ function TicketHeaderInfo({
         </div>
       </div>
       {/* Ticket meta info */}
+      {/* //TODO: При клике значение ID копируется в буфер обмена */}
       <div
         className="w-full flex justify-start items-center
             font-consolas font-normal text-[11px] text-(--text-secondary) leading-4"

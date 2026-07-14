@@ -69,7 +69,47 @@
     "category": "Доступы и коммуникация",
     "subcategory": "Папки и файлы",
     "name": "Изменить доступ",
-    "fields": []
+    "fields": [
+      {
+        "name": "old_link",
+        "label": "Ссылка на ресурс",
+        "type": "short text",
+        "required": true,
+        "placeholder": "https://example.com",
+        "validation": "url"
+      },
+      {
+        "name": "contact_email",
+        "label": "Email для связи",
+        "type": "short text",
+        "required": true,
+        "placeholder": "name@company.com",
+        "validation": "email"
+      },
+      {
+        "name": "contact_phone",
+        "label": "Контактный телефон",
+        "type": "short text",
+        "required": false,
+        "placeholder": "77071234567",
+        "validation": "phone"
+      },
+      {
+        "name": "file_path",
+        "label": "Путь к файлу",
+        "type": "short text",
+        "required": true,
+        "placeholder": "C:\\Users\\...",
+        "validation": "path"
+      },
+      {
+        "name": "reason",
+        "label": "Причина изменения",
+        "type": "long text",
+        "required": true,
+        "placeholder": "Опишите причину"
+      }
+    ]
   },
   {
     "id": 3,
@@ -104,6 +144,21 @@
     "category": "NTMincer",
     "subcategory": "Нейроразметка",
     "name": "Не работает",
-    "fields": []
+    "fields": [
+      {
+        "name": "problem",
+        "label": "Описание проблемы",
+        "type": "long text",
+        "placeholder": "Опишите проблему подробно",
+        "required": true
+      },
+      {
+        "name": "priority_reason",
+        "label": "Короткое описание",
+        "type": "short text",
+        "placeholder": "Короткий текст",
+        "required": true
+      }
+    ]
   }
 ]

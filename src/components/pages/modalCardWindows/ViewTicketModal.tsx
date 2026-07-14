@@ -84,6 +84,7 @@ function ViewTicketModal({
           className="w-full h-8.5 mb-2 px-12.5
     flex justify-between items-center"
         >
+          {/* //TODO: Make Tg icon fullsize. Make only icons if window is narrow */}
           {/* Functional btns */}
           <div className="w-full flex justify-start gap-1.5 select-none">
             <FunctionBtn
