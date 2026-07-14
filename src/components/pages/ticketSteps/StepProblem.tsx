@@ -1,7 +1,13 @@
 import { useState, useRef } from "react";
-import type { CategoriesPool, Action } from "../../../types/createTicket.type";
+import type {
+  CategoriesPool,
+  Action,
+  CategoryNode,
+} from "../../../types/createTicket.type";
 
-import mockActionInfo from "../../../../mockActions.json";
+import mockActionsNested from "../../../../mockActionsNested.json";
+import flattenActions from "../../../utils/flattenActions";
+
 import Searchbar from "../../ui/Searchbar";
 import { hoverAnimationStyle } from "../../../styles/pressAnimation";
 import { categories } from "../../../data/categories";
@@ -31,11 +37,12 @@ function StepProblem({
     return null;
   }
 
-  const mockAction = mockActionInfo as unknown as Action[];
-
-  const categoryActions = mockAction.filter(
+  const typedActions = mockActionsNested as CategoryNode[];
+  const allActions = flattenActions(typedActions);
+  const categoryActions = allActions.filter(
     (a) => a.category === selectedCategory,
   );
+
   const filteredActions = categoryActions.filter((a) =>
     a.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
@@ -75,15 +82,7 @@ function StepProblem({
         </div>
       </div>
 
-      <div
-        // onMouseDown={(e) => {
-        //   if (e.target !== inputRef.current) {
-        //     e.preventDefault();
-        //     inputRef.current?.blur();
-        //   }
-        // }}
-        className="w-full flex flex-col gap-7"
-      >
+      <div className="w-full flex flex-col gap-7">
         {/* //TODO: Add debounce after connection to BD */}
         <Searchbar
           searchRequest={searchQuery}

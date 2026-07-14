@@ -54,7 +54,7 @@ export type FieldType =
 
 //Types for nested actions
 export interface CategoryNode {
-  category: string;
+  category: CategoryName;
   subcategories: SubcategoryNode[];
 }
 export interface SubcategoryNode {

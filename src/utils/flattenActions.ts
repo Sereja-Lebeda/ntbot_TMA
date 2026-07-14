@@ -3,6 +3,12 @@ import type { CategoryNode, Action } from "../types/createTicket.type";
 
 export default function flattenActions(categories: CategoryNode[]): Action[] {
   return categories.flatMap((category) =>
-    category.subcategories.flatMap((subcategory) => subcategory.actions),
+    category.subcategories.flatMap((subcategory) =>
+      subcategory.actions.map((action) => ({
+        ...action,
+        category: category.category,
+        subcategory: subcategory.subcategory,
+      })),
+    ),
   );
 }

@@ -36,7 +36,7 @@ function CreateTicketPage() {
   const [priority, setPriority] = useState<PriorityLevel>(null);
   // const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [files, setFiles] = useState<AttachedFile[]>([]);
-  //TODO: check what to do w this setters
+  //NOTE: setters are for backend fetch
   const [ticketId, setTicletId] = useState<number>(542);
   const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Failed");
 
