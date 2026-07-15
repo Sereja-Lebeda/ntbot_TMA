@@ -11,6 +11,9 @@ import flattenActions from "../../../utils/flattenActions";
 
 import Searchbar from "../../ui/Searchbar";
 import { hoverAnimationStyle } from "../../../styles/pressAnimation";
+
+import { shadowLiftCategoryStyle } from "../../../styles/shadowLift";
+
 import { categories } from "../../../data/categories";
 
 import ArrowIcon from "../../../icons/filterblock/ArrowIcon";
@@ -140,11 +143,13 @@ function StepProblem({
                         >
                           <div
                             // TODO: Узнать будет ли фиксированное количество и скролл бар, чтобы сделать анимацию через высоту
-                            className="w-full bg-(--bg-secondary) border border-(--border-hover-btn) rounded-xs py-5 px-4 cursor-pointer
+                            className={`w-full py-5 px-4 rounded-xs
+                              bg-(--bg-secondary)
+                              border border-(--border-hover-btn) cursor-pointer
+                              hover:text-(--text-primary)
                             font-consolas font-bold text-sm text-(--text-tertiary) leading-4.5
-                            transition-all duration-600 ease-in-out hover:-translate-x-1 hover:-translate-y-1 hover:z-10
-                            hover:text-(--text-primary)
-                            "
+                            ${shadowLiftCategoryStyle}
+                            `}
                             onClick={() => {
                               selectAction(action);
                               onNext();

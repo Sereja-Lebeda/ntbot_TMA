@@ -6,6 +6,7 @@ import TelegramIcon from "../../../icons/card/TelegramIcon";
 function SupportButtons() {
   return (
     // Toggle and telegram block
+    //TODO: make cliclable whole toggle btn, not just icon
     <>
       <button
         className={`flex items-center bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none

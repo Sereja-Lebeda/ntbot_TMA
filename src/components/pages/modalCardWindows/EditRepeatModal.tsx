@@ -23,6 +23,8 @@ import FormDropdown from "../../ui/FormDropdown";
 import EditableAttachmentField from "../../ui/Attachment/EditableAttachmentField";
 import AttachmentaField from "../../ui/Attachment/AttachmentField";
 
+import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
+
 import mockActionsNested from "../../../../mockActionsNested.json";
 
 import FloppydiskIcon from "../../../icons/FloppydiskIcon";
@@ -30,6 +32,7 @@ import RepeatIcon from "../../../icons/card/RepeatIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
+import FunctionBtn from "../../ui/Buttons/FunctionBtn";
 
 interface EditRepeatModalProps {
   ticket: Ticket | undefined;
@@ -412,40 +415,20 @@ function EditRepeatModal({
           </button>
 
           {/* Send ticket btn */}
-          {/* White background */}
-          <button
+          <FunctionBtn
+            Icon={mode === "edit" ? FloppydiskIcon : SendFormIcon}
+            iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+            text={mode === "edit" ? "Сохранить" : "Отправить заявку"}
+            textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
+            innerDivClassName="flex justify-center items-center gap-2"
+            btnClassName={`
+              h-8.5 px-4 rounded-xs group
+              ${shadowLiftButtonStyle}
+              enabled:bg-(--bg-btn-primary)
+              `}
             onClick={handleSubmit}
             disabled={isFormInvalid}
-            className="h-8.5 flex justify-center items-center
-            transition-all duration-600 ease-in-out
-            enabled:bg-(--text-primary) disabled:bg-(--bg-disable-btn) 
-            enabled:cursor-pointer disabled:cursor-not-allowed
-            rounded-xs group"
-          >
-            <div
-              className="h-8.5 flex justify-center items-center gap-2
-              rounded-xs px-4
-              transition-all duration-600 ease-in-out
-              group-enabled:bg-(--bg-btn-primary)
-              group-enabled:hover:-translate-x-1 group-enabled:hover:-translate-y-1 group-enabled:hover:z-10"
-            >
-              {mode === "edit" ? (
-                <>
-                  <FloppydiskIcon className="w-4.5 h-4.5 text-(--text-btn)" />
-                  <span className="font-jbmono font-medium text-xs text-(--text-btn) leading-normal">
-                    Сохранить
-                  </span>
-                </>
-              ) : (
-                <>
-                  <SendFormIcon className="w-4.5 h-4.5 text-(--text-btn)" />
-                  <span className="font-jbmono font-medium text-xs text-(--text-btn) leading-normal">
-                    Отправить заявку
-                  </span>
-                </>
-              )}
-            </div>
-          </button>
+          />
         </div>
       </div>
     </div>,

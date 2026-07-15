@@ -4,6 +4,8 @@ import type { activeSectionType } from "../../types/header.types";
 
 import FunctionBtn from "../ui/Buttons/FunctionBtn";
 
+import { shadowLiftButtonStyle } from "../../styles/shadowLift";
+
 import KnowledgeBaseIcon from "../../icons/header/KnowledgeBaseIcon";
 import MascootIcon from "../../icons/header/MascootIcon";
 import PlusIcon from "../../icons/header/PlusIcon";
@@ -70,33 +72,13 @@ export default function Header({
             textClassName={
               "text-sm dark:text-(--bg-primary) text-(--text-primary) font-jbmono font-extrabold select-none"
             }
-            outerDivClassName={`h-10 w-47.5 ${isOnCreatePage ? "bg-(--bg-disable-btn)" : "bg-[#ede8de] cursor-pointer"} rounded-xs select-none `}
-            outerBtnClassName={
-              "h-10 w-47.5 bg-(--bg-btn-primary) rounded-xs flex justify-center items-center px-6 py-3 gap-2 transition-all duration-600 ease-in-out enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10 enabled:cursor-pointer disabled:bg-(--bg-disable-btn)"
-            }
+            btnClassName={`h-10 w-47.5  rounded-xs flex justify-center items-center px-6 py-3 gap-2
+              ${shadowLiftButtonStyle}
+              enabled:bg-(--bg-btn-primary)`}
             innerDivClassName={"flex items-center gap-1"}
             onClick={() => navigate("/tickets/new")}
             disabled={isOnCreatePage}
           />
-
-          {/* <div
-            className={`h-10 w-47.5 ${isOnCreatePage ? "bg-(--bg-disable-btn)" : "bg-[#ede8de] cursor-pointer"} rounded-xs select-none`}
-          >
-            <button
-              disabled={isOnCreatePage}
-              onClick={() => navigate("/tickets/new")}
-              className="h-10 w-47.5 bg-(--bg-btn-primary) rounded-xs flex justify-center items-center px-6 py-3 gap-2 cursor-pointer
-              transition-all duration-600 ease-in-out enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10
-            disabled:bg-(--bg-disable-btn)"
-            >
-              <div className="flex items-center gap-1">
-                <PlusIcon className="w-5 h-5" />
-                <span className="text-sm dark:text-(--bg-primary) text-(--text-primary) font-jbmono font-extrabold select-none">
-                  Создать заявку
-                </span>
-              </div>
-            </button>
-          </div> */}
         </div>
       </div>
     </div>

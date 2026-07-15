@@ -6,24 +6,20 @@ import useEscapeKey from "../../../hooks/useEscapeKey";
 import type { Ticket } from "../../../types/ticket.types";
 import type { Action } from "../../../types/createTicket.type";
 
-// import getStatusTitle from "../../../utils/ticketBadgeHelpers";
-// import { getStatusColor } from "../../../utils/ticketBadgeHelpers";
-// import { getPriorityTitle } from "../../../utils/ticketBadgeHelpers";
-
+import TicketHeaderInfo from "./TicketHeaderInfo";
 import FunctionBtn from "../../ui/Buttons/FunctionBtn";
+import TicketAttachmentsView from "../../ui/Attachment/TicketAttachmentsView";
+
+import getBreadcrumb from "../../../utils/getBreadcrumbs";
+import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 
 import TelegramIcon from "../../../icons/card/TelegramIcon";
 import RepeatIcon from "../../../icons/card/RepeatIcon";
 import EditIcon from "../../../icons/card/EditIcon";
 import CancelIcon from "../../../icons/card/CancelIcon";
 import CrossTicketIcon from "../../../icons/createTicket/CrossTicketIcon";
-// import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import AttachmentIcon from "../../../icons/createTicket/AttachmentIcon";
-import TicketAttachmentsView from "../../ui/Attachment/TicketAttachmentsView";
-import getBreadcrumb from "../../../utils/getBreadcrumbs";
-import TicketHeaderInfo from "./TicketHeaderInfo";
-// import getBreadcrumb from "../../../utils/getBreadcrumbs";Да
 
 interface ViewTicketModalProps {
   ticket: Ticket | undefined;
@@ -57,14 +53,13 @@ function ViewTicketModal({
   const iconClassName = "w-4.5 h-4.5 text-(--text-primary)!";
   const textClassName =
     "font-jbmono font-medium text-xs text-(--text-primary) leading-normal";
-  // const outerDivClassName = `w-fit h-8.5 rounded-xs select-none bg-(--text-primary) `;
   //TODO: take this logic of box shadow and implement in other places
 
-  //TODO: findout why tg icon is small if u use vert monitor in view ticket
-  const outerDivClassName = ` w-fit h-8.5`;
-  const outerBtnClassName = `w-full h-full flex justify-center items-center px-4 py-2 rounded-xs enabled:bg-(--bg-inactive-btn) disabled:bg-(--bg-disable-btn) enabled:cursor-pointer transition-all duration-600 ease-in-out enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10 enabled:hover:shadow-[4px_4px_0_0_var(--text-primary)]`;
+  //TODO: findout why tg icon is small if u use vert monitor in view ticket. Make inly icons for sm screen
+  const btnClassName = `w-fit h-8.5 flex justify-center items-center px-4 py-2 rounded-xs
+  enabled:bg-(--bg-inactive-btn)
+  ${shadowLiftButtonStyle}`;
 
-  // const outerBtnClassName = `h-full flex justify-center items-center px-4 py-2 rounded-xs enabled:bg-(--bg-inactive-btn) disabled:bg-(--bg-disable-btn) enabled:cursor-pointer enabled:hover:-translate-x-1 enabled:hover:-translate-y-1 enabled:hover:z-10 transition-all duration-600 ease-in-out`;
   const innerDivClassName = "flex items-center gap-1";
 
   return createPortal(
@@ -92,8 +87,7 @@ function ViewTicketModal({
               iconClassName={iconClassName}
               text="Отправить сообщение"
               textClassName={textClassName}
-              outerDivClassName={outerDivClassName}
-              outerBtnClassName={outerBtnClassName}
+              btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
               onClick={() => console.log("TODO: send message to telegram")}
               disabled={false}
@@ -103,8 +97,7 @@ function ViewTicketModal({
               iconClassName={iconClassName}
               text="Повторить"
               textClassName={textClassName}
-              outerDivClassName={outerDivClassName}
-              outerBtnClassName={outerBtnClassName}
+              btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
               onClick={onRepeat}
               disabled={false}
@@ -114,8 +107,7 @@ function ViewTicketModal({
               iconClassName={iconClassName}
               text="Изменить"
               textClassName={textClassName}
-              outerDivClassName={outerDivClassName}
-              outerBtnClassName={outerBtnClassName}
+              btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
               onClick={onEdit}
               disabled={isBtnDisabled}
@@ -125,8 +117,7 @@ function ViewTicketModal({
               iconClassName={iconClassName}
               text="Отменить"
               textClassName={textClassName}
-              outerDivClassName={outerDivClassName}
-              outerBtnClassName={outerBtnClassName}
+              btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
               onClick={() => onCancel(ticket.ticketId)}
               disabled={isBtnDisabled}

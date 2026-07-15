@@ -5,8 +5,7 @@ interface FunctionBtnProps {
   text: string;
   textClassName?: string;
 
-  outerDivClassName?: string;
-  outerBtnClassName?: string;
+  btnClassName?: string;
   innerDivClassName?: string;
 
   onClick: () => void;
@@ -18,27 +17,19 @@ function FunctionBtn({
   text,
   onClick,
   iconClassName,
-  outerDivClassName,
-  outerBtnClassName,
   innerDivClassName,
+  btnClassName,
   textClassName,
   disabled,
 }: FunctionBtnProps) {
   return (
-    <div className={outerDivClassName}>
-      {/* //Background white */}
-      <button
-        disabled={disabled}
-        onClick={onClick}
-        className={outerBtnClassName}
-      >
-        {/* Top layer of btn */}
-        <div className={innerDivClassName}>
-          <Icon className={iconClassName} />
-          <span className={textClassName}>{text}</span>
-        </div>
-      </button>
-    </div>
+    <button disabled={disabled} onClick={onClick} className={btnClassName}>
+      {/* Top layer of btn */}
+      <div className={innerDivClassName}>
+        <Icon className={iconClassName} />
+        <span className={textClassName}>{text}</span>
+      </div>
+    </button>
   );
 }
 

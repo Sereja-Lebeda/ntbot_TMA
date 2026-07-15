@@ -10,6 +10,9 @@ import { isSameFile } from "../../../utils/fileDublicateHelper";
 
 import TicketForm from "../../TicketForm";
 import AttachmentaField from "../../ui/Attachment/AttachmentField";
+import FunctionBtn from "../../ui/Buttons/FunctionBtn";
+
+import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 
 import BackArrowIcon from "../../../icons/createTicket/BackArrowIcon";
 import ForwardArrowIcon from "../../../icons/createTicket/ForwardArrowIcon";
@@ -190,28 +193,21 @@ function StepDetails({
             </button>
 
             {/* Send ticket btn */}
-            {/* White background */}
-            <button
+            <FunctionBtn
+              Icon={SendFormIcon}
+              iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+              text="Отправить заявку"
+              textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
+              btnClassName={`h-8.5
+              flex justify-center items-center
+              enabled:bg-(--bg-btn-primary) disabled:bg-(--bg-disable-btn)
+              ${shadowLiftButtonStyle}
+
+              `}
+              innerDivClassName="flex justify-center items-center gap-2 rounded-xs px-4"
               onClick={submitForm}
               disabled={isFormInvalid}
-              className="h-8.5 flex justify-center items-center
-              transition-all duration-600 ease-in-out
-            enabled:bg-(--text-primary) disabled:bg-(--bg-disable-btn)
-            enabled:cursor-pointer disabled:cursor-not-allowed
-            rounded-xs group"
-            >
-              <div
-                className="h-8.5 flex justify-center items-center gap-2 rounded-xs px-4
-              transition-all duration-600 ease-in-out
-              group-enabled:bg-(--bg-btn-primary)
-              group-enabled:hover:-translate-x-1 group-enabled:hover:-translate-y-1 group-enabled:hover:z-10"
-              >
-                <SendFormIcon className="w-4.5 h-4.5 text-(--text-btn)" />
-                <span className="font-jbmono font-medium text-xs text-(--text-btn) leading-normal">
-                  Отправить заявку
-                </span>
-              </div>
-            </button>
+            />
           </div>
         </div>
       </div>
