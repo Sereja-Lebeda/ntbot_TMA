@@ -74,6 +74,7 @@ export default function HomePage() {
         <Infoblock
           ticketStatuses={selectedStatuses}
           setTicketStatuses={setSelectedStatuses}
+          ticketView={ticketView}
         />
         <HeroSector
           className={" sticky top-0"}
