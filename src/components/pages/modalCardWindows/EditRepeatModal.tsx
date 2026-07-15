@@ -10,7 +10,11 @@ import type {
   CategoryNode,
   CategoryName,
 } from "../../../types/createTicket.type";
-import type { Ticket, TicketFileItem } from "../../../types/ticket.types";
+import type {
+  Ticket,
+  TicketAttachmentType,
+  TicketFileItem,
+} from "../../../types/ticket.types";
 import TicketForm from "../../TicketForm";
 
 import getBreadcrumb from "../../../utils/getBreadcrumbs";
@@ -44,6 +48,7 @@ interface EditRepeatModalProps {
     multiData: Record<string, string[]>;
     priority: PriorityLevel;
     action: Action;
+    attachedFiles: TicketAttachmentType;
   }) => void;
   mode: ModeType;
 
@@ -204,7 +209,7 @@ function EditRepeatModal({
   }
 
   function handleSubmit() {
-    if (!currentAction) return; // на всякий случай, хотя кнопка вряд ли будет нажата в этом состоянии
+    if (!currentAction) return;
 
     const newErrors = validateForm(
       formData,
@@ -213,10 +218,20 @@ function EditRepeatModal({
       currentAction,
     );
     setErrors(newErrors);
-
     if (Object.keys(newErrors).length > 0) return;
 
-    onSubmit({ formData, multiData, priority, action: currentAction });
+    const attachedFiles =
+      mode === "edit"
+        ? attachedFilesFromMixed(editFiles)
+        : attachedFilesFromNew(files);
+
+    onSubmit({
+      formData,
+      multiData,
+      priority,
+      action: currentAction,
+      attachedFiles,
+    });
   }
 
   function addFiles(fileList: FileList) {
@@ -248,6 +263,28 @@ function EditRepeatModal({
         );
       return [...prev, ...unique];
     });
+  }
+
+  function attachedFilesFromNew(files: AttachedFile[]): TicketAttachmentType {
+    return files.map((f) => ({
+      name: f.file.name,
+      url: f.url,
+      uploadedAt: new Date().toISOString(),
+    }));
+  }
+
+  function attachedFilesFromMixed(
+    files: TicketFileItem[],
+  ): TicketAttachmentType {
+    return files.map((f) =>
+      f.kind === "existing"
+        ? { name: f.name, url: f.url, uploadedAt: f.uploadedAt }
+        : {
+            name: f.file.name,
+            url: f.url,
+            uploadedAt: new Date().toISOString(),
+          },
+    );
   }
 
   return createPortal(
@@ -307,7 +344,10 @@ function EditRepeatModal({
         )}
 
         {/* Content */}
-        <div className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll px-12.5">
+        <div
+          // className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll px-12.5"
+          className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll px-12.5"
+        >
           {/* Ticket information */}
           <div className="w-full flex items-start gap-1">
             <TicketInfoIcon className="text-(--text-primary)" />
@@ -315,7 +355,7 @@ function EditRepeatModal({
               Информация о заявке
             </span>
           </div>
-          <div className="w-full flex flex-col items-start justify-center gap-8">
+          <div className="w-full  flex flex-col items-start justify-center gap-8">
             <div className="w-full flex flex-col items-start gap-2">
               <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                 Категории

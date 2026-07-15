@@ -206,7 +206,7 @@ function ViewTicketModal({
                   </span>
                 </div>
 
-                <div>
+                <div className="w-full">
                   {/* иконка + подпись "Прикреплённые файлы" */}
                   <TicketAttachmentsView files={ticket.attachedFiles} />
                 </div>

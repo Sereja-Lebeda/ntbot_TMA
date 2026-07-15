@@ -35,7 +35,9 @@ export default function HomePage() {
 
   // States for btns "yes/no" for complete tickets
   //TODO: update type for mock
-  const [tickets, setTickets] = useState<Ticket[]>(mockData as Ticket[]);
+  const [tickets, setTickets] = useState<Ticket[]>(
+    mockData as unknown as Ticket[],
+  );
 
   // State for which section should be reflected
   // const [activeSection, setActiveSection] =

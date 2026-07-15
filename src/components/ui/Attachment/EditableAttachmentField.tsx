@@ -68,7 +68,7 @@ function EditableAttachmentField({
         setIsDragging(false);
         addFiles(e.dataTransfer.files);
       }}
-      className="w-full flex justify-start gap-5 overscroll-contain dropdown-scroll"
+      className="w-full shrink-0 flex justify-start gap-5 overscroll-contain dropdown-scroll overflow-x-auto"
     >
       {isModalOpen && (
         <ConfirmModal
@@ -148,12 +148,13 @@ function EditableAttachmentField({
               flex items-center justify-center gap-1
           border border-dashed border-(--bg-border) rounded-xs
           cursor-pointer
-          font-consolas font-normal text-xs text-(--text-secondary) leading-3
           group hover:border-(--border-hover-btn) shrink-0
           ${isDragging ? "border-(--border-hover-btn)" : ""}`}
         >
           <PlusAttachIcon className="w-2.5 h-2.5 text-(--text-primary)" />
-          <span>Загрузить файл</span>
+          <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
+            Загрузить файл
+          </span>
         </button>
       )}
     </div>

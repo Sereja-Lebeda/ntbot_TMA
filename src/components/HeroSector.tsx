@@ -4,6 +4,7 @@ import type {
   Ticket,
   SortByStatusType,
   TicketViewType,
+  TicketAttachmentType,
 } from "../types/ticket.types";
 
 import type { UserType } from "../types/user.types";
@@ -136,6 +137,7 @@ export default function HeroSector({
     formData: Record<string, string>;
     multiData: Record<string, string[]>;
     priority: PriorityLevel;
+    attachedFiles: TicketAttachmentType;
   }) {
     if (!repeatTicket) return;
 
@@ -149,7 +151,7 @@ export default function HeroSector({
       multiBody: data.multiData,
       priority: data.priority,
       description: getTicketDescription(data.formData, repeatAction!),
-      attachedFiles: [],
+      attachedFiles: data.attachedFiles,
     };
 
     setTickets((prev) => [...prev, newTicket]);
@@ -161,6 +163,7 @@ export default function HeroSector({
     multiData: Record<string, string[]>;
     priority: PriorityLevel;
     action: Action;
+    attachedFiles: TicketAttachmentType;
   }) {
     if (!editTicket) return;
 
@@ -181,6 +184,7 @@ export default function HeroSector({
               actionId: data.action.id,
               breadcrumbs: newBreadcrumbs,
               description: getTicketDescription(data.formData, data.action),
+              attachedFiles: data.attachedFiles,
             }
           : t,
       ),
