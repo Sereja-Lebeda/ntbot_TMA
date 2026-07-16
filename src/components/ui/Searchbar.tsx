@@ -17,7 +17,7 @@ const Searchbar = forwardRef<HTMLInputElement, searchRequestProps>(
         className={`h-10 flex items-center flex-1 px-5 py-3 gap-2 rounded-xs bg-(--bg-secondary) border border-(--bg-border) hover:border-(--border-hover-btn) group ${className} select-none`}
       >
         <MagnifyIcon className="w-5 h-5 " />
-        {/* TODO: add debounce */}
+        {/* //TODO: add debounce after connetion to db */}
 
         <input
           ref={ref}

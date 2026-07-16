@@ -34,7 +34,6 @@ export default function HomePage() {
   const [ticketView, setTicketView] = useState<"my" | "team">("my");
 
   // States for btns "yes/no" for complete tickets
-  //TODO: update type for mock
   const [tickets, setTickets] = useState<Ticket[]>(
     mockData as unknown as Ticket[],
   );

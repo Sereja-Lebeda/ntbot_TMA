@@ -18,7 +18,7 @@ export interface OpenDropdownFilterProps {
   // setTicketView: React.Dispatch<React.SetStateAction<TicketViewType>>;
 }
 
-const mock = mockData as Ticket[];
+const mock = mockData as unknown as Ticket[];
 
 function SortFilterBlock({
   openDropdownFilter,
@@ -50,20 +50,6 @@ function SortFilterBlock({
     "Все",
     ...new Set(mock.map((ticket: Ticket) => ticket.breadcrumbs[0])),
   ];
-
-  // const categories = [
-  //   "Все",
-  //   "Это другое",
-  //   "Коммуникация",
-  //   "Zdarova gaymeri",
-  //   "Party",
-  //   "Office",
-  //   "Workflow",
-  //   "Zdarova gaymeri",
-  //   "Party",
-  //   "Office",
-  //   "Workflow",
-  // ];
 
   // TODO: pull names from backend
   const usernames = [

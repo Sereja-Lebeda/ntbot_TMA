@@ -53,7 +53,6 @@ function ViewTicketModal({
   const iconClassName = "w-4.5 h-4.5 text-(--text-primary)!";
   const textClassName =
     "font-jbmono font-medium text-xs text-(--text-primary) leading-normal";
-  //TODO: take this logic of box shadow and implement in other places
 
   //TODO: findout why tg icon is small if u use vert monitor in view ticket. Make inly icons for sm screen
   const btnClassName = `w-fit h-8.5 flex justify-center items-center px-4 py-2 rounded-xs

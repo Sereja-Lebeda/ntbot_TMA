@@ -158,7 +158,6 @@ dark:text-(--bg-btn-primary)"
           </div>
         </div>
 
-        {/* //TODO: Add to reflect actual statuses (Team / mine) */}
         {/* Status of tickets */}
         <div className="w-69 grid grid-cols-5 gap-2">
           {ticketStatusOrder.map((status, index) => (

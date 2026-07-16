@@ -25,8 +25,7 @@ interface StepProblemProps {
   selectedCategory: CategoriesPool;
   selectAction: (action: Action) => void;
 }
-//TODO: add modal window for closing
-//TODO: need to change logic to new nested action mock
+
 function StepProblem({
   onPrev,
   onNext,

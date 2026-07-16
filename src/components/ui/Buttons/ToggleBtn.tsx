@@ -11,13 +11,10 @@ import ToggleDarkIcon from "../../../icons/ToggleDarkIcon";
 import ToggleLightIcon from "../../../icons/ToggleLightIcon";
 
 function ToggleBtn() {
-  const { toggleTheme, theme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   return (
-    <div
-      onClick={toggleTheme}
-      className="flex items-center cursor-pointer select-none"
-    >
+    <div className="flex items-center cursor-pointer select-none">
       {theme === "light" ? <ToggleDarkIcon /> : <ToggleLightIcon />}
     </div>
   );

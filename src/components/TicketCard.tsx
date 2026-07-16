@@ -92,7 +92,6 @@ export default function TicketCard({
             Заявка выполнена?
           </span>
           <div className={`${baseStyle} `}>
-            {/* // TODO: Which bg. should be for hover to btns */}
             <button
               className="h-6 bg-(--bg-task-complete) dark:bg-(--bg-btn-primary) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
               onClick={() =>
@@ -184,10 +183,9 @@ export default function TicketCard({
             </div>
             <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">
               <span>ID: </span>
-              {/* //TODO: make to copy id, not open ticket */}
               <div
                 onClick={(e) => {
-                  e.preventDefault();
+                  e.stopPropagation();
                   navigator.clipboard.writeText(ticket.ticketId.toString());
                 }}
                 className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
@@ -220,9 +218,10 @@ export default function TicketCard({
           <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">
             <span>ID: </span>
             <div
-              onClick={() =>
-                navigator.clipboard.writeText(ticket.ticketId.toString())
-              }
+              onClick={(e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(ticket.ticketId.toString());
+              }}
               className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
             >
               {ticket.ticketId}
@@ -258,7 +257,6 @@ export default function TicketCard({
           </div>
         </div>
         {/* icons */}
-        {/* TODO: Make icons as buttons and add logic */}
         <div>{getStatusIcon(ticket.status)}</div>
       </div>
     </div>

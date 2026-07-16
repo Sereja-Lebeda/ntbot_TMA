@@ -14,8 +14,6 @@
   font-style: normal;
 }
 
-/* //TODO: On widescreen monitor page should be centered */
-
 :root {
   /* Color bg */
   background: var(--bg-primary);
@@ -50,7 +48,10 @@
   color-scheme: light dark;
 
   max-width: 1920px;
-  max-height: 1080px;
+  margin: 0 auto; /* центрирует блок, когда он не занимает всю ширину родителя */
+
+  /* max-width: 1920px;
+  max-height: 1080px; */
 
   scrollbar-width: none;
 }

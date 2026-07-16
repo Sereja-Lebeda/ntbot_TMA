@@ -25,7 +25,7 @@ import pcDevicesPngLight from "../icons/createTicket/categoryIconsLight/pcDevice
 import programsPngLight from "../icons/createTicket/categoryIconsLight/programsPngLight.png";
 import purchasesPngLight from "../icons/createTicket/categoryIconsLight/purchasesPngLight.png";
 import websitesPngLight from "../icons/createTicket/categoryIconsLight/websitesPngLight.png";
-//TODO: add icons for light theme
+
 export const categories: {
   name: CategoryName;
   icon: string;

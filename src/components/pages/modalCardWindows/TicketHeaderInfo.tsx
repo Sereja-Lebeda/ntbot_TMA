@@ -1,4 +1,5 @@
 import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
+import { textPressAnimationStyle } from "../../../styles/pressAnimation";
 import type { Ticket } from "../../../types/ticket.types";
 import getStatusTitle, {
   getStatusColor,
@@ -61,12 +62,21 @@ function TicketHeaderInfo({
         </div>
       </div>
       {/* Ticket meta info */}
-      {/* //TODO: При клике значение ID копируется в буфер обмена */}
       <div
-        className="w-full flex justify-start items-center
+        className="w-full flex justify-start items-center gap-1
             font-consolas font-normal text-[11px] text-(--text-secondary) leading-4"
       >
-        {`ID: ${ticket.ticketId} | Дата создания: ${ticket.createDate} | Автор: ${ticket.userName}`}
+        <span>ID:</span>
+        <span
+          onClick={() => {
+            navigator.clipboard.writeText(`${ticket.ticketId}`);
+          }}
+          className={`${textPressAnimationStyle} cursor-pointer`}
+        >
+          {ticket.ticketId}
+        </span>
+        <span>{`| Дата создания: ${ticket.createDate}`}</span>
+        <span>{`| Автор: ${ticket.userName}`}</span>
       </div>
 
       {modalMode === "edit" ? (
