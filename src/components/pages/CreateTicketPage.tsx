@@ -21,6 +21,7 @@ import ProgressBar from "../ui/ProgressBar";
 import ConfirmModal from "./modalCardWindows/ConfirmModal";
 
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
+import transferFieldValues from "../../utils/transferFieldValues";
 
 // type LabelStepProps = "Category" | "Problem" | "Details" | "Done";
 //TODO: add esc button to exit or step back?
@@ -87,7 +88,15 @@ function CreateTicketPage() {
 
   function selectAction(action: Action) {
     setSelectedAction(action);
-    setFormData({});
+    if (!selectedAction) {
+      setFormData({});
+      setMultiData({});
+      return;
+    }
+    const { formData: newFormData, multiData: newMultiData } =
+      transferFieldValues(selectedAction, action, formData, multiData);
+    setFormData(newFormData);
+    setMultiData(newMultiData);
   }
 
   function onConfirm() {

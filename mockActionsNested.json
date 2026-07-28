@@ -22,6 +22,7 @@
                 "name": "level",
                 "label": "Уровень доступа",
                 "type": "radio",
+                "semanticId": "access_level",
                 "required": true,
                 "options": ["Просмотр", "Редактирование"]
               },
@@ -29,6 +30,7 @@
                 "name": "sections",
                 "label": "Доступные разделы",
                 "type": "multiselect",
+                "semanticId": "access_sections",
                 "required": true,
                 "placeholder": "Выберите разделы",
                 "options": ["Документы", "Финансы", "HR", "Общее"]
@@ -38,6 +40,7 @@
                 "label": "ФИО сотрудника",
                 "type": "select",
                 "subtype": "employeeFullname",
+                "semanticId": "employee_fullname",
                 "required": true,
                 "placeholder": "Абоба Макарович ИИшников",
                 "options": [
@@ -53,6 +56,7 @@
                 "name": "comment",
                 "label": "Короткий текст",
                 "type": "short text",
+                "semanticId": "comment",
                 "placeholder": "Короткий текст",
                 "required": true
               },
@@ -74,6 +78,7 @@
                 "label": "ФИО сотрудника",
                 "type": "select",
                 "subtype": "employeeFullname",
+                "semanticId": "employee_fullname",
                 "required": true,
                 "placeholder": "Абоба Макарович ИИшников",
                 "options": [
@@ -89,6 +94,7 @@
                 "name": "new_level",
                 "label": "Новый уровень доступа",
                 "type": "radio",
+                "semanticId": "access_level",
                 "required": true,
                 "options": ["Просмотр", "Редактирование"]
               },
@@ -110,6 +116,7 @@
                 "label": "ФИО сотрудника",
                 "type": "select",
                 "subtype": "employeeFullname",
+                "semanticId": "employee_fullname",
                 "required": true,
                 "placeholder": "Абоба Макарович ИИшников",
                 "options": [
@@ -125,6 +132,7 @@
                 "name": "sections",
                 "label": "Разделы для закрытия",
                 "type": "multiselect",
+                "semanticId": "access_sections",
                 "required": true,
                 "placeholder": "Выберите разделы",
                 "options": ["Документы", "Финансы", "HR", "Общее"]
@@ -168,6 +176,7 @@
                 "label": "ФИО ответственного",
                 "type": "select",
                 "subtype": "employeeFullname",
+                "semanticId": "employee_fullname",
                 "required": true,
                 "placeholder": "Абоба Макарович ИИшников",
                 "options": [
@@ -183,6 +192,7 @@
                 "name": "comment",
                 "label": "Комментарий",
                 "type": "long text",
+                "semanticId": "comment",
                 "placeholder": "Дополнительная информация",
                 "required": false
               }
@@ -222,6 +232,7 @@
                 "name": "comment",
                 "label": "Комментарий",
                 "type": "short text",
+                "semanticId": "comment",
                 "placeholder": "Короткий текст",
                 "required": false
               }

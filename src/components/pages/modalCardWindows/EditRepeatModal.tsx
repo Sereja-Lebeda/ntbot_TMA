@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
 import useEscapeKey from "../../../hooks/useEscapeKey";
 
@@ -37,6 +37,7 @@ import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
 import FunctionBtn from "../../ui/Buttons/FunctionBtn";
+import transferFieldValues from "../../../utils/transferFieldValues";
 
 interface EditRepeatModalProps {
   ticket: Ticket | undefined;
@@ -126,6 +127,13 @@ function EditRepeatModal({
     action ?? null,
   );
 
+  const lastActionRef = useRef<Action | null>(action ?? null);
+  useEffect(() => {
+    if (selectedActionState) {
+      lastActionRef.current = selectedActionState;
+    }
+  }, [selectedActionState]);
+
   if (!ticket || !action) return null;
 
   const typedActions = mockActionsNested as CategoryNode[];
@@ -160,7 +168,11 @@ function EditRepeatModal({
     setFormData({});
     setMultiData({});
     setFiles([]);
-    setPriority(null);
+    setErrors({});
+  }
+
+  function resetCategorySelectionState() {
+    setFiles([]);
     setErrors({});
   }
 
@@ -168,13 +180,13 @@ function EditRepeatModal({
     setSelectedCategory(category);
     setSelectedSubcategory(null);
     setSelectedActionState(null);
-    resetFormState();
+    resetCategorySelectionState();
   }
 
   function handleSubcategoryChange(subcategory: string) {
     setSelectedSubcategory(subcategory);
     setSelectedActionState(null);
-    resetFormState();
+    resetCategorySelectionState();
   }
 
   function handleActionChange(actionName: string) {
@@ -183,17 +195,29 @@ function EditRepeatModal({
       ?.subcategories.find((s) => s.subcategory === selectedSubcategory)
       ?.actions.find((a) => a.name === actionName);
 
-    if (found && selectedCategory && selectedSubcategory) {
-      setSelectedActionState({
-        ...found,
-        category: selectedCategory as CategoryName,
-        subcategory: selectedSubcategory,
-      });
+    if (found) {
+      if (selectedCategory && selectedSubcategory) {
+        setSelectedActionState({
+          ...found,
+          category: selectedCategory as CategoryName,
+          subcategory: selectedSubcategory,
+        });
+      } else {
+        resetFormState();
+      }
     } else {
       setSelectedActionState(null);
     }
 
-    resetFormState();
+    if (!lastActionRef.current || !found) {
+      resetFormState();
+      return;
+    }
+
+    const { formData: newFormData, multiData: newMultiData } =
+      transferFieldValues(lastActionRef.current, found, formData, multiData);
+    setFormData(newFormData);
+    setMultiData(newMultiData);
   }
 
   function clearError(field: string) {

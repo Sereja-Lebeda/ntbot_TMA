@@ -42,6 +42,7 @@ export interface Field {
   validation?: ValidationType;
   placeholder?: string;
   options?: string[];
+  semanticId?: string;
 }
 
 export type FieldType =
