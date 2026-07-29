@@ -2,6 +2,7 @@ import { createPortal } from "react-dom";
 
 import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
 import useEscapeKey from "../../../hooks/useEscapeKey";
+import useUser from "../../../hooks/useUser";
 
 import type { Ticket } from "../../../types/ticket.types";
 import type { Action } from "../../../types/createTicket.type";
@@ -10,6 +11,7 @@ import TicketHeaderInfo from "./TicketHeaderInfo";
 import FunctionBtn from "../../ui/Buttons/FunctionBtn";
 import TicketAttachmentsView from "../../ui/Attachment/TicketAttachmentsView";
 
+import { getTicketPermissions } from "../../../utils/ticketPermissions";
 import getBreadcrumb from "../../../utils/getBreadcrumbs";
 import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 
@@ -45,10 +47,9 @@ function ViewTicketModal({
 }: ViewTicketModalProps) {
   useLockBodyScroll();
   useEscapeKey(onClose);
-
-  if (!ticket || !action) return null;
-
-  const isBtnDisabled = ticket.status !== "New";
+  const currentUser = useUser();
+  if (!currentUser || !ticket || !action) return null;
+  const permissions = getTicketPermissions(ticket, currentUser);
 
   const iconClassName = "w-4.5 h-4.5 text-(--text-primary)!";
   const textClassName =
@@ -109,7 +110,7 @@ function ViewTicketModal({
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
               onClick={onEdit}
-              disabled={isBtnDisabled}
+              disabled={!permissions.canEdit}
             />
             <FunctionBtn
               Icon={CancelIcon}
@@ -119,7 +120,7 @@ function ViewTicketModal({
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
               onClick={() => onCancel(ticket.ticketId)}
-              disabled={isBtnDisabled}
+              disabled={!permissions.canCancel}
             />
           </div>
 

@@ -2,6 +2,7 @@ import { createPortal } from "react-dom";
 import { useState, useRef, useEffect } from "react";
 import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
 import useEscapeKey from "../../../hooks/useEscapeKey";
+import useUser from "../../../hooks/useUser";
 
 import type {
   Action,
@@ -17,6 +18,8 @@ import type {
 } from "../../../types/ticket.types";
 import TicketForm from "../../TicketForm";
 
+import transferFieldValues from "../../../utils/transferFieldValues";
+import { getTicketPermissions } from "../../../utils/ticketPermissions";
 import getBreadcrumb from "../../../utils/getBreadcrumbs";
 import validateForm from "../../../utils/validateForm";
 import { isSameFile } from "../../../utils/fileDublicateHelper";
@@ -26,6 +29,7 @@ import ConfirmModal from "./ConfirmModal";
 import FormDropdown from "../../ui/FormDropdown";
 import EditableAttachmentField from "../../ui/Attachment/EditableAttachmentField";
 import AttachmentaField from "../../ui/Attachment/AttachmentField";
+import FunctionBtn from "../../ui/Buttons/FunctionBtn";
 
 import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 
@@ -36,8 +40,6 @@ import RepeatIcon from "../../../icons/card/RepeatIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
-import FunctionBtn from "../../ui/Buttons/FunctionBtn";
-import transferFieldValues from "../../../utils/transferFieldValues";
 
 interface EditRepeatModalProps {
   ticket: Ticket | undefined;
@@ -70,6 +72,7 @@ function EditRepeatModal({
 }: EditRepeatModalProps) {
   useLockBodyScroll();
   useEscapeKey(handleCloseAttempt);
+  const currentUser = useUser();
 
   const [formData, setFormData] = useState<Record<string, string>>(
     ticket?.body ?? {},
@@ -96,6 +99,7 @@ function EditRepeatModal({
     multiData: ticket?.multiBody ?? {},
     priority: ticket?.priority ?? null,
   });
+
   const inputText =
     "Вы уверены, что хотите прервать редактирование заявки?\n\nИзмененная информация не сохранится.";
 
@@ -134,7 +138,39 @@ function EditRepeatModal({
     }
   }, [selectedActionState]);
 
-  if (!ticket || !action) return null;
+  if (!currentUser || !ticket || !action) return null;
+  const permissions = getTicketPermissions(ticket, currentUser);
+
+  //NOTE: comment above to edit modal window with restricted message
+  // permissions.canEdit = false;
+
+  if (!permissions.canEdit) {
+    return createPortal(
+      <div
+        onClick={onClose}
+        className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center"
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="bg-(--bg-secondary) border border-(--bg-border) rounded-xs p-8 text-center flex flex-col gap-4 items-center"
+        >
+          <p className="text-(--text-primary) font-jbmono">
+            У вас нет прав на редактирование этой заявки.<br></br>
+            Пожалуйста, обратитесь к администратору.
+          </p>
+          <button
+            onClick={onClose}
+            className="cursor-pointer text-(--text-secondary) hover:text-(--text-primary)
+            font-consolas
+            "
+          >
+            Закрыть
+          </button>
+        </div>
+      </div>,
+      document.body,
+    );
+  }
 
   const typedActions = mockActionsNested as CategoryNode[];
 

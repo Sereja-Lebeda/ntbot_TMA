@@ -1,9 +1,10 @@
-type role = "employee" | "manager" | "admin";
+export type UserRole = "employee" | "manager" | "admin";
 
 export interface UserType {
   id: number;
   name: string;
-  role: role;
+  role: UserRole;
+  department: string;
   localIp: string;
   pcName: string;
   remoteAccessDate: string;

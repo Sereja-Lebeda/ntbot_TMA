@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useUser from "../hooks/useUser";
 
 import type {
   Ticket,
@@ -7,7 +8,7 @@ import type {
   TicketAttachmentType,
 } from "../types/ticket.types";
 
-import type { UserType } from "../types/user.types";
+// import type { UserType } from "../types/user.types";
 import type {
   CategoryNode,
   PriorityLevel,
@@ -21,7 +22,7 @@ import ConfirmModal from "./pages/modalCardWindows/ConfirmModal";
 import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
 
 import getStatusTitle from "../utils/ticketBadgeHelpers";
-import mockUser from "../../mockUserInfo.json";
+// import mockUser from "../../mockUserInfo.json";
 import mockActionsNested from "../../mockActionsNested.json";
 
 import { hoverAnimationStyle } from "../styles/pressAnimation";
@@ -95,6 +96,8 @@ export default function HeroSector({
   tickets,
   setTickets,
 }: selectedTicketStatusesProps) {
+  const currentUser = useUser();
+
   // const [title, id, date, description, status, priority, category] = mock;
   // const mock = mockData as Ticket[];
   const [activeModal, setActiveModal] = useState<{
@@ -103,7 +106,9 @@ export default function HeroSector({
     from?: "view";
   } | null>(null);
 
-  const mockCurrentUser = mockUser as UserType;
+  if (!currentUser) return null;
+
+  // const mockCurrentUser = mockUser as UserType;
   const allActions = flattenActions(mockActionsNested as CategoryNode[]);
 
   const viewedTicket =
@@ -139,7 +144,7 @@ export default function HeroSector({
     priority: PriorityLevel;
     attachedFiles: TicketAttachmentType;
   }) {
-    if (!repeatTicket) return;
+    if (!repeatTicket || !currentUser) return;
 
     const newTicket: Ticket = {
       ...repeatTicket,
@@ -147,6 +152,9 @@ export default function HeroSector({
       ticketId: Math.max(...tickets.map((t) => t.ticketId)) + 1,
       createDate: new Date().toLocaleDateString("ru-RU"),
       status: "New",
+      userId: currentUser.id,
+      userName: currentUser.name,
+      department: currentUser.department,
       body: data.formData,
       multiBody: data.multiData,
       priority: data.priority,
@@ -441,8 +449,8 @@ export default function HeroSector({
           )
           .filter((ticket) =>
             isManager && ticketView === "team"
-              ? ticket.userId !== mockCurrentUser.id
-              : ticket.userId === mockCurrentUser.id,
+              ? ticket.userId !== currentUser.id
+              : ticket.userId === currentUser.id,
           )
           .sort((a, b) =>
             sortOldToNew

@@ -1,3 +1,5 @@
+import useUser from "../hooks/useUser";
+
 import type {
   Ticket,
   StatusType,
@@ -9,6 +11,7 @@ import CardActionButton from "./ui/Buttons/CardActionButton";
 import getStatusTitle from "../utils/ticketBadgeHelpers";
 import { getStatusColor } from "../utils/ticketBadgeHelpers";
 import { getPriorityTitle } from "../utils/ticketBadgeHelpers";
+import { getTicketPermissions } from "../utils/ticketPermissions";
 
 import { textPressAnimationStyle } from "../styles/pressAnimation";
 import { shadowLiftCardStyle } from "../styles/shadowLift";
@@ -55,6 +58,10 @@ export default function TicketCard({
   onRequestEdit,
   handleOpenView,
 }: TicketCardWithActionsProps) {
+  const currentUser = useUser();
+  if (!currentUser) return null;
+  const permissions = getTicketPermissions(ticket, currentUser);
+
   const favoriteBtn = (
     <FavoriteIcon
       ticketId={ticket.ticketId}
@@ -135,6 +142,16 @@ export default function TicketCard({
       <div className={baseStyle}>
         {statusActions[status]
           .filter((key) => key !== "telegram")
+          .filter((key) => {
+            if (key === "cancel") {
+              return permissions.canCancel;
+            }
+            if (key === "edit") {
+              return permissions.canEdit;
+            }
+
+            return true;
+          })
           .map((key) => {
             const { Icon, onClick } = actionRegistry[key];
             return (

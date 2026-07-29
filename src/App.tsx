@@ -1,14 +1,16 @@
 import { RouterProvider } from "react-router";
 import { router } from "../router";
 
-// import HomePage from "./components/pages/HomePage";
 import ThemeProvider from "./providers/ThemeProvider";
+import UserProvider from "./providers/UserProvider";
 
 function App() {
   return (
     <>
       <ThemeProvider>
-        <RouterProvider router={router} />
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
       </ThemeProvider>
     </>
   );
