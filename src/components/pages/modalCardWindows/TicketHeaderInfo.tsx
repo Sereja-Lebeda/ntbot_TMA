@@ -1,10 +1,16 @@
-import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
-import { textPressAnimationStyle } from "../../../styles/pressAnimation";
-import type { Ticket } from "../../../types/ticket.types";
+import type { StatusType, Ticket } from "../../../types/ticket.types";
+
 import getStatusTitle, {
   getStatusColor,
   getPriorityTitle,
+  buildStatusLabelMap,
 } from "../../../utils/ticketBadgeHelpers";
+
+import StatusDropdown from "../../ui/StaturDropdown";
+
+import { textPressAnimationStyle } from "../../../styles/pressAnimation";
+
+import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
 
 interface TicketHeaderInfoProps {
   ticket: Ticket | undefined;
@@ -13,6 +19,9 @@ interface TicketHeaderInfoProps {
   favoriteTickets: number[];
   setFavoriteTickets: (id: number[]) => void;
   modalMode?: modalModeType;
+
+  onStatusChange?: (newStatus: StatusType) => void;
+  currentStatus?: StatusType;
 }
 
 type modalModeType = "view" | "edit";
@@ -23,8 +32,12 @@ function TicketHeaderInfo({
   favoriteTickets,
   setFavoriteTickets,
   modalMode,
+  onStatusChange,
+  currentStatus,
 }: TicketHeaderInfoProps) {
   if (!ticket) return null;
+
+  const displayStatus = currentStatus ?? ticket.status;
 
   return (
     // Ticket header and content
@@ -48,14 +61,30 @@ function TicketHeaderInfo({
           <span className="font-jbmono font-medium text-[15px] text-(--text-primary) leading-6">
             {ticket.title}
           </span>
-          <div className={`${getStatusColor(ticket.status)}`}>
-            {getStatusTitle(ticket.status, "singular")}
-          </div>
+
+          {onStatusChange ? (
+            <StatusDropdown
+              options={Object.keys(buildStatusLabelMap())}
+              onChange={(selectedLabel) => {
+                const status = buildStatusLabelMap()[selectedLabel];
+                if (status) {
+                  onStatusChange(status);
+                }
+              }}
+              value={getStatusTitle(displayStatus, "singular")}
+              badgeClassName={getStatusColor(displayStatus)}
+            />
+          ) : (
+            <div className={getStatusColor(displayStatus)}>
+              {getStatusTitle(displayStatus, "singular")}
+            </div>
+          )}
+
           <div
             className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5
             bg-(--text-primary) text-(--bg-primary) text-xs
             dark:bg-transparent dark:border dark:border-(--text-tertiary) dark:text-(--text-tertiary)
-            rounded-xs font-bold leading-3 select-none"
+            rounded-xs font-jbmono font-bold leading-3 select-none"
           >
             {getPriorityTitle(ticket.priority)}
           </div>

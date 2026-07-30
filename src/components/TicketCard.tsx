@@ -92,6 +92,7 @@ export default function TicketCard({
   function getStatusIcon(status: StatusType): React.ReactNode {
     const baseStyle = "flex items-center gap-2";
 
+    //todo: make auto "yes" answer after 48h if user didnt choose
     if (status === "Complete") {
       return (
         <div className="flex items-center gap-2 font-jbmono">

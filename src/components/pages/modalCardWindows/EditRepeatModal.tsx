@@ -15,6 +15,7 @@ import type {
   Ticket,
   TicketAttachmentType,
   TicketFileItem,
+  StatusType,
 } from "../../../types/ticket.types";
 import TicketForm from "../../TicketForm";
 
@@ -52,6 +53,7 @@ interface EditRepeatModalProps {
     priority: PriorityLevel;
     action: Action;
     attachedFiles: TicketAttachmentType;
+    status: StatusType;
   }) => void;
   mode: ModeType;
 
@@ -138,13 +140,17 @@ function EditRepeatModal({
     }
   }, [selectedActionState]);
 
+  const [newStatus, setNewStatus] = useState<StatusType>(
+    ticket?.status ?? "New",
+  );
+
   if (!currentUser || !ticket || !action) return null;
   const permissions = getTicketPermissions(ticket, currentUser);
 
   //NOTE: comment above to edit modal window with restricted message
   // permissions.canEdit = false;
 
-  if (!permissions.canEdit) {
+  if (mode === "edit" && !permissions.canEdit) {
     return createPortal(
       <div
         onClick={onClose}
@@ -291,6 +297,7 @@ function EditRepeatModal({
       priority,
       action: currentAction,
       attachedFiles,
+      status: newStatus,
     });
   }
 
@@ -389,6 +396,12 @@ function EditRepeatModal({
               setFavoriteTickets={setFavoriteTickets}
               ticket={ticket}
               modalMode="edit"
+              onStatusChange={
+                permissions.canChangeStatus
+                  ? (status) => setNewStatus(status)
+                  : undefined
+              }
+              currentStatus={newStatus}
             />
           </div>
         ) : (

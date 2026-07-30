@@ -8,7 +8,7 @@ import {
 } from "../styles/pressAnimation";
 
 import handleStatusSelect from "../utils/statusSelectedHelper";
-import getStatusTitle from "../utils/ticketBadgeHelpers";
+import getStatusTitle, { allStatuses } from "../utils/ticketBadgeHelpers";
 
 import mockUser from "../../mockUserInfo.json";
 import mockTicket from "../../mockTicketInfo.json";
@@ -57,14 +57,7 @@ function Infoblock({
   ];
 
   const plateHeights = ["h-28", "h-28", "h-25", "h-25", "h-18", "h-18"];
-  const ticketStatusOrder = [
-    "New",
-    "In progress",
-    "Complete",
-    "Paused",
-    "Cancelled",
-    "Closed",
-  ];
+  const ticketStatusOrder = allStatuses;
 
   function getTicketQuantity(ticketList: Ticket[]) {
     return ticketList.reduce(

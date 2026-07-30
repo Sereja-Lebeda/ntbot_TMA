@@ -4,7 +4,7 @@ import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
 import useEscapeKey from "../../../hooks/useEscapeKey";
 import useUser from "../../../hooks/useUser";
 
-import type { Ticket } from "../../../types/ticket.types";
+import type { StatusType, Ticket } from "../../../types/ticket.types";
 import type { Action } from "../../../types/createTicket.type";
 
 import TicketHeaderInfo from "./TicketHeaderInfo";
@@ -30,6 +30,7 @@ interface ViewTicketModalProps {
   onRepeat: () => void;
   onCancel: (ticketId: number) => void;
   onEdit: () => void;
+  onChangeStatus: (ticketId: number, newStatus: StatusType) => void;
 
   favoriteTickets: number[];
   setFavoriteTickets: (id: number[]) => void;
@@ -42,6 +43,7 @@ function ViewTicketModal({
   onRepeat,
   onCancel,
   onEdit,
+  onChangeStatus,
   favoriteTickets,
   setFavoriteTickets,
 }: ViewTicketModalProps) {
@@ -150,6 +152,11 @@ function ViewTicketModal({
             favoriteTickets={favoriteTickets}
             setFavoriteTickets={setFavoriteTickets}
             ticket={ticket}
+            onStatusChange={
+              permissions.canChangeStatus
+                ? (newStatus) => onChangeStatus(ticket.ticketId, newStatus)
+                : undefined
+            }
             className="px-0!"
           />
           {/* Content */}

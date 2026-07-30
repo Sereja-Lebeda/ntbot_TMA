@@ -47,7 +47,7 @@ export default function getStatusTitle(status: string, form: FormType) {
 }
 export function getStatusColor(status: StatusType) {
   const baseStyle =
-    "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) text-xs font-bold leading-3 select-none";
+    "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) text-xs font-jbmono font-bold leading-3 select-none";
   switch (status) {
     case "New":
       return `${baseStyle} bg-(--bg-task-new)`;
@@ -75,4 +75,25 @@ export function getPriorityTitle(priority: PriorityLevel) {
     case null:
       return "";
   }
+}
+
+export const allStatuses: StatusType[] = [
+  "New",
+  "In progress",
+  "Paused",
+  "Complete",
+  "Closed",
+  "Cancelled",
+];
+
+export function buildStatusLabelMap(): Record<string, StatusType> {
+  const map: Record<string, StatusType> = {};
+  allStatuses.forEach((status) => {
+    const label = getStatusTitle(status, "singular");
+    if (!label) {
+      return;
+    }
+    map[label] = status;
+  });
+  return map;
 }

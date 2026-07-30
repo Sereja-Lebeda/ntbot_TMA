@@ -6,6 +6,7 @@ import type {
   SortByStatusType,
   TicketViewType,
   TicketAttachmentType,
+  StatusType,
 } from "../types/ticket.types";
 
 // import type { UserType } from "../types/user.types";
@@ -172,6 +173,7 @@ export default function HeroSector({
     priority: PriorityLevel;
     action: Action;
     attachedFiles: TicketAttachmentType;
+    status: StatusType;
   }) {
     if (!editTicket) return;
 
@@ -193,6 +195,7 @@ export default function HeroSector({
               breadcrumbs: newBreadcrumbs,
               description: getTicketDescription(data.formData, data.action),
               attachedFiles: data.attachedFiles,
+              status: data.status,
             }
           : t,
       ),
@@ -286,6 +289,14 @@ export default function HeroSector({
     }
   }
 
+  function handleStatusChange(ticketId: number, newStatus: StatusType) {
+    setTickets((prev) =>
+      prev.map((t) =>
+        t.ticketId === ticketId ? { ...t, status: newStatus } : t,
+      ),
+    );
+  }
+
   function handleOpenView(ticketId: number) {
     setActiveModal({ type: "view", ticketId });
   }
@@ -328,8 +339,7 @@ export default function HeroSector({
               });
             }
           }}
-
-          // ... (позже кнопки edit/repeat/cancel)
+          onChangeStatus={handleStatusChange}
         />
       )}
       {activeModal?.type === "repeat" && (

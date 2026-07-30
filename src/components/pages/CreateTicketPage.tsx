@@ -24,7 +24,7 @@ import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 import transferFieldValues from "../../utils/transferFieldValues";
 
 // type LabelStepProps = "Category" | "Problem" | "Details" | "Done";
-//TODO: add esc button to exit or step back?
+//TODO: add esc button to call modal window and totally exit from creating process?
 function CreateTicketPage() {
   const [currentStep, setCurrentStep] = useState<CurrentStepType>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);

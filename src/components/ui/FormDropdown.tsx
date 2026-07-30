@@ -45,7 +45,9 @@ function FormDropdown({
     border ${isOpen ? "border-[#E7E6E6]!" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
     ${hasError ? "border-(--bg-task-error)!" : ""}
     ${disabled ? "opacity-40" : "cursor-pointer group hover:border-(--border-hover-btn)"}
-    px-4 py-2.5 ${isOpen ? "z-50" : "z-20"}`}
+    px-4 py-2.5 ${isOpen ? "z-50" : "z-20"}
+    
+    `}
     >
       <div
         // onClick={() => setIsOpen(!isOpen)}
