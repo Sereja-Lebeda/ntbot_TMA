@@ -58,7 +58,8 @@ interface selectedTicketStatusesProps {
   showFavorites: boolean;
   setShowFavorites: (show: boolean) => void;
 
-  isManager: boolean;
+  isPrivilegeUser: boolean;
+  // isManager: boolean;
   ticketView: TicketViewType;
   setTicketView: React.Dispatch<React.SetStateAction<TicketViewType>>;
   resetFilters: () => void;
@@ -85,7 +86,8 @@ export default function HeroSector({
   setFavoriteTickets,
   showFavorites,
   setShowFavorites,
-  isManager,
+  isPrivilegeUser,
+  // isManager,
   ticketView,
   setTicketView,
   sortOldToNew,
@@ -301,7 +303,6 @@ export default function HeroSector({
     setActiveModal({ type: "view", ticketId });
   }
 
-  //TODO: Arrange functionality that manager can close (and cancel) employee tickets!!!
   return (
     <div
       className={`relative flex-1 max-w-225 min-w-130 h-246 flex flex-col items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5 ${className} `}
@@ -381,7 +382,7 @@ export default function HeroSector({
             icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
             isActive={true}
           />
-          {isManager && (
+          {isPrivilegeUser && (
             <SearchMenuBtn
               icon={
                 ticketView === "my" ? (
@@ -453,15 +454,21 @@ export default function HeroSector({
                 ticketEmployees.includes("Все") ||
                 ticketEmployees.includes(ticket.userName ?? "")),
           )
+          // Filter by favorite tickets
           .filter(
             (ticket) =>
               !showFavorites || favoriteTickets.includes(ticket.ticketId),
           )
-          .filter((ticket) =>
-            isManager && ticketView === "team"
-              ? ticket.userId !== currentUser.id
-              : ticket.userId === currentUser.id,
-          )
+          // Filter tickets by role
+          .filter((ticket) => {
+            if (currentUser.role === "admin" && ticketView === "team") {
+              return true;
+            }
+            if (currentUser.role === "manager" && ticketView === "team") {
+              return ticket.department === currentUser.department;
+            }
+            return ticket.userId === currentUser.id;
+          })
           .sort((a, b) =>
             sortOldToNew
               ? Date.parse(a.createDate.split(".").reverse().join("-")) -

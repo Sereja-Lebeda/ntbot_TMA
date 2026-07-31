@@ -1,16 +1,14 @@
 import { useState, useRef } from "react";
 import type { SortByStatusType, Ticket } from "../../types/ticket.types";
-// import type { activeSectionType } from "../../types/header.types";
-import type { UserType } from "../../types/user.types";
-import mockUser from "../../../mockUserInfo.json";
 import mockData from "../../../mockTicketInfo.json";
 
 import HeroSector from "../HeroSector";
-// import Header from "../layouts/Header";
 import Infoblock from "../Infoblock";
 import SortFilterBlock from "../SortFilterBlock";
+import useUser from "../../hooks/useUser";
 
 export default function HomePage() {
+  useUser();
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = useState<string | null>("Статус"); // какой дроп открыт
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>(["Все"]);
@@ -23,8 +21,9 @@ export default function HomePage() {
   ]);
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>(["Все"]);
 
-  const mock = mockUser as UserType;
-  const isManager = mock.role === "manager";
+  const currentUser = useUser();
+  const isPrivilegeUser =
+    currentUser?.role === "admin" || currentUser?.role === "manager";
 
   // States for btns near searchbar
   const [favoriteTickets, setFavoriteTickets] = useState<number[]>([]);
@@ -37,10 +36,6 @@ export default function HomePage() {
   const [tickets, setTickets] = useState<Ticket[]>(
     mockData as unknown as Ticket[],
   );
-
-  // State for which section should be reflected
-  // const [activeSection, setActiveSection] =
-  //   useState<activeSectionType>("tickets");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -65,10 +60,6 @@ export default function HomePage() {
       }}
       className=""
     >
-      {/* <Header
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-      /> */}
       <div className="flex justify-center max-w-395 mx-auto">
         <Infoblock
           ticketStatuses={selectedStatuses}
@@ -94,7 +85,7 @@ export default function HomePage() {
           showFavorites={showFavorites}
           setShowFavorites={setShowFavorites}
           // manager feat btn
-          isManager={isManager}
+          isPrivilegeUser={isPrivilegeUser}
           ticketView={ticketView}
           setTicketView={setTicketView}
           // sort btns near searchbar
@@ -120,7 +111,7 @@ export default function HomePage() {
           selectedEmployees={selectedEmployees}
           setSelectedEmployees={setSelectedEmployees}
           // manager feat btn
-          isManager={isManager}
+          isPrivilegeUser={isPrivilegeUser}
           ticketView={ticketView}
         />
       </div>

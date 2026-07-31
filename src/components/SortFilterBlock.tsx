@@ -13,9 +13,8 @@ export interface OpenDropdownFilterProps {
   setSelectedDepartments: (department: string[]) => void;
   selectedEmployees: string[];
   setSelectedEmployees: (employee: string[]) => void;
-  isManager: boolean;
+  isPrivilegeUser: boolean;
   ticketView: TicketViewType;
-  // setTicketView: React.Dispatch<React.SetStateAction<TicketViewType>>;
 }
 
 const mock = mockData as unknown as Ticket[];
@@ -31,9 +30,8 @@ function SortFilterBlock({
   setSelectedDepartments,
   selectedEmployees,
   setSelectedEmployees,
-  isManager,
+  isPrivilegeUser,
   ticketView,
-  // setTicketView,
 }: OpenDropdownFilterProps) {
   const statuses = [
     "Все",
@@ -93,8 +91,6 @@ function SortFilterBlock({
           isOpen={openDropdownFilter === "Период"}
           items={statuses}
           onChange={(title) => changeFilter(title)}
-          // selectedItems={ticketStatuses}
-          // setSelectedItems={setTicketStatuses}
         />
         <DropdownList
           title="Категории"
@@ -104,7 +100,7 @@ function SortFilterBlock({
           selectedItems={ticketCategories}
           setSelectedItems={setTicketCategories}
         />
-        {isManager && ticketView === "team" && (
+        {isPrivilegeUser && ticketView === "team" && (
           <DropdownList
             title="Отделы"
             isOpen={openDropdownFilter === "Отделы"}
@@ -115,7 +111,7 @@ function SortFilterBlock({
             showResetButton={true}
           />
         )}
-        {isManager && ticketView === "team" && (
+        {isPrivilegeUser && ticketView === "team" && (
           <DropdownList
             title="Сотрудники"
             isOpen={openDropdownFilter === "Сотрудники"}
