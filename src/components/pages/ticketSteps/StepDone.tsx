@@ -11,7 +11,7 @@ import type { TicketStatusType } from "../../../types/createTicket.type";
 import FailCreateIcon from "../../../icons/createTicket/FailCreateIcon";
 import SuccessCreateIcon from "../../../icons/createTicket/SuccessCreateIcon";
 
-//TODO: redirect only when success or always?
+//NOTE: redirect only when success
 function StepDone({ ticketId, ticketStatus }: StepDoneProps) {
   const navigate = useNavigate();
 

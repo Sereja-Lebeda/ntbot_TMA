@@ -53,11 +53,11 @@ function ViewTicketModal({
   if (!currentUser || !ticket || !action) return null;
   const permissions = getTicketPermissions(ticket, currentUser);
 
-  const iconClassName = "w-4.5 h-4.5 text-(--text-primary)!";
+  const iconClassName = "w-4.5 h-4.5 shrink-0 text-(--text-primary)!";
   const textClassName =
     "font-jbmono font-medium text-xs text-(--text-primary) leading-normal";
 
-  //TODO: findout why tg icon is small if u use vert monitor in view ticket. Make inly icons for sm screen
+  //TODO: Make only icons for sm screen
   const btnClassName = `w-fit h-8.5 flex justify-center items-center px-4 py-2 rounded-xs
   enabled:bg-(--bg-inactive-btn)
   ${shadowLiftButtonStyle}`;
@@ -81,7 +81,7 @@ function ViewTicketModal({
           className="w-full h-8.5 mb-2 px-12.5
     flex justify-between items-center"
         >
-          {/* //TODO: Make Tg icon fullsize. Make only icons if window is narrow */}
+          {/* //TODO: Make only icons if window is narrow */}
           {/* Functional btns */}
           <div className="w-full flex justify-start gap-1.5 select-none">
             <FunctionBtn

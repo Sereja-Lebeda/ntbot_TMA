@@ -22,10 +22,13 @@ import ConfirmModal from "./modalCardWindows/ConfirmModal";
 
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 import transferFieldValues from "../../utils/transferFieldValues";
+import useEscapeKey from "../../hooks/useEscapeKey";
 
-// type LabelStepProps = "Category" | "Problem" | "Details" | "Done";
-//TODO: add esc button to call modal window and totally exit from creating process?
 function CreateTicketPage() {
+  useEscapeKey(() => {
+    setIsModalOpen((prev) => !prev);
+  });
+
   const [currentStep, setCurrentStep] = useState<CurrentStepType>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,7 +38,6 @@ function CreateTicketPage() {
     useState<CategoriesPool>(null);
   const [selectedAction, setSelectedAction] = useState<Action | null>();
   const [priority, setPriority] = useState<PriorityLevel>(null);
-  // const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [files, setFiles] = useState<AttachedFile[]>([]);
   //NOTE: setters are for backend fetch
   const [ticketId, setTicletId] = useState<number>(542);
