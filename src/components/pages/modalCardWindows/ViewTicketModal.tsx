@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 
 import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
-import useEscapeKey from "../../../hooks/useEscapeKey";
+import useModalStackEntry from "../../../hooks/useModalStackEntry";
 import useUser from "../../../hooks/useUser";
 
 import type { StatusType, Ticket } from "../../../types/ticket.types";
@@ -48,7 +48,8 @@ function ViewTicketModal({
   setFavoriteTickets,
 }: ViewTicketModalProps) {
   useLockBodyScroll();
-  useEscapeKey(onClose);
+  useModalStackEntry(onClose);
+
   const currentUser = useUser();
   if (!currentUser || !ticket || !action) return null;
   const permissions = getTicketPermissions(ticket, currentUser);

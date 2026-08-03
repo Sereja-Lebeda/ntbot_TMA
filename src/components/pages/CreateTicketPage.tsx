@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import useModalStackEntry from "../../hooks/useModalStackEntry";
 
 import type {
   CurrentStepType,
@@ -22,10 +23,9 @@ import ConfirmModal from "./modalCardWindows/ConfirmModal";
 
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 import transferFieldValues from "../../utils/transferFieldValues";
-import useEscapeKey from "../../hooks/useEscapeKey";
 
 function CreateTicketPage() {
-  useEscapeKey(() => {
+  useModalStackEntry(() => {
     setIsModalOpen((prev) => !prev);
   });
 

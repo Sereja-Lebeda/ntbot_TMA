@@ -1,7 +1,6 @@
 import { createPortal } from "react-dom";
 import { useState, useRef, useEffect } from "react";
 import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
-import useEscapeKey from "../../../hooks/useEscapeKey";
 import useUser from "../../../hooks/useUser";
 
 import type {
@@ -41,6 +40,7 @@ import RepeatIcon from "../../../icons/card/RepeatIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
+import useModalStackEntry from "../../../hooks/useModalStackEntry";
 
 interface EditRepeatModalProps {
   ticket: Ticket | undefined;
@@ -73,7 +73,13 @@ function EditRepeatModal({
   setFavoriteTickets,
 }: EditRepeatModalProps) {
   useLockBodyScroll();
-  useEscapeKey(handleCloseAttempt);
+
+  const ref = useRef(handleCloseAttempt);
+  useEffect(() => {
+    ref.current = handleCloseAttempt;
+  });
+  useModalStackEntry(() => ref.current());
+
   const currentUser = useUser();
 
   const [formData, setFormData] = useState<Record<string, string>>(

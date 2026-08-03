@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import useModalStackEntry from "../../../hooks/useModalStackEntry";
 
 import CheckIcon from "../../../icons/card/CheckIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
@@ -11,6 +12,8 @@ interface ConfirmModalProps {
 }
 
 function ConfirmModal({ onConfirm, onCancel, inputText }: ConfirmModalProps) {
+  useModalStackEntry(onCancel);
+
   return createPortal(
     <div
       className="fixed inset-0
