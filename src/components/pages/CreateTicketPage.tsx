@@ -111,7 +111,7 @@ function CreateTicketPage() {
 
   // console.log(formData);
   return (
-    <div className="flex flex-col justify-center items-center min-w-130 max-w-225 mx-auto pt-4 pb-7">
+    <div className="xl:flex xl:flex-col xl:justify-center xl:items-center xl:min-w-130 xl:max-w-225 xl:mx-auto xl:pt-4 xl:pb-7">
       {/* Modal window  */}
       {isModalOpen && (
         <ConfirmModal
@@ -122,41 +122,37 @@ function CreateTicketPage() {
       )}
 
       {/* Step container */}
-      <div className="w-full flex flex-col items-center select-none">
+      <div className="xl:w-full xl:flex xl:flex-col xl:items-center xl:select-none">
         {/* Title section */}
-        <div className="w-full flex justify-between items-start ">
+        <div className="xl:w-full xl:flex xl:justify-between xl:items-start">
           {/* Info container */}
-          <div className="w-2/3 flex flex-col justify-center items-start gap-2">
-            <span className="font-jbmono text-2xl text-(--text-primary) font-bold leading-7.5">
+          <div className="xl:w-2/3 xl:flex xl:flex-col xl:justify-center xl:items-start xl:gap-2">
+            <span className="xl:font-jbmono xl:text-2xl xl:text-(--text-primary) xl:font-bold xl:leading-7.5">
               Создание заявки
             </span>
-            <span className="font-consolas text-[15px] text-(--text-secondary) font-normal leading-4.5">{`Шаг ${currentStep} из 4`}</span>
+            <span className="xl:font-consolas xl:text-[15px] xl:text-(--text-secondary) xl:font-normal xl:leading-4.5">{`Шаг ${currentStep} из 4`}</span>
           </div>
           {/* Button */}
 
           {currentStep !== 4 && (
             <button
-              className={`flex justify-center items-center gap-1 cursor-pointer group transition-all duration-300 ease-in-out active:opacity-0`}
+              className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:cursor-pointer xl:group xl:transition-all xl:duration-300 xl:ease-in-out xl:active:opacity-0"
               onClick={() => setIsModalOpen(true)}
             >
-              <CrossTicketIcon
-                className={`text-(--text-secondary) group-hover:text-(--text-primary) transition-colors duration-300`}
-              />
-              <span
-                className={`font-jbmono text-xs text-(--text-secondary) font-medium leading-normal group-hover:text-(--text-primary) transition-colors duration-300`}
-              >
+              <CrossTicketIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary) xl:transition-colors xl:duration-300" />
+              <span className="xl:font-jbmono xl:text-xs xl:text-(--text-secondary) xl:font-medium xl:leading-normal xl:group-hover:text-(--text-primary) xl:transition-colors xl:duration-300">
                 Отмена
               </span>
             </button>
           )}
         </div>
         {/* Steps navigation */}
-        <div className="w-full flex justify-center items-center py-5 mb-8">
+        <div className="xl:w-full xl:flex xl:justify-center xl:items-center xl:py-5 xl:mb-8">
           <ProgressBar currentStep={currentStep} />
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="xl:w-full">
         {currentStep === 1 && (
           <StepCategory
             onNext={nextStep}
@@ -192,7 +188,7 @@ function CreateTicketPage() {
         )}
       </div>
 
-      <div className="fixed bottom-6 left-6 flex w-83 gap-2.5">
+      <div className="xl:fixed xl:bottom-6 xl:left-6 xl:flex xl:w-83 xl:gap-2.5">
         <SupportButtons />
       </div>
     </div>

@@ -73,7 +73,7 @@ export default function Header({
               "xl:text-sm xl:dark:text-(--bg-primary) xl:text-(--text-primary) xl:font-jbmono xl:font-extrabold xl:select-none"
             }
             btnClassName={`xl:h-10 xl:w-47.5 xl:rounded-xs xl:flex xl:justify-center xl:items-center xl:px-6 xl:py-3 xl:gap-2
-              xl:${shadowLiftButtonStyle}
+              ${shadowLiftButtonStyle}
               xl:enabled:bg-(--bg-btn-primary)`}
             innerDivClassName={"xl:flex xl:items-center xl:gap-1"}
             onClick={() => navigate("/tickets/new")}

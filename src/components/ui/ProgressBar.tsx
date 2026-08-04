@@ -19,21 +19,21 @@ function ProgressBar({ currentStep }: ProgressBarProps) {
   function getStepStyle(num: CurrentStepType) {
     if (num < currentStep) {
       return (
-        <div className="w-12.5 h-12.5 rounded-xs">
-          <div className="w-full h-full flex justify-center items-center bg-(--bg-secondary) border-[0.5px] border-(--border-hover-btn) rounded-xs">
-            <PassedStepIcon className="text-(--border-hover-btn)" />
+        <div className="xl:w-12.5 xl:h-12.5 xl:rounded-xs">
+          <div className="xl:w-full xl:h-full xl:flex xl:justify-center xl:items-center xl:bg-(--bg-secondary) xl:border-[0.5px] xl:border-(--border-hover-btn) xl:rounded-xs">
+            <PassedStepIcon className="xl:text-(--border-hover-btn)" />
           </div>
         </div>
       );
     }
     if (num === currentStep) {
       return (
-        <div className="relative w-12.5 h-12.5 rounded-xs">
+        <div className="xl:relative xl:w-12.5 xl:h-12.5 xl:rounded-xs">
           {/* Background */}
-          <div className="absolute left-0.75 top-0.75 w-12.5 h-12.5 bg-(--border-hover-btn) rounded-xs z-0"></div>
+          <div className="xl:absolute xl:left-0.75 xl:top-0.75 xl:w-12.5 xl:h-12.5 xl:bg-(--border-hover-btn) xl:rounded-xs xl:z-0"></div>
           {/* Active step */}
-          <div className="absolute w-12.5 h-12.5 flex items-center justify-center bg-(--bg-btn-primary) border-[0.5px] border-(--border-hover-btn) rounded-xs z-10">
-            <span className="font-jbmono text-2xl text-(--bg-primary) font-bold leading-7.5">
+          <div className="xl:absolute xl:w-12.5 xl:h-12.5 xl:flex xl:items-center xl:justify-center xl:bg-(--bg-btn-primary) xl:border-[0.5px] xl:border-(--border-hover-btn) xl:rounded-xs xl:z-10">
+            <span className="xl:font-jbmono xl:text-2xl xl:text-(--bg-primary) xl:font-bold xl:leading-7.5">
               {num}
             </span>
           </div>
@@ -42,9 +42,9 @@ function ProgressBar({ currentStep }: ProgressBarProps) {
     }
 
     return (
-      <div className="w-12.5 h-12.5 rounded-xs">
-        <div className="w-full h-full flex items-center justify-center bg-(--bg-inactive-btn) rounded-xs">
-          <span className="font-jbmono text-2xl text-(--bg-primary) font-bold leading-7.5">
+      <div className="xl:w-12.5 xl:h-12.5 xl:rounded-xs">
+        <div className="xl:w-full xl:h-full xl:flex xl:items-center xl:justify-center xl:bg-(--bg-inactive-btn) xl:rounded-xs">
+          <span className="xl:font-jbmono xl:text-2xl xl:text-(--bg-primary) xl:font-bold xl:leading-7.5">
             {num}
           </span>
         </div>
@@ -53,14 +53,14 @@ function ProgressBar({ currentStep }: ProgressBarProps) {
   }
 
   return (
-    <div className="max-w-224.5 w-full flex items-start py-5 select-none">
+    <div className="xl:max-w-224.5 xl:w-full xl:flex xl:items-start xl:py-5 xl:select-none">
       {stepsNumAndLabel.map((step, index) => (
         <Fragment key={step.num}>
           {/* колонка шага */}
-          <div className="relative shrink-0 w-12.5 flex flex-col items-center">
+          <div className="xl:relative xl:shrink-0 xl:w-12.5 xl:flex xl:flex-col xl:items-center">
             {getStepStyle(step.num)}
             <span
-              className={`absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap font-jbmono text-sm ${step.num === currentStep ? "text-(--text-primary)" : "text-(--border-hover-btn)"} font-normal leading-4`}
+              className={`xl:absolute xl:top-full xl:mt-2 xl:left-1/2 xl:-translate-x-1/2 xl:whitespace-nowrap xl:font-jbmono xl:text-sm ${step.num === currentStep ? "xl:text-(--text-primary)" : "xl:text-(--border-hover-btn)"} xl:font-normal xl:leading-4`}
             >
               {step.label}
             </span>
@@ -69,7 +69,7 @@ function ProgressBar({ currentStep }: ProgressBarProps) {
           {/* линия — отступ сверху на половину кружка (50/2=25px) */}
           {index < stepsNumAndLabel.length - 1 && (
             <div
-              className={`flex-1 h-px mt-6.25 ${step.num < currentStep ? "bg-(--border-hover-btn)" : "bg-(--bg-border)"}`}
+              className={`xl:flex-1 xl:h-px xl:mt-6.25 ${step.num < currentStep ? "xl:bg-(--border-hover-btn)" : "xl:bg-(--bg-border)"}`}
             />
           )}
         </Fragment>

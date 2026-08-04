@@ -6,7 +6,7 @@ import getStatusTitle, {
   buildStatusLabelMap,
 } from "../../../utils/ticketBadgeHelpers";
 
-import StatusDropdown from "../../ui/StaturDropdown";
+import StatusDropdown from "../../ui/StatusDropdown";
 
 import { textPressAnimationStyle } from "../../../styles/pressAnimation";
 
@@ -44,12 +44,12 @@ function TicketHeaderInfo({
 
     // Header
     <div
-      className={`w-full flex flex-col items-start gap-1 px-12.5 ${className}`}
+      className={`xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-1 xl:px-12.5 ${className}`}
     >
       {/* Title ticket */}
-      <div className="w-full flex justify-start items-center gap-2">
+      <div className="xl:w-full xl:flex xl:justify-start xl:items-center xl:gap-2">
         {/* Icon */}
-        <button className="cursor-pointer">
+        <button className="xl:cursor-pointer">
           <FavoriteTicketIcon
             ticketId={ticket.ticketId}
             favoriteTickets={favoriteTickets}
@@ -57,8 +57,8 @@ function TicketHeaderInfo({
           />
         </button>
         {/* Title, status, priority */}
-        <div className=" w-full flex justify-start items-center gap-3 py-3">
-          <span className="font-jbmono font-medium text-[15px] text-(--text-primary) leading-6">
+        <div className="xl:w-full xl:flex xl:justify-start xl:items-center xl:gap-3 xl:py-3">
+          <span className="xl:font-jbmono xl:font-medium xl:text-[15px] xl:text-(--text-primary) xl:leading-6">
             {ticket.title}
           </span>
 
@@ -80,21 +80,13 @@ function TicketHeaderInfo({
             </div>
           )}
 
-          <div
-            className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5
-            bg-(--text-primary) text-(--bg-primary) text-xs
-            dark:bg-transparent dark:border dark:border-(--text-tertiary) dark:text-(--text-tertiary)
-            rounded-xs font-jbmono font-bold leading-3 select-none"
-          >
+          <div className="xl:h-5 xl:flex xl:justify-center xl:items-center xl:px-2 xl:py-1.5 xl:gap-2.5 xl:bg-(--text-primary) xl:text-(--bg-primary) xl:text-xs xl:dark:bg-transparent xl:dark:border xl:dark:border-(--text-tertiary) xl:dark:text-(--text-tertiary) xl:rounded-xs xl:font-jbmono xl:font-bold xl:leading-3 xl:select-none">
             {getPriorityTitle(ticket.priority)}
           </div>
         </div>
       </div>
       {/* Ticket meta info */}
-      <div
-        className="w-full flex justify-start items-center gap-1
-            font-consolas font-normal text-[11px] text-(--text-secondary) leading-4"
-      >
+      <div className="xl:w-full xl:flex xl:justify-start xl:items-center xl:gap-1 xl:font-consolas xl:font-normal xl:text-[11px] xl:text-(--text-secondary) xl:leading-4">
         <span>ID:</span>
         <span
           onClick={() => {
@@ -109,7 +101,7 @@ function TicketHeaderInfo({
       </div>
 
       {modalMode === "edit" ? (
-        <div className="w-full h-px bg-(--bg-disable-btn) mt-2"></div>
+        <div className="xl:w-full xl:h-px xl:bg-(--bg-disable-btn) xl:mt-2"></div>
       ) : null}
     </div>
   );

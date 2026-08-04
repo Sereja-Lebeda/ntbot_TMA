@@ -15,35 +15,29 @@ function TicketAttachmentsView({ files }: TicketAttachmentsViewProps) {
   return (
     <div>
       {files.length === 0 ? (
-        <div className="w-full">Файлы не прикреплены</div>
+        <div className="xl:w-full">Файлы не прикреплены</div>
       ) : (
-        <div className="w-full flex justify-start gap-5 overflow-x-auto overscroll-contain dropdown-scroll ">
+        <div className="xl:w-full xl:flex xl:justify-start xl:gap-5 xl:overflow-x-auto xl:overscroll-contain xl:dropdown-scroll">
           {files.map((attached) => (
             <div
               key={`${attached.name}-${attached.url}`}
-              className="w-47 h-53
-              flex flex-col items-center
-              border-[0.8px] border-(--bg-border) rounded-xs
-              group shrink-0"
+              className="xl:w-47 xl:h-53 xl:flex xl:flex-col xl:items-center xl:border-[0.8px] xl:border-(--bg-border) xl:rounded-xs xl:group xl:shrink-0"
             >
               {/* Image */}
-              <div
-                className="relative w-full h-37.25 overflow-hidden rounded-xs
-                flex justify-center items-center"
-              >
+              <div className="xl:relative xl:w-full xl:h-37.25 xl:overflow-hidden xl:rounded-xs xl:flex xl:justify-center xl:items-center">
                 {isImageFile(attached.name) ? (
                   <img
                     src={attached.url}
-                    className={`w-full h-full object-cover
-                      group-hover:scale-115 ${hoverAnimationStyle} cursor-default!`}
+                    className={`xl:w-full xl:h-full xl:object-cover
+                      xl:group-hover:scale-115 ${hoverAnimationStyle} xl:cursor-default!`}
                   />
                 ) : (
                   (() => {
                     const Icon = getFileIcon(attached.name);
                     return (
                       <Icon
-                        className={`w-1/2 h-1/2
-                        group-hover:scale-115 ${hoverAnimationStyle} cursor-default!`}
+                        className={`xl:w-1/2 xl:h-1/2
+                        xl:group-hover:scale-115 ${hoverAnimationStyle} xl:cursor-default!`}
                       />
                     );
                   })()
@@ -51,15 +45,11 @@ function TicketAttachmentsView({ files }: TicketAttachmentsViewProps) {
               </div>
 
               {/* Image info */}
-              <div
-                className="w-47 h-15.75 p-3 gap-2.5
-                flex flex-col justify-center items-start
-                font-consolas font-normal"
-              >
-                <span className="w-full h-full text-xs text-(--text-primary) leading-3 truncate">
+              <div className="xl:w-47 xl:h-15.75 xl:p-3 xl:gap-2.5 xl:flex xl:flex-col xl:justify-center xl:items-start xl:font-consolas xl:font-normal">
+                <span className="xl:w-full xl:h-full xl:text-xs xl:text-(--text-primary) xl:leading-3 xl:truncate">
                   {attached.name}
                 </span>
-                <span className="text-[11px] text-(--text-secondary) leading-4">
+                <span className="xl:text-[11px] xl:text-(--text-secondary) xl:leading-4">
                   {new Date(attached.uploadedAt).toLocaleString()}
                 </span>
               </div>

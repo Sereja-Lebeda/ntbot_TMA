@@ -14,7 +14,7 @@ function ToggleBtn() {
   const { theme } = useContext(ThemeContext);
 
   return (
-    <div className="flex items-center cursor-pointer select-none">
+    <div className="xl:flex xl:items-center xl:cursor-pointer xl:select-none">
       {theme === "light" ? <ToggleDarkIcon /> : <ToggleLightIcon />}
     </div>
   );

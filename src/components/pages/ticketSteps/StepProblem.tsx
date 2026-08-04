@@ -65,32 +65,32 @@ function StepProblem({
 
   // console.log(categoryActions, subcategories);
   return (
-    <div className="w-full">
+    <div className="xl:w-full">
       {/* Header */}
-      <div className="w-full flex flex-col items-center gap-4 mb-7 select-none">
+      <div className="xl:w-full xl:flex xl:flex-col xl:items-center xl:gap-4 xl:mb-7 xl:select-none">
         {/* Category name and icon */}
-        <div className="flex justify-center items-center gap-3">
+        <div className="xl:flex xl:justify-center xl:items-center xl:gap-3">
           <img
             src={
               theme === "light" ? categoryData?.iconLight : categoryData?.icon
             }
             alt=""
-            className="bg-(--text-primary) rounded-xs w-5 h-5"
+            className="xl:bg-(--text-primary) xl:rounded-xs xl:w-5 xl:h-5"
           />
-          <span className="font-jbmono font-normal text-xl text-(--text-primary) tracking-[0.8px]">
+          <span className="xl:font-jbmono xl:font-normal xl:text-xl xl:text-(--text-primary) xl:tracking-[0.8px]">
             {selectedCategory}
           </span>
         </div>
 
         {/* Text hint */}
         <div>
-          <span className="font-consolas font-normal text-sm text-(--text-secondary) leading-normal">
+          <span className="xl:font-consolas xl:font-normal xl:text-sm xl:text-(--text-secondary) xl:leading-normal">
             Выберите проблему или найдите через поиск
           </span>
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-7">
+      <div className="xl:w-full xl:flex xl:flex-col xl:gap-7">
         {/* //TODO: Add debounce after connection to BD */}
         <Searchbar
           searchRequest={searchQuery}
@@ -99,8 +99,8 @@ function StepProblem({
           ref={inputRef}
         />
         {/* Subcategory containter */}
-        <div className="w-full flex">
-          <div className={`w-full flex flex-col gap-3`}>
+        <div className="xl:w-full xl:flex">
+          <div className="xl:w-full xl:flex xl:flex-col xl:gap-3">
             {subcategories.map((sub) => {
               // действия этой подкатегории
               const subActions = filteredActions.filter(
@@ -111,42 +111,42 @@ function StepProblem({
 
               return (
                 <div
-                  className={`w-full flex flex-col justify-start bg-(--bg-secondary) px-5 py-4 transition-transform duration-900 border border-(--bg-border) cursor-pointer ${isOpen ? "border-(--border-hover-btn)!" : "hover:border-(--border-hover-btn)"}`}
+                  className={`xl:w-full xl:flex xl:flex-col xl:justify-start xl:bg-(--bg-secondary) xl:px-5 xl:py-4 xl:transition-transform xl:duration-900 xl:border xl:border-(--bg-border) xl:cursor-pointer ${isOpen ? "xl:border-(--border-hover-btn)!" : "xl:hover:border-(--border-hover-btn)"}`}
                   key={sub}
                   onClick={() => toggleSubcategory(sub)}
                 >
                   {/* Заголовок аккордеона */}
                   <div
-                    className={`w-full flex justify-between items-center ${isOpen ? "pb-6" : ""}`}
+                    className={`xl:w-full xl:flex xl:justify-between xl:items-center ${isOpen ? "xl:pb-6" : ""}`}
                   >
-                    <div className="space-x-2 select-none">
-                      <span className="font-jbmono font-normal text-sm text-(--text-primary) tracking-[0.8px]">
+                    <div className="xl:space-x-2 xl:select-none">
+                      <span className="xl:font-jbmono xl:font-normal xl:text-sm xl:text-(--text-primary) xl:tracking-[0.8px]">
                         {sub}
                       </span>
-                      <span className="font-jbmono font-light text-sm text-(--text-primary) tracking-[0.8px]">
+                      <span className="xl:font-jbmono xl:font-light xl:text-sm xl:text-(--text-primary) xl:tracking-[0.8px]">
                         [{subActions.length}]{/* стрелка-индикатор */}
                       </span>
                     </div>
                     <ArrowIcon
-                      className={`text-(--text-secondary) transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`}
+                      className={`xl:text-(--text-secondary) xl:transition-transform xl:duration-300 ${isOpen ? "" : "xl:rotate-180"}`}
                     />
                   </div>
 
                   {/* Список действий — если открыт */}
                   {isOpen && (
-                    <div className="w-full space-y-2">
+                    <div className="xl:w-full xl:space-y-2">
                       {subActions.map((action) => (
                         <div
-                          className="bg-(--text-primary) rounded-xs select-none"
+                          className="xl:bg-(--text-primary) xl:rounded-xs xl:select-none"
                           key={action.id}
                         >
                           <div
                             // TODO: Узнать будет ли фиксированное количество и скролл бар, чтобы сделать анимацию через высоту
-                            className={`w-full py-5 px-4 rounded-xs
-                              bg-(--bg-secondary)
-                              border border-(--border-hover-btn) cursor-pointer
-                              hover:text-(--text-primary)
-                            font-consolas font-bold text-sm text-(--text-tertiary) leading-4.5
+                            className={`xl:w-full xl:py-5 xl:px-4 xl:rounded-xs
+                              xl:bg-(--bg-secondary)
+                              xl:border border-(--border-hover-btn) xl:cursor-pointer
+                              xl:hover:text-(--text-primary)
+                            xl:font-consolas xl:font-bold xl:text-sm xl:text-(--text-tertiary) xl:leading-4.5
                             ${shadowLiftCategoryStyle}
                             `}
                             onClick={() => {
@@ -166,11 +166,11 @@ function StepProblem({
           </div>
         </div>
         <button
-          className="flex items-center justify-start gap-1 rounded-xs group cursor-pointer select-none pb-4"
+          className="xl:flex xl:items-center xl:justify-start xl:gap-1 xl:rounded-xs xl:group xl:cursor-pointer xl:select-none xl:pb-4"
           onClick={onPrev}
         >
-          <BackArrowIcon className="text-(--text-secondary) group-hover:text-(--text-primary)" />
-          <span className="font-jbmono font-medium text-(--text-secondary) text-xs leading-normal group-hover:text-(--text-primary)">
+          <BackArrowIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)" />
+          <span className="xl:font-jbmono xl:font-medium xl:text-(--text-secondary) xl:text-xs xl:leading-normal xl:group-hover:text-(--text-primary)">
             Назад
           </span>
         </button>

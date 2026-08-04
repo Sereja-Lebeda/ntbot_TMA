@@ -305,7 +305,7 @@ export default function HeroSector({
 
   return (
     <div
-      className={`relative flex-1 max-w-225 min-w-130 h-246 flex flex-col items-center  rounded-xs border border-(--bg-border) bg-(--bg-primary-second) m-3 p-5 ${className} `}
+      className={`xl:relative xl:flex-1 xl:max-w-225 xl:min-w-130 xl:h-246 xl:flex xl:flex-col xl:items-center xl:rounded-xs xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:m-3 xl:p-5 ${className} `}
     >
       {activeModal?.type === "cancel" && (
         <ConfirmModal
@@ -368,7 +368,7 @@ export default function HeroSector({
       )}
 
       {/* Searchbar and icons for sort */}
-      <div className="w-full flex items-center gap-2 mb-3.5 p-1">
+      <div className="xl:w-full xl:flex xl:items-center xl:gap-2 xl:mb-3.5 xl:p-1">
         <Searchbar
           searchRequest={searchQuery}
           setSearchRequest={setSearchQuery}
@@ -376,7 +376,7 @@ export default function HeroSector({
           className={hoverAnimationStyle}
         />
         {/* Row of buttons */}
-        <div className="flex justify-center items-center gap-1">
+        <div className="xl:flex xl:justify-center xl:items-center xl:gap-1">
           <SearchMenuBtn
             onClick={() => setShowFavorites(!showFavorites)}
             icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
@@ -388,7 +388,7 @@ export default function HeroSector({
                 ticketView === "my" ? (
                   <UserIcon />
                 ) : (
-                  <ManagerIcon className="text-(--bg-btn-primary)" />
+                  <ManagerIcon className="xl:text-(--bg-btn-primary)" />
                 )
               }
               onClick={() => {
@@ -401,7 +401,7 @@ export default function HeroSector({
           <SearchMenuBtn
             icon={
               sortOldToNew ? (
-                <TimeSortActiveIcon className="text-(--bg-btn-primary)" />
+                <TimeSortActiveIcon className="xl:text-(--bg-btn-primary)" />
               ) : (
                 <TimeSortIcon />
               )
@@ -414,9 +414,9 @@ export default function HeroSector({
               sortByStatus === "default" ? (
                 <PrioritySortIcon />
               ) : sortByStatus === "new" ? (
-                <PriorityNewSortIcon className="text-(--bg-btn-primary)" />
+                <PriorityNewSortIcon className="xl:text-(--bg-btn-primary)" />
               ) : (
-                <PriorityCompleteSortIcon className="text-(--bg-btn-primary)" />
+                <PriorityCompleteSortIcon className="xl:text-(--bg-btn-primary)" />
               )
             }
             onClick={() => changePrioritySort()}
@@ -428,13 +428,13 @@ export default function HeroSector({
               resetFilters();
             }}
             isActive={hasActiveFilters}
-            inactiveClassName="bg-(--bg-border) dark:bg-(--bg-inactive-btn)"
+            inactiveClassName="xl:bg-(--bg-border) xl:dark:bg-(--bg-inactive-btn)"
           />
         </div>
       </div>
 
       {/* Ticket cards */}
-      <div className="overflow-y-auto scrollbar-none w-full flex flex-1 flex-col justify-start items-center gap-2 select-none p-1">
+      <div className="xl:overflow-y-auto xl:scrollbar-none xl:w-full xl:flex xl:flex-1 xl:flex-col xl:justify-start xl:items-center xl:gap-2 xl:select-none xl:p-1">
         {tickets
           // Filter by Searchbar
           .filter((ticket) => ticketMatchesSearch(ticket, searchQuery))

@@ -95,13 +95,13 @@ export default function TicketCard({
     //todo: make auto "yes" answer after 48h if user didnt choose
     if (status === "Complete") {
       return (
-        <div className="flex items-center gap-2 font-jbmono">
-          <span className="text-(--text-primary)  text-xs font-medium leading-3 select-none">
+        <div className="xl:flex xl:items-center xl:gap-2 xl:font-jbmono">
+          <span className="xl:text-(--text-primary) xl:text-xs xl:font-medium xl:leading-3 xl:select-none">
             Заявка выполнена?
           </span>
           <div className={`${baseStyle} `}>
             <button
-              className="h-6 bg-(--bg-task-complete) dark:bg-(--bg-btn-primary) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
+              className="xl:h-6 xl:bg-(--bg-task-complete) xl:dark:bg-(--bg-btn-primary) xl:flex xl:items-center xl:px-1.5 xl:py-0.5 xl:gap-1 xl:rounded-xs xl:select-none xl:cursor-pointer xl:hover:bg-(--text-primary) xl:group"
               onClick={() =>
                 setTickets((prev) =>
                   prev.map((t) =>
@@ -112,14 +112,14 @@ export default function TicketCard({
                 )
               }
             >
-              <CheckIcon className="text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
-              <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
+              <CheckIcon className="xl:text-(--text-primary) xl:group-hover:text-(--bg-primary) xl:dark:text-(--bg-primary)" />
+              <span className="xl:font-bold xl:leading-3 xl:text-xs xl:text-(--text-primary) xl:group-hover:text-(--bg-primary) xl:dark:text-(--bg-primary)">
                 Да
               </span>
             </button>
             <button
               // onClick={() => }
-              className="h-6 bg-(--bg-task-cancelled) dark:bg-(--bg-task-cancelled) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
+              className="xl:h-6 xl:bg-(--bg-task-cancelled) xl:dark:bg-(--bg-task-cancelled) xl:flex xl:items-center xl:px-1.5 xl:py-0.5 xl:gap-1 xl:rounded-xs xl:select-none xl:cursor-pointer xl:hover:bg-(--text-primary) xl:group"
               onClick={() =>
                 setTickets((prev) =>
                   prev.map((t) =>
@@ -130,8 +130,8 @@ export default function TicketCard({
                 )
               }
             >
-              <CrossIcon className="w-2.5 h-2.5 text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
-              <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
+              <CrossIcon className="xl:w-2.5 xl:h-2.5 xl:text-(--text-primary) xl:group-hover:text-(--bg-primary) xl:dark:text-(--bg-primary)" />
+              <span className="xl:font-bold xl:leading-3 xl:text-xs xl:text-(--text-primary) xl:group-hover:text-(--bg-primary) xl:dark:text-(--bg-primary)">
                 Нет
               </span>
             </button>
@@ -159,18 +159,18 @@ export default function TicketCard({
               <CardActionButton
                 key={key}
                 onClick={onClick}
-                className="cursor-pointer"
+                className="xl:cursor-pointer"
               >
                 <Icon />
               </CardActionButton>
             );
           })}
-        <CardActionButton className="cursor-pointer">
+        <CardActionButton className="xl:cursor-pointer">
           {favoriteBtn}
         </CardActionButton>
         {statusActions[status].includes("telegram") && (
           <CardActionButton onClick={actionRegistry.telegram.onClick}>
-            <TelegramIcon className="text-(--text-tertiary) cursor-pointer" />
+            <TelegramIcon className="xl:text-(--text-tertiary) xl:cursor-pointer" />
           </CardActionButton>
         )}
       </div>
@@ -180,33 +180,33 @@ export default function TicketCard({
   return (
     <div
       onClick={() => handleOpenView(ticket.ticketId)}
-      className={` w-full px-5 py-3 gap-2 rounded-xs cursor-pointer
-        flex flex-col justify-between items-start
-      ${ticketView === "my" ? "h-38" : "h-47 "}
+      className={`xl:w-full xl:px-5 xl:py-3 xl:gap-2 xl:rounded-xs xl:cursor-pointer
+        xl:flex xl:flex-col xl:justify-between xl:items-start
+      ${ticketView === "my" ? "xl:h-38" : "xl:h-47 "}
       ${shadowLiftCardStyle}
-      bg-(--bg-secondary) border border-(--bg-border)
-      hover:border-(--text-tertiary)
-      relative select-none shrink-0
+      xl:bg-(--bg-secondary) xl:border border-(--bg-border)
+      xl:hover:border-(--text-tertiary)
+      xl:relative xl:select-none xl:shrink-0
       `}
     >
       {/* Title, dep, employee name and Meta info as manager*/}
       {ticketView === "team" ? (
-        <div className="w-full flex flex-col gap-2">
+        <div className="xl:w-full xl:flex xl:flex-col xl:gap-2">
           {/* Строка 1: имя/отдел и ID/дата */}
-          <div className="w-full flex justify-between items-center">
-            <div className="flex items-center gap-2 text-(--text-secondary) text-xs font-jbmono font-medium leading-3">
+          <div className="xl:w-full xl:flex xl:justify-between xl:items-center">
+            <div className="xl:flex xl:items-center xl:gap-2 xl:text-(--text-secondary) xl:text-xs xl:font-jbmono xl:font-medium xl:leading-3">
               {ticket.userName}
               <span>|</span>
               {ticket.department}
             </div>
-            <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">
+            <div className="xl:w-auto xl:flex xl:items-center xl:font-jbmono xl:text-(--text-secondary) xl:text-xs xl:font-medium xl:leading-3 xl:gap-2 xl:select-none">
               <span>ID: </span>
               <div
                 onClick={(e) => {
                   e.stopPropagation();
                   navigator.clipboard.writeText(ticket.ticketId.toString());
                 }}
-                className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
+                className={`xl:flex xl:gap-1.5 xl:hover:text-(--text-primary) ${textPressAnimationStyle}`}
               >
                 {ticket.ticketId}
               </div>
@@ -215,36 +215,36 @@ export default function TicketCard({
             </div>
           </div>
           {/* Строка 2: заголовок */}
-          <div className="flex flex-1 items-center gap-1.5 min-w-0">
-            <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer truncate">
+          <div className="xl:flex xl:flex-1 xl:items-center xl:gap-1.5 xl:min-w-0">
+            <div className="xl:text-(--text-primary) xl:font-jbmono xl:text-[15px] xl:font-medium xl:leading-6 xl:select-none xl:cursor-pointer xl:truncate">
               {ticket.title}
             </div>
             {ticket.attachedFiles.length > 0 && (
-              <AttachIcon className="shrink-0" />
+              <AttachIcon className="xl:shrink-0" />
             )}
           </div>
         </div>
       ) : (
         // Title and Meta info as user
-        <div className="w-full flex justify-between items-center py-0.5">
+        <div className="xl:w-full xl:flex xl:justify-between xl:items-center xl:py-0.5">
           {/* title */}
-          <div className="flex flex-1 items-center gap-1.5 min-w-0">
-            <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer truncate">
+          <div className="xl:flex xl:flex-1 xl:items-center xl:gap-1.5 xl:min-w-0">
+            <div className="xl:text-(--text-primary) xl:font-jbmono xl:text-[15px] xl:font-medium xl:leading-6 xl:select-none xl:cursor-pointer xl:truncate">
               {ticket.title}
             </div>
             {ticket.attachedFiles.length > 0 && (
-              <AttachIcon className="shrink-0" />
+              <AttachIcon className="xl:shrink-0" />
             )}
           </div>
           {/* meta info */}
-          <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">
+          <div className="xl:w-auto xl:flex xl:items-center xl:font-jbmono xl:text-(--text-secondary) xl:text-xs xl:font-medium xl:leading-3 xl:gap-2 xl:select-none">
             <span>ID: </span>
             <div
               onClick={(e) => {
                 e.stopPropagation();
                 navigator.clipboard.writeText(ticket.ticketId.toString());
               }}
-              className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
+              className={`xl:flex xl:gap-1.5 xl:hover:text-(--text-primary) ${textPressAnimationStyle}`}
             >
               {ticket.ticketId}
             </div>
@@ -255,26 +255,21 @@ export default function TicketCard({
       )}
 
       {/* Description */}
-      <div className="w-full flex-1 h-10 text-(--text-secondary) text-sm font-consolas font-normal leading-5 line-clamp-2 select-none">
+      <div className="xl:w-full xl:flex-1 xl:h-10 xl:text-(--text-secondary) xl:text-sm xl:font-consolas xl:font-normal xl:leading-5 xl:line-clamp-2 xl:select-none">
         {ticket.description}
       </div>
 
       {/* Status, priorirty, category, icons */}
-      <div className="w-full py-2 flex justify-between items-center">
+      <div className="xl:w-full xl:py-2 xl:flex xl:justify-between xl:items-center">
         {/* Status, priorirty, category */}
-        <div className="flex items-center gap-3 font-jbmono text-xs">
+        <div className="xl:flex xl:items-center xl:gap-3 xl:font-jbmono xl:text-xs">
           <div className={getStatusColor(ticket.status)}>
             {getStatusTitle(ticket.status, "singular")}
           </div>
-          <div
-            className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5
-            bg-(--text-primary) text-(--bg-primary)
-            dark:bg-transparent dark:border dark:border-(--text-tertiary) dark:text-(--text-tertiary)
-            rounded-xs font-bold leading-3 select-none"
-          >
+          <div className="xl:h-5 xl:flex xl:justify-center xl:items-center xl:px-2 xl:py-1.5 xl:gap-2.5 xl:bg-(--text-primary) xl:text-(--bg-primary) xl:dark:bg-transparent xl:dark:border xl:dark:border-(--text-tertiary) xl:dark:text-(--text-tertiary) xl:rounded-xs xl:font-bold xl:leading-3 xl:select-none">
             {getPriorityTitle(ticket.priority)}
           </div>
-          <div className="h-6 flex justify-center items-center py-1.5 gap-2.5 font-medium leading-3 text-(--text-tertiary) select-none">
+          <div className="xl:h-6 xl:flex xl:justify-center xl:items-center xl:py-1.5 xl:gap-2.5 xl:font-medium xl:leading-3 xl:text-(--text-tertiary) xl:select-none">
             {ticket.breadcrumbs[0]}
           </div>
         </div>

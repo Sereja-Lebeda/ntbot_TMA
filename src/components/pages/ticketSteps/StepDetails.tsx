@@ -103,25 +103,19 @@ function StepDetails({
 
   // console.log({ multiData });
   return (
-    <div className="w-full">
+    <div className="xl:w-full">
       {/* Header */}
-      <div className="w-full flex flex-col items-center gap-4 mb-7 select-none">
+      <div className="xl:w-full xl:flex xl:flex-col xl:items-center xl:gap-4 xl:mb-7 xl:select-none">
         {/* Hint */}
-        <span className="font-jbmono font-normal text-xl text-(--text-primary) leading-5 tracking-[0.8px]">
+        <span className="xl:font-jbmono xl:font-normal xl:text-xl xl:text-(--text-primary) xl:leading-5 xl:tracking-[0.8px]">
           Заполните форму
         </span>
       </div>
-      <div
-        className="w-full flex flex-col justify-center items-center gap-8 p-12.5
-      bg-(--bg-secondary) border border-(--bg-border) select-none"
-      >
+      <div className="xl:w-full xl:flex xl:flex-col xl:justify-center xl:items-center xl:gap-8 xl:p-12.5 xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:select-none">
         {/* Top of form  */}
-        <div className="w-full flex flex-col items-start gap-2">
+        <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-2">
           {/* Breadcrumps */}
-          <div
-            className="w-full flex items-center gap-3 py-2.5
-          font-jbmono font-normal text-base text-(--text-primary) leading-6"
-          >
+          <div className="xl:w-full xl:flex xl:items-center xl:gap-3 xl:py-2.5 xl:font-jbmono xl:font-normal xl:text-base xl:text-(--text-primary) xl:leading-6">
             {selectedAction.category}
             <ForwardArrowIcon className="" />
             {selectedAction.subcategory}
@@ -130,7 +124,7 @@ function StepDetails({
           </div>
 
           {/* Divider */}
-          <div className="w-full h-px bg-(--bg-border)"></div>
+          <div className="xl:w-full xl:h-px xl:bg-(--bg-border)"></div>
         </div>
 
         {/* Middle of form - fields */}
@@ -162,7 +156,7 @@ function StepDetails({
             setIsDragging(false);
             addFiles(e.dataTransfer.files);
           }}
-          className="w-full"
+          className="xl:w-full"
         >
           <AttachmentaField
             files={files}
@@ -173,19 +167,19 @@ function StepDetails({
         </div>
 
         {/* Bottom of form - buttons */}
-        <div className="w-full flex flex-col items-start gap-7">
+        <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7">
           {/* Divider */}
-          <div className="w-full h-px bg-(--bg-border)"></div>
+          <div className="xl:w-full xl:h-px xl:bg-(--bg-border)"></div>
 
           {/* Buttons */}
-          <div className="w-full flex justify-between items-center">
+          <div className="xl:w-full xl:flex xl:justify-between xl:items-center">
             {/* Back btn */}
             <button
               onClick={onPrev}
-              className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
+              className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:py-2.25 xl:cursor-pointer xl:group"
             >
-              <BackArrowIcon className="text-(--text-secondary) group-hover:text-(--text-primary)" />
-              <span className="font-jbmono font-medium text-(--text-secondary) text-xs leading-normal group-hover:text-(--text-primary)">
+              <BackArrowIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)" />
+              <span className="xl:font-jbmono xl:font-medium xl:text-(--text-secondary) xl:text-xs xl:leading-normal xl:group-hover:text-(--text-primary)">
                 Назад
               </span>
             </button>
@@ -193,16 +187,15 @@ function StepDetails({
             {/* Send ticket btn */}
             <FunctionBtn
               Icon={SendFormIcon}
-              iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+              iconClassName="xl:w-4.5 xl:h-4.5 xl:text-(--text-btn)"
               text="Отправить заявку"
-              textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
-              btnClassName={`h-8.5
-              flex justify-center items-center
-              enabled:bg-(--bg-btn-primary) disabled:bg-(--bg-disable-btn)
+              textClassName="xl:font-jbmono xl:font-medium xl:text-xs xl:text-(--text-btn) xl:leading-normal"
+              btnClassName={`xl:h-8.5
+              xl:flex xl:justify-center xl:items-center
+              xl:enabled:bg-(--bg-btn-primary) xl:disabled:bg-(--bg-disable-btn)
               ${shadowLiftButtonStyle}
-
               `}
-              innerDivClassName="flex justify-center items-center gap-2 rounded-xs px-4"
+              innerDivClassName="xl:flex xl:justify-center xl:items-center xl:gap-2 xl:rounded-xs xl:px-4"
               onClick={submitForm}
               disabled={isFormInvalid}
             />

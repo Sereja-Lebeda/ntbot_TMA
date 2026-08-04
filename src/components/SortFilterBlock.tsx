@@ -75,9 +75,9 @@ function SortFilterBlock({
     // TODO: delete shrink 0 for adaptive interface?
     <div
       onMouseDown={(e) => e.preventDefault()}
-      className="h-246 w-79 flex flex-col items-center my-3 gap-3 border border-(--bg-border) bg-(--bg-primary-second) rounded-xs shrink-0"
+      className="xl:h-246 xl:w-79 xl:flex xl:flex-col xl:items-center xl:my-3 xl:gap-3 xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:rounded-xs xl:shrink-0"
     >
-      <div className="w-full flex flex-col items-start pt-5 px-2.5">
+      <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:pt-5 xl:px-2.5">
         <DropdownList
           title="Статус"
           isOpen={openDropdownFilter === "Статус"}

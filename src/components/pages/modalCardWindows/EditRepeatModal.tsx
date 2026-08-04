@@ -160,21 +160,19 @@ function EditRepeatModal({
     return createPortal(
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center"
+        className="xl:fixed xl:inset-0 xl:bg-black/50 xl:z-50 xl:flex xl:justify-center xl:items-center"
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="bg-(--bg-secondary) border border-(--bg-border) rounded-xs p-8 text-center flex flex-col gap-4 items-center"
+          className="xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:p-8 xl:text-center xl:flex xl:flex-col xl:gap-4 xl:items-center"
         >
-          <p className="text-(--text-primary) font-jbmono">
+          <p className="xl:text-(--text-primary) xl:font-jbmono">
             У вас нет прав на редактирование этой заявки.<br></br>
             Пожалуйста, обратитесь к администратору.
           </p>
           <button
             onClick={onClose}
-            className="cursor-pointer text-(--text-secondary) hover:text-(--text-primary)
-            font-consolas
-            "
+            className="xl:cursor-pointer xl:text-(--text-secondary) xl:hover:text-(--text-primary) xl:font-consolas"
           >
             Закрыть
           </button>
@@ -363,9 +361,7 @@ function EditRepeatModal({
   return createPortal(
     <div
       onClick={handleCloseAttempt}
-      className="fixed inset-0
-  bg-black/50 z-50
-  flex justify-center items-center"
+      className="xl:fixed xl:inset-0 xl:bg-black/50 xl:z-50 xl:flex xl:justify-center xl:items-center"
     >
       {isConfirmCloseOpen && (
         <ConfirmModal
@@ -387,16 +383,11 @@ function EditRepeatModal({
             (document.activeElement as HTMLElement)?.blur();
           }
         }}
-        className="w-[50vw] max-h-[90vh] flex flex-col items-center gap-4
-      bg-(--bg-secondary) border border-(--bg-border) rounded-xs py-10 select-none
-      "
+        className="xl:w-[50vw] xl:max-h-[90vh] xl:flex xl:flex-col xl:items-center xl:gap-4 xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:py-10 xl:select-none"
       >
         {/* Header */}
         {mode === "edit" ? (
-          <div
-            className="w-full gap-7
-          flex flex-col items-start"
-          >
+          <div className="xl:w-full xl:gap-7 xl:flex xl:flex-col xl:items-start">
             <TicketHeaderInfo
               favoriteTickets={favoriteTickets}
               setFavoriteTickets={setFavoriteTickets}
@@ -411,41 +402,38 @@ function EditRepeatModal({
             />
           </div>
         ) : (
-          <div className="w-full flex flex-col justify-center items-start gap-3 px-12.5">
-            <div className="w-full flex items-center gap-1">
-              <RepeatIcon className="text(--text-secondary) w-4 h-4" />
-              <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-4">{`Повтор заявки #${ticket.ticketId}`}</span>
+          <div className="xl:w-full xl:flex xl:flex-col xl:justify-center xl:items-start xl:gap-3 xl:px-12.5">
+            <div className="xl:w-full xl:flex xl:items-center xl:gap-1">
+              <RepeatIcon className="xl:text(--text-secondary) xl:w-4 xl:h-4" />
+              <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-4">{`Повтор заявки #${ticket.ticketId}`}</span>
             </div>
 
             {/* Divider */}
-            <div className="w-full h-px bg-(--bg-disable-btn)"></div>
+            <div className="xl:w-full xl:h-px xl:bg-(--bg-disable-btn)"></div>
           </div>
         )}
 
         {/* Content */}
-        <div
-          // className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll px-12.5"
-          className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll px-12.5"
-        >
+        <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7 xl:overflow-y-auto xl:dropdown-scroll xl:px-12.5">
           {/* Ticket information */}
-          <div className="w-full flex items-start gap-1">
-            <TicketInfoIcon className="text-(--text-primary)" />
-            <span className="font-jbmono font-normal text-sm text-(--text-primary) leading-5">
+          <div className="xl:w-full xl:flex xl:items-start xl:gap-1">
+            <TicketInfoIcon className="xl:text-(--text-primary)" />
+            <span className="xl:font-jbmono xl:font-normal xl:text-sm xl:text-(--text-primary) xl:leading-5">
               Информация о заявке
             </span>
           </div>
-          <div className="w-full  flex flex-col items-start justify-center gap-8">
-            <div className="w-full flex flex-col items-start gap-2">
-              <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
+          <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:justify-center xl:gap-8">
+            <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-2">
+              <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-3">
                 Категории
               </span>
 
               {mode === "repeat" ? (
-                <div className="flex justify-start items-center gap-2">
+                <div className="xl:flex xl:justify-start xl:items-center xl:gap-2">
                   {ticket.breadcrumbs.map(getBreadcrumb)}
                 </div>
               ) : (
-                <div className="w-full flex flex-col gap-3">
+                <div className="xl:w-full xl:flex xl:flex-col xl:gap-3">
                   <FormDropdown
                     options={categoryOptions}
                     value={selectedCategory ?? ""}
@@ -505,7 +493,7 @@ function EditRepeatModal({
                 setIsDragging(false);
                 addFiles(e.dataTransfer.files);
               }}
-              className="w-full"
+              className="xl:w-full"
             >
               <AttachmentaField
                 files={files}
@@ -517,18 +505,18 @@ function EditRepeatModal({
           )}
 
           {/* Divider */}
-          <div className="w-full h-px bg-(--bg-disable-btn)"></div>
+          <div className="xl:w-full xl:h-px xl:bg-(--bg-disable-btn)"></div>
         </div>
 
         {/* Buttons */}
-        <div className="w-full flex justify-between items-center px-12.5">
+        <div className="xl:w-full xl:flex xl:justify-between xl:items-center xl:px-12.5">
           {/* Back btn */}
           <button
             onClick={handleCloseAttempt}
-            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
+            className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:py-2.25 xl:cursor-pointer xl:group"
           >
-            <CrossIcon className="text-(--text-secondary) group-hover:text-(--text-primary) w-2.25 h-2.25" />
-            <span className="font-jbmono font-medium text-(--text-secondary) text-xs leading-normal group-hover:text-(--text-primary)">
+            <CrossIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary) xl:w-2.25 xl:h-2.25" />
+            <span className="xl:font-jbmono xl:font-medium xl:text-(--text-secondary) xl:text-xs xl:leading-normal xl:group-hover:text-(--text-primary)">
               Отмена
             </span>
           </button>
@@ -536,14 +524,14 @@ function EditRepeatModal({
           {/* Send ticket btn */}
           <FunctionBtn
             Icon={mode === "edit" ? FloppydiskIcon : SendFormIcon}
-            iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+            iconClassName="xl:w-4.5 xl:h-4.5 xl:text-(--text-btn)"
             text={mode === "edit" ? "Сохранить" : "Отправить заявку"}
-            textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
-            innerDivClassName="flex justify-center items-center gap-2"
+            textClassName="xl:font-jbmono xl:font-medium xl:text-xs xl:text-(--text-btn) xl:leading-normal"
+            innerDivClassName="xl:flex xl:justify-center xl:items-center xl:gap-2"
             btnClassName={`
-              h-8.5 px-4 rounded-xs group
+              xl:h-8.5 xl:px-4 xl:rounded-xs xl:group
               ${shadowLiftButtonStyle}
-              enabled:bg-(--bg-btn-primary)
+              xl:enabled:bg-(--bg-btn-primary)
               `}
             onClick={handleSubmit}
             disabled={isFormInvalid}

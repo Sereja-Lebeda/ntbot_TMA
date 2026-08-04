@@ -14,19 +14,16 @@ const Searchbar = forwardRef<HTMLInputElement, searchRequestProps>(
       <div
         // onMouseDown={(e) => e.preventDefault()}
         // onFocus={() => console.log("focus", document.activeElement)}
-        className={`h-10 flex items-center flex-1 px-5 py-3 gap-2 rounded-xs bg-(--bg-secondary) border border-(--bg-border) hover:border-(--border-hover-btn) group ${className} select-none`}
+        className={`xl:h-10 xl:flex xl:items-center xl:flex-1 xl:px-5 xl:py-3 xl:gap-2 xl:rounded-xs xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:hover:border-(--border-hover-btn) xl:group ${className} xl:select-none`}
       >
-        <MagnifyIcon className="w-5 h-5 " />
+        <MagnifyIcon className="xl:w-5 xl:h-5" />
         {/* //TODO: add debounce after connetion to db */}
 
         <input
           ref={ref}
           type="text"
           placeholder="Найти..."
-          className="w-full font-consolas outline-none
-          dark:group-hover:placeholder-(--text-primary)
-          group-hover:placeholder-(--text-primary)
-          placeholder-(--text-secondary) text-(--text-primary)"
+          className="xl:w-full xl:font-consolas xl:outline-none xl:dark:group-hover:placeholder-(--text-primary) xl:group-hover:placeholder-(--text-primary) xl:placeholder-(--text-secondary) xl:text-(--text-primary)"
           value={searchRequest}
           onChange={(e) => setSearchRequest(e.target.value)}
         />

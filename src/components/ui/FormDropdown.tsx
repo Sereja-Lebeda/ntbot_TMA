@@ -40,47 +40,40 @@ function FormDropdown({
       onClick={() => {
         if (!disabled) setIsOpen((prev) => !prev);
       }}
-      className={`relative
-    w-full h-10 flex flex-col justify-center items-start
-    border ${isOpen ? "border-[#E7E6E6]!" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
-    ${hasError ? "border-(--bg-task-error)!" : ""}
-    ${disabled ? "opacity-40" : "cursor-pointer group hover:border-(--border-hover-btn)"}
-    px-4 py-2.5 ${isOpen ? "z-50" : "z-20"}
+      className={`xl:relative
+    xl:w-full xl:h-10 xl:flex xl:flex-col xl:justify-center xl:items-start
+    xl:border ${isOpen ? "xl:border-[#E7E6E6]!" : "xl:border-(--bg-border) xl:hover:border-(--border-hover-btn)"} xl:rounded-xs
+    ${hasError ? "xl:border-(--bg-task-error)!" : ""}
+    ${disabled ? "xl:opacity-40" : "xl:cursor-pointer xl:group xl:hover:border-(--border-hover-btn)"}
+    xl:px-4 xl:py-2.5 ${isOpen ? "xl:z-50" : "xl:z-20"}
     
     `}
     >
       <div
         // onClick={() => setIsOpen(!isOpen)}
-        className="w-full h-full flex justify-between items-center"
+        className="xl:w-full xl:h-full xl:flex xl:justify-between xl:items-center"
       >
         <span
-          className={`flex items-center font-consolas font-normal text-sm
-          ${value ? "text-(--text-primary)" : "text-(--text-secondary)"}
-          group-hover:text-(--text-primary)`}
+          className={`xl:flex xl:items-center xl:font-consolas xl:font-normal xl:text-sm
+          ${value ? "xl:text-(--text-primary)" : "xl:text-(--text-secondary)"}
+          xl:group-hover:text-(--text-primary)`}
         >
           {value || placeholder}
         </span>
         <ArrowIcon
-          className={`transition-all ease-in-out duration-300
-          group-hover:text-(--text-primary)
-          ${isOpen ? "text-(--text-primary)" : "rotate-180 text-(--text-secondary)"}`}
+          className={`xl:transition-all xl:ease-in-out xl:duration-300
+          xl:group-hover:text-(--text-primary)
+          ${isOpen ? "xl:text-(--text-primary)" : "xl:rotate-180 text-(--text-secondary)"}`}
         />
       </div>
 
       {isOpen && (
-        <div
-          className="absolute top-full mt-px -left-px -right-px z-50
-          max-h-50 overflow-y-auto scrollbar-none
-        bg-(--bg-secondary) border border-(--bg-border)"
-        >
+        <div className="xl:absolute xl:top-full xl:mt-px xl:-left-px xl:-right-px xl:z-50 xl:max-h-50 xl:overflow-y-auto xl:scrollbar-none xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border)">
           {options.map((option) => (
             <div
               key={option}
               onClick={() => onChange(option)}
-              className="w-full h-10 flex items-center justify-start px-6 py-2.5
-              font-consolas font-normal text-sm text-(--text-primary) leading-normal
-              border border-(--bg-border)
-              hover:bg-[#1B1B1B]"
+              className="xl:w-full xl:h-10 xl:flex xl:items-center xl:justify-start xl:px-6 xl:py-2.5 xl:font-consolas xl:font-normal xl:text-sm xl:text-(--text-primary) xl:leading-normal xl:border xl:border-(--bg-border) xl:hover:bg-[#1B1B1B]"
             >
               {option}
             </div>

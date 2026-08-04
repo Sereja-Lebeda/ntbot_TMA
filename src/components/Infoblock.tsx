@@ -2,10 +2,7 @@ import { useState } from "react";
 
 import type { UserType } from "../types/user.types";
 import type { StatusType, Ticket } from "../types/ticket.types";
-import {
-  textPressAnimationStyle,
-  // btnPressAnimationStyle,
-} from "../styles/pressAnimation";
+import { textPressAnimationStyle } from "../styles/pressAnimation";
 
 import handleStatusSelect from "../utils/statusSelectedHelper";
 import getStatusTitle, { allStatuses } from "../utils/ticketBadgeHelpers";
@@ -37,15 +34,15 @@ function Infoblock({
   const mockUserInfo = mockUser as UserType;
   const allTickets = mockTicket;
 
-  const baseStyle = "w-full flex items-center px-0.5 gap-2";
+  const baseStyle = "xl:w-full xl:flex xl:items-center xl:px-0.5 xl:gap-2";
   const textStyle =
-    "font-consolas text-sm font-normal text-(--text-secondary) select-none";
+    "xl:font-consolas xl:text-sm xl:font-normal xl:text-(--text-secondary) xl:select-none";
 
   // Style for hints near user info
   const copyHintBase =
-    "rounded-sm ml-auto px-1 transition-opacity duration-600 ease-in-out";
-  const copyHintIpAnimation = `${copyHintBase} ${copiedField === "ip" ? "opacity-100" : "opacity-0"} `;
-  const copyHintPcNameAnimation = `${copyHintBase} ${copiedField === "pcName" ? "opacity-100" : "opacity-0"} `;
+    "xl:rounded-sm xl:ml-auto xl:px-1 xl:transition-opacity xl:duration-600 xl:ease-in-out";
+  const copyHintIpAnimation = `${copyHintBase} ${copiedField === "ip" ? "xl:opacity-100" : "xl:opacity-0"} `;
+  const copyHintPcNameAnimation = `${copyHintBase} ${copiedField === "pcName" ? "xl:opacity-100" : "xl:opacity-0"} `;
 
   const spans = [
     "col-span-2",
@@ -56,7 +53,14 @@ function Infoblock({
     "col-span-3",
   ];
 
-  const plateHeights = ["h-28", "h-28", "h-25", "h-25", "h-18", "h-18"];
+  const plateHeights = [
+    "xl:h-28",
+    "xl:h-28",
+    "xl:h-25",
+    "xl:h-25",
+    "xl:h-18",
+    "xl:h-18",
+  ];
   const ticketStatusOrder = allStatuses;
 
   function getTicketQuantity(ticketList: Ticket[]) {
@@ -83,21 +87,21 @@ function Infoblock({
     // Whole left side
     <div
       onMouseDown={(e) => e.preventDefault()}
-      className="h-246 w-79 flex flex-col items-center my-3 gap-3 shrink-0"
+      className="xl:h-246 xl:w-79 xl:flex xl:flex-col xl:items-center xl:my-3 xl:gap-3 xl:shrink-0"
     >
       {/* Info block  */}
-      <div className="h-223 w-full flex flex-col items-center p-5 pt-5 pb-90 border border-(--bg-border) bg-(--bg-primary-second) rounded-xs gap-3">
+      <div className="xl:h-223 xl:w-full xl:flex xl:flex-col xl:items-center xl:p-5 xl:pt-5 xl:pb-90 xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:rounded-xs xl:gap-3">
         {/* User Info */}
-        <div className="w-69 flex flex-col justify-center items-start px-4 py-6 gap-3 border border-(--bg-border) bg-(--bg-tertiary) rounded-xs select-none">
+        <div className="xl:w-69 xl:flex xl:flex-col xl:justify-center xl:items-start xl:px-4 xl:py-6 xl:gap-3 xl:border xl:border-(--bg-border) xl:bg-(--bg-tertiary) xl:rounded-xs xl:select-none">
           {/* User name */}
-          <div className="h-10 w-full flex items-center px-1 border-b border-(--bg-disable-btn) ">
-            <span className="font-jbmono text-(--text-primary) text-lg font-bold leading-5.5 mb-6">
+          <div className="xl:h-10 xl:w-full xl:flex xl:items-center xl:px-1 xl:border-b xl:border-(--bg-disable-btn)">
+            <span className="xl:font-jbmono xl:text-(--text-primary) xl:text-lg xl:font-bold xl:leading-5.5 xl:mb-6">
               {mockUserInfo.name}
             </span>
           </div>
 
           {/* User pc Info */}
-          <div className="w-full flex flex-col items-start gap-3.5">
+          <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-3.5">
             {/* user ip  */}
             <div
               onClick={() => {
@@ -124,7 +128,7 @@ function Infoblock({
               }}
               className={`${baseStyle} cursor-pointer`}
             >
-              <div className="w-5 h-5 flex justify-center items-center">
+              <div className="xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center">
                 <PcIcon />
               </div>
 
@@ -137,11 +141,8 @@ function Infoblock({
             </div>
             {/* access date  */}
             <div className={baseStyle}>
-              <div className="w-5 h-5 flex justify-center items-center dark:bg-[#A1FF6226] bg-[#71C13B40] rounded-xs">
-                <AccessIcon
-                  className=" text-(--bg-task-complete)
-dark:text-(--bg-btn-primary)"
-                />
+              <div className="xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center xl:dark:bg-[#A1FF6226] xl:bg-[#71C13B40] xl:rounded-xs">
+                <AccessIcon className="xl:text-(--bg-task-complete) xl:dark:text-(--bg-btn-primary)" />
               </div>
               {/* //TODO: Add ternar for access  */}
               <span className={textStyle}>
@@ -152,7 +153,7 @@ dark:text-(--bg-btn-primary)"
         </div>
 
         {/* Status of tickets */}
-        <div className="w-69 grid grid-cols-5 gap-2">
+        <div className="xl:w-69 xl:grid xl:grid-cols-5 xl:gap-2">
           {ticketStatusOrder.map((status, index) => (
             <div key={status} className={`${spans[index]}`}>
               <StatusInfoBtn
@@ -174,7 +175,7 @@ dark:text-(--bg-btn-primary)"
       </div>
 
       {/* // Toggle and telegram block */}
-      <div className="w-full h-full flex justify-center items-center p-5 bg-(--bg-primary-second) border border-(--bg-border) rounded-xs gap-2.5">
+      <div className="xl:w-full xl:h-full xl:flex xl:justify-center xl:items-center xl:p-5 xl:bg-(--bg-primary-second) xl:border xl:border-(--bg-border) xl:rounded-xs xl:gap-2.5">
         <SupportButtons />
       </div>
     </div>

@@ -60,14 +60,14 @@ export default function HomePage() {
       }}
       className=""
     >
-      <div className="flex justify-center max-w-395 mx-auto">
+      <div className="xl:flex xl:justify-center xl:max-w-395 xl:mx-auto">
         <Infoblock
           ticketStatuses={selectedStatuses}
           setTicketStatuses={setSelectedStatuses}
           ticketView={ticketView}
         />
         <HeroSector
-          className={" sticky top-0"}
+          className={"xl:sticky xl:top-0"}
           // searchbar
           inputRef={inputRef}
           searchQuery={keyword}
@@ -115,7 +115,6 @@ export default function HomePage() {
           ticketView={ticketView}
         />
       </div>
-      <p></p>
     </div>
   );
 }
