@@ -215,22 +215,26 @@ export default function TicketCard({
             </div>
           </div>
           {/* Строка 2: заголовок */}
-          <div className="flex flex-1 items-center gap-1.5">
-            <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer">
+          <div className="flex flex-1 items-center gap-1.5 min-w-0">
+            <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer truncate">
               {ticket.title}
             </div>
-            {ticket.attachedFiles.length > 0 && <AttachIcon />}
+            {ticket.attachedFiles.length > 0 && (
+              <AttachIcon className="shrink-0" />
+            )}
           </div>
         </div>
       ) : (
         // Title and Meta info as user
         <div className="w-full flex justify-between items-center py-0.5">
           {/* title */}
-          <div className="flex flex-1 items-center gap-1.5">
-            <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer">
+          <div className="flex flex-1 items-center gap-1.5 min-w-0">
+            <div className="text-(--text-primary) font-jbmono text-[15px] font-medium leading-6 select-none cursor-pointer truncate">
               {ticket.title}
             </div>
-            {ticket.attachedFiles.length > 0 && <AttachIcon />}
+            {ticket.attachedFiles.length > 0 && (
+              <AttachIcon className="shrink-0" />
+            )}
           </div>
           {/* meta info */}
           <div className="w-auto flex items-center font-jbmono text-(--text-secondary) text-xs font-medium leading-3 gap-2 select-none">
