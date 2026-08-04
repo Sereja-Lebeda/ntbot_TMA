@@ -26,37 +26,37 @@ export default function Header({
   const isOnCreatePage = location.pathname === "/tickets/new";
 
   return (
-    <div className="w-full h-18 bg-[#0e0e0e] border-b border-[#201e1e] flex justify-center items-center gap-2.5 px-8 py-7">
-      <div className="w-225 flex justify-between items-center">
+    <div className="xl:w-full xl:h-18 xl:bg-[#0e0e0e] xl:border-b xl:border-[#201e1e] xl:flex xl:justify-center xl:items-center xl:gap-2.5 xl:px-8 xl:py-7">
+      <div className="xl:w-225 xl:flex xl:justify-between xl:items-center">
         {/* Mascoot icon and bot name - Left side*/}
         <div
-          className="flex justify-center items-center gap-4 cursor-pointer"
+          className="xl:flex xl:justify-center xl:items-center xl:gap-4 xl:cursor-pointer"
           onClick={() => navigate("/")}
         >
           <MascootIcon />
-          <p className="text-4xl font-jbmono font-extrabold leading-9 tracking-[1.6px] select-none">
+          <p className="xl:text-4xl xl:font-jbmono xl:font-extrabold xl:leading-9 xl:tracking-[1.6px] xl:select-none">
             NTBot
           </p>
         </div>
 
-        <div className="flex justify-center items-center gap-8">
+        <div className="xl:flex xl:justify-center xl:items-center xl:gap-8">
           {/* Three icons - Right side */}
-          <div className="flex justify-center items-center gap-4">
-            <button className="cursor-pointer">
+          <div className="xl:flex xl:justify-center xl:items-center xl:gap-4">
+            <button className="xl:cursor-pointer">
               <TicketIcon
                 activeSection={activeSection}
                 // setActiveSection={setActiveSection}
                 onClick={() => setActiveSection("tickets")}
               />
             </button>
-            <button className="cursor-pointer">
+            <button className="xl:cursor-pointer">
               <RatingIcon
                 activeSection={activeSection}
                 // setActiveSection={setActiveSection}
                 onClick={() => setActiveSection("rating")}
               />
             </button>
-            <button className="cursor-pointer ">
+            <button className="xl:cursor-pointer">
               <KnowledgeBaseIcon
                 activeSection={activeSection}
                 // setActiveSection={setActiveSection}
@@ -67,15 +67,15 @@ export default function Header({
 
           <FunctionBtn
             Icon={PlusIcon}
-            iconClassName={"w-5 h-5"}
+            iconClassName={"xl:w-5 xl:h-5"}
             text={"Создать заявку"}
             textClassName={
-              "text-sm dark:text-(--bg-primary) text-(--text-primary) font-jbmono font-extrabold select-none"
+              "xl:text-sm xl:dark:text-(--bg-primary) xl:text-(--text-primary) xl:font-jbmono xl:font-extrabold xl:select-none"
             }
-            btnClassName={`h-10 w-47.5  rounded-xs flex justify-center items-center px-6 py-3 gap-2
-              ${shadowLiftButtonStyle}
-              enabled:bg-(--bg-btn-primary)`}
-            innerDivClassName={"flex items-center gap-1"}
+            btnClassName={`xl:h-10 xl:w-47.5 xl:rounded-xs xl:flex xl:justify-center xl:items-center xl:px-6 xl:py-3 xl:gap-2
+              xl:${shadowLiftButtonStyle}
+              xl:enabled:bg-(--bg-btn-primary)`}
+            innerDivClassName={"xl:flex xl:items-center xl:gap-1"}
             onClick={() => navigate("/tickets/new")}
             disabled={isOnCreatePage}
           />
