@@ -27,6 +27,16 @@ export type StatusType =
   | "Closed"
   | "Cancelled";
 
+export const StatusesOfTicket = [
+  "Все",
+  "Новые",
+  "В работе",
+  "На паузе",
+  "Готовы",
+  "Отклонены",
+  "Закрыты",
+];
+
 export interface TicketCardProps {
   ticket: Ticket;
 }

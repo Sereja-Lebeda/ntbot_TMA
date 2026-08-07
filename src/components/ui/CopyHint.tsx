@@ -2,11 +2,11 @@ import CopyHintVectorIcon from "../../icons/infoblock/CopyHintVectorIcon";
 
 function CopyHint() {
   return (
-    <div className="xl:relative xl:w-21.5 xl:h-5 xl:flex xl:items-center">
+    <div className="relative w-21.5 h-5 flex items-center">
       <div>
-        <CopyHintVectorIcon className="xl:absolute xl:-left-1.5 xl:top-1.5" />
+        <CopyHintVectorIcon className="absolute -left-1.5 top-1.5" />
       </div>
-      <span className="xl:font-consolas xl:bg-(--bg-border) xl:text-xs xl:text-(--text-primary) xl:font-normal xl:leading-3 xl:flex xl:items-center xl:p-1 xl:rounded-xs">
+      <span className="font-consolas bg-(--bg-border) text-xs text-(--text-primary) font-normal leading-3 flex items-center p-1 rounded-xs">
         Скопировано
       </span>
     </div>

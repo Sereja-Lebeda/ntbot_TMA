@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useUser from "../hooks/useUser";
+import useSearch from "../hooks/useSearch";
 
 import type {
   Ticket,
@@ -9,21 +10,23 @@ import type {
   StatusType,
 } from "../types/ticket.types";
 
-// import type { UserType } from "../types/user.types";
 import type {
   CategoryNode,
   PriorityLevel,
   Action,
 } from "../types/createTicket.type";
 
+import ConfirmModal from "./pages/modalCardWindows/ConfirmModal";
+import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
+import EditRepeatModal from "./pages/modalCardWindows/EditRepeatModal";
+
 import TicketCard from "./TicketCard";
 import Searchbar from "./ui/Searchbar";
 import SearchMenuBtn from "./ui/Buttons/SearchMenuBtn";
-import ConfirmModal from "./pages/modalCardWindows/ConfirmModal";
-import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
 
 import getStatusTitle from "../utils/ticketBadgeHelpers";
-// import mockUser from "../../mockUserInfo.json";
+import flattenActions from "../utils/flattenActions";
+import getTicketDescription from "../utils/getTicketDescription";
 import mockActionsNested from "../../mockActionsNested.json";
 
 import { hoverAnimationStyle } from "../styles/pressAnimation";
@@ -37,21 +40,17 @@ import PriorityCompleteSortIcon from "../icons/searchmenu/PriorityCompleteSortIc
 import TimeSortIcon from "../icons/searchmenu/TimeSortIcon";
 import TimeSortActiveIcon from "../icons/searchmenu/TimeSortActiveIcon";
 import UserIcon from "../icons/searchmenu/UserIcon";
-import flattenActions from "../utils/flattenActions";
-import getTicketDescription from "../utils/getTicketDescription";
-import EditRepeatModal from "./pages/modalCardWindows/EditRepeatModal";
 
 interface selectedTicketStatusesProps {
   className?: string;
   inputRef: React.RefObject<HTMLInputElement | null>;
-  searchQuery: string;
-  setSearchQuery: (req: string) => void;
 
   ticketStatuses: string[];
   ticketCategories: string[];
   ticketDepartments: string[];
   ticketEmployees: string[];
   setOpenDropdownFilter: (filter: string | null) => void;
+  hasActiveFilters: boolean | undefined;
 
   favoriteTickets: number[];
   setFavoriteTickets: (id: number[]) => void;
@@ -59,7 +58,6 @@ interface selectedTicketStatusesProps {
   setShowFavorites: (show: boolean) => void;
 
   isPrivilegeUser: boolean;
-  // isManager: boolean;
   ticketView: TicketViewType;
   setTicketView: React.Dispatch<React.SetStateAction<TicketViewType>>;
   resetFilters: () => void;
@@ -68,14 +66,13 @@ interface selectedTicketStatusesProps {
   setSortOldToNew: (sortByTime: boolean) => void;
   sortByStatus: string;
   setSortByStatus: (sortByStatus: SortByStatusType) => void;
+  changePrioritySort: () => void;
 
   tickets: Ticket[];
   setTickets: React.Dispatch<React.SetStateAction<Ticket[]>>;
 }
 
 export default function HeroSector({
-  searchQuery,
-  setSearchQuery,
   ticketStatuses,
   ticketCategories,
   ticketDepartments,
@@ -87,22 +84,21 @@ export default function HeroSector({
   showFavorites,
   setShowFavorites,
   isPrivilegeUser,
-  // isManager,
   ticketView,
   setTicketView,
   sortOldToNew,
   setSortOldToNew,
   sortByStatus,
-  setSortByStatus,
   className,
   inputRef,
   tickets,
   setTickets,
+  changePrioritySort,
+  hasActiveFilters,
 }: selectedTicketStatusesProps) {
   const currentUser = useUser();
+  const { searchRequest, setSearchRequest } = useSearch();
 
-  // const [title, id, date, description, status, priority, category] = mock;
-  // const mock = mockData as Ticket[];
   const [activeModal, setActiveModal] = useState<{
     type: "view" | "edit" | "repeat" | "cancel";
     ticketId: number;
@@ -111,7 +107,6 @@ export default function HeroSector({
 
   if (!currentUser) return null;
 
-  // const mockCurrentUser = mockUser as UserType;
   const allActions = flattenActions(mockActionsNested as CategoryNode[]);
 
   const viewedTicket =
@@ -215,17 +210,6 @@ export default function HeroSector({
     ].some((value) => value?.toLowerCase().includes(query.toLowerCase()));
   }
 
-  function changePrioritySort() {
-    switch (sortByStatus) {
-      case "default":
-        return setSortByStatus("new");
-      case "new":
-        return setSortByStatus("complete");
-      case "complete":
-        return setSortByStatus("default");
-    }
-  }
-
   const statusPriority = {
     New: 0,
     "In progress": 1,
@@ -234,13 +218,6 @@ export default function HeroSector({
     Cancelled: 4,
     Complete: 5,
   };
-
-  const hasActiveFilters =
-    ticketStatuses.some((i) => i !== "Все") ||
-    ticketCategories.some((i) => i !== "Все") ||
-    (ticketView === "team" &&
-      (ticketDepartments.some((i) => i !== "Все") ||
-        ticketEmployees.some((i) => i !== "Все")));
 
   const inputText =
     "Вы уверены, что хотите отменить заявку?\n\nЗаново запустить её в работу будет невозможно.";
@@ -370,8 +347,8 @@ export default function HeroSector({
       {/* Searchbar and icons for sort */}
       <div className="xl:w-full xl:flex xl:items-center xl:gap-2 xl:mb-3.5 xl:p-1">
         <Searchbar
-          searchRequest={searchQuery}
-          setSearchRequest={setSearchQuery}
+          searchRequest={searchRequest}
+          setSearchRequest={setSearchRequest}
           ref={inputRef}
           className={hoverAnimationStyle}
         />
@@ -437,7 +414,7 @@ export default function HeroSector({
       <div className="xl:overflow-y-auto xl:scrollbar-none xl:w-full xl:flex xl:flex-1 xl:flex-col xl:justify-start xl:items-center xl:gap-2 xl:select-none xl:p-1">
         {tickets
           // Filter by Searchbar
-          .filter((ticket) => ticketMatchesSearch(ticket, searchQuery))
+          .filter((ticket) => ticketMatchesSearch(ticket, searchRequest))
           // Filter by filter side layout
           .filter(
             (ticket) =>

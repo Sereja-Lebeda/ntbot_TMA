@@ -136,7 +136,7 @@ function ViewTicketModal({
         {/* Divider */}
         <div className="xl:w-full xl:h-px xl:bg-(--bg-disable-btn) xl:my-3"></div>
         {/* Ticket header and content */}
-        <div className="xl:w-full xl:gap-7 xl:px-12.5 xl:flex xl:flex-col xl:items-start xl:overflow-y-auto xl:dropdown-scroll">
+        <div className="xl:w-full xl:gap-7 xl:px-12.5 xl:flex xl:flex-col xl:items-start xl:overflow-y-auto dropdown-scroll">
           <TicketHeaderInfo
             favoriteTickets={favoriteTickets}
             setFavoriteTickets={setFavoriteTickets}

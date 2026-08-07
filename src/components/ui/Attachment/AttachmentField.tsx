@@ -102,7 +102,7 @@ function AttachmentaField({
         </div>
       ) : (
         // Attachment row / container
-        <div className="xl:w-full xl:flex xl:justify-start xl:gap-5 xl:overflow-x-auto xl:overscroll-contain xl:dropdown-scroll">
+        <div className="xl:w-full xl:flex xl:justify-start xl:gap-5 xl:overflow-x-auto xl:overscroll-contain dropdown-scroll">
           {files.length >= 1 &&
             files.map((attached) => (
               // Single attachment

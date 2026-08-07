@@ -1,36 +1,78 @@
 import { useState, useRef } from "react";
-import type { SortByStatusType, Ticket } from "../../types/ticket.types";
+import type {
+  SortByStatusType,
+  Ticket,
+  TicketViewType,
+} from "../../types/ticket.types";
 import mockData from "../../../mockTicketInfo.json";
 
 import HeroSector from "../HeroSector";
 import Infoblock from "../Infoblock";
 import SortFilterBlock from "../SortFilterBlock";
 import useUser from "../../hooks/useUser";
+import { useOutletContext } from "react-router";
+
+interface TicketFilterContextType {
+  selectedStatuses: string[];
+  setSelectedStatuses: (words: string[]) => void;
+  selectedCategories: string[];
+  setSelectedCategories: (words: string[]) => void;
+  selectedDepartments: string[];
+  setSelectedDepartments: (words: string[]) => void;
+  selectedEmployees: string[];
+  setSelectedEmployees: (words: string[]) => void;
+
+  favoriteTickets: number[];
+  setFavoriteTickets: (number: number[]) => void;
+  showFavorites: boolean;
+  setShowFavorites: (boolean: boolean) => void;
+
+  sortByStatus: SortByStatusType;
+  setSortByStatus: (status: SortByStatusType) => void;
+  sortOldToNew: boolean;
+  setSortOldToNew: (boolean: boolean) => void;
+  ticketView: TicketViewType;
+  setTicketView: React.Dispatch<React.SetStateAction<TicketViewType>>;
+
+  filter: string | null;
+  setFilter: (dropdown: string | null) => void;
+  resetFilters: () => void;
+  changePrioritySort: () => void;
+  hasActiveFilters: boolean | undefined;
+}
 
 export default function HomePage() {
   useUser();
-  const [keyword, setKeyword] = useState("");
-  const [filter, setFilter] = useState<string | null>("Статус"); // какой дроп открыт
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(["Все"]);
-  // const [selectedPeriods, setSelectedPeriods] = useState<string[]>(["Все"]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([
-    "Все",
-  ]);
-  const [selectedDepartments, setSelectedDepartments] = useState<string[]>([
-    "Все",
-  ]);
-  const [selectedEmployees, setSelectedEmployees] = useState<string[]>(["Все"]);
+
+  const {
+    selectedStatuses,
+    setSelectedStatuses,
+    selectedCategories,
+    setSelectedCategories,
+    selectedDepartments,
+    setSelectedDepartments,
+    selectedEmployees,
+    setSelectedEmployees,
+    favoriteTickets,
+    setFavoriteTickets,
+    showFavorites,
+    setShowFavorites,
+    sortOldToNew,
+    setSortOldToNew,
+    sortByStatus,
+    setSortByStatus,
+    ticketView,
+    setTicketView,
+    filter,
+    setFilter,
+    resetFilters,
+    changePrioritySort,
+    hasActiveFilters,
+  } = useOutletContext<TicketFilterContextType>();
 
   const currentUser = useUser();
   const isPrivilegeUser =
     currentUser?.role === "admin" || currentUser?.role === "manager";
-
-  // States for btns near searchbar
-  const [favoriteTickets, setFavoriteTickets] = useState<number[]>([]);
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [sortOldToNew, setSortOldToNew] = useState(false);
-  const [sortByStatus, setSortByStatus] = useState<SortByStatusType>("default");
-  const [ticketView, setTicketView] = useState<"my" | "team">("my");
 
   // States for btns "yes/no" for complete tickets
   const [tickets, setTickets] = useState<Ticket[]>(
@@ -38,13 +80,6 @@ export default function HomePage() {
   );
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  function resetFilters() {
-    setSelectedStatuses(["Все"]);
-    setSelectedCategories(["Все"]);
-    setSelectedDepartments(["Все"]);
-    setSelectedEmployees(["Все"]);
-  }
 
   return (
     <div
@@ -70,8 +105,6 @@ export default function HomePage() {
           className={"xl:sticky xl:top-0"}
           // searchbar
           inputRef={inputRef}
-          searchQuery={keyword}
-          setSearchQuery={setKeyword}
           // filters for tickets
           ticketStatuses={selectedStatuses}
           ticketCategories={selectedCategories}
@@ -79,6 +112,7 @@ export default function HomePage() {
           ticketEmployees={selectedEmployees}
           resetFilters={resetFilters}
           setOpenDropdownFilter={setFilter}
+          hasActiveFilters={hasActiveFilters}
           // favorite btn
           favoriteTickets={favoriteTickets}
           setFavoriteTickets={setFavoriteTickets}
@@ -93,6 +127,8 @@ export default function HomePage() {
           setSortOldToNew={setSortOldToNew}
           sortByStatus={sortByStatus}
           setSortByStatus={setSortByStatus}
+          //sort function
+          changePrioritySort={changePrioritySort}
           //yes-no btns for complete ticket
           tickets={tickets}
           setTickets={setTickets}

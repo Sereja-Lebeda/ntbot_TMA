@@ -206,7 +206,7 @@ function TicketForm({
                 clearError(field.name);
               }}
               placeholder={field.placeholder}
-              className="xl:w-full xl:min-h-20 xl:max-h-60 xl:font-consolas xl:font-normal xl:text-sm xl:leading-normal xl:outline-none xl:placeholder:text-(--text-secondary) xl:group-hover:placeholder:text-(--text-primary) xl:text-(--text-primary) xl:resize-none xl:overscroll-contain xl:dropdown-scroll xl:field-sizing-content"
+              className="xl:w-full xl:min-h-20 xl:max-h-60 xl:font-consolas xl:font-normal xl:text-sm xl:leading-normal xl:outline-none xl:placeholder:text-(--text-secondary) xl:group-hover:placeholder:text-(--text-primary) xl:text-(--text-primary) xl:resize-none xl:overscroll-contain dropdown-scroll xl:field-sizing-content"
             ></textarea>
           </div>
         );

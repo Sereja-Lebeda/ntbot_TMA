@@ -414,7 +414,7 @@ function EditRepeatModal({
         )}
 
         {/* Content */}
-        <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7 xl:overflow-y-auto xl:dropdown-scroll xl:px-12.5">
+        <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7 xl:overflow-y-auto dropdown-scroll xl:px-12.5">
           {/* Ticket information */}
           <div className="xl:w-full xl:flex xl:items-start xl:gap-1">
             <TicketInfoIcon className="xl:text-(--text-primary)" />

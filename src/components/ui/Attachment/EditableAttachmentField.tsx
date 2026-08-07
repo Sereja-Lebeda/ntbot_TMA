@@ -68,7 +68,7 @@ function EditableAttachmentField({
         setIsDragging(false);
         addFiles(e.dataTransfer.files);
       }}
-      className="xl:w-full xl:shrink-0 xl:flex xl:justify-start xl:gap-5 xl:overscroll-contain xl:dropdown-scroll xl:overflow-x-auto"
+      className="xl:w-full xl:shrink-0 xl:flex xl:justify-start xl:gap-5 xl:overscroll-contain dropdown-scroll xl:overflow-x-auto"
     >
       {isModalOpen && (
         <ConfirmModal

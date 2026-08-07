@@ -5,25 +5,41 @@ import MagnifyIcon from "../../icons/searchmenu/MagnifyIcon";
 interface searchRequestProps {
   searchRequest: string;
   setSearchRequest: (word: string) => void;
+  variant?: string;
   className?: string;
 }
 
 const Searchbar = forwardRef<HTMLInputElement, searchRequestProps>(
-  ({ searchRequest, setSearchRequest, className }, ref) => {
+  (
+    { searchRequest, setSearchRequest, variant = "desktop", className },
+    ref,
+  ) => {
     return (
       <div
-        // onMouseDown={(e) => e.preventDefault()}
-        // onFocus={() => console.log("focus", document.activeElement)}
-        className={`xl:h-10 xl:flex xl:items-center xl:flex-1 xl:px-5 xl:py-3 xl:gap-2 xl:rounded-xs xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:hover:border-(--border-hover-btn) xl:group ${className} xl:select-none`}
+        className={`
+          h-full
+          flex items-center flex-1
+          mx-3 p-2
+          rounded-xs
+          bg-(--bg-secondary) border border-(--bg-border) hover:border-(--border-hover-btn) group ${className}
+          select-none
+
+          xl:h-10
+          xl:px-5 xl:py-3 xl:gap-2 `}
       >
-        <MagnifyIcon className="xl:w-5 xl:h-5" />
+        {variant === "desktop" ? (
+          <MagnifyIcon className="xl:w-5 xl:h-5" />
+        ) : null}
+
         {/* //TODO: add debounce after connetion to db */}
 
         <input
           ref={ref}
           type="text"
           placeholder="Найти..."
-          className="xl:w-full xl:font-consolas xl:outline-none xl:dark:group-hover:placeholder-(--text-primary) xl:group-hover:placeholder-(--text-primary) xl:placeholder-(--text-secondary) xl:text-(--text-primary)"
+          className="w-full
+          font-consolas text-(--text-primary) outline-none
+          dark:group-hover:placeholder-(--text-primary) group-hover:placeholder-(--text-primary) placeholder-(--text-secondary)"
           value={searchRequest}
           onChange={(e) => setSearchRequest(e.target.value)}
         />

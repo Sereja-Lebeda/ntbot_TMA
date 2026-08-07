@@ -1,6 +1,11 @@
 import DropdownList from "./ui/DropdownList";
 import mockData from "../../mockTicketInfo.json";
-import type { Ticket, TicketViewType } from "../types/ticket.types";
+import {
+  StatusesOfTicket,
+  type Ticket,
+  type TicketViewType,
+} from "../types/ticket.types";
+import { useOutletContext } from "react-router";
 
 export interface OpenDropdownFilterProps {
   openDropdownFilter: string | null;
@@ -17,11 +22,14 @@ export interface OpenDropdownFilterProps {
   ticketView: TicketViewType;
 }
 
-const mock = mockData as unknown as Ticket[];
+interface OutletContextProps {
+  changeFilter: (status: string) => void;
+}
+
+export const mock = mockData as unknown as Ticket[];
 
 function SortFilterBlock({
   openDropdownFilter,
-  setOpenDropdownFilter,
   ticketStatuses,
   setTicketStatuses,
   ticketCategories,
@@ -33,15 +41,9 @@ function SortFilterBlock({
   isPrivilegeUser,
   ticketView,
 }: OpenDropdownFilterProps) {
-  const statuses = [
-    "Все",
-    "Новые",
-    "В работе",
-    "На паузе",
-    "Готовы",
-    "Отклонены",
-    "Закрыты",
-  ];
+  const { changeFilter } = useOutletContext<OutletContextProps>();
+
+  const statuses = StatusesOfTicket;
 
   // TODO: pull categories from backend
   const categories = [
@@ -61,15 +63,15 @@ function SortFilterBlock({
     ...new Set(mock.map((ticket: Ticket) => ticket.department)),
   ];
 
-  function changeFilter(name: string) {
-    if (openDropdownFilter === name) {
-      setOpenDropdownFilter(null);
-    } else {
-      if (name !== "Статус") setTicketStatuses(["Все"]);
-      if (name !== "Категории") setTicketCategories(["Все"]);
-      setOpenDropdownFilter(name);
-    }
-  }
+  // function changeFilter(name: string) {
+  //   if (openDropdownFilter === name) {
+  //     setOpenDropdownFilter(null);
+  //   } else {
+  //     if (name !== "Статус") setTicketStatuses(["Все"]);
+  //     if (name !== "Категории") setTicketCategories(["Все"]);
+  //     setOpenDropdownFilter(name);
+  //   }
+  // }
 
   return (
     // TODO: delete shrink 0 for adaptive interface?
@@ -85,12 +87,14 @@ function SortFilterBlock({
           onChange={(title) => changeFilter(title)}
           selectedItems={ticketStatuses}
           setSelectedItems={setTicketStatuses}
+          showResetButton={true}
         />
         <DropdownList
           title="Период"
           isOpen={openDropdownFilter === "Период"}
           items={statuses}
           onChange={(title) => changeFilter(title)}
+          showResetButton={true}
         />
         <DropdownList
           title="Категории"
@@ -99,6 +103,7 @@ function SortFilterBlock({
           onChange={(title) => changeFilter(title)}
           selectedItems={ticketCategories}
           setSelectedItems={setTicketCategories}
+          showResetButton={true}
         />
         {isPrivilegeUser && ticketView === "team" && (
           <DropdownList

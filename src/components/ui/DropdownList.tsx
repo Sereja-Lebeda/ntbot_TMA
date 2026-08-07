@@ -1,4 +1,5 @@
 // import { useState } from "react";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import CrossIcon from "../../icons/card/CrossIcon";
 import ArrowIcon from "../../icons/filterblock/ArrowIcon";
 import SquareCheckIcon from "../../icons/filterblock/SquareCheckIcon";
@@ -23,6 +24,8 @@ function DropdownList({
   setSelectedItems,
   showResetButton,
 }: DropdownListProps) {
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
+
   const handleSelect = (item: string) => {
     if (setSelectedItems && selectedItems) {
       if (item === "Все") {
@@ -48,14 +51,14 @@ function DropdownList({
     selectedItems?.filter((i) => i !== "Все").length ?? 0;
 
   return (
-    <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:bg-(--bg-primary-second) xl:group/dropdown xl:cursor-pointer">
+    <div className="w-full flex flex-col items-start bg-(--bg-primary-second) group/dropdown cursor-pointer">
       <div
-        className={`xl:w-full xl:flex xl:justify-between xl:items-center xl:border-b border-(--bg-border) xl:bg-(--bg-primary-second) xl:px-5 xl:py-3.75 ${isOpen ? "" : "xl:group-hover/dropdown:border-b xl:group-hover/dropdown:border-(--text-primary)"}`}
+        className={`w-full flex justify-between items-center border-b border-(--bg-border) bg-(--bg-primary-second) px-5 py-3.75 ${isOpen ? "" : "group-hover/dropdown:border-b group-hover/dropdown:border-(--text-primary)"}`}
         onClick={() => onChange(title)}
       >
-        <div className="xl:flex xl:gap-2 xl:items-center">
+        <div className="flex gap-2 items-center">
           <span
-            className={`xl:font-jbmono xl:text-sm xl:font-normal xl:leading-4 xl:select-none ${isOpen ? "xl:text-(--text-primary)" : "xl:group-hover/dropdown:text-(--text-primary) xl:text-(--text-secondary)"}`}
+            className={`font-jbmono text-sm font-normal leading-4 select-none ${isOpen ? "text-(--text-primary)" : "group-hover/dropdown:text-(--text-primary) text-(--text-secondary)"}`}
           >
             {title}
           </span>
@@ -63,53 +66,87 @@ function DropdownList({
           {/* reset filter btn */}
           {showResetButton && selectedItems && amountOfItems() > 0 && (
             <button
-              className="xl:w-7.5 xl:h-4 xl:flex xl:justify-center xl:items-center xl:bg-(--text-secondary) xl:rounded-xs xl:px-1 xl:py-0.5 xl:gap-1.5 xl:cursor-pointer"
+              className="w-7.5 h-4 flex justify-center items-center bg-(--text-secondary) rounded-xs px-1 py-0.5 gap-1.5 cursor-pointer select-none"
               onClick={(e) => {
                 e.stopPropagation();
                 handleSelect("Все");
               }}
             >
-              <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--bg-primary) xl:leading-4">
+              <span className="font-consolas font-normal text-xs text-(--bg-primary) leading-4">
                 {amountOfItems()}
               </span>
-              <CrossIcon className="xl:w-2 xl:h-2 xl:text-(--bg-primary) xl:block" />
+              <CrossIcon className="w-2 h-2 text-(--bg-primary) block" />
             </button>
           )}
         </div>
         <ArrowIcon
-          className={`${isOpen ? "xl:text-(--text-primary)" : "xl:rotate-180 xl:dark:text-(--text-secondary) xl:text-(--text-secondary)"}  xl:group-hover/dropdown:text-(--text-primary)`}
+          className={`${isOpen ? "text-(--text-primary)" : "rotate-180 dark:text-(--text-secondary) text-(--text-secondary)"}  group-hover/dropdown:text-(--text-primary)`}
         />
       </div>
 
-      <div
-        className={`xl:w-full xl:flex xl:flex-col xl:justify-start xl:items-start xl:gap-1 xl:py-1 xl:overflow-hidden xl:transition-all xl:duration-300 ${isOpen ? "xl:max-h-79 xl:overflow-y-auto xl:overscroll-contain xl:dropdown-scroll" : "xl:max-h-0"}`}
-      >
-        {items.map((item) => {
-          return (
-            <div
-              key={item}
-              className="xl:w-full xl:flex xl:items-center xl:gap-1.5 xl:select-none"
-              onClick={() => handleSelect(item)}
-            >
-              {selectedItems?.includes(item) ? (
-                <div className="xl:h-full xl:flex-1 xl:flex xl:items-center xl:gap-2 xl:px-3 xl:py-2">
-                  <SquareCheckIcon className="xl:text-(--bg-btn-primary)" />
-                  <span className="xl:text-sm xl:text-(--bg-btn-primary) xl:font-consolas xl:font-bold xl:leading-4.5">
-                    {item}
-                  </span>
-                </div>
-              ) : (
-                <div className="xl:h-full xl:flex-1 xl:flex xl:items-center xl:gap-2 xl:px-3 xl:py-2 xl:cursor-pointer xl:group/item">
-                  <SquareIcon className="" />
-                  <span className="xl:text-sm xl:text-(--text-secondary) xl:font-consolas xl:font-normal xl:leading-4.5 xl:group-hover/item:text-(--text-primary)">
-                    {item}
-                  </span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {isDesktop ? (
+        <div
+          className={`xl:w-full xl:flex xl:flex-col xl:justify-start xl:items-start xl:gap-1 xl:py-1 xl:overflow-hidden xl:transition-all xl:duration-300 ${isOpen ? "xl:max-h-79 xl:overflow-y-auto xl:overscroll-contain dropdown-scroll" : "xl:max-h-0"}`}
+        >
+          {items.map((item) => {
+            return (
+              <div
+                key={item}
+                className="xl:w-full xl:flex xl:items-center xl:gap-1.5 xl:select-none"
+                onClick={() => handleSelect(item)}
+              >
+                {selectedItems?.includes(item) ? (
+                  <div className="xl:h-full xl:flex-1 xl:flex xl:items-center xl:gap-2 xl:px-3 xl:py-2">
+                    <SquareCheckIcon className="xl:text-(--bg-btn-primary)" />
+                    <span className="xl:text-sm xl:text-(--bg-btn-primary) xl:font-consolas xl:font-bold xl:leading-4.5">
+                      {item}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="xl:h-full xl:flex-1 xl:flex xl:items-center xl:gap-2 xl:px-3 xl:py-2 xl:cursor-pointer xl:group/item">
+                    <SquareIcon className="" />
+                    <span className="xl:text-sm xl:text-(--text-secondary) xl:font-consolas xl:font-normal xl:leading-4.5 xl:group-hover/item:text-(--text-primary)">
+                      {item}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div
+          className={`w-full flex flex-col justify-start items-start gap-1 overflow-hidden transition-all duration-300 ${isOpen ? "max-h-79 overflow-y-auto overscroll-contain dropdown-scroll" : "max-h-0"}`}
+        >
+          {items.map((item) => {
+            return (
+              <div
+                key={item}
+                className="w-full flex items-center gap-1.5 select-none"
+                onClick={() => handleSelect(item)}
+              >
+                {selectedItems?.includes(item) ? (
+                  <div
+                    className="h-full flex-1 flex items-center
+                  bg-[#A1FF6207]
+                  gap-2 px-3 py-2"
+                  >
+                    <span className="text-sm text-(--bg-btn-primary) font-consolas font-bold leading-4.5">
+                      {item}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="h-full flex-1 flex items-center gap-2 px-3 py-2 cursor-pointer group/item">
+                    <span className="text-sm text-(--text-secondary) font-consolas font-normal leading-4.5 group-hover/item:text-(--text-primary)">
+                      {item}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

@@ -12,18 +12,18 @@ function SupportButtons() {
     // Toggle and telegram block
     <>
       <button
-        className={`xl:flex items-center xl:bg-(--bg-primary-second) xl:border xl:border-(--bg-border) xl:hover:border-(--border-hover-btn) xl:select-none
-      xl:group xl:rounded-xs xl:p-2 ${btnPressAnimationStyle}`}
+        className={`flex items-center bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none
+      group rounded-xs p-2 ${btnPressAnimationStyle}`}
         onClick={toggleTheme}
       >
         <ToggleBtn />
       </button>
 
       <button
-        className={`xl:w-full xl:flex xl:justify-center xl:items-center xl:px-3 xl:py-2.5 xl:bg-(--bg-primary-second) xl:border xl:border-(--bg-border) xl:hover:border-(--border-hover-btn) xl:select-none xl:group xl:rounded-xs xl:gap-2 ${btnPressAnimationStyle}`}
+        className={`w-full flex justify-center items-center px-3 py-2.5 bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none group rounded-xs gap-2 ${btnPressAnimationStyle}`}
       >
-        <TelegramIcon className="xl:group-hover:text-(--text-primary) xl:text-(--text-secondary) " />
-        <span className="xl:font-jbmono xl:text-(--text-secondary) xl:group-hover:text-(--text-primary) xl:text-sm xl:font-medium xl:leading-normal xl:select-none">
+        <TelegramIcon className="group-hover:text-(--text-primary) text-(--text-secondary) " />
+        <span className="font-jbmono text-(--text-secondary) group-hover:text-(--text-primary) text-sm font-medium leading-normal select-none">
           Задать вопрос
         </span>
       </button>

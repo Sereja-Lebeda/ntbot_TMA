@@ -17,7 +17,7 @@ function TicketAttachmentsView({ files }: TicketAttachmentsViewProps) {
       {files.length === 0 ? (
         <div className="xl:w-full">Файлы не прикреплены</div>
       ) : (
-        <div className="xl:w-full xl:flex xl:justify-start xl:gap-5 xl:overflow-x-auto xl:overscroll-contain xl:dropdown-scroll">
+        <div className="xl:w-full xl:flex xl:justify-start xl:gap-5 xl:overflow-x-auto xl:overscroll-contain dropdown-scroll">
           {files.map((attached) => (
             <div
               key={`${attached.name}-${attached.url}`}
