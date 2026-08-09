@@ -107,7 +107,10 @@ function MobileSidebar({
   }, []);
 
   useEffect(() => {
-    if (!isAnimatingIn) {
+    if (isAnimatingIn) {
+      void panelRef.current?.offsetHeight; // форсируем reflow перед показом
+      setIsVisible(true);
+    } else {
       setIsVisible(false);
     }
   }, [isAnimatingIn]);

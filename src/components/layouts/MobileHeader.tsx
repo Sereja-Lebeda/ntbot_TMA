@@ -28,7 +28,7 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
 
   return (
     <div
-      className="w-full h-15.5
+      className="fixed w-full h-15.5
   flex justify-between items-center
   bg-[#0e0e0e] border-b border-[#201e1e]
   px-5 py-4"

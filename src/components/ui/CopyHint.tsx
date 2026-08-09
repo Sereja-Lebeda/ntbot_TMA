@@ -2,7 +2,7 @@ import CopyHintVectorIcon from "../../icons/infoblock/CopyHintVectorIcon";
 
 function CopyHint() {
   return (
-    <div className="relative w-21.5 h-5 flex items-center">
+    <div className="relative w-21.5 h-5 flex items-center select-none">
       <div>
         <CopyHintVectorIcon className="absolute -left-1.5 top-1.5" />
       </div>

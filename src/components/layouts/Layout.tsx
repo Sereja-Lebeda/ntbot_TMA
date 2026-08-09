@@ -7,6 +7,7 @@ import type { SortByStatusType } from "../../types/ticket.types";
 
 import Header from "./Header";
 import MobileSidebar from "./MobileSidebar";
+import Footer from "./Footer";
 
 export default function Layout() {
   const currentUser = useUser();
@@ -166,8 +167,12 @@ export default function Layout() {
           hasActiveFilters,
           changeFilter,
         }}
-      />{" "}
+      />
       {/* сюда подставляется страница */}
+      <Footer
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+      />{" "}
     </div>
   );
 }
