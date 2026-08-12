@@ -5,11 +5,11 @@ import type { StatusType, Ticket } from "../types/ticket.types";
 import { textPressAnimationStyle } from "../styles/pressAnimation";
 
 import handleStatusSelect from "../utils/statusSelectedHelper";
+import getTicketQuantity from "../utils/getTicketQuantity";
 import getStatusTitle, { allStatuses } from "../utils/ticketBadgeHelpers";
 
 import mockUser from "../../mockUserInfo.json";
 import mockTicket from "../../mockTicketInfo.json";
-// import ToggleBtn from "../components/ui/ToggleBtn";
 import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
 import CopyHint from "../components/ui/CopyHint";
@@ -62,16 +62,6 @@ function Infoblock({
     "xl:h-18",
   ];
   const ticketStatusOrder = allStatuses;
-
-  function getTicketQuantity(ticketList: Ticket[]) {
-    return ticketList.reduce(
-      (acc: Record<string, number>, ticket) => {
-        acc[ticket.status] = (acc[ticket.status] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-  }
 
   const currentUserId = mockUserInfo.id;
   const filteredTicketQuantities = allTickets.filter((ticket) => {

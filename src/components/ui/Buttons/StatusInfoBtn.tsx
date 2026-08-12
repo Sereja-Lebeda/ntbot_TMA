@@ -12,37 +12,49 @@ interface StatusInfoBtnProps {
 
 const textStyles = {
   New: {
-    quantity: " xl:font-jbmono xl:text-[22px] xl:font-extralight xl:leading-7",
-    statusLabel: "xl:text-sm xl:font-jbmono xl:font-normal xl:leading-5",
-    container:
-      "xl:flex xl:flex-col xl:items-center xl:h-full xl:justify-center xl:gap-1",
+    quantity:
+      " font-jbmono text-sm xl:text-[22px] font-normal xl:font-extralight leading-5 xl:leading-7",
+    statusLabel:
+      "text-sm font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5",
+    container: "flex flex-col items-center h-full justify-center gap-1",
   },
   "In progress": {
-    quantity: " xl:font-jbmono xl:text-[28px] xl:font-extralight xl:leading-9",
-    statusLabel: "xl:text-base xl:font-jbmono xl:font-normal xl:leading-5.5",
-    container: "xl:flex xl:items-baseline xl:gap-2",
+    quantity:
+      " font-jbmono text-sm xl:text-[28px] font-normal xl:font-extralight leading-5  xl:leading-9",
+    statusLabel:
+      "text-sm xl:text-base font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5.5",
+    container:
+      "flex flex-col items-center justify-center gap-1 xl:flex xl:flex-row xl:items-baseline xl:gap-2",
   },
   Paused: {
-    quantity: " xl:font-jbmono xl:text-[22px] xl:font-extralight xl:leading-7",
-    statusLabel: "xl:text-sm xl:font-jbmono xl:font-normal xl:leading-5",
-    container:
-      "xl:flex xl:flex-col xl:items-center xl:h-full xl:justify-center xl:gap-1",
+    quantity:
+      " font-jbmono text-sm xl:text-[22px] font-normal xl:font-extralight leading-5  xl:leading-7",
+    statusLabel:
+      "text-sm font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5",
+    container: "flex flex-col items-center xl:h-full justify-center gap-1",
   },
   Complete: {
-    quantity: "xl:text-[28px] font-jbmono font-extralight leading-9",
-    statusLabel: "xl:text-base xl:font-jbmono xl:font-normal xl:leading-5.5",
-    container: "xl:flex xl:items-baseline xl:gap-2",
+    quantity:
+      " font-jbmono text-sm xl:text-[28px] font-normal xl:font-extralight leading-5  xl:leading-9",
+    statusLabel:
+      "text-sm xl:text-base font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5.5",
+    container:
+      "flex flex-col xl:flex-row justify-center items-center gap-1 xl:items-baseline xl:gap-2",
   },
   Closed: {
-    quantity: "xl:text-[22px] font-jbmono font-extralight leading-7",
-    statusLabel: "xl:text-base xl:font-jbmono xl:font-normal xl:leading-5.5",
-    container: "xl:flex xl:items-baseline xl:gap-2",
+    quantity:
+      "font-jbmono text-sm xl:text-[22px] font-normal xl:font-extralight leading-5  xl:leading-7",
+    statusLabel:
+      "text-sm xl:text-base font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5.5",
+    container:
+      "flex flex-col xl:flex-row justify-center items-center gap-1 xl:items-baseline xl:gap-2",
   },
   Cancelled: {
-    quantity: "xl:text-lg xl:font-jbmono xl:font-extralight xl:leading-6.5",
-    statusLabel: "xl:text-sm xl:font-jbmono xl:font-normal xl:leading-5",
-    container:
-      "xl:flex xl:flex-col xl:items-center xl:h-full xl:justify-center xl:gap-1",
+    quantity:
+      "font-jbmono text-sm xl:text-lg font-normal xl:font-extralight leading-5  xl:leading-6.5",
+    statusLabel:
+      "text-sm font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5",
+    container: "flex flex-col items-center xl:h-full justify-center gap-1",
   },
 };
 
@@ -59,19 +71,19 @@ function StatusInfoBtn({
   return (
     <div
       onClick={onClick}
-      className={`${plateHeight} ${isSelected ? "xl:border-(--text-primary) " : "xl:border-(--bg-border) xl:hover:border-(--border-hover-btn)"} xl:bg-(--bg-primary-secondary) xl:border xl:rounded-xs xl:group`}
+      className={`${plateHeight} ${isSelected ? "border-(--bg-border) xl:border-(--text-primary)" : "border-(--bg-border) hover:border-(--border-hover-btn)"} bg-(--bg-primary-second) border rounded-xs group`}
     >
-      <div className="xl:flex xl:items-center xl:justify-center xl:h-full xl:select-none xl:cursor-pointer">
+      <div className="flex items-center justify-center h-full select-none cursor-pointer">
         <div
-          className={`${textStyles[status].container} xl:hover:text-(--text-primary)`}
+          className={`${textStyles[status].container} hover:text-(--text-primary)`}
         >
           <div
-            className={`${textStyles[status].quantity} ${isSelected ? "xl:text-(--text-primary)" : "xl:text-(--text-secondary) "} xl:group-hover:text-(--text-primary)`}
+            className={`${textStyles[status].quantity} ${isSelected ? "text-(--text-primary)" : "text-(--text-primary) xl:text-(--text-secondary) "} group-hover:text-(--text-primary)`}
           >
             {quantity}
           </div>
           <div
-            className={`${textStyles[status].statusLabel} ${isSelected ? "xl:text-(--text-primary)" : "xl:text-(--text-secondary)"} xl:group-hover:text-(--text-primary)`}
+            className={`${textStyles[status].statusLabel} ${isSelected ? "text-(--bg-btn-primary) xl:text-(--text-primary)" : "text-(--text-secondary)"} group-hover:text-(--text-primary)`}
           >
             {getStatusTitle(status, "infoBlock")}
           </div>

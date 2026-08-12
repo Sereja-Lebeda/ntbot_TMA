@@ -115,8 +115,9 @@ function DropdownList({
           })}
         </div>
       ) : (
+        // TODO: ask should scroll menu block all sidebar?
         <div
-          className={`w-full flex flex-col justify-start items-start gap-1 overflow-hidden transition-all duration-300 ${isOpen ? "max-h-79 overflow-y-auto overscroll-contain dropdown-scroll" : "max-h-0"}`}
+          className={`w-full flex flex-col justify-start items-start gap-1 overflow-hidden transition-all duration-300 ${isOpen ? "max-h-79 overflow-y-auto overscroll-y-auto overscroll-contain dropdown-scroll" : "max-h-0"}`}
         >
           {items.map((item) => {
             return (

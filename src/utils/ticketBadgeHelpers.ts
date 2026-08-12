@@ -47,20 +47,20 @@ export default function getStatusTitle(status: string, form: FormType) {
 }
 export function getStatusColor(status: StatusType) {
   const baseStyle =
-    "xl:h-5 xl:w-auto xl:flex xl:justify-center xl:items-center xl:px-2 xl:py-1.5 xl:rounded-xs xl:dark:text-(--text-btn) xl:text-(--text-primary) xl:text-xs xl:font-jbmono xl:font-bold xl:leading-3 xl:select-none";
+    "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) text-xs font-jbmono font-bold leading-3 select-none";
   switch (status) {
     case "New":
-      return `${baseStyle} xl:bg-(--bg-task-new)`;
+      return `${baseStyle} bg-(--bg-task-new)`;
     case "In progress":
-      return `${baseStyle} xl:bg-(--bg-task-inprogress)`;
+      return `${baseStyle} bg-(--bg-task-inprogress)`;
     case "Paused":
-      return `${baseStyle} xl:bg-(--bg-task-paused)`;
+      return `${baseStyle} bg-(--bg-task-paused)`;
     case "Complete":
-      return `${baseStyle} xl:bg-(--bg-task-complete)`;
+      return `${baseStyle} bg-(--bg-task-complete)`;
     case "Closed":
-      return `${baseStyle} xl:bg-(--bg-task-closed)`;
+      return `${baseStyle} bg-(--bg-task-closed)`;
     case "Cancelled":
-      return `${baseStyle} xl:bg-(--bg-task-cancelled)`;
+      return `${baseStyle} bg-(--bg-task-cancelled)`;
   }
 }
 

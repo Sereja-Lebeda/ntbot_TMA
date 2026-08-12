@@ -11,6 +11,7 @@ import Infoblock from "../Infoblock";
 import SortFilterBlock from "../SortFilterBlock";
 import useUser from "../../hooks/useUser";
 import { useOutletContext } from "react-router";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 interface TicketFilterContextType {
   selectedStatuses: string[];
@@ -28,7 +29,6 @@ interface TicketFilterContextType {
   setShowFavorites: (boolean: boolean) => void;
 
   sortByStatus: SortByStatusType;
-  setSortByStatus: (status: SortByStatusType) => void;
   sortOldToNew: boolean;
   setSortOldToNew: (boolean: boolean) => void;
   ticketView: TicketViewType;
@@ -60,7 +60,6 @@ export default function HomePage() {
     sortOldToNew,
     setSortOldToNew,
     sortByStatus,
-    setSortByStatus,
     ticketView,
     setTicketView,
     filter,
@@ -69,6 +68,7 @@ export default function HomePage() {
     changePrioritySort,
     hasActiveFilters,
   } = useOutletContext<TicketFilterContextType>();
+  const isDesktop = useMediaQuery("(min-width:1280px)");
 
   const currentUser = useUser();
   const isPrivilegeUser =
@@ -96,17 +96,20 @@ export default function HomePage() {
       className=""
     >
       <div className="xl:flex xl:justify-center xl:max-w-395 xl:mx-auto">
-        <Infoblock
-          ticketStatuses={selectedStatuses}
-          setTicketStatuses={setSelectedStatuses}
-          ticketView={ticketView}
-        />
+        {isDesktop && (
+          <Infoblock
+            ticketStatuses={selectedStatuses}
+            setTicketStatuses={setSelectedStatuses}
+            ticketView={ticketView}
+          />
+        )}
         <HeroSector
           className={"xl:sticky xl:top-0"}
           // searchbar
           inputRef={inputRef}
           // filters for tickets
           ticketStatuses={selectedStatuses}
+          setTicketStatuses={setSelectedStatuses}
           ticketCategories={selectedCategories}
           ticketDepartments={selectedDepartments}
           ticketEmployees={selectedEmployees}
@@ -126,30 +129,31 @@ export default function HomePage() {
           sortOldToNew={sortOldToNew}
           setSortOldToNew={setSortOldToNew}
           sortByStatus={sortByStatus}
-          setSortByStatus={setSortByStatus}
           //sort function
           changePrioritySort={changePrioritySort}
           //yes-no btns for complete ticket
           tickets={tickets}
           setTickets={setTickets}
         />
-        <SortFilterBlock
-          // ui filters
-          openDropdownFilter={filter}
-          setOpenDropdownFilter={setFilter}
-          // filters for tickets
-          ticketStatuses={selectedStatuses}
-          setTicketStatuses={setSelectedStatuses}
-          ticketCategories={selectedCategories}
-          setTicketCategories={setSelectedCategories}
-          selectedDepartments={selectedDepartments}
-          setSelectedDepartments={setSelectedDepartments}
-          selectedEmployees={selectedEmployees}
-          setSelectedEmployees={setSelectedEmployees}
-          // manager feat btn
-          isPrivilegeUser={isPrivilegeUser}
-          ticketView={ticketView}
-        />
+        {isDesktop && (
+          <SortFilterBlock
+            // ui filters
+            openDropdownFilter={filter}
+            setOpenDropdownFilter={setFilter}
+            // filters for tickets
+            ticketStatuses={selectedStatuses}
+            setTicketStatuses={setSelectedStatuses}
+            ticketCategories={selectedCategories}
+            setTicketCategories={setSelectedCategories}
+            selectedDepartments={selectedDepartments}
+            setSelectedDepartments={setSelectedDepartments}
+            selectedEmployees={selectedEmployees}
+            setSelectedEmployees={setSelectedEmployees}
+            // manager feat btn
+            isPrivilegeUser={isPrivilegeUser}
+            ticketView={ticketView}
+          />
+        )}
       </div>
     </div>
   );

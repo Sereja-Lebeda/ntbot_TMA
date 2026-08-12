@@ -1,10 +1,10 @@
 import { useState } from "react";
 import useUser from "../hooks/useUser";
 import useSearch from "../hooks/useSearch";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 import type {
   Ticket,
-  SortByStatusType,
   TicketViewType,
   TicketAttachmentType,
   StatusType,
@@ -20,32 +20,20 @@ import ConfirmModal from "./pages/modalCardWindows/ConfirmModal";
 import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
 import EditRepeatModal from "./pages/modalCardWindows/EditRepeatModal";
 
-import TicketCard from "./TicketCard";
-import Searchbar from "./ui/Searchbar";
-import SearchMenuBtn from "./ui/Buttons/SearchMenuBtn";
+import DesktopHeroSector from "./DesktopHeroSector";
+import MobileHeroSector from "./MobileHeroSector";
 
 import getStatusTitle from "../utils/ticketBadgeHelpers";
 import flattenActions from "../utils/flattenActions";
 import getTicketDescription from "../utils/getTicketDescription";
 import mockActionsNested from "../../mockActionsNested.json";
 
-import { hoverAnimationStyle } from "../styles/pressAnimation";
-
-import ManagerIcon from "../icons/searchmenu/ManagerIcon";
-import DeleteFilterIcon from "../icons/searchmenu/DeleteFilterIcon";
-import FavoriteFilterBtn from "../icons/searchmenu/FavoriteFilterBtn";
-import PrioritySortIcon from "../icons/searchmenu/PrioritySortIcon";
-import PriorityNewSortIcon from "../icons/searchmenu/PriorityNewSortIcon";
-import PriorityCompleteSortIcon from "../icons/searchmenu/PriorityCompleteSortIcon";
-import TimeSortIcon from "../icons/searchmenu/TimeSortIcon";
-import TimeSortActiveIcon from "../icons/searchmenu/TimeSortActiveIcon";
-import UserIcon from "../icons/searchmenu/UserIcon";
-
 interface selectedTicketStatusesProps {
   className?: string;
   inputRef: React.RefObject<HTMLInputElement | null>;
 
   ticketStatuses: string[];
+  setTicketStatuses: (status: string[]) => void;
   ticketCategories: string[];
   ticketDepartments: string[];
   ticketEmployees: string[];
@@ -65,7 +53,6 @@ interface selectedTicketStatusesProps {
   sortOldToNew: boolean;
   setSortOldToNew: (sortByTime: boolean) => void;
   sortByStatus: string;
-  setSortByStatus: (sortByStatus: SortByStatusType) => void;
   changePrioritySort: () => void;
 
   tickets: Ticket[];
@@ -74,6 +61,7 @@ interface selectedTicketStatusesProps {
 
 export default function HeroSector({
   ticketStatuses,
+  setTicketStatuses,
   ticketCategories,
   ticketDepartments,
   ticketEmployees,
@@ -97,13 +85,15 @@ export default function HeroSector({
   hasActiveFilters,
 }: selectedTicketStatusesProps) {
   const currentUser = useUser();
-  const { searchRequest, setSearchRequest } = useSearch();
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
 
   const [activeModal, setActiveModal] = useState<{
     type: "view" | "edit" | "repeat" | "cancel";
     ticketId: number;
     from?: "view";
   } | null>(null);
+
+  const { searchRequest, setSearchRequest } = useSearch();
 
   if (!currentUser) return null;
 
@@ -135,6 +125,67 @@ export default function HeroSector({
   const editAction = editTicket
     ? allActions.find((a) => a.id === editTicket.actionId)
     : undefined;
+
+  const statusPriority = {
+    New: 0,
+    "In progress": 1,
+    Paused: 2,
+    Closed: 3,
+    Cancelled: 4,
+    Complete: 5,
+  };
+
+  const filteredTickets = tickets
+    // Filter by Searchbar
+    .filter((ticket) => ticketMatchesSearch(ticket, searchRequest))
+    // Filter by filter side layout
+    .filter(
+      (ticket) =>
+        (ticketStatuses.includes("Все") ||
+          ticketStatuses.includes(
+            getStatusTitle(ticket.status, "statusBlock"),
+          )) &&
+        (ticketCategories.includes("Все") ||
+          ticketCategories.includes(ticket.breadcrumbs[0])) &&
+        (ticketView !== "team" ||
+          ticketDepartments.includes("Все") ||
+          ticketDepartments.includes(ticket.department ?? "")) &&
+        (ticketView !== "team" ||
+          ticketEmployees.includes("Все") ||
+          ticketEmployees.includes(ticket.userName ?? "")),
+    )
+    // Filter by favorite tickets
+    .filter(
+      (ticket) => !showFavorites || favoriteTickets.includes(ticket.ticketId),
+    )
+    // Filter tickets by role
+    .filter((ticket) => {
+      if (currentUser.role === "admin" && ticketView === "team") {
+        return true;
+      }
+      if (currentUser.role === "manager" && ticketView === "team") {
+        return ticket.department === currentUser.department;
+      }
+      return ticket.userId === currentUser.id;
+    })
+    .sort((a, b) =>
+      sortOldToNew
+        ? Date.parse(a.createDate.split(".").reverse().join("-")) -
+          Date.parse(b.createDate.split(".").reverse().join("-"))
+        : Date.parse(b.createDate.split(".").reverse().join("-")) -
+          Date.parse(a.createDate.split(".").reverse().join("-")),
+    )
+    .sort((a, b) => {
+      if (sortByStatus === "default") return 0;
+      if (sortByStatus === "new") {
+        return statusPriority[a.status] - statusPriority[b.status];
+      }
+
+      if (sortByStatus === "complete") {
+        return statusPriority[b.status] - statusPriority[a.status];
+      }
+      return 0;
+    });
 
   function handleRepeatSubmit(data: {
     formData: Record<string, string>;
@@ -209,15 +260,6 @@ export default function HeroSector({
       ticket.breadcrumbs[0],
     ].some((value) => value?.toLowerCase().includes(query.toLowerCase()));
   }
-
-  const statusPriority = {
-    New: 0,
-    "In progress": 1,
-    Paused: 2,
-    Closed: 3,
-    Cancelled: 4,
-    Complete: 5,
-  };
 
   const inputText =
     "Вы уверены, что хотите отменить заявку?\n\nЗаново запустить её в работу будет невозможно.";
@@ -344,141 +386,47 @@ export default function HeroSector({
         />
       )}
 
-      {/* Searchbar and icons for sort */}
-      <div className="xl:w-full xl:flex xl:items-center xl:gap-2 xl:mb-3.5 xl:p-1">
-        <Searchbar
+      {isDesktop ? (
+        <DesktopHeroSector
+          tickets={filteredTickets}
+          setTickets={setTickets}
+          inputRef={inputRef}
           searchRequest={searchRequest}
           setSearchRequest={setSearchRequest}
-          ref={inputRef}
-          className={hoverAnimationStyle}
+          favoriteTickets={favoriteTickets}
+          setFavoriteTickets={setFavoriteTickets}
+          showFavorites={showFavorites}
+          setShowFavorites={setShowFavorites}
+          ticketView={ticketView}
+          setTicketView={setTicketView}
+          sortOldToNew={sortOldToNew}
+          setSortOldToNew={setSortOldToNew}
+          sortByStatus={sortByStatus}
+          setOpenDropdownFilter={setOpenDropdownFilter}
+          changePrioritySort={changePrioritySort}
+          resetFilters={resetFilters}
+          hasActiveFilters={hasActiveFilters}
+          isPrivilegeUser={isPrivilegeUser}
+          handleOpenView={handleOpenView}
+          handleRequestCancel={handleRequestCancel}
+          handleRequestEdit={handleRequestEdit}
+          handleRequestRepeat={handleRequestRepeat}
         />
-        {/* Row of buttons */}
-        <div className="xl:flex xl:justify-center xl:items-center xl:gap-1">
-          <SearchMenuBtn
-            onClick={() => setShowFavorites(!showFavorites)}
-            icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
-            isActive={true}
-          />
-          {isPrivilegeUser && (
-            <SearchMenuBtn
-              icon={
-                ticketView === "my" ? (
-                  <UserIcon />
-                ) : (
-                  <ManagerIcon className="xl:text-(--bg-btn-primary)" />
-                )
-              }
-              onClick={() => {
-                setTicketView(ticketView === "my" ? "team" : "my");
-                setOpenDropdownFilter("Статус");
-              }}
-              isActive={true}
-            />
-          )}
-          <SearchMenuBtn
-            icon={
-              sortOldToNew ? (
-                <TimeSortActiveIcon className="xl:text-(--bg-btn-primary)" />
-              ) : (
-                <TimeSortIcon />
-              )
-            }
-            onClick={() => setSortOldToNew(!sortOldToNew)}
-            isActive={true}
-          />
-          <SearchMenuBtn
-            icon={
-              sortByStatus === "default" ? (
-                <PrioritySortIcon />
-              ) : sortByStatus === "new" ? (
-                <PriorityNewSortIcon className="xl:text-(--bg-btn-primary)" />
-              ) : (
-                <PriorityCompleteSortIcon className="xl:text-(--bg-btn-primary)" />
-              )
-            }
-            onClick={() => changePrioritySort()}
-            isActive={true}
-          />
-          <SearchMenuBtn
-            icon={<DeleteFilterIcon />}
-            onClick={() => {
-              resetFilters();
-            }}
-            isActive={hasActiveFilters}
-            inactiveClassName="xl:bg-(--bg-border) xl:dark:bg-(--bg-inactive-btn)"
-          />
-        </div>
-      </div>
-
-      {/* Ticket cards */}
-      <div className="xl:overflow-y-auto xl:scrollbar-none xl:w-full xl:flex xl:flex-1 xl:flex-col xl:justify-start xl:items-center xl:gap-2 xl:select-none xl:p-1">
-        {tickets
-          // Filter by Searchbar
-          .filter((ticket) => ticketMatchesSearch(ticket, searchRequest))
-          // Filter by filter side layout
-          .filter(
-            (ticket) =>
-              (ticketStatuses.includes("Все") ||
-                ticketStatuses.includes(
-                  getStatusTitle(ticket.status, "statusBlock"),
-                )) &&
-              (ticketCategories.includes("Все") ||
-                ticketCategories.includes(ticket.breadcrumbs[0])) &&
-              (ticketView !== "team" ||
-                ticketDepartments.includes("Все") ||
-                ticketDepartments.includes(ticket.department ?? "")) &&
-              (ticketView !== "team" ||
-                ticketEmployees.includes("Все") ||
-                ticketEmployees.includes(ticket.userName ?? "")),
-          )
-          // Filter by favorite tickets
-          .filter(
-            (ticket) =>
-              !showFavorites || favoriteTickets.includes(ticket.ticketId),
-          )
-          // Filter tickets by role
-          .filter((ticket) => {
-            if (currentUser.role === "admin" && ticketView === "team") {
-              return true;
-            }
-            if (currentUser.role === "manager" && ticketView === "team") {
-              return ticket.department === currentUser.department;
-            }
-            return ticket.userId === currentUser.id;
-          })
-          .sort((a, b) =>
-            sortOldToNew
-              ? Date.parse(a.createDate.split(".").reverse().join("-")) -
-                Date.parse(b.createDate.split(".").reverse().join("-"))
-              : Date.parse(b.createDate.split(".").reverse().join("-")) -
-                Date.parse(a.createDate.split(".").reverse().join("-")),
-          )
-          .sort((a, b) => {
-            if (sortByStatus === "default") return 0;
-            if (sortByStatus === "new") {
-              return statusPriority[a.status] - statusPriority[b.status];
-            }
-
-            if (sortByStatus === "complete") {
-              return statusPriority[b.status] - statusPriority[a.status];
-            }
-            return 0;
-          })
-          .map((ticket) => (
-            <TicketCard
-              key={ticket.ticketId}
-              ticket={ticket}
-              favoriteTickets={favoriteTickets}
-              setFavoriteTickets={setFavoriteTickets}
-              ticketView={ticketView}
-              setTickets={setTickets}
-              onRequestCancel={handleRequestCancel}
-              onRequestRepeat={handleRequestRepeat}
-              onRequestEdit={handleRequestEdit}
-              handleOpenView={handleOpenView}
-            />
-          ))}
-      </div>
+      ) : (
+        <MobileHeroSector
+          ticketStatuses={ticketStatuses}
+          setTicketStatuses={setTicketStatuses}
+          tickets={filteredTickets}
+          favoriteTickets={favoriteTickets}
+          setFavoriteTickets={setFavoriteTickets}
+          ticketView={ticketView}
+          setTickets={setTickets}
+          handleOpenView={handleOpenView}
+          handleRequestCancel={handleRequestCancel}
+          handleRequestEdit={handleRequestEdit}
+          handleRequestRepeat={handleRequestRepeat}
+        />
+      )}
     </div>
   );
 }
