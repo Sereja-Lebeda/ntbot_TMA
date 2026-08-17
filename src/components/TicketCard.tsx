@@ -477,13 +477,13 @@ export default function TicketCard({
         {ticket.description}
       </div>
 
-      {/* Status, priorirty, category, icons */}
+      {/* Status, priority, category, icons */}
       <div
         className="w-full py-2 flex
       justify-start xl:justify-between
       items-center"
       >
-        {/* Status, priorirty, category */}
+        {/* Status, priority, category */}
         <div className="flex items-center gap-3 font-jbmono text-xs">
           <div className={getStatusColor(ticket.status)}>
             {getStatusTitle(ticket.status, "singular")}

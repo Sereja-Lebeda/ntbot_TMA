@@ -1,10 +1,8 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import type {
   SortByStatusType,
-  Ticket,
   TicketViewType,
 } from "../../types/ticket.types";
-import mockData from "../../../mockTicketInfo.json";
 
 import HeroSector from "../HeroSector";
 import Infoblock from "../Infoblock";
@@ -74,11 +72,6 @@ export default function HomePage() {
   const isPrivilegeUser =
     currentUser?.role === "admin" || currentUser?.role === "manager";
 
-  // States for btns "yes/no" for complete tickets
-  const [tickets, setTickets] = useState<Ticket[]>(
-    mockData as unknown as Ticket[],
-  );
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -131,9 +124,6 @@ export default function HomePage() {
           sortByStatus={sortByStatus}
           //sort function
           changePrioritySort={changePrioritySort}
-          //yes-no btns for complete ticket
-          tickets={tickets}
-          setTickets={setTickets}
         />
         {isDesktop && (
           <SortFilterBlock

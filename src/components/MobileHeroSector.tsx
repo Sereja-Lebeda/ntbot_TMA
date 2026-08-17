@@ -12,7 +12,7 @@ import handleStatusSelect from "../utils/statusSelectedHelper";
 import TicketCard from "./TicketCard";
 import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
-import MobilePlusIcon from "../icons/filterblock/MobilePlusIcon";
+import MobilePlusIcon from "../icons/mobile/MobilePlusIcon";
 
 interface MobileHeroSectorProps {
   tickets: Ticket[]; // уже отфильтрованный и отсортированный массив
@@ -67,7 +67,7 @@ function MobileHeroSector({
         className="fixed top-15.5
        h-13 w-full
       flex items-center
-      overflow-x-auto scrollbar-none"
+      overflow-x-auto scrollbar-none z-20"
       >
         {/* Status row */}
         <div className={pillStyle}>
@@ -83,7 +83,7 @@ function MobileHeroSector({
               ticketStatuses.includes("Все")
                 ? "border-(--bg-border)"
                 : "border-(--bg-border) hover:border-(--border-hover-btn)"
-            } bg-(--bg-primary-second) border rounded-xs group`}
+            } bg-(--bg-primary-second) border xl:rounded-xs group`}
           >
             <div className="flex flex-col items-center justify-center h-full gap-1 select-none cursor-pointer">
               {/* Quantity */}

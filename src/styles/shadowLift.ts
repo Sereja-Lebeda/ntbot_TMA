@@ -11,5 +11,5 @@ xl:enabled:hover:-translate-x-1
 xl:enabled:hover:-translate-y-1
 xl:enabled:hover:z-10
 xl:enabled:hover:shadow-[4px_4px_0_0_var(--text-primary)]
-xl:enabled:cursor-pointer
+enabled:cursor-pointer
 xl:disabled:bg-(--bg-disable-btn)`;

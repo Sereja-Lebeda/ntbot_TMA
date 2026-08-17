@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useNavigate, useOutletContext } from "react-router";
+import React from "react";
 import useUser from "../hooks/useUser";
 import useSearch from "../hooks/useSearch";
 import useMediaQuery from "../hooks/useMediaQuery";
+import useTicketAndAction from "../hooks/useTicketAndAction";
 
 import type {
   Ticket,
@@ -9,14 +11,9 @@ import type {
   TicketAttachmentType,
   StatusType,
 } from "../types/ticket.types";
+import type { PriorityLevel, Action } from "../types/createTicket.type";
+import type { ModalTypes } from "../types/modalTypes";
 
-import type {
-  CategoryNode,
-  PriorityLevel,
-  Action,
-} from "../types/createTicket.type";
-
-import ConfirmModal from "./pages/modalCardWindows/ConfirmModal";
 import ViewTicketModal from "./pages/modalCardWindows/ViewTicketModal";
 import EditRepeatModal from "./pages/modalCardWindows/EditRepeatModal";
 
@@ -24,9 +21,8 @@ import DesktopHeroSector from "./DesktopHeroSector";
 import MobileHeroSector from "./MobileHeroSector";
 
 import getStatusTitle from "../utils/ticketBadgeHelpers";
-import flattenActions from "../utils/flattenActions";
 import getTicketDescription from "../utils/getTicketDescription";
-import mockActionsNested from "../../mockActionsNested.json";
+import { allActions } from "../utils/allActions";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -54,9 +50,24 @@ interface selectedTicketStatusesProps {
   setSortOldToNew: (sortByTime: boolean) => void;
   sortByStatus: string;
   changePrioritySort: () => void;
+}
 
+interface heroSectorContextProps {
   tickets: Ticket[];
   setTickets: React.Dispatch<React.SetStateAction<Ticket[]>>;
+
+  activeModal: ModalTypes;
+  setActiveModal: React.Dispatch<React.SetStateAction<ModalTypes>>;
+
+  handleStatusChange: (ticketId: number, status: StatusType) => void;
+  handleRepeatCancel: () => void;
+  handleEditCancel: () => void;
+
+  handleRequestCancel: (ticketId: number) => void;
+  handleRequestEdit: (ticketId: number) => void;
+  handleRequestRepeat: (ticketId: number) => void;
+
+  handleOpenView: (ticketId: number) => void;
 }
 
 export default function HeroSector({
@@ -79,52 +90,49 @@ export default function HeroSector({
   sortByStatus,
   className,
   inputRef,
-  tickets,
-  setTickets,
   changePrioritySort,
   hasActiveFilters,
 }: selectedTicketStatusesProps) {
   const currentUser = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
-  const [activeModal, setActiveModal] = useState<{
-    type: "view" | "edit" | "repeat" | "cancel";
-    ticketId: number;
-    from?: "view";
-  } | null>(null);
+  const {
+    tickets,
+    setTickets,
+    activeModal,
+    setActiveModal,
+    handleRequestCancel,
+    handleRequestEdit,
+    handleRequestRepeat,
+    handleOpenView,
+    handleStatusChange,
+    handleRepeatCancel,
+    handleEditCancel,
+  } = useOutletContext<heroSectorContextProps>();
 
   const { searchRequest, setSearchRequest } = useSearch();
 
+  const { ticket: viewedTicket, action: viewedAction } = useTicketAndAction({
+    ticketId: activeModal?.type === "view" ? activeModal.ticketId : undefined,
+    tickets,
+    allActions,
+  });
+
+  const { ticket: repeatTicket, action: repeatAction } = useTicketAndAction({
+    ticketId: activeModal?.type === "repeat" ? activeModal.ticketId : undefined,
+    tickets,
+    allActions,
+  });
+
+  const { ticket: editTicket, action: editAction } = useTicketAndAction({
+    ticketId: activeModal?.type === "edit" ? activeModal.ticketId : undefined,
+    tickets,
+    allActions,
+  });
+
+  const navigate = useNavigate();
+
   if (!currentUser) return null;
-
-  const allActions = flattenActions(mockActionsNested as CategoryNode[]);
-
-  const viewedTicket =
-    activeModal?.type === "view"
-      ? tickets.find((t) => t.ticketId === activeModal.ticketId)
-      : undefined;
-
-  const viewedAction = viewedTicket
-    ? allActions.find((a) => a.id === viewedTicket.actionId)
-    : undefined;
-
-  const repeatTicket =
-    activeModal?.type === "repeat"
-      ? tickets.find((t) => t.ticketId === activeModal.ticketId)
-      : undefined;
-
-  const repeatAction = repeatTicket
-    ? allActions.find((a) => a.id === repeatTicket.actionId)
-    : undefined;
-
-  const editTicket =
-    activeModal?.type === "edit"
-      ? tickets.find((t) => t.ticketId === activeModal.ticketId)
-      : undefined;
-
-  const editAction = editTicket
-    ? allActions.find((a) => a.id === editTicket.actionId)
-    : undefined;
 
   const statusPriority = {
     New: 0,
@@ -261,86 +269,28 @@ export default function HeroSector({
     ].some((value) => value?.toLowerCase().includes(query.toLowerCase()));
   }
 
-  const inputText =
-    "Вы уверены, что хотите отменить заявку?\n\nЗаново запустить её в работу будет невозможно.";
-
-  function onConfirm() {
-    // отмена заявки: статус → Cancelled, id из activeModal
-    if (activeModal?.type === "cancel") {
-      setTickets((prev) =>
-        prev.map((t) =>
-          t.ticketId === activeModal.ticketId
-            ? { ...t, status: "Cancelled" }
-            : t,
-        ),
-      );
-    }
-    setActiveModal(null); // закрыть
-  }
-
-  function onCancel() {
-    setActiveModal(null); // закрыть
-  }
-
-  function handleRequestCancel(ticketId: number) {
-    setActiveModal({ type: "cancel", ticketId });
-  }
-
-  function handleRequestRepeat(ticketId: number) {
-    setActiveModal({ type: "repeat", ticketId }); // без from — прямое открытие
-  }
-
-  function handleRequestEdit(ticketId: number) {
-    setActiveModal({ type: "edit", ticketId }); // без from
-  }
-
-  function handleRepeatCancel() {
-    if (activeModal?.from === "view") {
-      setActiveModal({ type: "view", ticketId: activeModal.ticketId });
-    } else {
-      setActiveModal(null);
-    }
-  }
-
-  function handleEditCancel() {
-    if (activeModal?.from === "view") {
-      setActiveModal({ type: "view", ticketId: activeModal.ticketId });
-    } else {
-      setActiveModal(null);
-    }
-  }
-
-  function handleStatusChange(ticketId: number, newStatus: StatusType) {
-    setTickets((prev) =>
-      prev.map((t) =>
-        t.ticketId === ticketId ? { ...t, status: newStatus } : t,
-      ),
-    );
-  }
-
-  function handleOpenView(ticketId: number) {
-    setActiveModal({ type: "view", ticketId });
-  }
-
   return (
     <div
       className={`xl:relative xl:flex-1 xl:max-w-225 xl:min-w-130 xl:h-246 xl:flex xl:flex-col xl:items-center xl:rounded-xs xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:m-3 xl:p-5 ${className} `}
     >
-      {activeModal?.type === "cancel" && (
-        <ConfirmModal
-          onConfirm={onConfirm}
-          onCancel={onCancel}
-          inputText={inputText}
-        />
-      )}
       {activeModal?.type === "view" && (
         <ViewTicketModal
           ticket={viewedTicket}
           action={viewedAction}
-          onClose={() => setActiveModal(null)}
+          onClose={() => {
+            setActiveModal(null);
+          }}
           favoriteTickets={favoriteTickets}
           setFavoriteTickets={setFavoriteTickets}
-          onCancel={handleRequestCancel}
+          onCancel={() => {
+            if (viewedTicket) {
+              setActiveModal({
+                type: "cancel",
+                ticketId: viewedTicket.ticketId,
+                from: "view",
+              });
+            }
+          }}
           onRepeat={() => {
             if (viewedTicket) {
               setActiveModal({
@@ -421,10 +371,16 @@ export default function HeroSector({
           setFavoriteTickets={setFavoriteTickets}
           ticketView={ticketView}
           setTickets={setTickets}
-          handleOpenView={handleOpenView}
+          handleOpenView={(ticketId: number) => {
+            navigate(`/tickets/${ticketId}`);
+          }}
           handleRequestCancel={handleRequestCancel}
-          handleRequestEdit={handleRequestEdit}
-          handleRequestRepeat={handleRequestRepeat}
+          handleRequestEdit={(ticketId: number) => {
+            navigate(`/tickets/${ticketId}/edit`);
+          }}
+          handleRequestRepeat={(ticketId: number) => {
+            navigate(`/tickets/${ticketId}/repeat`);
+          }}
         />
       )}
     </div>

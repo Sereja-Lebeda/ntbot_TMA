@@ -3,16 +3,26 @@ import { useEffect, useState } from "react";
 import useUser from "../../hooks/useUser";
 
 import type { activeSectionType } from "../../types/header.types";
-import type { SortByStatusType } from "../../types/ticket.types";
+import type {
+  SortByStatusType,
+  StatusType,
+  Ticket,
+} from "../../types/ticket.types";
 
 import Header from "./Header";
 import MobileSidebar from "./MobileSidebar";
 import Footer from "./Footer";
+import ConfirmModal from "../pages/modalCardWindows/ConfirmModal";
+
+import mockData from "../../../mockTicketInfo.json";
+import type { ModalTypes } from "../../types/modalTypes";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 export default function Layout() {
   const currentUser = useUser();
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
 
-  const [shouldSidebarRebder, setShouldSidebarRender] = useState(false);
+  const [shouldSidebarRender, setShouldSidebarRender] = useState(false);
   const [isAnimatingIn, setIsAnimatingIn] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -59,6 +69,52 @@ export default function Layout() {
 
   const [filter, setFilter] = useState<string | null>("Статус"); // какой дроп открыт
 
+  // Modal states
+  const [tickets, setTickets] = useState<Ticket[]>(
+    mockData as unknown as Ticket[],
+  );
+  const [activeModal, setActiveModal] = useState<ModalTypes>(null);
+  function handleRequestCancel(ticketId: number) {
+    setActiveModal({ type: "cancel", ticketId });
+  }
+
+  function handleRequestRepeat(ticketId: number) {
+    setActiveModal({ type: "repeat", ticketId }); // без from — прямое открытие
+  }
+
+  function handleRequestEdit(ticketId: number) {
+    setActiveModal({ type: "edit", ticketId }); // без from
+  }
+
+  function handleRepeatCancel() {
+    if (activeModal?.from === "view") {
+      setActiveModal({ type: "view", ticketId: activeModal.ticketId });
+    } else {
+      setActiveModal(null);
+    }
+  }
+
+  function handleEditCancel() {
+    if (activeModal?.from === "view") {
+      setActiveModal({ type: "view", ticketId: activeModal.ticketId });
+    } else {
+      setActiveModal(null);
+    }
+  }
+
+  function handleStatusChange(ticketId: number, newStatus: StatusType) {
+    setTickets((prev) =>
+      prev.map((t) =>
+        t.ticketId === ticketId ? { ...t, status: newStatus } : t,
+      ),
+    );
+  }
+
+  function handleOpenView(ticketId: number) {
+    setActiveModal({ type: "view", ticketId });
+  }
+  // End modal functions
+
   const hasActiveFilters =
     selectedStatuses.some((i) => i !== "Все") ||
     selectedCategories.some((i) => i !== "Все") ||
@@ -88,8 +144,6 @@ export default function Layout() {
     if (filter === name) {
       setFilter(null);
     } else {
-      // if (name !== "Статус") setSelectedStatuses(["Все"]);
-      // if (name !== "Категории") setSelectedCategories(["Все"]);
       setFilter(name);
     }
   }
@@ -102,6 +156,36 @@ export default function Layout() {
     setSidebarOpen(false);
   }
 
+  // For confirm modal window
+  const inputText =
+    "Вы уверены, что хотите отменить заявку?\n\nЗаново запустить её в работу будет невозможно.";
+
+  function onConfirm() {
+    // отмена заявки: статус → Cancelled, id из activeModal
+    if (activeModal?.type === "cancel") {
+      setTickets((prev) =>
+        prev.map((t) =>
+          t.ticketId === activeModal.ticketId
+            ? { ...t, status: "Cancelled" }
+            : t,
+        ),
+      );
+    }
+    setActiveModal(null); // закрыть
+  }
+
+  function onCancelConfirmModal() {
+    if (!isDesktop) {
+      setActiveModal(null);
+    } else {
+      if (activeModal?.from === "view") {
+        setActiveModal({ type: "view", ticketId: activeModal.ticketId });
+      } else {
+        setActiveModal(null);
+      }
+    }
+  }
+
   return (
     <div
     // onMouseDown={(e) => e.preventDefault()}
@@ -112,7 +196,7 @@ export default function Layout() {
         setActiveSection={setActiveSection}
         openSidebar={openSidebar}
       />
-      {shouldSidebarRebder && (
+      {shouldSidebarRender && (
         <MobileSidebar
           closeSidebar={closeSidebar}
           isAnimatingIn={isAnimatingIn}
@@ -138,6 +222,13 @@ export default function Layout() {
           isPrivilegeUser={isPrivilegeUser}
           changeFilter={changeFilter}
           filter={filter}
+        />
+      )}
+      {activeModal?.type === "cancel" && (
+        <ConfirmModal
+          onConfirm={onConfirm}
+          onCancel={onCancelConfirmModal}
+          inputText={inputText}
         />
       )}
       <Outlet
@@ -166,6 +257,17 @@ export default function Layout() {
           changePrioritySort,
           hasActiveFilters,
           changeFilter,
+          tickets,
+          setTickets,
+          activeModal,
+          setActiveModal,
+          handleRequestCancel,
+          handleStatusChange,
+          handleRepeatCancel,
+          handleEditCancel,
+          handleRequestEdit,
+          handleRequestRepeat,
+          handleOpenView,
         }}
       />
       {/* сюда подставляется страница */}

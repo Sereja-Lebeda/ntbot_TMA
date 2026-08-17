@@ -69,11 +69,11 @@ function ViewTicketModal({
   return createPortal(
     <div
       onClick={onClose}
-      className="xl:fixed xl:inset-0 xl:bg-black/50 xl:z-50 xl:flex xl:justify-center xl:items-center"
+      className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="xl:w-[50vw] xl:max-w-[90vw] xl:max-h-[90vh] xl:flex xl:flex-col xl:items-center xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:py-10 xl:select-none"
+        className="w-full h-full xl:w-[50vw] xl:max-w-[90vw] xl:max-h-[90vh] xl:flex xl:flex-col xl:items-center bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:py-10 xl:select-none"
       >
         {/* Header with btns */}
         <div className="xl:w-full xl:h-8.5 xl:mb-2 xl:px-12.5 xl:flex xl:justify-between xl:items-center">

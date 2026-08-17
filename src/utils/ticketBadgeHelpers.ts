@@ -47,7 +47,7 @@ export default function getStatusTitle(status: string, form: FormType) {
 }
 export function getStatusColor(status: StatusType) {
   const baseStyle =
-    "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) text-xs font-jbmono font-bold leading-3 select-none";
+    "h-5 w-auto flex justify-center items-center px-2 py-1.5 rounded-xs dark:text-(--text-btn) text-(--text-primary) text-xs font-jbmono font-bold leading-3 select-none text-nowrap";
   switch (status) {
     case "New":
       return `${baseStyle} bg-(--bg-task-new)`;

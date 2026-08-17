@@ -8,6 +8,7 @@ interface StatusInfoBtnProps {
   plateHeight: string;
   onClick: () => void;
   selectedItems: string[];
+  className?: string;
 }
 
 const textStyles = {
@@ -64,6 +65,7 @@ function StatusInfoBtn({
   plateHeight,
   selectedItems,
   onClick,
+  className,
 }: StatusInfoBtnProps) {
   const isSelected = selectedItems.includes(
     getStatusTitle(status, "statusBlock"),
@@ -71,7 +73,7 @@ function StatusInfoBtn({
   return (
     <div
       onClick={onClick}
-      className={`${plateHeight} ${isSelected ? "border-(--bg-border) xl:border-(--text-primary)" : "border-(--bg-border) hover:border-(--border-hover-btn)"} bg-(--bg-primary-second) border rounded-xs group`}
+      className={`${className} ${plateHeight} ${isSelected ? "border-(--bg-border) xl:border-(--text-primary)" : "border-(--bg-border) hover:border-(--border-hover-btn)"} bg-(--bg-primary-second) border xl:rounded-xs group`}
     >
       <div className="flex items-center justify-center h-full select-none cursor-pointer">
         <div

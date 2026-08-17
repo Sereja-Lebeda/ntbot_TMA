@@ -1,17 +1,11 @@
 import { useState, useRef } from "react";
 import useTheme from "../../../hooks/useTheme";
-import type {
-  CategoriesPool,
-  Action,
-  CategoryNode,
-} from "../../../types/createTicket.type";
+import type { CategoriesPool, Action } from "../../../types/createTicket.type";
 
-import mockActionsNested from "../../../../mockActionsNested.json";
-import flattenActions from "../../../utils/flattenActions";
+import { allActions } from "../../../utils/allActions";
 
 import Searchbar from "../../ui/Searchbar";
 import { hoverAnimationStyle } from "../../../styles/pressAnimation";
-
 import { shadowLiftCategoryStyle } from "../../../styles/shadowLift";
 
 import { categories } from "../../../data/categories";
@@ -43,8 +37,6 @@ function StepProblem({
 
   const categoryData = categories.find((c) => c.name === selectedCategory);
 
-  const typedActions = mockActionsNested as CategoryNode[];
-  const allActions = flattenActions(typedActions);
   const categoryActions = allActions.filter(
     (a) => a.category === selectedCategory,
   );

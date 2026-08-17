@@ -31,13 +31,13 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
       className="fixed w-full h-15.5
   flex justify-between items-center
   bg-[#0e0e0e] border-b border-[#201e1e]
-  px-5 py-4"
+  px-5 py-4 z-20"
     >
       <button onClick={openSidebar} className="outline-none cursor-pointer">
         <BurgerIcon
           className="w-5 h-5
         text-(--text-secondary)
-        hover:text-(--text-primary)"
+        hover:text-[#ede8de]"
         />
       </button>
 
@@ -67,7 +67,7 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
         <MagnifyIcon
           className="w-5 h-5
         text-(--text-secondary)
-        hover:text-(--text-primary)"
+        hover:text-[#ede8de]"
         />
       </button>
     </div>

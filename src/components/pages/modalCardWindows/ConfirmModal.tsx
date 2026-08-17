@@ -15,35 +15,27 @@ function ConfirmModal({ onConfirm, onCancel, inputText }: ConfirmModalProps) {
   useModalStackEntry(onCancel);
 
   return createPortal(
-    <div
-      className="xl:fixed xl:inset-0 xl:bg-black/50 xl:z-50 xl:flex xl:justify-center xl:items-center"
-    >
-      <div
-        className="xl:h-38.25 xl:w-78 xl:px-8 xl:py-3 xl:gap-2 xl:flex xl:flex-col xl:justify-center xl:items-center xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:select-none"
-      >
+    <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center">
+      <div className="h-38.25 w-78 px-8 py-3 gap-2 flex flex-col justify-center items-center bg-(--bg-secondary) border border-(--bg-border) rounded-xs select-none">
         {/* icon and text */}
-        <div
-          className="xl:w-full xl:pt-6 xl:pb-2 xl:flex xl:justify-center xl:items-center xl:gap-3"
-        >
-          <ModalIcon className="xl:w-6 xl:h-6 xl:text-(--text-primary) xl:shrink-0" />
-          <span
-            className="xl:font-consolas xl:font-normal xl:text-(--text-primary) xl:text-xs xl:leading-3 xl:whitespace-pre-line"
-          >
+        <div className="w-full pt-6 pb-2 flex justify-center items-center gap-3">
+          <ModalIcon className="w-6 h-6 text-(--text-primary) shrink-0" />
+          <span className="font-consolas font-normal text-(--text-primary) text-xs leading-3 whitespace-pre-line">
             {inputText}
           </span>
         </div>
 
         {/* buttons */}
-        <div className="xl:w-full xl:h-full xl:flex xl:justify-center xl:items-center xl:gap-18">
+        <div className="w-full h-full flex justify-center items-center gap-18">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onCancel();
             }}
-            className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:py-2.25 xl:cursor-pointer xl:group"
+            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
           >
-            <CrossIcon className="xl:w-2.5 xl:h-2.5 xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)" />
-            <span className="xl:font-bold xl:leading-3 xl:text-xs xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)">
+            <CrossIcon className="w-2.5 h-2.5 text-(--text-secondary) group-hover:text-(--text-primary)" />
+            <span className="font-bold leading-3 text-xs text-(--text-secondary) group-hover:text-(--text-primary)">
               Нет
             </span>
           </button>
@@ -53,10 +45,10 @@ function ConfirmModal({ onConfirm, onCancel, inputText }: ConfirmModalProps) {
               e.stopPropagation();
               onConfirm();
             }}
-            className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:py-2.25 xl:cursor-pointer xl:group"
+            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
           >
-            <CheckIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)" />
-            <span className="xl:font-bold xl:leading-3 xl:text-xs xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)">
+            <CheckIcon className="text-(--text-secondary) group-hover:text-(--text-primary)" />
+            <span className="font-bold leading-3 text-xs text-(--text-secondary) group-hover:text-(--text-primary)">
               Да
             </span>
           </button>
