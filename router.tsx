@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> }, // "/"
       { path: "tickets/new", element: <CreateTicketPage /> },
       { path: "tickets/:ticketId", element: <TicketViewPage /> },
-      // { path: "tickets/:ticketId/edit", element: <TicketEditPage /> },
+      { path: "tickets/:ticketId/edit", element: <TicketEditPage /> },
       // { path: "tickets/:ticketId/repeat", element: <TicketRepeatPage /> },
     ],
   },

@@ -49,30 +49,30 @@ function MultiSelectDropdown({
       onClick={() => {
         setIsOpen((prev) => !prev);
       }}
-      className={`xl:relative 
-    xl:w-full xl:h-10 xl:flex xl:flex-col xl:justify-center xl:items-start
-    xl:border ${isOpen ? "xl:border-[#E7E6E6]!" : "xl:border-(--bg-border) xl:hover:border-(--border-hover-btn)"} xl:rounded-xs
-    ${hasError ? "xl:border-(--bg-task-error)!" : ""}
-    xl:group xl:hover:border-(--border-hover-btn)
-    xl:px-4 xl:py-2.5 xl:cursor-pointer ${isOpen ? "xl:z-50" : "xl:z-20"}`}
+      className={`relative 
+    w-full h-10 flex flex-col justify-center items-start
+    border ${isOpen ? "border-[#E7E6E6]!" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
+    ${hasError ? "border-(--bg-task-error)!" : ""}
+    group hover:border-(--border-hover-btn)
+    px-4 py-2.5 cursor-pointer ${isOpen ? "z-50" : "z-20"}`}
     >
-      <div className="xl:w-full xl:h-full xl:flex xl:justify-between xl:items-center">
+      <div className="w-full h-full flex justify-between items-center">
         <span
-          className={`xl:flex-1 xl:min-w-0 xl:truncate xl:font-consolas xl:font-normal xl:text-sm
-          ${displayText ? "xl:text-(--text-primary)" : "xl:text-(--text-secondary)"}
-          xl:group-hover:text-(--text-primary)`}
+          className={`flex-1 min-w-0 truncate font-consolas font-normal text-sm
+          ${displayText ? "text-(--text-primary)" : "text-(--text-secondary)"}
+          group-hover:text-(--text-primary)`}
         >
           {displayText || placeholder}
         </span>
         <ArrowIcon
-          className={`xl:shrink-0 xl:ml-2 xl:transition-all xl:ease-in-out xl:duration-300
-          xl:group-hover:text-(--text-primary)
-          ${isOpen ? "xl:text-(--text-primary)" : "xl:rotate-180 text-(--text-secondary)"}`}
+          className={`shrink-0 ml-2 transition-all ease-in-out duration-300
+          group-hover:text-(--text-primary)
+          ${isOpen ? "text-(--text-primary)" : "rotate-180 text-(--text-secondary)"}`}
         />
       </div>
 
       {isOpen && (
-        <div className="xl:absolute xl:top-full xl:mt-px xl:-left-px xl:-right-px xl:z-50 xl:max-h-50 xl:overflow-y-auto xl:scrollbar-none xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border)">
+        <div className="absolute top-full mt-px -left-px -right-px z-50 max-h-50 overflow-y-auto scrollbar-none bg-(--bg-secondary) border border-(--bg-border)">
           {options.map((option) => {
             const isSelected = value.includes(option);
             return (
@@ -82,11 +82,11 @@ function MultiSelectDropdown({
                   e.stopPropagation();
                   toggleOption(option);
                 }}
-                className={`xl:w-full xl:h-10 xl:flex xl:items-center xl:justify-between xl:px-6 xl:py-2.5
-                xl:font-consolas xl:font-normal xl:text-sm xl:leading-normal
-                xl:border xl:border-(--bg-border)
-                xl:hover:bg-[#1B1B1B]
-                ${isSelected ? "xl:text-(--bg-btn-primary) xl:bg-[#1B1B1B]" : "xl:text-(--text-primary)"}`}
+                className={`w-full h-10 flex items-center justify-between px-6 py-2.5
+                font-consolas font-normal text-sm leading-normal
+                border border-(--bg-border)
+                hover:bg-[#1B1B1B]
+                ${isSelected ? "text-(--bg-btn-primary) bg-[#1B1B1B]" : "text-(--text-primary)"}`}
               >
                 <span>{option}</span>
                 {isSelected && <span>✓</span>}

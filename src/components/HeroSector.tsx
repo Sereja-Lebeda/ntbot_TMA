@@ -21,7 +21,6 @@ import DesktopHeroSector from "./DesktopHeroSector";
 import MobileHeroSector from "./MobileHeroSector";
 
 import getStatusTitle from "../utils/ticketBadgeHelpers";
-import getTicketDescription from "../utils/getTicketDescription";
 import { allActions } from "../utils/allActions";
 
 interface selectedTicketStatusesProps {
@@ -52,7 +51,7 @@ interface selectedTicketStatusesProps {
   changePrioritySort: () => void;
 }
 
-interface heroSectorContextProps {
+interface OutletContextProps {
   tickets: Ticket[];
   setTickets: React.Dispatch<React.SetStateAction<Ticket[]>>;
 
@@ -66,6 +65,28 @@ interface heroSectorContextProps {
   handleRequestCancel: (ticketId: number) => void;
   handleRequestEdit: (ticketId: number) => void;
   handleRequestRepeat: (ticketId: number) => void;
+
+  handleRepeatSubmit: (
+    data: {
+      formData: Record<string, string>;
+      multiData: Record<string, string[]>;
+      priority: PriorityLevel;
+      attachedFiles: TicketAttachmentType;
+    },
+    ticket: Ticket | undefined,
+    action: Action | undefined,
+  ) => void;
+  handleEditSubmit: (
+    data: {
+      formData: Record<string, string>;
+      multiData: Record<string, string[]>;
+      priority: PriorityLevel;
+      action: Action;
+      attachedFiles: TicketAttachmentType;
+      status: StatusType;
+    },
+    ticket: Ticket | undefined,
+  ) => void;
 
   handleOpenView: (ticketId: number) => void;
 }
@@ -108,7 +129,9 @@ export default function HeroSector({
     handleStatusChange,
     handleRepeatCancel,
     handleEditCancel,
-  } = useOutletContext<heroSectorContextProps>();
+    handleRepeatSubmit,
+    handleEditSubmit,
+  } = useOutletContext<OutletContextProps>();
 
   const { searchRequest, setSearchRequest } = useSearch();
 
@@ -195,70 +218,6 @@ export default function HeroSector({
       return 0;
     });
 
-  function handleRepeatSubmit(data: {
-    formData: Record<string, string>;
-    multiData: Record<string, string[]>;
-    priority: PriorityLevel;
-    attachedFiles: TicketAttachmentType;
-  }) {
-    if (!repeatTicket || !currentUser) return;
-
-    const newTicket: Ticket = {
-      ...repeatTicket,
-      // TODO: change logic to receive ticketid from server
-      ticketId: Math.max(...tickets.map((t) => t.ticketId)) + 1,
-      createDate: new Date().toLocaleDateString("ru-RU"),
-      status: "New",
-      userId: currentUser.id,
-      userName: currentUser.name,
-      department: currentUser.department,
-      body: data.formData,
-      multiBody: data.multiData,
-      priority: data.priority,
-      description: getTicketDescription(data.formData, repeatAction!),
-      attachedFiles: data.attachedFiles,
-    };
-
-    setTickets((prev) => [...prev, newTicket]);
-    setActiveModal(null);
-  }
-
-  function handleEditSubmit(data: {
-    formData: Record<string, string>;
-    multiData: Record<string, string[]>;
-    priority: PriorityLevel;
-    action: Action;
-    attachedFiles: TicketAttachmentType;
-    status: StatusType;
-  }) {
-    if (!editTicket) return;
-
-    const newBreadcrumbs = [
-      data.action.category,
-      data.action.subcategory,
-      data.action.name,
-    ];
-
-    setTickets((prev) =>
-      prev.map((t) =>
-        t.ticketId === editTicket.ticketId
-          ? {
-              ...t,
-              body: data.formData,
-              multiBody: data.multiData,
-              priority: data.priority,
-              actionId: data.action.id,
-              breadcrumbs: newBreadcrumbs,
-              description: getTicketDescription(data.formData, data.action),
-              attachedFiles: data.attachedFiles,
-              status: data.status,
-            }
-          : t,
-      ),
-    );
-    setActiveModal(null);
-  }
-
   function ticketMatchesSearch(ticket: Ticket, query: string): boolean {
     return [
       ticket.title,
@@ -317,7 +276,9 @@ export default function HeroSector({
           ticket={repeatTicket}
           action={repeatAction}
           onClose={handleRepeatCancel}
-          onSubmit={handleRepeatSubmit}
+          onSubmit={(data) =>
+            handleRepeatSubmit(data, repeatTicket, repeatAction)
+          }
           mode="repeat"
           favoriteTickets={favoriteTickets}
           setFavoriteTickets={setFavoriteTickets}
@@ -329,7 +290,7 @@ export default function HeroSector({
           ticket={editTicket}
           action={editAction}
           onClose={handleEditCancel}
-          onSubmit={handleEditSubmit}
+          onSubmit={(data) => handleEditSubmit(data, editTicket)}
           mode="edit"
           favoriteTickets={favoriteTickets}
           setFavoriteTickets={setFavoriteTickets}

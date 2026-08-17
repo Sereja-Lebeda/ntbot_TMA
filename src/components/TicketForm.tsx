@@ -43,7 +43,7 @@ function TicketForm({
 }: TicketFormProps) {
   if (!selectedAction) {
     return (
-      <div className="xl:w-full xl:text-center xl:font-consolas xl:text-sm xl:text-(--text-secondary) xl:py-8">
+      <div className="w-full text-center font-consolas text-sm text-(--text-secondary) py-8">
         Выберите действие выше, чтобы продолжить заполнение формы
       </div>
     );
@@ -51,25 +51,25 @@ function TicketForm({
 
   const userFullName = mockUserInfo.name;
 
-  const defaultInputStyle = `xl:w-full xl:h-10 xl:flex xl:items-center xl:px-4 xl:py-2.5
-    xl:border border-(--bg-border)
-    xl:hover:border-(--border-hover-btn)
-    xl:focus-within:border-(--text-primary)!
-    xl:group xl:rounded-xs xl:cursor-text`;
+  const defaultInputStyle = `w-full h-10 flex items-center px-4 py-2.5
+    border border-(--bg-border)
+    hover:border-(--border-hover-btn)
+    focus-within:border-(--text-primary)!
+    group rounded-xs cursor-text`;
 
   const priorityDivBtnStyle =
-    "xl:w-35 xl:flex xl:justify-center xl:items-center xl:px-7 xl:py-3 xl:gap-2.5 xl:rounded-xs xl:cursor-pointer";
+    "w-35 flex justify-center items-center px-7 py-3 gap-2.5 rounded-xs cursor-pointer";
   const priorityTextBtnStyle =
-    "xl:font-jbmono xl:font-extrabold xl:leading-normal xl:text-sm ";
+    "font-jbmono font-extrabold leading-normal text-sm ";
 
   function renderField(field: Field) {
     switch (field.type) {
       case "short text":
         return (
-          <div className="xl:w-full xl:flex xl:items-center xl:gap-3">
+          <div className="w-full flex items-center gap-3">
             <div
               className={`${defaultInputStyle}
-              ${errors[field.name] ? "xl:border-(--bg-task-error)!" : ""}`}
+              ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
             >
               <input
                 value={formData[field.name] ?? ""}
@@ -90,7 +90,7 @@ function TicketForm({
                 }}
                 type="text"
                 placeholder={field.placeholder}
-                className="xl:w-full xl:font-consolas xl:font-normal xl:text-sm xl:leading-normal xl:outline-none xl:group-hover:placeholder:text-(--text-primary)"
+                className="w-full font-consolas font-normal text-sm leading-normal outline-none group-hover:placeholder:text-(--text-primary)"
               />
             </div>
           </div>
@@ -99,15 +99,12 @@ function TicketForm({
       case "multi text": {
         const values = multiData[field.name] ?? [""];
         return (
-          <div className="xl:w-full xl:flex xl:flex-col xl:gap-3">
+          <div className="w-full flex flex-col gap-3">
             {values.map((value, index) => (
-              <div
-                key={index}
-                className="xl:w-full xl:flex xl:items-center xl:gap-3"
-              >
+              <div key={index} className="w-full flex items-center gap-3">
                 <div
                   className={`${defaultInputStyle}
-              ${errors[field.name] ? "xl:border-(--bg-task-error)!" : ""}`}
+              ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
                 >
                   <input
                     value={value}
@@ -133,19 +130,19 @@ function TicketForm({
                     }}
                     type="text"
                     placeholder={field.placeholder}
-                    className="xl:w-full xl:font-consolas xl:font-normal xl:text-sm xl:leading-normal xl:outline-none"
+                    className="w-full font-consolas font-normal text-sm leading-normal outline-none"
                   />
                 </div>
 
                 <div
-                  className={`xl:w-10 xl:h-10 xl:flex xl:justify-center xl:items-center
-            xl:border-[0.8px] xl:border-(--bg-border)
-            xl:group xl:hover:border-(--border-hover-btn) xl:cursor-pointer
+                  className={`w-10 h-10 flex justify-center items-center
+            border-[0.8px] border-(--bg-border)
+            group hover:border-(--border-hover-btn) cursor-pointer
             ${btnPressAnimationStyle}`}
                 >
                   {index === 0 ? (
                     <button
-                      className="xl:w-full xl:h-full xl:flex xl:items-center xl:justify-center xl:cursor-pointer"
+                      className="w-full h-full flex items-center justify-center cursor-pointer"
                       onClick={() =>
                         setMultiData((prev) => {
                           const arr = [...(prev[field.name] ?? [""])];
@@ -153,11 +150,11 @@ function TicketForm({
                         })
                       }
                     >
-                      <PlusFieldIcon className="xl:w-4 xl:h-4 xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)" />
+                      <PlusFieldIcon className="w-4 h-4 text-(--text-secondary) group-hover:text-(--text-primary)" />
                     </button>
                   ) : (
                     <button
-                      className="xl:w-full xl:h-full xl:flex xl:items-center xl:justify-center xl:cursor-pointer"
+                      className="w-full h-full flex items-center justify-center cursor-pointer"
                       onClick={() =>
                         setMultiData((prev) => {
                           const arr = (prev[field.name] ?? []).filter(
@@ -167,7 +164,7 @@ function TicketForm({
                         })
                       }
                     >
-                      <MinusIcon className="xl:w-4 xl:h-4 xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)" />
+                      <MinusIcon className="w-4 h-4 text-(--text-secondary) group-hover:text-(--text-primary)" />
                     </button>
                   )}
                 </div>
@@ -181,12 +178,12 @@ function TicketForm({
       case "long text":
         return (
           <div
-            className={`xl:w-full xl:px-4 xl:py-2.5
-        xl:border xl:border-(--bg-border)
-        xl:hover:border-(--border-hover-btn)
-        xl:focus-within:border-(--text-primary)!
-        xl:group xl:rounded-xs xl:cursor-text
-        ${errors[field.name] ? "xl:border-(--bg-task-error)!" : ""}`}
+            className={`w-full px-4 py-2.5
+        border border-(--bg-border)
+        hover:border-(--border-hover-btn)
+        focus-within:border-(--text-primary)!
+        group rounded-xs cursor-text
+        ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
           >
             <textarea
               value={formData[field.name] ?? ""}
@@ -206,7 +203,7 @@ function TicketForm({
                 clearError(field.name);
               }}
               placeholder={field.placeholder}
-              className="xl:w-full xl:min-h-20 xl:max-h-60 xl:font-consolas xl:font-normal xl:text-sm xl:leading-normal xl:outline-none xl:placeholder:text-(--text-secondary) xl:group-hover:placeholder:text-(--text-primary) xl:text-(--text-primary) xl:resize-none xl:overscroll-contain dropdown-scroll xl:field-sizing-content"
+              className="w-full min-h-20 max-h-60 font-consolas font-normal text-sm leading-normal outline-none placeholder:text-(--text-secondary) group-hover:placeholder:text-(--text-primary) text-(--text-primary) resize-none overscroll-contain dropdown-scroll field-sizing-content"
             ></textarea>
           </div>
         );
@@ -257,7 +254,7 @@ function TicketForm({
       case "radio": // или внутри dropdown по флагу
         return (
           <div
-            className={`xl:flex xl:items-start xl:gap-6 xl:border xl:border-transparent ${errors[field.name] ? "xl:border-(--bg-task-error)! xl:rounded-xs" : ""}`}
+            className={`flex items-start gap-6 border border-transparent ${errors[field.name] ? "border-(--bg-task-error)! rounded-xs" : ""}`}
           >
             {field.options?.map((option) => (
               <label
@@ -268,13 +265,13 @@ function TicketForm({
                 }}
                 className=""
               >
-                <div className="xl:flex xl:items-center xl:cursor-pointer xl:gap-1">
+                <div className="flex items-center cursor-pointer gap-1">
                   {formData[field.name] === option ? (
                     <CheckRadioIcon />
                   ) : (
                     <UncheckRadioIcon />
                   )}
-                  <span className="xl:flex xl:justify-center xl:items-center xl:p-1 xl:font-consolas xl:font-normal xl:text-sm xl:text-(--text-primary)">
+                  <span className="flex justify-center items-center p-1 font-consolas font-normal text-sm text-(--text-primary)">
                     {option}
                   </span>
                 </div>
@@ -300,7 +297,7 @@ function TicketForm({
     ];
 
     return (
-      <div className="xl:w-full xl:flex xl:justify-start xl:items-center xl:gap-2.5">
+      <div className="w-full flex justify-start items-center gap-2.5">
         {priorities.map((p) => {
           const Icon = p.icon;
           const isActive = priority === p.value;
@@ -311,13 +308,13 @@ function TicketForm({
                 setPriority(p.value);
                 clearError("priority");
               }}
-              className={`${priorityDivBtnStyle} ${isActive ? "xl:border xl:border-(--text-primary)" : "xl:border xl:border-(--border-hover-btn) xl:group xl:hover:border-(--text-secondary)"} ${errors["priority"] ? "xl:border-(--bg-task-error)!" : ""}`}
+              className={`${priorityDivBtnStyle} ${isActive ? "border border-(--text-primary)" : "border border-(--border-hover-btn) group hover:border-(--text-secondary)"} ${errors["priority"] ? "border-(--bg-task-error)!" : ""}`}
             >
               <Icon
-                className={`xl:shrink-0 ${isActive ? "xl:text-(--text-primary)" : "xl:text-(--border-hover-btn) xl:group-hover:text-(--text-secondary)"}`}
+                className={`shrink-0 ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}
               />
               <span
-                className={`${priorityTextBtnStyle} ${isActive ? "xl:text-(--text-primary)" : "xl:text-(--border-hover-btn) xl:group-hover:text-(--text-secondary)"}`}
+                className={`${priorityTextBtnStyle} ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}
               >
                 {p.label}
               </span>
@@ -329,23 +326,20 @@ function TicketForm({
   }
 
   return (
-    <div className="xl:w-full">
-      <div className="xl:w-full xl:flex xl:flex-col xl:gap-8">
-        <div className="xl:w-full xl:flex xl:flex-col xl:gap-8">
+    <div className="w-full">
+      <div className="w-full flex flex-col gap-8">
+        <div className="w-full flex flex-col gap-8">
           {selectedAction.fields.map((field: Field) => (
-            <div
-              key={field.name}
-              className="xl:w-full xl:flex xl:flex-col xl:gap-2"
-            >
-              <label className="xl:flex xl:items-center xl:gap-1 xl:font-consolas xl:leading-3">
-                <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-3">
+            <div key={field.name} className="w-full flex flex-col gap-2">
+              <label className="flex items-center gap-1 font-consolas leading-3">
+                <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                   {field.label}
                 </span>
-                <span className="xl:font-consolas xl:font-normal xl:text-[15px] xl:text-(--bg-btn-primary) xl:leading-4">
+                <span className="font-consolas font-normal text-[15px] text-(--bg-btn-primary) leading-4">
                   {field.required && "*"}
                 </span>
                 {errors[field.name] && (
-                  <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--bg-task-error) xl:leading-3">
+                  <span className="font-consolas font-normal text-xs text-(--bg-task-error) leading-3">
                     {errors[field.name]}
                   </span>
                 )}
@@ -354,18 +348,18 @@ function TicketForm({
             </div>
           ))}
         </div>
-        <div className="xl:w-full xl:flex xl:flex-col">
-          <label className="xl:font-consolas xl:font-normal xl:text-xs xl:flex xl:items-center xl:gap-0.5 xl:mb-4">
-            <span className="xl:text-(--text-secondary) xl:leading-4.5">
+        <div className="w-full flex flex-col">
+          <label className="font-consolas font-normal text-xs flex items-center gap-0.5 mb-4">
+            <span className="text-(--text-secondary) leading-4.5">
               Приоритет
             </span>
-            <span className="xl:text-(--bg-btn-primary) xl:leading-4">*</span>
+            <span className="text-(--bg-btn-primary) leading-4">*</span>
           </label>
           {renderPriority()}
         </div>
 
         {/* Divider */}
-        <div className="xl:w-full xl:h-px xl:bg-(--bg-border)"></div>
+        <div className="w-full h-px bg-(--bg-border)"></div>
       </div>
     </div>
   );

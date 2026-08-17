@@ -11,7 +11,7 @@ import useUser from "../../hooks/useUser";
 import { useOutletContext } from "react-router";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
-interface TicketFilterContextType {
+interface OutletContextProps {
   selectedStatuses: string[];
   setSelectedStatuses: (words: string[]) => void;
   selectedCategories: string[];
@@ -65,7 +65,7 @@ export default function HomePage() {
     resetFilters,
     changePrioritySort,
     hasActiveFilters,
-  } = useOutletContext<TicketFilterContextType>();
+  } = useOutletContext<OutletContextProps>();
   const isDesktop = useMediaQuery("(min-width:1280px)");
 
   const currentUser = useUser();

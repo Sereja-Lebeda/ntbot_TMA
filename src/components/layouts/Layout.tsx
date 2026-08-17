@@ -1,22 +1,26 @@
 import { Outlet } from "react-router";
 import { useEffect, useState } from "react";
 import useUser from "../../hooks/useUser";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 import type { activeSectionType } from "../../types/header.types";
 import type {
   SortByStatusType,
   StatusType,
   Ticket,
+  TicketAttachmentType,
 } from "../../types/ticket.types";
+import type { PriorityLevel, Action } from "../../types/createTicket.type";
+import type { ModalTypes } from "../../types/modalTypes";
 
 import Header from "./Header";
 import MobileSidebar from "./MobileSidebar";
 import Footer from "./Footer";
 import ConfirmModal from "../pages/modalCardWindows/ConfirmModal";
 
+import getTicketDescription from "../../utils/getTicketDescription";
+
 import mockData from "../../../mockTicketInfo.json";
-import type { ModalTypes } from "../../types/modalTypes";
-import useMediaQuery from "../../hooks/useMediaQuery";
 
 export default function Layout() {
   const currentUser = useUser();
@@ -186,8 +190,80 @@ export default function Layout() {
     }
   }
 
+  function handleRepeatSubmit(
+    data: {
+      formData: Record<string, string>;
+      multiData: Record<string, string[]>;
+      priority: PriorityLevel;
+      attachedFiles: TicketAttachmentType;
+    },
+    repeatTicket: Ticket | undefined,
+    repeatAction: Action | undefined,
+  ) {
+    if (!repeatTicket || !currentUser) return;
+
+    const newTicket: Ticket = {
+      ...repeatTicket,
+      // TODO: change logic to receive ticketid from server
+      ticketId: Math.max(...tickets.map((t) => t.ticketId)) + 1,
+      createDate: new Date().toLocaleDateString("ru-RU"),
+      status: "New",
+      userId: currentUser.id,
+      userName: currentUser.name,
+      department: currentUser.department,
+      body: data.formData,
+      multiBody: data.multiData,
+      priority: data.priority,
+      description: getTicketDescription(data.formData, repeatAction!),
+      attachedFiles: data.attachedFiles,
+    };
+
+    setTickets((prev) => [...prev, newTicket]);
+    setActiveModal(null);
+  }
+
+  function handleEditSubmit(
+    data: {
+      formData: Record<string, string>;
+      multiData: Record<string, string[]>;
+      priority: PriorityLevel;
+      action: Action;
+      attachedFiles: TicketAttachmentType;
+      status: StatusType;
+    },
+    editTicket: Ticket | undefined,
+  ) {
+    if (!editTicket) return;
+
+    const newBreadcrumbs = [
+      data.action.category,
+      data.action.subcategory,
+      data.action.name,
+    ];
+
+    setTickets((prev) =>
+      prev.map((t) =>
+        t.ticketId === editTicket.ticketId
+          ? {
+              ...t,
+              body: data.formData,
+              multiBody: data.multiData,
+              priority: data.priority,
+              actionId: data.action.id,
+              breadcrumbs: newBreadcrumbs,
+              description: getTicketDescription(data.formData, data.action),
+              attachedFiles: data.attachedFiles,
+              status: data.status,
+            }
+          : t,
+      ),
+    );
+    setActiveModal(null);
+  }
+
   return (
     <div
+
     // onMouseDown={(e) => e.preventDefault()}
     /* твой onMouseDown для blur инпута, если нужен глобально */
     >
@@ -268,6 +344,8 @@ export default function Layout() {
           handleRequestEdit,
           handleRequestRepeat,
           handleOpenView,
+          handleRepeatSubmit,
+          handleEditSubmit,
         }}
       />
       {/* сюда подставляется страница */}

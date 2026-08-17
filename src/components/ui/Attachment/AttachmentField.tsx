@@ -12,19 +12,19 @@ import {
 import CrossIcon from "../../../icons/card/CrossIcon";
 import PlusAttachIcon from "../../../icons/createTicket/PlusAttachIcon";
 
-interface AttachmentaFieldProps {
+interface AttachmentFieldProps {
   files: AttachedFile[];
   setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
   isDragging: boolean;
   addFiles: (fileList: FileList) => void;
 }
 
-function AttachmentaField({
+function AttachmentField({
   files,
   setFiles,
   isDragging,
   addFiles,
-}: AttachmentaFieldProps) {
+}: AttachmentFieldProps) {
   const filesRef = useRef(files);
   filesRef.current = files; // refresh every render
 
@@ -102,7 +102,7 @@ function AttachmentaField({
         </div>
       ) : (
         // Attachment row / container
-        <div className="xl:w-full xl:flex xl:justify-start xl:gap-5 xl:overflow-x-auto xl:overscroll-contain dropdown-scroll">
+        <div className="xl:w-full xl:flex xl:justify-start xl:gap-5 xl:overflow-x-auto overscroll-x-contain dropdown-scroll">
           {files.length >= 1 &&
             files.map((attached) => (
               // Single attachment
@@ -178,4 +178,4 @@ function AttachmentaField({
   );
 }
 
-export default AttachmentaField;
+export default AttachmentField;

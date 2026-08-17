@@ -68,7 +68,7 @@ function EditableAttachmentField({
         setIsDragging(false);
         addFiles(e.dataTransfer.files);
       }}
-      className="xl:w-full xl:shrink-0 xl:flex xl:justify-start xl:gap-5 xl:overscroll-contain dropdown-scroll xl:overflow-x-auto"
+      className="w-full shrink-0 flex justify-start gap-5 overscroll-x-contain dropdown-scroll overflow-x-auto"
     >
       {isModalOpen && (
         <ConfirmModal
@@ -127,13 +127,13 @@ function EditableAttachmentField({
       {files.length === 0 ? (
         <button
           onClick={() => refFileAttach.current?.click()}
-          className={`xl:w-full xl:h-32.5 xl:px-4 xl:py-2.5
-          xl:flex xl:flex-col xl:items-center xl:justify-center xl:gap-2.5
-          xl:border xl:border-dashed xl:border-(--bg-border)
-          xl:cursor-pointer
-          xl:font-consolas xl:font-normal xl:text-sm xl:text-(--text-secondary) xl:leading-5
-          xl:group xl:hover:border-(--border-hover-btn)
-          ${isDragging ? "xl:border-(--border-hover-btn)" : ""}`}
+          className={`w-full h-32.5 px-4 py-2.5
+          flex flex-col items-center justify-center gap-2.5
+          border border-dashed border-(--bg-border)
+          cursor-pointer
+          font-consolas font-normal text-sm text-(--text-secondary) leading-5
+          group hover:border-(--border-hover-btn)
+          ${isDragging ? "border-(--border-hover-btn)" : ""}`}
         >
           <span className="xl:group-hover:text-(--text-primary)">
             Перетащите файл сюда или
@@ -144,15 +144,15 @@ function EditableAttachmentField({
       ) : (
         <button
           onClick={() => refFileAttach.current?.click()}
-          className={`xl:w-47 xl:h-53
-              xl:flex xl:items-center xl:justify-center xl:gap-1
-          xl:border xl:border-dashed xl:border-(--bg-border) xl:rounded-xs
-          xl:cursor-pointer
-          xl:group xl:hover:border-(--border-hover-btn) xl:shrink-0
-          ${isDragging ? "xl:border-(--border-hover-btn)" : ""}`}
+          className={`w-47 h-53
+              flex items-center justify-center gap-1
+          border border-dashed border-(--bg-border) rounded-xs
+          cursor-pointer
+          group hover:border-(--border-hover-btn) shrink-0
+          ${isDragging ? "border-(--border-hover-btn)" : ""}`}
         >
-          <PlusAttachIcon className="xl:w-2.5 xl:h-2.5 xl:text-(--text-primary)" />
-          <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-3">
+          <PlusAttachIcon className="w-2.5 h-2.5 text-(--text-primary)" />
+          <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
             Загрузить файл
           </span>
         </button>

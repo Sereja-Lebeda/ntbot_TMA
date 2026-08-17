@@ -21,19 +21,19 @@ export default function FileCard({
   onDelete,
 }: FileCardProps) {
   return (
-    <div className="xl:w-47 xl:h-53 xl:flex xl:flex-col xl:items-center xl:border-[0.8px] xl:border-(--bg-border) xl:rounded-xs xl:group xl:shrink-0">
-      <div className="xl:relative xl:w-full xl:h-37.25 xl:overflow-hidden xl:rounded-xs xl:flex xl:justify-center xl:items-center">
+    <div className="w-47 h-53 flex flex-col items-center border-[0.8px] border-(--bg-border) rounded-xs group shrink-0">
+      <div className="relative w-full h-37.25 overflow-hidden rounded-xs flex justify-center items-center">
         {isImage && imageUrl ? (
           <img
             src={imageUrl}
-            className={`xl:w-full xl:h-full xl:object-cover xl:group-hover:scale-115 ${hoverAnimationStyle} xl:cursor-default!`}
+            className={`w-full h-full object-cover group-hover:scale-115 ${hoverAnimationStyle} cursor-default!`}
           />
         ) : (
           (() => {
             const Icon = getFileIcon(name);
             return (
               <Icon
-                className={`xl:w-1/2 xl:h-1/2 xl:group-hover:scale-115 ${hoverAnimationStyle} xl:cursor-default!`}
+                className={`w-1/2 h-1/2 group-hover:scale-115 ${hoverAnimationStyle} cursor-default!`}
               />
             );
           })()
@@ -41,19 +41,19 @@ export default function FileCard({
         {onDelete && (
           <div
             onClick={onDelete}
-            className="xl:absolute xl:top-2 xl:right-2 xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center xl:bg-(--bg-secondary) xl:border-[0.8px] xl:border-(--bg-border) xl:rounded-xs xl:group/delete xl:cursor-pointer"
+            className="absolute top-2 right-2 w-5 h-5 flex justify-center items-center bg-(--bg-secondary) border-[0.8px] border-(--bg-border) rounded-xs group/delete cursor-pointer"
           >
             <CrossIcon
-              className={`xl:w-2.5 xl:h-2.5 xl:text-(--text-secondary) xl:group-hover/delete:text-(--text-primary) ${btnPressAnimationStyle}`}
+              className={`w-2.5 h-2.5 text-(--text-secondary) group-hover/delete:text-(--text-primary) ${btnPressAnimationStyle}`}
             />
           </div>
         )}
       </div>
-      <div className="xl:w-47 xl:h-15.75 xl:p-3 xl:gap-2.5 xl:flex xl:flex-col xl:justify-center xl:items-start xl:font-consolas xl:font-normal">
-        <span className="xl:w-full xl:h-full xl:text-xs xl:text-(--text-primary) xl:leading-3 xl:truncate">
+      <div className="w-47 h-15.75 p-3 gap-2.5 flex flex-col justify-center items-start font-consolas font-normal">
+        <span className="w-full h-full text-xs text-(--text-primary) leading-3 truncate">
           {name}
         </span>
-        <span className="xl:text-[11px] xl:text-(--text-secondary) xl:leading-4">
+        <span className="text-[11px] text-(--text-secondary) leading-4">
           {dateLabel}
         </span>
       </div>
