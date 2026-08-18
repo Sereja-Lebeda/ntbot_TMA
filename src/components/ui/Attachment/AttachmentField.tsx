@@ -58,7 +58,7 @@ function AttachmentField({
   }
 
   return (
-    <div className="xl:w-full">
+    <div className="w-full">
       {isModalOpen && (
         <ConfirmModal
           onConfirm={onConfirm}
@@ -81,19 +81,19 @@ function AttachmentField({
       />
 
       {files.length === 0 ? (
-        <div className="xl:w-full">
+        <div className="w-full">
           {/* Drag field */}
           <button
             onClick={() => refFileAttach.current?.click()}
-            className={`xl:w-full xl:h-32.5 xl:px-4 xl:py-2.5
-          xl:flex xl:flex-col xl:items-center xl:justify-center xl:gap-2.5
-          xl:border xl:border-dashed xl:border-(--bg-border)
-          xl:cursor-pointer
-          xl:font-consolas xl:font-normal xl:text-sm xl:text-(--text-secondary) xl:leading-5
-          xl:group xl:hover:border-(--border-hover-btn)
-          ${isDragging ? "xl:border-(--border-hover-btn)" : ""}`}
+            className={`w-full h-32.5 px-4 py-2.5
+          flex flex-col items-center justify-center gap-2.5
+          border border-dashed border-(--bg-border)
+          cursor-pointer
+          font-consolas font-normal text-sm text-(--text-secondary) leading-5
+          group hover:border-(--border-hover-btn)
+          ${isDragging ? "border-(--border-hover-btn)" : ""}`}
           >
-            <span className="xl:group-hover:text-(--text-primary)">
+            <span className="group-hover:text-(--text-primary)">
               Перетащите файл сюда или
               <br />
               нажмите для выбора
@@ -102,21 +102,21 @@ function AttachmentField({
         </div>
       ) : (
         // Attachment row / container
-        <div className="xl:w-full xl:flex xl:justify-start xl:gap-5 xl:overflow-x-auto overscroll-x-contain dropdown-scroll">
+        <div className="w-full flex justify-start gap-5 overflow-x-auto overscroll-x-contain dropdown-scroll">
           {files.length >= 1 &&
             files.map((attached) => (
               // Single attachment
               <div
                 key={`${attached.file.name}-${attached.file.size}-${attached.file.lastModified}`}
-                className="xl:w-47 xl:h-53 xl:flex xl:flex-col xl:items-center xl:border-[0.8px] xl:border-(--bg-border) xl:rounded-xs xl:group xl:shrink-0"
+                className="w-47 h-53 flex flex-col items-center border-[0.8px] border-(--bg-border) rounded-xs group shrink-0"
               >
                 {/* Image */}
-                <div className="xl:relative xl:w-full xl:h-37.25 xl:overflow-hidden xl:rounded-xs xl:flex xl:justify-center xl:items-center">
+                <div className="relative w-full h-37.25 overflow-hidden rounded-xs flex justify-center items-center">
                   {attached.file.type.startsWith("image/") ? (
                     <img
                       src={attached.url}
-                      className={`xl:w-full xl:h-full xl:object-cover
-                          xl:group-hover:scale-115 ${hoverAnimationStyle} xl:cursor-default!`}
+                      className={`w-full h-full object-cover
+                          group-hover:scale-115 ${hoverAnimationStyle} cursor-default!`}
                     />
                   ) : (
                     (() => {
@@ -124,8 +124,8 @@ function AttachmentField({
                       return (
                         <Icon
                           className={`
-                      xl:w-1/2 xl:h-1/2
-                      xl:group-hover:scale-115 ${hoverAnimationStyle} xl:cursor-default!`}
+                      w-1/2 h-1/2
+                      group-hover:scale-115 ${hoverAnimationStyle} cursor-default!`}
                         />
                       );
                     })()
@@ -136,22 +136,22 @@ function AttachmentField({
                       setFileToDelete(attached);
                       setIsModalOpen(true);
                     }}
-                    className="xl:absolute xl:top-2 xl:right-2 xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center xl:bg-(--bg-secondary) xl:border-[0.8px] xl:border-(--bg-border) xl:rounded-xs xl:group/delete xl:cursor-pointer"
+                    className="absolute top-2 right-2 w-5 h-5 flex justify-center items-center bg-(--bg-secondary) border-[0.8px] border-(--bg-border) rounded-xs group/delete cursor-pointer"
                   >
                     <CrossIcon
-                      className={`xl:w-2.5 xl:h-2.5 xl:text-(--text-secondary)
-                        xl:group-hover/delete:text-(--text-primary)
+                      className={`w-2.5 h-2.5 text-(--text-secondary)
+                        group-hover/delete:text-(--text-primary)
                         ${btnPressAnimationStyle}`}
                     />
                   </div>
                 </div>
 
                 {/* Image info */}
-                <div className="xl:w-47 xl:h-15.75 xl:p-3 xl:gap-2.5 xl:flex xl:flex-col xl:justify-center xl:items-start xl:font-consolas xl:font-normal">
-                  <span className="xl:w-full xl:h-full xl:text-xs xl:text-(--text-primary) xl:leading-3 xl:truncate">
+                <div className="w-47 h-15.75 p-3 gap-2.5 flex flex-col justify-center items-start font-consolas font-normal">
+                  <span className="w-full h-full text-xs text-(--text-primary) leading-3 truncate">
                     {attached.file.name}
                   </span>
-                  <span className="xl:text-[11px] xl:text-(--text-secondary) xl:leading-4">
+                  <span className="text-[11px] text-(--text-secondary) leading-4">
                     {new Date(attached.file.lastModified).toLocaleString()}
                   </span>
                 </div>
@@ -161,15 +161,15 @@ function AttachmentField({
 
           <button
             onClick={() => refFileAttach.current?.click()}
-            className={`xl:w-47 xl:h-53
-              xl:flex xl:items-center xl:justify-center xl:gap-1
-          xl:border xl:border-dashed xl:border-(--bg-border) xl:rounded-xs
-          xl:cursor-pointer
-          xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-3
-          xl:group xl:hover:border-(--border-hover-btn) xl:shrink-0
-          ${isDragging ? "xl:border-(--border-hover-btn)" : ""}`}
+            className={`w-47 h-53
+              flex items-center justify-center gap-1
+          border border-dashed border-(--bg-border) rounded-xs
+          cursor-pointer
+          font-consolas font-normal text-xs text-(--text-secondary) leading-3
+          group hover:border-(--border-hover-btn) shrink-0
+          ${isDragging ? "border-(--border-hover-btn)" : ""}`}
           >
-            <PlusAttachIcon className="xl:w-2.5 xl:h-2.5 xl:text-(--text-primary)" />
+            <PlusAttachIcon className="w-2.5 h-2.5 text-(--text-primary)" />
             <span>Загрузить файл</span>
           </button>
         </div>

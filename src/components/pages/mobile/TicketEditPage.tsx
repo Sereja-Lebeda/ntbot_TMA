@@ -26,8 +26,7 @@ import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import FloppydiskIcon from "../../../icons/FloppydiskIcon";
-
-// interface TicketEditPageProps {}
+import useEscButton from "../../../hooks/useEscButton";
 
 interface OutletContextProps {
   tickets: Ticket[];
@@ -103,8 +102,13 @@ function TicketEditPage() {
     action: editedAction,
     mode: "edit",
     onClose,
-    onSubmit: (data) => handleEditSubmit(data, editedTicket),
+    onSubmit: (data) => {
+      handleEditSubmit(data, editedTicket);
+      onClose();
+    },
   });
+
+  useEscButton(handleCloseAttempt);
 
   if (!currentUser || !editedTicket || !editedAction) return;
   const permissions = getTicketPermissions(editedTicket, currentUser);

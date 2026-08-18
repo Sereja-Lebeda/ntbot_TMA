@@ -2,7 +2,7 @@ interface FunctionBtnProps {
   Icon: React.ComponentType<{ className?: string }>;
   iconClassName?: string;
 
-  text: string;
+  text?: string;
   textClassName?: string;
 
   btnClassName?: string;

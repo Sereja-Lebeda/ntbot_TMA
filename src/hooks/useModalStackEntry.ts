@@ -1,14 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useModalStack from "./useModalStack";
 
 function useModalStackEntry(onClose: () => void) {
   const modalStack = useModalStack();
+  const ref = useRef(onClose);
 
   useEffect(() => {
-    modalStack.addStackEl(onClose);
+    ref.current = onClose;
+  });
+
+  useEffect(() => {
+    const stableCallback = () => ref.current();
+    modalStack.addStackEl(stableCallback);
 
     return () => {
-      modalStack.removeStackEl(onClose);
+      modalStack.removeStackEl(stableCallback);
     };
   }, []);
 }

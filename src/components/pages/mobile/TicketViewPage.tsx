@@ -24,6 +24,7 @@ import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import AttachmentIcon from "../../../icons/createTicket/AttachmentIcon";
 import MobileArrowIcon from "../../../icons/mobile/MobileArrowIcon";
 import useMediaQuery from "../../../hooks/useMediaQuery";
+import useEscButton from "../../../hooks/useEscButton";
 
 interface TicketViewPageProps {
   tickets: Ticket[];
@@ -35,6 +36,8 @@ interface TicketViewPageProps {
 }
 
 function TicketViewPage() {
+  useEscButton(() => navigate(-1));
+
   const params = useParams<{ ticketId: string }>();
   const navigate = useNavigate();
   const ticketId = Number(params.ticketId);

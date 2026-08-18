@@ -1,5 +1,4 @@
 import { createPortal } from "react-dom";
-import { useRef, useEffect } from "react";
 import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
 import useUser from "../../../hooks/useUser";
 import useModalStackEntry from "../../../hooks/useModalStackEntry";
@@ -107,11 +106,7 @@ function EditRepeatModal({
     onSubmit,
   });
 
-  const ref = useRef(handleCloseAttempt);
-  useEffect(() => {
-    ref.current = handleCloseAttempt;
-  });
-  useModalStackEntry(() => ref.current());
+  useModalStackEntry(handleCloseAttempt);
 
   const currentUser = useUser();
 

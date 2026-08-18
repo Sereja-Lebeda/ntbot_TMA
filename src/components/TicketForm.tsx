@@ -15,6 +15,7 @@ import UncheckRadioIcon from "../icons/createTicket/UncheckRadioIcon";
 import LowPriorityIcon from "../icons/createTicket/LowPriorityIcon";
 import MidPriorityIcon from "../icons/createTicket/MidPriorityIcon";
 import HighPriorityIcon from "../icons/createTicket/HighPriorityIcon";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 interface TicketFormProps {
   selectedAction: Action | null;
@@ -41,6 +42,8 @@ function TicketForm({
   clearError,
   setFieldError,
 }: TicketFormProps) {
+  const isDesktop = useMediaQuery("(min-width: 500px)");
+
   if (!selectedAction) {
     return (
       <div className="w-full text-center font-consolas text-sm text-(--text-secondary) py-8">
@@ -310,14 +313,22 @@ function TicketForm({
               }}
               className={`${priorityDivBtnStyle} ${isActive ? "border border-(--text-primary)" : "border border-(--border-hover-btn) group hover:border-(--text-secondary)"} ${errors["priority"] ? "border-(--bg-task-error)!" : ""}`}
             >
-              <Icon
-                className={`shrink-0 ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}
-              />
-              <span
-                className={`${priorityTextBtnStyle} ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}
-              >
-                {p.label}
-              </span>
+              {isDesktop ? (
+                <>
+                  <Icon
+                    className={`shrink-0 ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}
+                  />
+                  <span
+                    className={`${priorityTextBtnStyle} ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}
+                  >
+                    {p.label}
+                  </span>
+                </>
+              ) : (
+                <Icon
+                  className={`shrink-0 ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}
+                />
+              )}
             </button>
           );
         })}
