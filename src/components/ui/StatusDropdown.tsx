@@ -47,30 +47,30 @@ function StatusDropdown({
       onClick={() => {
         if (!disabled) setIsOpen((prev) => !prev);
       }}
-      className={`xl:relative ${badgeClassName} ${disabled ? "xl:opacity-40" : "xl:cursor-pointer group"} ${isOpen ? "xl:z-50" : "xl:z-20"}`}
+      className={`relative ${badgeClassName} ${disabled ? "opacity-40" : "cursor-pointer group"} ${isOpen ? "z-50" : "z-20"}`}
     >
       <div
         ref={badgeContentRef}
-        className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:cursor-pointer"
+        className="flex justify-center items-center gap-1 cursor-pointer"
       >
-        <span className="xl:dark:text-(--text-btn) xl:text-(--text-primary) xl:text-xs xl:font-bold xl:leading-3 xl:select-none">
+        <span className="dark:text-(--text-btn) text-(--text-primary) text-xs font-bold leading-3 select-none">
           {value}
         </span>
         <ArrowIcon
-          className={`xl:w-5 xl:h-5 xl:transition-all ${isOpen ? "" : "xl:rotate-180"}`}
+          className={`w-5 h-5 transition-all ${isOpen ? "" : "rotate-180"}`}
         />
       </div>
 
       {isOpen && (
         <div
           style={{ width: badgeWidth }}
-          className="xl:absolute xl:top-full xl:left- xl:mt-px xl:z-50 xl:min-w-24 xl:max-h-70 xl:overflow-y-auto xl:scrollbar-none xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border)"
+          className="absolute top-full left-0 xl:-left-2.5 mt-px z-40 min-w-24 max-h-70 overflow-y-auto scrollbar-none bg-(--bg-secondary) border border-(--bg-border)"
         >
           {options.map((option) => (
             <div
               key={option}
               onClick={() => onChange(option)}
-              className="xl:h-10 xl:flex xl:items-center xl:justify-start xl:px-2 xl:py-2.5 xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-primary) xl:leading-normal xl:border xl:border-(--bg-border) xl:hover:bg-[#1B1B1B]"
+              className="h-10 flex items-center justify-start px-2 py-2.5 font-consolas font-normal text-xs text-(--text-primary) leading-normal border border-(--bg-border) hover:bg-[#1B1B1B]"
             >
               {option}
             </div>

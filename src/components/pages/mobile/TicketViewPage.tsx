@@ -84,7 +84,7 @@ function TicketViewPage() {
         className={`max-w-200 mx-auto
          ${isDesktop ? "sticky " : "fixed top-15.5"}
         
-      w-full h-15
+      w-full h-15 z-30
       flex justify-center select-none`}
       >
         <FunctionBtn

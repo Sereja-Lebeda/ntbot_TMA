@@ -49,6 +49,7 @@ function TicketEditPage() {
   const currentUser = useUser();
   const navigate = useNavigate();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
+  const isMobile = useMediaQuery("(max-width: 500px)");
 
   const params = useParams<{ ticketId: string }>();
   const ticketId = Number(params.ticketId);
@@ -252,21 +253,38 @@ function TicketEditPage() {
           </button>
 
           {/* Send ticket btn */}
-          <FunctionBtn
-            Icon={FloppydiskIcon}
-            iconClassName="w-4.5 h-4.5 text-(--text-btn)"
-            text={"Сохранить"}
-            textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
-            innerDivClassName="flex justify-center items-center gap-2"
-            btnClassName={`
+          {isMobile ? (
+            <FunctionBtn
+              Icon={FloppydiskIcon}
+              iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+              textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
+              innerDivClassName="flex justify-center items-center"
+              btnClassName={`
+              h-8.5 px-3 rounded-xs group
+              ${shadowLiftButtonStyle}
+              enabled:bg-(--bg-btn-primary)
+              disabled:bg-(--bg-disable-btn)
+              `}
+              onClick={handleSubmit}
+              disabled={isFormInvalid}
+            />
+          ) : (
+            <FunctionBtn
+              Icon={FloppydiskIcon}
+              iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+              text={"Сохранить"}
+              textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
+              innerDivClassName="flex justify-center items-center gap-2"
+              btnClassName={`
               h-8.5 px-4 rounded-xs group
               ${shadowLiftButtonStyle}
               enabled:bg-(--bg-btn-primary)
               disabled:bg-(--bg-disable-btn)
               `}
-            onClick={handleSubmit}
-            disabled={isFormInvalid}
-          />
+              onClick={handleSubmit}
+              disabled={isFormInvalid}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -219,7 +219,7 @@ function TicketRepeatPage() {
               textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
               innerDivClassName="flex justify-center items-center"
               btnClassName={`
-            h-8.5 px-2 rounded-xs group
+            h-8.5 px-3 rounded-xs group
             ${shadowLiftButtonStyle}
             enabled:bg-(--bg-btn-primary)
             disabled:bg-(--bg-disable-btn)
