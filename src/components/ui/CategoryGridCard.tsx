@@ -1,3 +1,4 @@
+import useMediaQuery from "../../hooks/useMediaQuery";
 import { shadowLiftCategoryStyle } from "../../styles/shadowLift";
 
 interface CategoryGridCardProps {
@@ -7,28 +8,28 @@ interface CategoryGridCardProps {
 }
 
 function CategoryGridCard({ iconPng, title, onClick }: CategoryGridCardProps) {
+  const isMobile = useMediaQuery("(max-width: 500px");
   return (
     <div
-      className={`xl:w-full xl:h-32.5 xl:px-8 xl:py-9 xl:gap-2.5
-        xl:flex xl:justify-start xl:items-center
-        xl:rounded-xs xl:group xl:select-none
-        xl:bg-(--bg-secondary)
-        xl:border border-(--bg-border)
-        xl:hover:border-(--text-primary)
+      className={`w-full px-8 py-9 gap-2.5
+        ${isMobile ? "h-38 flex flex-col justify-center items-center text-center" : "h-32.5 flex justify-start items-center"}
+        
+        rounded-xs group select-none
+        bg-(--bg-secondary)
+        border border-(--bg-border)
+        hover:border-(--text-primary)
         ${shadowLiftCategoryStyle}
         `}
       onClick={onClick}
     >
       {/* Icon */}
-      <div className="xl:w-10 xl:h-10 xl:flex xl:justify-center xl:items-center xl:bg-(--text-secondary) xl:group-hover:bg-(--text-primary) xl:rounded-xs xl:shrink-0">
-        <img
-          src={iconPng}
-          alt={title}
-          className="xl:w-8 xl:h-8 xl:object-contain"
-        />
+      <div className="w-10 h-10 flex justify-center items-center bg-(--text-secondary) group-hover:bg-(--text-primary) rounded-xs shrink-0">
+        <img src={iconPng} alt={title} className="w-8 h-8 object-contain" />
       </div>
       {/* Title */}
-      <span className="xl:flex-1 xl:font-consolas xl:font-normal xl:text-lg xl:leading-4.5 xl:tracking-[0.8px] xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)">
+      <span
+        className={`${isMobile ? "flex justify-center items-center" : ""} flex-1 font-consolas font-normal text-lg leading-4.5 tracking-[0.8px] text-(--text-secondary) group-hover:text-(--text-primary)`}
+      >
         {title}
       </span>
     </div>

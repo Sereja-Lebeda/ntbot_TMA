@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import useModalStackEntry from "../../hooks/useModalStackEntry";
+import { useNavigate, useOutletContext } from "react-router";
 
 import type {
   CurrentStepType,
@@ -24,24 +23,64 @@ import ConfirmModal from "./modalCardWindows/ConfirmModal";
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 import transferFieldValues from "../../utils/transferFieldValues";
 
+interface OutletContextProps {
+  formData: Record<string, string>;
+  setFormData: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+  multiData: Record<string, string[]>;
+  setMultiData: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  selectedCategory: CategoriesPool;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<CategoriesPool>>;
+  selectedAction: Action | null | undefined;
+  setSelectedAction: React.Dispatch<
+    React.SetStateAction<Action | null | undefined>
+  >;
+  priority: PriorityLevel;
+  setPriority: React.Dispatch<React.SetStateAction<PriorityLevel>>;
+  files: AttachedFile[];
+  setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
+  ticketId: number;
+  setTicketId: React.Dispatch<React.SetStateAction<number>>;
+  ticketStatus: TicketStatusType;
+  setTicketStatus: React.Dispatch<React.SetStateAction<TicketStatusType>>;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 function CreateTicketPage() {
-  useModalStackEntry(() => {
-    setIsModalOpen((prev) => !prev);
-  });
-
   const [currentStep, setCurrentStep] = useState<CurrentStepType>(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [formData, setFormData] = useState<Record<string, string>>({});
-  const [multiData, setMultiData] = useState<Record<string, string[]>>({});
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategoriesPool>(null);
-  const [selectedAction, setSelectedAction] = useState<Action | null>();
-  const [priority, setPriority] = useState<PriorityLevel>(null);
-  const [files, setFiles] = useState<AttachedFile[]>([]);
-  //NOTE: setters are for backend fetch
-  const [ticketId, setTicletId] = useState<number>(542);
-  const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Failed");
+  // const [formData, setFormData] = useState<Record<string, string>>({});
+  // const [multiData, setMultiData] = useState<Record<string, string[]>>({});
+  // const [selectedCategory, setSelectedCategory] =
+  //   useState<CategoriesPool>(null);
+  // const [selectedAction, setSelectedAction] = useState<Action | null>();
+  // const [priority, setPriority] = useState<PriorityLevel>(null);
+  // const [files, setFiles] = useState<AttachedFile[]>([]);
+  // //NOTE: setters are for backend fetch
+  // const [ticketId, setTicletId] = useState<number>(542);
+  // const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Failed");
+
+  const {
+    formData,
+    setFormData,
+    multiData,
+    setMultiData,
+    selectedCategory,
+    setSelectedCategory,
+    selectedAction,
+    setSelectedAction,
+    priority,
+    setPriority,
+    files,
+    setFiles,
+    ticketId,
+    setTicketId,
+    ticketStatus,
+    setTicketStatus,
+    isModalOpen,
+    setIsModalOpen,
+  } = useOutletContext<OutletContextProps>();
 
   const navigate = useNavigate();
 

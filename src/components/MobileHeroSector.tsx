@@ -150,7 +150,7 @@ function MobileHeroSector({
           />
         ))}
         <button
-          onClick={() => navigate("/tickets/new")}
+          onClick={() => navigate("/tickets/new/category")}
           className="fixed right-5 bottom-24
         w-15 h-15
         bg-(--bg-btn-primary) rounded-xs
