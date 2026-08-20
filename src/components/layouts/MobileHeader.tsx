@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import useSearch from "../../hooks/useSearch";
 
 import Searchbar from "../ui/Searchbar";
@@ -15,6 +15,7 @@ interface MobileHeaderProps {
 function MobileHeader({ openSidebar }: MobileHeaderProps) {
   const { searchRequest, setSearchRequest } = useSearch();
 
+  const location = useLocation();
   const navigate = useNavigate();
   const [isSearchbarOpen, setIsSearchbarOpen] = useState(false);
 
@@ -25,6 +26,8 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
       setSearchRequest("");
     }
   }, [isSearchbarOpen, setSearchRequest]);
+
+  const isOnMainPage = location.pathname === "/";
 
   return (
     <div
@@ -62,7 +65,10 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
 
       <button
         onClick={() => setIsSearchbarOpen((prev) => !prev)}
-        className="cursor-pointer"
+        className={`
+          ${isOnMainPage ? "visible" : "invisible"}
+          cursor-pointer`}
+        disabled={!isOnMainPage}
       >
         <MagnifyIcon
           className="w-5 h-5

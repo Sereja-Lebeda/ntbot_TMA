@@ -188,7 +188,7 @@ function MobileStepDetails() {
           {/* Back btn */}
           <button
             onClick={onPrev}
-            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
+            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group select-none"
           >
             <CrossIcon className="w-2 h-2 text-(--text-secondary) group-hover:text-(--text-primary)" />
             <span className="font-jbmono font-medium text-(--text-secondary) text-xs leading-normal group-hover:text-(--text-primary)">

@@ -1,6 +1,6 @@
 import { useNavigate, useOutletContext } from "react-router";
 import { useState, useRef, useEffect } from "react";
-// import useMediaQuery from "../../../hooks/useMediaQuery";
+import useMediaQuery from "../../../hooks/useMediaQuery";
 
 import type { Action, CategoriesPool } from "../../../types/createTicket.type";
 
@@ -21,7 +21,7 @@ interface OutletContextProps {
 }
 
 function MobileStepProblem() {
-  // const isDesktop = useMediaQuery("(min-width: 1280px)");
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
   const navigate = useNavigate();
 
   const { selectedCategory, setSelectedAction } =
@@ -124,8 +124,8 @@ function MobileStepProblem() {
                           className={`w-full py-5 px-4 rounded-xs
                               bg-(--bg-secondary)
                               border border-(--border-hover-btn) cursor-pointer
-                              hover:text-(--text-primary)
                             font-consolas font-bold text-sm text-(--text-tertiary) leading-4.5
+                            ${isDesktop ? "hover:text-(--text-primary)" : "hover:text-(--bg-btn-primary)"}
                             ${shadowLiftCategoryStyle}
                             `}
                           onClick={() => {

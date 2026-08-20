@@ -54,7 +54,7 @@ function MultiSelectDropdown({
     border ${isOpen ? "border-[#E7E6E6]!" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
     ${hasError ? "border-(--bg-task-error)!" : ""}
     group hover:border-(--border-hover-btn)
-    px-4 py-2.5 cursor-pointer ${isOpen ? "z-50" : "z-20"}`}
+    px-4 py-2.5 cursor-pointer ${isOpen ? "z-30" : "z-20"}`}
     >
       <div className="w-full h-full flex justify-between items-center">
         <span

@@ -93,7 +93,7 @@ function TicketForm({
                 }}
                 type="text"
                 placeholder={field.placeholder}
-                className="w-full font-consolas font-normal text-sm leading-normal outline-none group-hover:placeholder:text-(--text-primary)"
+                className="w-full font-consolas font-normal text-sm leading-normal outline-none placeholder:text-(--text-secondary) group-hover:placeholder:text-(--text-primary)"
               />
             </div>
           </div>
@@ -133,7 +133,8 @@ function TicketForm({
                     }}
                     type="text"
                     placeholder={field.placeholder}
-                    className="w-full font-consolas font-normal text-sm leading-normal outline-none"
+                    className="w-full font-consolas font-normal text-sm leading-normal outline-none
+                    placeholder:text-(--text-secondary) group-hover:placeholder:text-(--text-primary)"
                   />
                 </div>
 
@@ -270,9 +271,9 @@ function TicketForm({
               >
                 <div className="flex items-center cursor-pointer gap-1">
                   {formData[field.name] === option ? (
-                    <CheckRadioIcon />
+                    <CheckRadioIcon className="text-(--text-primary)" />
                   ) : (
-                    <UncheckRadioIcon />
+                    <UncheckRadioIcon className="text-(--text-primary)" />
                   )}
                   <span className="flex justify-center items-center p-1 font-consolas font-normal text-sm text-(--text-primary)">
                     {option}
