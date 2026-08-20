@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
           { path: "category", element: <MobileStepCategory /> },
           { path: "problem", element: <MobileStepProblem /> },
           { path: "details", element: <MobileStepDetails /> },
-          // { path: "done", element: <MobileStepDone /> },
+          { path: "done", element: <MobileStepDone /> },
         ],
       },
     ],

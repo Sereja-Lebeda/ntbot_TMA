@@ -92,6 +92,7 @@ function MobileStepDetails() {
     if (Object.keys(newErrors).length === 0) {
       // валидно?
       submitTicket();
+      console.log("message");
       onNext();
     }
   }

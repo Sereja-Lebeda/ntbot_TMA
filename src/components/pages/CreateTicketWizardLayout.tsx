@@ -13,6 +13,7 @@ import type {
 } from "../../types/createTicket.type";
 
 import { categories } from "../../data/categories";
+import getTicketDescription from "../../utils/getTicketDescription";
 
 function CreateTicketWizardLayout() {
   const { theme } = useTheme();
@@ -30,7 +31,7 @@ function CreateTicketWizardLayout() {
   const [files, setFiles] = useState<AttachedFile[]>([]);
   //NOTE: setters are for backend fetch
   const [ticketId, setTicketId] = useState<number>(542);
-  const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Failed");
+  const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Success");
 
   const location = useLocation();
   const segments = location.pathname.split("/");
@@ -59,6 +60,35 @@ function CreateTicketWizardLayout() {
   // if (!selectedCategory) return {
   //   navigate("category", { replace: true })
   // }
+
+  function submitTicket() {
+    if (!selectedAction) return;
+
+    const breadcrumbs = [
+      selectedAction.category,
+      selectedAction.subcategory,
+      selectedAction.name,
+    ];
+    const ticket = {
+      //TODO: userID:  NOTE: take id from db?
+      //TODO: ticketID: NOTE: need to take id from db
+      actionId: selectedAction.id,
+      breadcrumbs,
+      priority,
+      body: formData,
+      multiBody: multiData,
+      description: getTicketDescription(formData, selectedAction),
+    };
+
+    const formDataToSend = new FormData(); // браузерный FormData (не стейт formData)
+    formDataToSend.append("ticket", JSON.stringify(ticket)); // JSON тикета
+    files.forEach((item) => {
+      formDataToSend.append("files", item.file); // каждый файл
+    });
+
+    // TODO: fetch отправка, когда бэк готов
+    console.log(ticket); // пока проверить сборку
+  }
 
   return (
     <div
@@ -200,6 +230,7 @@ function CreateTicketWizardLayout() {
             setTicketStatus,
             isModalOpen,
             setIsModalOpen,
+            submitTicket,
           }}
         />
       </div>

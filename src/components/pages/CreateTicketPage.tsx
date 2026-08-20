@@ -44,6 +44,7 @@ interface OutletContextProps {
   setTicketStatus: React.Dispatch<React.SetStateAction<TicketStatusType>>;
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  submitTicket: () => void;
 }
 
 function CreateTicketPage() {
@@ -80,6 +81,7 @@ function CreateTicketPage() {
     setTicketStatus,
     isModalOpen,
     setIsModalOpen,
+    submitTicket,
   } = useOutletContext<OutletContextProps>();
 
   const navigate = useNavigate();
@@ -87,34 +89,34 @@ function CreateTicketPage() {
   const inputText =
     "Вы уверены, что хотите прервать создание заявки?\n\nВведенная информация не сохранится.";
 
-  function submitTicket() {
-    if (!selectedAction) return;
+  // function submitTicket() {
+  //   if (!selectedAction) return;
 
-    const breadcrumbs = [
-      selectedAction.category,
-      selectedAction.subcategory,
-      selectedAction.name,
-    ];
-    const ticket = {
-      //TODO: userID:  NOTE: take id from db?
-      //TODO: ticketID: NOTE: need to take id from db
-      actionId: selectedAction.id,
-      breadcrumbs,
-      priority,
-      body: formData,
-      multiBody: multiData,
-      description: getTicketDescription(formData, selectedAction),
-    };
+  //   const breadcrumbs = [
+  //     selectedAction.category,
+  //     selectedAction.subcategory,
+  //     selectedAction.name,
+  //   ];
+  //   const ticket = {
+  //     //TODO: userID:  NOTE: take id from db?
+  //     //TODO: ticketID: NOTE: need to take id from db
+  //     actionId: selectedAction.id,
+  //     breadcrumbs,
+  //     priority,
+  //     body: formData,
+  //     multiBody: multiData,
+  //     description: getTicketDescription(formData, selectedAction),
+  //   };
 
-    const formDataToSend = new FormData(); // браузерный FormData (не стейт formData)
-    formDataToSend.append("ticket", JSON.stringify(ticket)); // JSON тикета
-    files.forEach((item) => {
-      formDataToSend.append("files", item.file); // каждый файл
-    });
+  //   const formDataToSend = new FormData(); // браузерный FormData (не стейт formData)
+  //   formDataToSend.append("ticket", JSON.stringify(ticket)); // JSON тикета
+  //   files.forEach((item) => {
+  //     formDataToSend.append("files", item.file); // каждый файл
+  //   });
 
-    // TODO: fetch отправка, когда бэк готов
-    console.log(ticket); // пока проверить сборку
-  }
+  //   // TODO: fetch отправка, когда бэк готов
+  //   console.log(ticket); // пока проверить сборку
+  // }
 
   function nextStep() {
     setCurrentStep((prev) =>
