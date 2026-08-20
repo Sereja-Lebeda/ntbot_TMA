@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
           { index: true, element: <CreateTicketPage /> }, // десктоп — существующий, как есть
           { path: "category", element: <MobileStepCategory /> },
           { path: "problem", element: <MobileStepProblem /> },
-          // { path: "details", element: <MobileStepDetails /> },
+          { path: "details", element: <MobileStepDetails /> },
           // { path: "done", element: <MobileStepDone /> },
         ],
       },

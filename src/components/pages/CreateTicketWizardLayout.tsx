@@ -68,7 +68,7 @@ function CreateTicketWizardLayout() {
       {currentMeta && (
         // {/* Container above header: step + question (hint) */}
         <div
-          className={`w-full flex flex-col justify-start items-center gap-8
+          className={`w-full flex flex-col justify-start items-center gap-8 select-none
           ${isDesktop ? "py-4 max-w-241" : "pt-22 pb-3 px-5 max-w-251"}
       
       `}

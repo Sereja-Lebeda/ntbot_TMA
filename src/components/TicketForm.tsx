@@ -343,7 +343,7 @@ function TicketForm({
           {selectedAction.fields.map((field: Field) => (
             <div key={field.name} className="w-full flex flex-col gap-2">
               <label className="flex items-center gap-1 font-consolas leading-3">
-                <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
+                <span className="font-consolas font-normal text-xs text-(--text-primary) leading-3">
                   {field.label}
                 </span>
                 <span className="font-consolas font-normal text-[15px] text-(--bg-btn-primary) leading-4">

@@ -9,7 +9,7 @@ import validateForm from "../../../utils/validateForm";
 import { isSameFile } from "../../../utils/fileDublicateHelper";
 
 import TicketForm from "../../TicketForm";
-import AttachmentaField from "../../ui/Attachment/AttachmentField";
+import AttachmentField from "../../ui/Attachment/AttachmentField";
 import FunctionBtn from "../../ui/Buttons/FunctionBtn";
 
 import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
@@ -158,7 +158,7 @@ function StepDetails({
           }}
           className="xl:w-full"
         >
-          <AttachmentaField
+          <AttachmentField
             files={files}
             setFiles={setFiles}
             isDragging={isDragging}

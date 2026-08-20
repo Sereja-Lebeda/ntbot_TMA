@@ -58,11 +58,11 @@ function MobileStepProblem() {
   }
 
   function onNext() {
-    navigate("../problem");
+    navigate("../details");
   }
 
   function onPrev() {
-    navigate(-1);
+    navigate("/");
   }
 
   return (
