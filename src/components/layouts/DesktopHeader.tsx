@@ -24,6 +24,7 @@ export default function DesktopHeader({
   const navigate = useNavigate();
   const location = useLocation();
   const isOnCreatePage = location.pathname === "/tickets/new";
+  const isOnMainPage = location.pathname === "/";
 
   return (
     <div className="xl:w-full xl:h-18 xl:bg-[#0e0e0e] xl:border-b xl:border-[#201e1e] xl:flex xl:justify-center xl:items-center xl:gap-2.5 xl:px-8 xl:py-7">
@@ -77,7 +78,7 @@ export default function DesktopHeader({
               xl:enabled:bg-(--bg-btn-primary)`}
             innerDivClassName={"xl:flex xl:items-center xl:gap-1"}
             onClick={() => navigate("/tickets/new")}
-            disabled={isOnCreatePage}
+            disabled={isOnCreatePage || !isOnMainPage}
           />
         </div>
       </div>

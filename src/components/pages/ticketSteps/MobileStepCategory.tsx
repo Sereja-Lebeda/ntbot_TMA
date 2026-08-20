@@ -28,7 +28,7 @@ function MobileStepCategory() {
     <div
       className={`w-full h-full
       flex justify-center items-center
-      ${isDesktop ? "" : "mb-20"}
+      ${isDesktop ? "" : ""}
       `}
     >
       <div className="grid grid-cols-2 gap-1.5 px-2 py-3">

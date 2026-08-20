@@ -25,11 +25,9 @@ const Searchbar = forwardRef<HTMLInputElement, searchRequestProps>(
           select-none
 
           xl:h-10
-          xl:px-5 xl:py-3 xl:gap-2 `}
+          xl:px-5 xl:py-3 gap-2 `}
       >
-        {variant === "desktop" ? (
-          <MagnifyIcon className="xl:w-5 xl:h-5" />
-        ) : null}
+        {variant === "desktop" ? <MagnifyIcon className="w-5 h-5" /> : null}
 
         {/* //TODO: add debounce after connetion to db */}
 

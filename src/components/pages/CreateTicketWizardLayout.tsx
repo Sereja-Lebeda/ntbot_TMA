@@ -1,4 +1,9 @@
+import { Outlet, useLocation } from "react-router";
 import { useState } from "react";
+import useModalStackEntry from "../../hooks/useModalStackEntry";
+import useTheme from "../../hooks/useTheme";
+import useMediaQuery from "../../hooks/useMediaQuery";
+
 import type {
   Action,
   AttachedFile,
@@ -6,11 +11,8 @@ import type {
   PriorityLevel,
   TicketStatusType,
 } from "../../types/createTicket.type";
-import { Outlet, useLocation } from "react-router";
-import useModalStackEntry from "../../hooks/useModalStackEntry";
-import useTheme from "../../hooks/useTheme";
+
 import { categories } from "../../data/categories";
-import useMediaQuery from "../../hooks/useMediaQuery";
 
 function CreateTicketWizardLayout() {
   const { theme } = useTheme();
@@ -60,8 +62,8 @@ function CreateTicketWizardLayout() {
 
   return (
     <div
-      className="w-full
-    flex flex-col justify-center items-center"
+      className={`w-full ${isDesktop ? "min-h-[calc(100dvh-4.5rem)]" : "min-h-dvh"}
+    flex flex-col justify-center items-center`}
     >
       {currentMeta && (
         // {/* Container above header: step + question (hint) */}
@@ -175,28 +177,32 @@ function CreateTicketWizardLayout() {
         </div>
       )}
 
-      <Outlet
-        context={{
-          formData,
-          setFormData,
-          multiData,
-          setMultiData,
-          selectedCategory,
-          setSelectedCategory,
-          selectedAction,
-          setSelectedAction,
-          priority,
-          setPriority,
-          files,
-          setFiles,
-          ticketId,
-          setTicketId,
-          ticketStatus,
-          setTicketStatus,
-          isModalOpen,
-          setIsModalOpen,
-        }}
-      />
+      <div
+        className={`w-full flex-1 flex flex-col justify-center items-center ${isDesktop ? "" : "pb-20"}`}
+      >
+        <Outlet
+          context={{
+            formData,
+            setFormData,
+            multiData,
+            setMultiData,
+            selectedCategory,
+            setSelectedCategory,
+            selectedAction,
+            setSelectedAction,
+            priority,
+            setPriority,
+            files,
+            setFiles,
+            ticketId,
+            setTicketId,
+            ticketStatus,
+            setTicketStatus,
+            isModalOpen,
+            setIsModalOpen,
+          }}
+        />
+      </div>
     </div>
   );
 }
