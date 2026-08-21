@@ -76,7 +76,7 @@ function ViewTicketModal({
         className="w-full h-full xl:w-[50vw] xl:max-w-[90vw] xl:max-h-[90vh] xl:flex xl:flex-col xl:items-center bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:py-10 xl:select-none"
       >
         {/* Header with btns */}
-        <div className="xl:w-full xl:h-8.5 xl:mb-2 xl:px-12.5 xl:flex xl:justify-between xl:items-center">
+        <div className="xl:w-full xl:h-8.5 xl:mb-2 xl:px-12.5 xl:flex xl:justify-between xl:items-center xl:gap-4">
           {/* //TODO: Make only icons if window is narrow */}
           {/* Functional btns */}
           <div className="xl:w-full xl:flex xl:justify-start xl:gap-1.5 xl:select-none">
@@ -124,7 +124,7 @@ function ViewTicketModal({
 
           {/* Close btn */}
           <button
-            className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:cursor-pointer xl:group xl:transition-all xl:duration-300 xl:ease-in-out xl:active:opacity-0 xl:select-none"
+            className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:cursor-pointer xl:group xl:transition-all xl:duration-300 xl:ease-in-out xl:active:opacity-0 xl:select-none group"
             onClick={onClose}
           >
             <CrossTicketIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary) xl:transition-colors xl:duration-300" />
@@ -196,7 +196,7 @@ function ViewTicketModal({
               <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7">
                 {/* Label */}
                 <div className="xl:w-full xl:flex xl:items-center xl:gap-1">
-                  <AttachmentIcon />
+                  <AttachmentIcon className="shrink-0 text-(--text-primary)" />
                   <span className="xl:font-jbmono xl:font-normal xl:text-sm xl:text-(--text-primary) xl:leading-5">
                     Прикрепленные файлы
                   </span>

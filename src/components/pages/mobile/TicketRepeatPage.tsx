@@ -97,7 +97,7 @@ function TicketRepeatPage() {
 
   useEscButton(handleCloseAttempt);
 
-  if (!currentUser || !repeatedTicket || !repeatedAction) return;
+  if (!currentUser || !repeatedTicket || !repeatedAction) return null;
 
   const inputText =
     "Вы уверены, что хотите прервать создание заявки?\n\nВведенная информация не сохранится.";

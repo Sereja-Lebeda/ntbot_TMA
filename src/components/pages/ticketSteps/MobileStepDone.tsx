@@ -7,12 +7,14 @@ import FailCreateIcon from "../../../icons/createTicket/FailCreateIcon";
 interface OutletContextProps {
   ticketId: number;
   ticketStatus: TicketStatusType;
+  hasSubmitted: boolean;
 }
 
 function MobileStepDone() {
   const navigate = useNavigate();
 
-  const { ticketId, ticketStatus } = useOutletContext<OutletContextProps>();
+  const { ticketId, ticketStatus, hasSubmitted } =
+    useOutletContext<OutletContextProps>();
 
   //TODO: Uncomment this UseEffect & Make error on 3rd step by modal or popup window
   // useEffect(() => {
@@ -21,6 +23,14 @@ function MobileStepDone() {
   //   }, 3000);
   //   return () => clearTimeout(timeout);
   // }, [navigate]);
+
+  useEffect(() => {
+    if (!hasSubmitted) {
+      navigate("../category", { replace: true });
+    }
+  }, [hasSubmitted, navigate]);
+
+  if (!hasSubmitted) return null;
 
   return (
     <div className="w-full h-full flex justify-center items-center select-none">

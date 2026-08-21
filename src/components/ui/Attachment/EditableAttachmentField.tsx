@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
 import type { TicketFileItem } from "../../../types/ticket.types";
+import useMediaQuery from "../../../hooks/useMediaQuery";
 
 import FileCard from "./FileCard";
 import ConfirmModal from "../../pages/modalCardWindows/ConfirmModal";
 
 import PlusAttachIcon from "../../../icons/createTicket/PlusAttachIcon";
+import MobileFileCard from "./MobileFileCard";
 
 interface EditableAttachmentFieldProps {
   files: TicketFileItem[];
@@ -19,6 +21,8 @@ function EditableAttachmentField({
   setFiles,
   addFiles,
 }: EditableAttachmentFieldProps) {
+  const isMobile = useMediaQuery("(max-width: 500px)");
+
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const refFileAttach = useRef<HTMLInputElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,7 +72,9 @@ function EditableAttachmentField({
         setIsDragging(false);
         addFiles(e.dataTransfer.files);
       }}
-      className="w-full shrink-0 flex justify-start gap-5 overscroll-x-contain dropdown-scroll overflow-x-auto"
+      className={`w-full shrink-0  overscroll-x-contain
+        ${isMobile ? "flex flex-col justify-start items-center gap-2" : "flex justify-start gap-5 overflow-x-auto"}
+        dropdown-scroll `}
     >
       {isModalOpen && (
         <ConfirmModal
@@ -93,7 +99,17 @@ function EditableAttachmentField({
 
       {files.map((file) => {
         if (file.kind === "existing") {
-          return (
+          return isMobile ? (
+            <MobileFileCard
+              key={file.url}
+              name={file.name}
+              dateLabel={file.uploadedAt}
+              onDelete={() => {
+                setFileToDelete(file);
+                setIsModalOpen(true);
+              }}
+            />
+          ) : (
             <FileCard
               key={file.url}
               name={file.name}
@@ -109,7 +125,17 @@ function EditableAttachmentField({
         }
 
         // тут file.kind === "new" — TS сам сузит тип благодаря проверке выше
-        return (
+        return isMobile ? (
+          <MobileFileCard
+            key={file.url}
+            name={file.file.name}
+            dateLabel={new Date(file.file.lastModified).toLocaleString()}
+            onDelete={() => {
+              setFileToDelete(file);
+              setIsModalOpen(true);
+            }}
+          />
+        ) : (
           <FileCard
             key={file.url}
             name={file.file.name}
@@ -136,10 +162,25 @@ function EditableAttachmentField({
           ${isDragging ? "border-(--border-hover-btn)" : ""}`}
         >
           <span className="xl:group-hover:text-(--text-primary)">
-            Перетащите файл сюда или
-            <br />
-            нажмите для выбора
+            {isMobile
+              ? `Нажмите для выбора файла`
+              : `Перетащите файл сюда или
+              нажмите для выбора`}
           </span>
+        </button>
+      ) : isMobile ? (
+        <button
+          onClick={() => refFileAttach.current?.click()}
+          className={`w-full h-12
+        flex items-center justify-center gap-1
+        border border-dashed border-(--bg-border) rounded-xs
+        cursor-pointer
+        font-consolas font-normal text-xs text-(--text-secondary)
+        group hover:border-(--border-hover-btn)
+        ${isDragging ? "border-(--border-hover-btn)" : ""}`}
+        >
+          <PlusAttachIcon className="w-2.5 h-2.5 text-(--text-primary)" />
+          <span>Загрузить файл</span>
         </button>
       ) : (
         <button

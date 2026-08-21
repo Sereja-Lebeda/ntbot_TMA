@@ -121,7 +121,7 @@ function TicketHeaderInfo({
         <div className="w-full flex flex-col items-start gap-3">
           {/* Ticket title */}
           <div className="w-full flex justify-start items-center gap-3">
-            <span className="font-jbmono font-normal text-2xl text-(--text-primary) leading-6">
+            <span className="font-jbmono font-normal text-2xl text-(--text-primary) leading-6 line-clamp-3">
               {ticket.title}
             </span>
           </div>

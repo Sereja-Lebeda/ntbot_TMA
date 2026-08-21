@@ -15,7 +15,7 @@ import StepDetails from "./ticketSteps/StepDetails";
 import StepProblem from "./ticketSteps/StepProblem";
 import StepDone from "./ticketSteps/StepDone";
 
-import getTicketDescription from "../../utils/getTicketDescription";
+// import getTicketDescription from "../../utils/getTicketDescription";
 import SupportButtons from "../ui/Buttons/SupportButtons";
 import ProgressBar from "../ui/ProgressBar";
 import ConfirmModal from "./modalCardWindows/ConfirmModal";
@@ -152,7 +152,7 @@ function CreateTicketPage() {
 
   // console.log(formData);
   return (
-    <div className="xl:flex xl:flex-col xl:justify-center xl:items-center xl:min-w-130 xl:max-w-225 xl:mx-auto xl:pt-4 xl:pb-7">
+    <div className="xl:w-full xl:h-full xl:flex xl:flex-col xl:justify-center xl:items-center xl:min-w-130 xl:max-w-225 xl:mx-auto xl:pt-4 xl:pb-7">
       {/* Modal window  */}
       {isModalOpen && (
         <ConfirmModal

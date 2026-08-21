@@ -1,7 +1,7 @@
 {
   "id": 1,
   "name": "Пистолетов Абоба Макарович",
-  "role": "user",
+  "role": "admin",
 
   "department": "IT",
   "localIp": "192.168.13.69",

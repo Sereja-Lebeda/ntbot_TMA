@@ -93,7 +93,8 @@ function TicketForm({
                 }}
                 type="text"
                 placeholder={field.placeholder}
-                className="w-full font-consolas font-normal text-sm leading-normal outline-none placeholder:text-(--text-secondary) group-hover:placeholder:text-(--text-primary)"
+                className="w-full font-consolas font-normal text-sm leading-normal outline-none placeholder:text-(--text-secondary) group-hover:placeholder:text-(--text-primary)
+                text-(--text-primary)"
               />
             </div>
           </div>
@@ -134,7 +135,7 @@ function TicketForm({
                     type="text"
                     placeholder={field.placeholder}
                     className="w-full font-consolas font-normal text-sm leading-normal outline-none
-                    placeholder:text-(--text-secondary) group-hover:placeholder:text-(--text-primary)"
+                    text-(--text-primary) placeholder:text-(--text-secondary) group-hover:placeholder:text-(--text-primary)"
                   />
                 </div>
 

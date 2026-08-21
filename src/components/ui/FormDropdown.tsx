@@ -42,7 +42,7 @@ function FormDropdown({
       }}
       className={`relative
     w-full h-10 flex flex-col justify-center items-start
-    border ${isOpen ? "border-[#E7E6E6]!" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
+    border ${isOpen ? "dark:border-[#E7E6E6]! border-[#141414]" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
     ${hasError ? "border-(--bg-task-error)!" : ""}
     ${disabled ? "opacity-40" : "cursor-pointer group hover:border-(--border-hover-btn)"}
     px-4 py-2.5 ${isOpen ? "z-30" : "z-20"}

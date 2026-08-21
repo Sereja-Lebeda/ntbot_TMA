@@ -19,6 +19,8 @@ function CreateTicketWizardLayout() {
   const { theme } = useTheme();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   useModalStackEntry(() => setIsModalOpen((prev) => !prev));
 
@@ -86,13 +88,15 @@ function CreateTicketWizardLayout() {
       formDataToSend.append("files", item.file); // каждый файл
     });
 
+    setHasSubmitted(true);
+
     // TODO: fetch отправка, когда бэк готов
     console.log(ticket); // пока проверить сборку
   }
 
   return (
     <div
-      className={`w-full ${isDesktop ? "min-h-[calc(100dvh-4.5rem)]" : "min-h-dvh"}
+      className={`w-full ${isDesktop ? "min-h-[calc(100dvh-4.5rem)] xl:min-h-0" : "min-h-dvh"}
     flex flex-col justify-center items-center`}
     >
       {currentMeta && (
@@ -231,6 +235,8 @@ function CreateTicketWizardLayout() {
             isModalOpen,
             setIsModalOpen,
             submitTicket,
+            hasSubmitted,
+            setHasSubmitted,
           }}
         />
       </div>

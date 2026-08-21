@@ -111,7 +111,7 @@ function TicketEditPage() {
 
   useEscButton(handleCloseAttempt);
 
-  if (!currentUser || !editedTicket || !editedAction) return;
+  if (!currentUser || !editedTicket || !editedAction) return null;
   const permissions = getTicketPermissions(editedTicket, currentUser);
 
   // permissions.canEdit = false;

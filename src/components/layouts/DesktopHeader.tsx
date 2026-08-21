@@ -27,7 +27,7 @@ export default function DesktopHeader({
   const isOnMainPage = location.pathname === "/";
 
   return (
-    <div className="xl:w-full xl:h-18 xl:bg-[#0e0e0e] xl:border-b xl:border-[#201e1e] xl:flex xl:justify-center xl:items-center xl:gap-2.5 xl:px-8 xl:py-7">
+    <div className="xl:max-w-389 xl:mx-auto xl:w-full xl:h-18 xl:bg-[#0e0e0e] xl:border-b xl:border-x xl:border-[#201e1e] xl:flex xl:justify-center xl:items-center xl:gap-2.5 xl:px-8 xl:py-7">
       <div className="xl:w-225 xl:flex xl:justify-between xl:items-center">
         {/* Mascoot icon and bot name - Left side*/}
         <div

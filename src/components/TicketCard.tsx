@@ -361,7 +361,7 @@ export default function TicketCard({
               {ticket.title}
             </div>
             {ticket.attachedFiles.length > 0 && (
-              <AttachIcon className="shrink-0" />
+              <AttachIcon className="shrink-0 text-(--text-primary)" />
             )}
           </div>
         </div>
@@ -390,7 +390,7 @@ export default function TicketCard({
                   {ticket.title}
                 </div>
                 {ticket.attachedFiles.length > 0 && (
-                  <AttachIcon className="shrink-0" />
+                  <AttachIcon className="shrink-0 text-(--text-primary)" />
                 )}
               </div>
               {/* meta info */}
@@ -457,7 +457,7 @@ export default function TicketCard({
                   {ticket.title}
                 </div>
                 {ticket.attachedFiles.length > 0 && (
-                  <AttachIcon className="shrink-0" />
+                  <AttachIcon className="shrink-0 text-(--text-primary)" />
                 )}
               </div>
             </div>

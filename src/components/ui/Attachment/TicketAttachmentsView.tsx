@@ -1,6 +1,9 @@
+import useMediaQuery from "../../../hooks/useMediaQuery";
+
 import type { TicketAttachmentType } from "../../../types/ticket.types";
-import { getFileIcon } from "../../../utils/getFileIcon";
-import { hoverAnimationStyle } from "../../../styles/pressAnimation";
+
+import FileCard from "./FileCard";
+import MobileFileCard from "./MobileFileCard";
 
 interface TicketAttachmentsViewProps {
   files: TicketAttachmentType;
@@ -12,48 +15,35 @@ function isImageFile(fileName: string): boolean {
 }
 
 function TicketAttachmentsView({ files }: TicketAttachmentsViewProps) {
+  const isMobile = useMediaQuery("(max-width: 500px)");
+
   return (
     <div>
+      {/* EMPTY Attachment view for MOBILE & DESKTOP */}
       {files.length === 0 ? (
         <div className="w-full">Файлы не прикреплены</div>
+      ) : isMobile ? (
+        // NOT empty attachment for MOBILE
+        <div className="w-full flex flex-col justify-start gap-2 overflow-x-auto dropdown-scroll overscroll-x-contain">
+          {files.map((attached) => (
+            <MobileFileCard
+              key={`${attached.name}-${attached.url}`}
+              name={attached.name}
+              dateLabel={new Date(attached.uploadedAt).toLocaleString()}
+            />
+          ))}
+        </div>
       ) : (
+        //  NOT empty attachment for DESKTOP
         <div className="w-full flex justify-start gap-5 overflow-x-auto dropdown-scroll overscroll-x-contain">
           {files.map((attached) => (
-            <div
+            <FileCard
               key={`${attached.name}-${attached.url}`}
-              className="w-47 h-53 flex flex-col items-center border-[0.8px] border-(--bg-border) rounded-xs group shrink-0"
-            >
-              {/* Image */}
-              <div className="relative w-full h-37.25 overflow-hidden rounded-xs flex justify-center items-center">
-                {isImageFile(attached.name) ? (
-                  <img
-                    src={attached.url}
-                    className={`w-full h-full object-cover
-                      group-hover:scale-115 ${hoverAnimationStyle} cursor-default!`}
-                  />
-                ) : (
-                  (() => {
-                    const Icon = getFileIcon(attached.name);
-                    return (
-                      <Icon
-                        className={`w-1/2 h-1/2
-                        group-hover:scale-115 ${hoverAnimationStyle} cursor-default!`}
-                      />
-                    );
-                  })()
-                )}
-              </div>
-
-              {/* Image info */}
-              <div className="w-47 h-15.75 p-3 gap-2.5 flex flex-col justify-center items-start font-consolas font-normal">
-                <span className="w-full h-full text-xs text-(--text-primary) leading-3 truncate">
-                  {attached.name}
-                </span>
-                <span className="text-[11px] text-(--text-secondary) leading-4">
-                  {new Date(attached.uploadedAt).toLocaleString()}
-                </span>
-              </div>
-            </div>
+              name={attached.name}
+              imageUrl={attached.url}
+              isImage={isImageFile(attached.name)}
+              dateLabel={new Date(attached.uploadedAt).toLocaleString()}
+            />
           ))}
         </div>
       )}
