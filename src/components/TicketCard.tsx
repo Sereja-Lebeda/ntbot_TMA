@@ -38,6 +38,8 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   onRequestRepeat: (ticketId: number) => void;
   onRequestEdit: (ticketId: number) => void;
   handleOpenView: (ticketId: number) => void;
+  openMenuTicketId: number | null;
+  setOpenMenuTicketId: (ticketId: number | null) => void;
 }
 
 type actionRegistryType =
@@ -66,6 +68,8 @@ export default function TicketCard({
   onRequestRepeat,
   onRequestEdit,
   handleOpenView,
+  openMenuTicketId,
+  setOpenMenuTicketId,
 }: TicketCardWithActionsProps) {
   const currentUser = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
@@ -107,6 +111,46 @@ export default function TicketCard({
     };
   }, [isActionsOpen]);
 
+  //Ctx menu for narrow pc screen
+  const menuVisible = openMenuTicketId === ticket.ticketId;
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  const handleContextMenuPC = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    const menuWidth = 200; // подставь реальную ширину меню
+    const menuHeight = 150; // подставь реальную высоту меню
+
+    let x = e.clientX;
+    let y = e.clientY;
+
+    // Коррекция, чтобы не вылезало за правый край
+    if (x + menuWidth > window.innerWidth) {
+      x = window.innerWidth - menuWidth;
+    }
+
+    // Коррекция, чтобы не вылезало за нижний край
+    if (y + menuHeight > window.innerHeight) {
+      y = window.innerHeight - menuHeight;
+    }
+
+    setMenuPosition({ x, y });
+    setOpenMenuTicketId(ticket.ticketId);
+  };
+
+  const handleOutsideClickPC = (e: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+      setOpenMenuTicketId(null);
+    }
+  };
+
+  useEffect(() => {
+    if (!menuVisible) return;
+    document.addEventListener("click", handleOutsideClickPC);
+    return () => document.removeEventListener("click", handleOutsideClickPC);
+  }, [menuVisible]);
+
   if (!currentUser) return null;
   const permissions = getTicketPermissions(ticket, currentUser);
 
@@ -136,10 +180,11 @@ export default function TicketCard({
       description: "Повторить",
     },
     favorite: {
-      Icon: () => (
+      Icon: ({ className }: { className?: string }) => (
         <FavoriteTicketIcon
           ticketId={ticket.ticketId}
           favoriteTickets={favoriteTickets}
+          className={className}
         />
       ),
       onClick: () => handleToggleFavorite(ticket.ticketId),
@@ -155,13 +200,14 @@ export default function TicketCard({
   function getStatusIcon(
     status: StatusType,
     layout: "row" | "column",
+    ctxMenu?: boolean,
   ): React.ReactNode {
     const baseStyle =
       layout === "row"
         ? "flex items-center gap-2"
         : "flex flex-col justify-center items-start";
 
-    //todo: make auto "yes" answer after 48h if user didnt choose
+    //todo: make auto "yes" answer after 48h if user didn't choose
     if (status === "Complete") {
       return (
         <div className="xl:flex xl:items-center xl:gap-2 xl:font-jbmono">
@@ -229,10 +275,14 @@ export default function TicketCard({
                 key={key}
                 onClick={onClick}
                 text={layout === "column" ? description : null}
-                className={`${isDesktop ? "" : "w-full flex items-center gap-2 border-b border-(--text-secondary) py-1"} cursor-pointer outline-0`}
-                textClassName={` ${isDesktop ? "" : "text-md text-(--text-secondary) font-normal font-consolas"} `}
+                className={`${isDesktop ? "" : "w-full flex items-center gap-2 border-b border-(--text-secondary) py-1 px-2 "} cursor-pointer outline-0
+                ${ctxMenu ? "bg-(--bg-primary) hover:bg-(--border-hover-btn)" : ""}
+                group`}
+                textClassName={` ${isDesktop ? "" : "text-md text-(--text-secondary) font-normal font-consolas"} 
+                ${textPressAnimationStyle}
+                group-hover:text-(--text-primary)`}
               >
-                <Icon />
+                <Icon className="group-hover:text-(--text-primary) duration-600 ease-in-out" />
               </CardActionButton>
             );
           })}
@@ -240,11 +290,14 @@ export default function TicketCard({
         {statusActions[status].includes("telegram") && (
           <CardActionButton
             text={layout === "column" ? "Телеграм" : null}
-            className={`${isDesktop ? "" : "w-full flex items-center gap-2 py-1 "} cursor-pointer`}
-            textClassName={` ${isDesktop ? "" : "text-md text-(--text-secondary) font-normal font-consolas"} `}
+            className={`${isDesktop ? "" : "w-full flex items-center gap-2 py-1 px-2"} cursor-pointer group
+            ${ctxMenu ? "bg-(--bg-primary) hover:bg-(--border-hover-btn)" : ""}`}
+            textClassName={` ${isDesktop ? "" : "text-md text-(--text-secondary) font-normal font-consolas"} 
+            ${textPressAnimationStyle}
+            group-hover:text-(--text-primary)`}
             onClick={actionRegistry.telegram.onClick}
           >
-            <TelegramIcon className="text-(--text-tertiary) cursor-pointer" />
+            <TelegramIcon className="text-(--text-tertiary) cursor-pointer group-hover:text-(--text-primary) duration-600 ease-in-out" />
           </CardActionButton>
         )}
       </div>
@@ -253,9 +306,13 @@ export default function TicketCard({
 
   return (
     <div
-      onContextMenu={(e) => {
-        e.preventDefault();
-      }}
+      onContextMenu={
+        isTouchDevice
+          ? (e) => {
+              e.preventDefault();
+            }
+          : handleContextMenuPC
+      }
       ref={cardRef}
       {...(isTouchDevice
         ? bind()
@@ -499,7 +556,7 @@ export default function TicketCard({
         {isDesktop ? (
           // {/* icons*/}
           <div>{getStatusIcon(ticket.status, "row")}</div>
-        ) : (
+        ) : isTouchDevice ? (
           <>
             {isActionsOpen && (
               <div
@@ -511,6 +568,27 @@ export default function TicketCard({
               bg-(--bg-secondary) border border-(--bg-border) rounded-xs p-2 flex flex-col gap-1"
               >
                 {getStatusIcon(ticket.status, "column")}
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {menuVisible && (
+              <div
+                ref={menuRef}
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                onPointerUp={(e) => e.stopPropagation()}
+                style={{
+                  top: `${menuPosition.y}px`,
+                  left: `${menuPosition.x}px`,
+                }}
+                className="pc-ctx-menu
+                fixed
+                border border-(--bg-border)
+                z-30"
+              >
+                {getStatusIcon(ticket.status, "column", true)}
               </div>
             )}
           </>
