@@ -1,4 +1,5 @@
 import useTheme from "../../../hooks/useTheme";
+import useIsTablet from "../../../hooks/useIsTablet";
 
 import type { CategoriesPool } from "../../../types/createTicket.type";
 import { categories } from "../../../data/categories";
@@ -12,20 +13,27 @@ interface StepCategoryProps {
 
 function StepCategory({ onNext, setSelectedCategory }: StepCategoryProps) {
   const { theme } = useTheme();
-
+  const isTablet = useIsTablet();
   return (
-    <div className="xl:w-full xl:select-none">
+    <div
+      className={`
+    xl:w-full xl:select-none`}
+    >
       {/* Header component */}
-      <div className="xl:flex xl:flex-col xl:justify-center xl:items-center xl:gap-4">
-        <span className="xl:font-jbmono xl:font-normal xl:text-xl xl:text-(--text-primary) xl:leading-5 xl:tracking-[0.8px]">
-          Выберите категорию
-        </span>
-        <span className="xl:font-consolas xl:font-normal xl:text-sm xl:text-(--text-secondary) xl:leading-normal">
-          С чем у вас возникла проблема?
-        </span>
-      </div>
+      {!isTablet && (
+        <div className="flex flex-col justify-center xl:items-center gap-2 xl:gap-4 py-1 pb-2">
+          <span className="font-jbmono font-normal text-xl text-(--text-primary) leading-5 tracking-[0.8px]">
+            Выберите категорию
+          </span>
+          <span className="font-consolas font-normal text-sm text-(--text-secondary) leading-normal">
+            С чем у вас возникла проблема?
+          </span>
+        </div>
+      )}
       {/* Grid of categories */}
-      <div className="xl:grid xl:grid-cols-3 xl:gap-3 xl:pt-7">
+      <div
+        className={`grid ${isTablet ? "grid-cols-2 gap-3" : "grid-cols-1 xl:grid-cols-3 gap-3 xl:pt-7"}`}
+      >
         {categories.map((category) => (
           <CategoryGridCard
             key={category.name}

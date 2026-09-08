@@ -8,8 +8,8 @@ interface CategoryGridCardProps {
 }
 
 function CategoryGridCard({ iconPng, title, onClick }: CategoryGridCardProps) {
-  const isMobile = useMediaQuery("(max-width: 500px");
-  const isDesktop = useMediaQuery("(max-width: 1280px");
+  const isMobile = useMediaQuery("(max-width: 550px");
+  const isDesktop = useMediaQuery("(min-width: 1280px");
   return (
     <div
       className={`w-full px-8 py-9 gap-2.5
@@ -30,7 +30,7 @@ function CategoryGridCard({ iconPng, title, onClick }: CategoryGridCardProps) {
       {/* Title */}
       <span
         className={`
-          ${isMobile ? "flex justify-center items-center" : ""}
+          ${isMobile && "flex justify-center items-center"}
           ${isDesktop ? "group-hover:text-(--bg-btn-primary)" : "group-hover:text-(--text-primary)"}
         flex-1 font-consolas font-normal text-lg leading-4.5 tracking-[0.8px] text-(--text-secondary) `}
       >

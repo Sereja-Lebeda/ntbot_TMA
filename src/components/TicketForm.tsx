@@ -42,7 +42,7 @@ function TicketForm({
   clearError,
   setFieldError,
 }: TicketFormProps) {
-  const isDesktop = useMediaQuery("(min-width: 500px)");
+  const isMobile = useMediaQuery("(max-width: 600px)");
 
   if (!selectedAction) {
     return (
@@ -315,7 +315,7 @@ function TicketForm({
               }}
               className={`${priorityDivBtnStyle} ${isActive ? "border border-(--text-primary)" : "border border-(--border-hover-btn) group hover:border-(--text-secondary)"} ${errors["priority"] ? "border-(--bg-task-error)!" : ""}`}
             >
-              {isDesktop ? (
+              {!isMobile ? (
                 <>
                   <Icon
                     className={`shrink-0 ${isActive ? "text-(--text-primary)" : "text-(--border-hover-btn) group-hover:text-(--text-secondary)"}`}

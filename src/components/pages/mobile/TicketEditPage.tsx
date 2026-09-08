@@ -24,9 +24,9 @@ import FunctionBtn from "../../ui/Buttons/FunctionBtn";
 import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
-import CrossIcon from "../../../icons/card/CrossIcon";
 import FloppydiskIcon from "../../../icons/FloppydiskIcon";
 import useEscButton from "../../../hooks/useEscButton";
+import CancelFormButton from "../../ui/Buttons/CancelFormButton";
 
 interface OutletContextProps {
   tickets: Ticket[];
@@ -242,15 +242,7 @@ function TicketEditPage() {
         {/* Buttons */}
         <div className="w-full flex justify-between items-center ">
           {/* Back btn */}
-          <button
-            onClick={handleCloseAttempt}
-            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
-          >
-            <CrossIcon className="text-(--text-secondary) group-hover:text-(--text-primary) w-2.25 h-2.25" />
-            <span className="font-jbmono font-medium text-(--text-secondary) text-xs leading-normal group-hover:text-(--text-primary)">
-              Отмена
-            </span>
-          </button>
+          <CancelFormButton onClick={handleCloseAttempt} />
 
           {/* Send ticket btn */}
           {isMobile ? (

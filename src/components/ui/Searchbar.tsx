@@ -15,11 +15,12 @@ const Searchbar = forwardRef<HTMLInputElement, searchRequestProps>(
     ref,
   ) => {
     return (
+      //todo: NOTE: mx- was 3, i dont remember why. Check on mobile responsive
       <div
         className={`
           h-full
           flex items-center flex-1
-          mx-3 xl:mx-0 p-2
+          mx- xl:mx-0 p-2
           rounded-xs
           bg-(--bg-secondary) border border-(--bg-border) hover:border-(--border-hover-btn) group ${className}
           select-none

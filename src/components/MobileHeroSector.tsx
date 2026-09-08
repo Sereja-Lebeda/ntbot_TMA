@@ -13,6 +13,7 @@ import TicketCard from "./TicketCard";
 import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
 import MobilePlusIcon from "../icons/mobile/MobilePlusIcon";
+import { useState } from "react";
 
 interface MobileHeroSectorProps {
   tickets: Ticket[]; // уже отфильтрованный и отсортированный массив
@@ -45,6 +46,8 @@ function MobileHeroSector({
   handleRequestRepeat,
 }: MobileHeroSectorProps) {
   const navigate = useNavigate();
+
+  const [openMenuTicketId, setOpenMenuTicketId] = useState<number | null>(null);
 
   const currentUserId = useUser()?.id;
   const allTickets = mockTicket;
@@ -147,6 +150,8 @@ function MobileHeroSector({
             onRequestRepeat={handleRequestRepeat}
             onRequestEdit={handleRequestEdit}
             handleOpenView={handleOpenView}
+            openMenuTicketId={openMenuTicketId}
+            setOpenMenuTicketId={setOpenMenuTicketId}
           />
         ))}
         <button

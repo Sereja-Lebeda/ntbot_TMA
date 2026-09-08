@@ -27,8 +27,8 @@ import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 import FloppydiskIcon from "../../../icons/FloppydiskIcon";
 import RepeatIcon from "../../../icons/card/RepeatIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
-import CrossIcon from "../../../icons/card/CrossIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
+import CancelFormButton from "../../ui/Buttons/CancelFormButton";
 
 interface EditRepeatModalProps {
   ticket: Ticket | undefined;
@@ -295,15 +295,8 @@ function EditRepeatModal({
         {/* Buttons */}
         <div className="xl:w-full xl:flex xl:justify-between xl:items-center xl:px-12.5">
           {/* Back btn */}
-          <button
-            onClick={handleCloseAttempt}
-            className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:py-2.25 xl:cursor-pointer xl:group"
-          >
-            <CrossIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary) xl:w-2.25 xl:h-2.25" />
-            <span className="xl:font-jbmono xl:font-medium xl:text-(--text-secondary) xl:text-xs xl:leading-normal xl:group-hover:text-(--text-primary)">
-              Отмена
-            </span>
-          </button>
+
+          <CancelFormButton onClick={handleCloseAttempt} isDesktop />
 
           {/* Send ticket btn */}
           <FunctionBtn

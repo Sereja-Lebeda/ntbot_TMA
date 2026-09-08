@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useMediaQuery from "../../../hooks/useMediaQuery";
 
 import type {
   Action,
@@ -52,6 +53,11 @@ function StepDetails({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  const isDesktop = useMediaQuery("(min-width:1280px)");
+  const isCentering = useMediaQuery("(max-width: 740px)");
+  const isTruncating = useMediaQuery("(max-width: 600px)");
+  const isMobile = useMediaQuery("(max-width: 500px)");
+
   if (!selectedAction) return null;
 
   //TODO: Change validation rules to get em with Action structure from backend
@@ -103,28 +109,54 @@ function StepDetails({
 
   // console.log({ multiData });
   return (
-    <div className="xl:w-full">
+    <div className="w-full">
       {/* Header */}
-      <div className="xl:w-full xl:flex xl:flex-col xl:items-center xl:gap-4 xl:mb-7 xl:select-none">
-        {/* Hint */}
-        <span className="xl:font-jbmono xl:font-normal xl:text-xl xl:text-(--text-primary) xl:leading-5 xl:tracking-[0.8px]">
-          Заполните форму
-        </span>
-      </div>
-      <div className="xl:w-full xl:flex xl:flex-col xl:justify-center xl:items-center xl:gap-8 xl:p-12.5 xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:select-none">
+      {isDesktop && (
+        <div className="xl:w-full xl:flex xl:flex-col xl:items-center xl:gap-4 xl:mb-7 xl:select-none">
+          {/* Hint */}
+          <span className="xl:font-jbmono xl:font-normal xl:text-xl xl:text-(--text-primary) xl:leading-5 xl:tracking-[0.8px]">
+            Заполните форму
+          </span>
+        </div>
+      )}
+      <div
+        className="w-full flex flex-col justify-center items-center gap-8 p-12.5
+        bg-(--bg-secondary) border border-(--bg-border) select-none"
+      >
         {/* Top of form  */}
-        <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-2">
+        <div className="w-full flex flex-col items-start gap-2">
           {/* Breadcrumps */}
-          <div className="xl:w-full xl:flex xl:items-center xl:gap-3 xl:py-2.5 xl:font-jbmono xl:font-normal xl:text-base xl:text-(--text-primary) xl:leading-6">
-            {selectedAction.category}
-            <ForwardArrowIcon className="" />
-            {selectedAction.subcategory}
-            <ForwardArrowIcon className="" />
-            {selectedAction.name}
+          <div
+            className={`w-full flex
+            items-center gap-3 py-2.5 font-jbmono font-normal text-base text-(--text-primary) leading-6`}
+          >
+            <span
+              className={`${isCentering && "flex-1 min-w-0 text-center"}
+            ${isTruncating && "line-clamp-1"}`}
+            >
+              {selectedAction.category}
+            </span>
+            <div className="flex items-center shrink-0">
+              <ForwardArrowIcon />
+            </div>
+            <span
+              className={` ${isCentering && "flex-1 min-w-0 text-center "}
+              ${isTruncating && "line-clamp-1"}`}
+            >
+              {selectedAction.subcategory}
+            </span>
+            <div className="flex items-center shrink-0">
+              <ForwardArrowIcon />
+            </div>
+            <span
+              className={` ${isCentering && "flex-1 min-w-0 text-center "}`}
+            >
+              {selectedAction.name}
+            </span>
           </div>
 
           {/* Divider */}
-          <div className="xl:w-full xl:h-px xl:bg-(--bg-border)"></div>
+          <div className="w-full h-px bg-(--bg-border)"></div>
         </div>
 
         {/* Middle of form - fields */}
@@ -156,7 +188,7 @@ function StepDetails({
             setIsDragging(false);
             addFiles(e.dataTransfer.files);
           }}
-          className="xl:w-full"
+          className="w-full"
         >
           <AttachmentField
             files={files}
@@ -167,38 +199,54 @@ function StepDetails({
         </div>
 
         {/* Bottom of form - buttons */}
-        <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7">
+        <div className="w-full flex flex-col items-start gap-7">
           {/* Divider */}
-          <div className="xl:w-full xl:h-px xl:bg-(--bg-border)"></div>
+          <div className="w-full h-px bg-(--bg-border)"></div>
 
           {/* Buttons */}
-          <div className="xl:w-full xl:flex xl:justify-between xl:items-center">
+          <div className="w-full flex justify-between items-center">
             {/* Back btn */}
             <button
               onClick={onPrev}
-              className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:py-2.25 xl:cursor-pointer xl:group"
+              className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
             >
-              <BackArrowIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary)" />
-              <span className="xl:font-jbmono xl:font-medium xl:text-(--text-secondary) xl:text-xs xl:leading-normal xl:group-hover:text-(--text-primary)">
+              <BackArrowIcon className="text-(--text-secondary) group-hover:text-(--text-primary)" />
+              <span className="font-jbmono font-medium text-(--text-secondary) text-xs leading-normal group-hover:text-(--text-primary)">
                 Назад
               </span>
             </button>
 
             {/* Send ticket btn */}
-            <FunctionBtn
-              Icon={SendFormIcon}
-              iconClassName="xl:w-4.5 xl:h-4.5 xl:text-(--text-btn)"
-              text="Отправить заявку"
-              textClassName="xl:font-jbmono xl:font-medium xl:text-xs xl:text-(--text-btn) xl:leading-normal"
-              btnClassName={`xl:h-8.5
-              xl:flex xl:justify-center xl:items-center
-              xl:enabled:bg-(--bg-btn-primary) xl:disabled:bg-(--bg-disable-btn)
-              ${shadowLiftButtonStyle}
-              `}
-              innerDivClassName="xl:flex xl:justify-center xl:items-center xl:gap-2 xl:rounded-xs xl:px-4"
-              onClick={submitForm}
-              disabled={isFormInvalid}
-            />
+            {isMobile ? (
+              <FunctionBtn
+                Icon={SendFormIcon}
+                iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+                textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
+                btnClassName={`h-8.5
+                flex justify-center items-center
+                enabled:bg-(--bg-btn-primary) disabled:bg-(--bg-disable-btn)
+                ${shadowLiftButtonStyle}
+                `}
+                innerDivClassName="flex justify-center items-center rounded-xs px-4"
+                onClick={submitForm}
+                disabled={isFormInvalid}
+              />
+            ) : (
+              <FunctionBtn
+                Icon={SendFormIcon}
+                iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+                text="Отправить заявку"
+                textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
+                btnClassName={`h-8.5
+                flex justify-center items-center
+                enabled:bg-(--bg-btn-primary) disabled:bg-(--bg-disable-btn)
+                ${shadowLiftButtonStyle}
+                `}
+                innerDivClassName="flex justify-center items-center gap-2 rounded-xs px-4"
+                onClick={submitForm}
+                disabled={isFormInvalid}
+              />
+            )}
           </div>
         </div>
       </div>

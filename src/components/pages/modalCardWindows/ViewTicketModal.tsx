@@ -22,6 +22,7 @@ import CancelIcon from "../../../icons/card/CancelIcon";
 import CrossTicketIcon from "../../../icons/createTicket/CrossTicketIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import AttachmentIcon from "../../../icons/createTicket/AttachmentIcon";
+import useMediaQuery from "../../../hooks/useMediaQuery";
 
 interface ViewTicketModalProps {
   ticket: Ticket | undefined;
@@ -51,20 +52,19 @@ function ViewTicketModal({
   useModalStackEntry(onClose);
 
   const currentUser = useUser();
+  const isDesktop = useMediaQuery("(min-width:1280px)");
   if (!currentUser || !ticket || !action) return null;
   const permissions = getTicketPermissions(ticket, currentUser);
 
-  const iconClassName =
-    "xl:w-4.5 xl:h-4.5 xl:shrink-0 xl:text-(--text-primary)!";
+  const iconClassName = "w-4.5 h-4.5 shrink-0 text-(--text-primary)!";
   const textClassName =
-    "xl:font-jbmono xl:font-medium xl:text-xs xl:text-(--text-primary) xl:leading-normal";
+    "font-jbmono font-medium text-xs text-(--text-primary) leading-normal";
 
-  //TODO: Make only icons for sm screen
-  const btnClassName = `xl:w-fit xl:h-8.5 xl:flex xl:justify-center xl:items-center xl:px-4 xl:py-2 xl:rounded-xs
-  xl:enabled:bg-(--bg-inactive-btn)
+  const btnClassName = `w-fit h-8.5 flex justify-center items-center px-4 py-2 rounded-xs
+  enabled:bg-(--bg-inactive-btn)
   ${shadowLiftButtonStyle}`;
 
-  const innerDivClassName = "xl:flex xl:items-center xl:gap-1";
+  const innerDivClassName = "flex items-center xl:gap-1";
 
   return createPortal(
     <div
@@ -73,17 +73,17 @@ function ViewTicketModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full h-full xl:w-[50vw] xl:max-w-[90vw] xl:max-h-[90vh] xl:flex xl:flex-col xl:items-center bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:py-10 xl:select-none"
+        className="w-[] min-w-[50vw] max-w-[90vw] max-h-[90vh] flex flex-col items-center bg-(--bg-secondary) border border-(--bg-border) rounded-xs py-10 select-none"
       >
         {/* Header with btns */}
-        <div className="xl:w-full xl:h-8.5 xl:mb-2 xl:px-12.5 xl:flex xl:justify-between xl:items-center xl:gap-4">
+        <div className="w-full h-8.5 mb-2 px-12.5 flex justify-between items-center gap-4">
           {/* //TODO: Make only icons if window is narrow */}
           {/* Functional btns */}
-          <div className="xl:w-full xl:flex xl:justify-start xl:gap-1.5 xl:select-none">
+          <div className="w-full flex justify-start gap-1.5 select-none">
             <FunctionBtn
               Icon={TelegramIcon}
               iconClassName={iconClassName}
-              text="Отправить сообщение"
+              text={isDesktop ? "Отправить сообщение" : ""}
               textClassName={textClassName}
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
@@ -93,7 +93,7 @@ function ViewTicketModal({
             <FunctionBtn
               Icon={RepeatIcon}
               iconClassName={iconClassName}
-              text="Повторить"
+              text={isDesktop ? "Повторить" : ""}
               textClassName={textClassName}
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
@@ -103,7 +103,7 @@ function ViewTicketModal({
             <FunctionBtn
               Icon={EditIcon}
               iconClassName={iconClassName}
-              text="Изменить"
+              text={isDesktop ? "Изменить" : ""}
               textClassName={textClassName}
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
@@ -113,7 +113,7 @@ function ViewTicketModal({
             <FunctionBtn
               Icon={CancelIcon}
               iconClassName={iconClassName}
-              text="Отменить"
+              text={isDesktop ? "Отменить" : ""}
               textClassName={textClassName}
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
@@ -124,19 +124,25 @@ function ViewTicketModal({
 
           {/* Close btn */}
           <button
-            className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:cursor-pointer xl:group xl:transition-all xl:duration-300 xl:ease-in-out xl:active:opacity-0 xl:select-none group"
+            className="flex justify-center items-center gap-1 cursor-pointer group transition-all duration-300 ease-in-out active:opacity-0 select-none group"
             onClick={onClose}
           >
-            <CrossTicketIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary) xl:transition-colors xl:duration-300" />
-            <span className="font-jbmono text-xs text-(--text-secondary) font-medium leading-normal group-hover:text-(--text-primary) transition-colors duration-300">
-              Закрыть
-            </span>
+            <CrossTicketIcon
+              className={`text-(--text-secondary) group-hover:text-(--text-primary) transition-colors duration-300
+              ${isDesktop ? "" : "w-4 h-4"}
+              `}
+            />
+            {isDesktop && (
+              <span className="font-jbmono text-xs text-(--text-secondary) font-medium leading-normal group-hover:text-(--text-primary) transition-colors duration-300">
+                Закрыть
+              </span>
+            )}
           </button>
         </div>
         {/* Divider */}
-        <div className="xl:w-full xl:h-px xl:bg-(--bg-disable-btn) xl:my-3"></div>
+        <div className="w-full h-px bg-(--bg-disable-btn) my-3"></div>
         {/* Ticket header and content */}
-        <div className="xl:w-full xl:gap-7 xl:px-12.5 xl:flex xl:flex-col xl:items-start xl:overflow-y-auto dropdown-scroll">
+        <div className="w-full gap-7 px-12.5 flex flex-col items-start overflow-y-auto dropdown-scroll">
           <TicketHeaderInfo
             favoriteTickets={favoriteTickets}
             setFavoriteTickets={setFavoriteTickets}
@@ -146,23 +152,23 @@ function ViewTicketModal({
                 ? (newStatus) => onChangeStatus(ticket.ticketId, newStatus)
                 : undefined
             }
-            className="xl:px-0!"
+            className="px-0!"
           />
           {/* Content */}
-          <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7">
+          <div className="w-full flex flex-col items-start gap-7">
             {/* Section container */}
-            <div className="xl:w-full xl:flex xl:items-start xl:gap-1">
-              <TicketInfoIcon className="xl:text-(--text-primary)" />
-              <span className="xl:font-jbmono xl:font-normal xl:text-sm xl:text-(--text-primary) xl:leading-5">
+            <div className="w-full flex items-start gap-1">
+              <TicketInfoIcon className="text-(--text-primary)" />
+              <span className="font-jbmono font-normal text-sm text-(--text-primary) leading-5">
                 Информация о заявке
               </span>
             </div>
-            <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:justify-center xl:gap-8">
-              <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-2">
-                <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-3">
+            <div className="w-full flex flex-col items-start justify-center gap-8">
+              <div className="w-full flex flex-col items-start gap-2">
+                <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                   Категории
                 </span>
-                <div className="xl:flex xl:justify-start xl:items-center xl:gap-2">
+                <div className="flex justify-start items-center gap-2">
                   {ticket.breadcrumbs.map(getBreadcrumb)}
                 </div>
               </div>
@@ -175,12 +181,12 @@ function ViewTicketModal({
                 return (
                   <div
                     key={field.name}
-                    className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-2"
+                    className="w-full flex flex-col items-start gap-2"
                   >
-                    <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-3">
+                    <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                       {field.label}
                     </span>
-                    <span className="xl:font-consolas xl:font-normal xl:text-sm xl:text-(--text-primary)">
+                    <span className="font-consolas font-normal text-sm text-(--text-primary)">
                       {value}
                     </span>
                   </div>
@@ -189,20 +195,20 @@ function ViewTicketModal({
             </div>
 
             {/* Divider */}
-            <div className="xl:w-full xl:h-px xl:bg-(--bg-disable-btn) xl:my-3"></div>
+            <div className="w-full h-px bg-(--bg-disable-btn) my-3"></div>
 
             {/* Attachment */}
             {ticket.attachedFiles.length > 0 && (
-              <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7">
+              <div className="w-full flex flex-col items-start gap-7">
                 {/* Label */}
-                <div className="xl:w-full xl:flex xl:items-center xl:gap-1">
+                <div className="w-full flex items-center gap-1">
                   <AttachmentIcon className="shrink-0 text-(--text-primary)" />
-                  <span className="xl:font-jbmono xl:font-normal xl:text-sm xl:text-(--text-primary) xl:leading-5">
+                  <span className="font-jbmono font-normal text-sm text-(--text-primary) leading-5">
                     Прикрепленные файлы
                   </span>
                 </div>
 
-                <div className="xl:w-full">
+                <div className="w-full">
                   {/* иконка + подпись "Прикреплённые файлы" */}
                   <TicketAttachmentsView files={ticket.attachedFiles} />
                 </div>

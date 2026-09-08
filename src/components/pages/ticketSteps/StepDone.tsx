@@ -24,26 +24,22 @@ function StepDone({ ticketId, ticketStatus }: StepDoneProps) {
   }, [navigate]);
 
   return (
-    <div
-      className="xl:w-full xl:h-full xl:mt-39 xl:flex xl:justify-center xl:items-center xl:select-none"
-    >
-      <div
-        className="xl:max-w-full xl:w-113 xl:max-h-full xl:h-54.5 xl:py-2 xl:px-4 xl:flex xl:flex-col xl:justify-center xl:items-center xl:gap-6 xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border)"
-      >
+    <div className="w-full h-full mt-39 flex justify-center items-center select-none">
+      <div className="max-w-full w-113 max-h-full h-54.5 py-2 px-4 flex flex-col justify-center items-center gap-6 bg-(--bg-secondary) border border-(--bg-border)">
         {ticketStatus === "Success" ? (
           <>
-            <SuccessCreateIcon className="xl:text-(--text-primary)" />
-            <span className="xl:font-jbmono xl:font-bold xl:text-(--text-primary) xl:text-2xl xl:leading-7.5 xl:text-center">
+            <SuccessCreateIcon className="text-(--text-primary)" />
+            <span className="font-jbmono font-bold text-(--text-primary) text-2xl leading-7.5 text-center">
               Заявка{" "}
-              <span className="xl:text-(--bg-btn-primary)">{`#${ticketId}`}</span>{" "}
+              <span className="text-(--bg-btn-primary)">{`#${ticketId}`}</span>{" "}
               создана
             </span>
           </>
         ) : (
           <>
-            <FailCreateIcon className="xl:w-12 xl:h-12 xl:text-(--text-primary)" />
-            <span className="xl:font-jbmono xl:font-bold xl:text-(--text-primary) xl:text-2xl xl:leading-7.5 xl:text-center">
-              <span className="xl:text-(--bg-task-error)">Ошибка:</span> Заявка не
+            <FailCreateIcon className="w-12 h-12 text-(--text-primary)" />
+            <span className="font-jbmono font-bold text-(--text-primary) text-2xl leading-7.5 text-center">
+              <span className="text-(--bg-task-error)">Ошибка:</span> Заявка не
               создана
             </span>
           </>

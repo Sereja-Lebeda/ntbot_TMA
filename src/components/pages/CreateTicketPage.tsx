@@ -22,6 +22,7 @@ import ConfirmModal from "./modalCardWindows/ConfirmModal";
 
 import CrossTicketIcon from "../../icons/createTicket/CrossTicketIcon";
 import transferFieldValues from "../../utils/transferFieldValues";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 interface OutletContextProps {
   formData: Record<string, string>;
@@ -49,18 +50,6 @@ interface OutletContextProps {
 
 function CreateTicketPage() {
   const [currentStep, setCurrentStep] = useState<CurrentStepType>(1);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const [formData, setFormData] = useState<Record<string, string>>({});
-  // const [multiData, setMultiData] = useState<Record<string, string[]>>({});
-  // const [selectedCategory, setSelectedCategory] =
-  //   useState<CategoriesPool>(null);
-  // const [selectedAction, setSelectedAction] = useState<Action | null>();
-  // const [priority, setPriority] = useState<PriorityLevel>(null);
-  // const [files, setFiles] = useState<AttachedFile[]>([]);
-  // //NOTE: setters are for backend fetch
-  // const [ticketId, setTicletId] = useState<number>(542);
-  // const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Failed");
 
   const {
     formData,
@@ -85,38 +74,11 @@ function CreateTicketPage() {
   } = useOutletContext<OutletContextProps>();
 
   const navigate = useNavigate();
+  const isDesktop = useMediaQuery("(min-width:1280px)");
+  const isTablet = useMediaQuery("(min-width: 550px) and (max-width: 1279px)");
 
   const inputText =
     "Вы уверены, что хотите прервать создание заявки?\n\nВведенная информация не сохранится.";
-
-  // function submitTicket() {
-  //   if (!selectedAction) return;
-
-  //   const breadcrumbs = [
-  //     selectedAction.category,
-  //     selectedAction.subcategory,
-  //     selectedAction.name,
-  //   ];
-  //   const ticket = {
-  //     //TODO: userID:  NOTE: take id from db?
-  //     //TODO: ticketID: NOTE: need to take id from db
-  //     actionId: selectedAction.id,
-  //     breadcrumbs,
-  //     priority,
-  //     body: formData,
-  //     multiBody: multiData,
-  //     description: getTicketDescription(formData, selectedAction),
-  //   };
-
-  //   const formDataToSend = new FormData(); // браузерный FormData (не стейт formData)
-  //   formDataToSend.append("ticket", JSON.stringify(ticket)); // JSON тикета
-  //   files.forEach((item) => {
-  //     formDataToSend.append("files", item.file); // каждый файл
-  //   });
-
-  //   // TODO: fetch отправка, когда бэк готов
-  //   console.log(ticket); // пока проверить сборку
-  // }
 
   function nextStep() {
     setCurrentStep((prev) =>
@@ -152,7 +114,11 @@ function CreateTicketPage() {
 
   // console.log(formData);
   return (
-    <div className="xl:w-full xl:h-full xl:flex xl:flex-col xl:justify-center xl:items-center xl:min-w-130 xl:max-w-225 xl:mx-auto xl:pt-4 xl:pb-7">
+    <div
+      className={` 
+        ${!isDesktop && "h-full mx-10 x-10 flex flex-col justify-center"}
+    w-full xl:h-full xl:flex xl:flex-col xl:justify-center xl:items-center xl:min-w-130 max-w-225 xl:mx-auto xl:pt-4 xl:pb-7`}
+    >
       {/* Modal window  */}
       {isModalOpen && (
         <ConfirmModal
@@ -163,25 +129,31 @@ function CreateTicketPage() {
       )}
 
       {/* Step container */}
-      <div className="xl:w-full xl:flex xl:flex-col xl:items-center xl:select-none">
+      <div
+        className={`
+            ${isTablet ? "" : "mt"}
+        xl:w-full xl:flex xl:flex-col xl:items-center xl:select-none`}
+      >
         {/* Title section */}
         <div className="xl:w-full xl:flex xl:justify-between xl:items-start">
           {/* Info container */}
-          <div className="xl:w-2/3 xl:flex xl:flex-col xl:justify-center xl:items-start xl:gap-2">
-            <span className="xl:font-jbmono xl:text-2xl xl:text-(--text-primary) xl:font-bold xl:leading-7.5">
-              Создание заявки
-            </span>
-            <span className="xl:font-consolas xl:text-[15px] xl:text-(--text-secondary) xl:font-normal xl:leading-4.5">{`Шаг ${currentStep} из 4`}</span>
-          </div>
+          {isDesktop && (
+            <div className="xl:w-2/3 xl:flex xl:flex-col xl:justify-center xl:items-start xl:gap-2">
+              <span className="xl:font-jbmono xl:text-2xl xl:text-(--text-primary) xl:font-bold xl:leading-7.5">
+                Создание заявки
+              </span>
+              <span className="xl:font-consolas xl:text-[15px] xl:text-(--text-secondary) xl:font-normal xl:leading-4.5">{`Шаг ${currentStep} из 4`}</span>
+            </div>
+          )}
           {/* Button */}
 
           {currentStep !== 4 && (
             <button
-              className="xl:flex xl:justify-center xl:items-center xl:gap-1 xl:cursor-pointer xl:group xl:transition-all xl:duration-300 xl:ease-in-out xl:active:opacity-0"
+              className="flex justify-center items-center gap-1 cursor-pointer group transition-all duration-300 ease-in-out active:opacity-0"
               onClick={() => setIsModalOpen(true)}
             >
-              <CrossTicketIcon className="xl:text-(--text-secondary) xl:group-hover:text-(--text-primary) xl:transition-colors xl:duration-300" />
-              <span className="xl:font-jbmono xl:text-xs xl:text-(--text-secondary) xl:font-medium xl:leading-normal xl:group-hover:text-(--text-primary) xl:transition-colors xl:duration-300">
+              <CrossTicketIcon className="text-(--text-secondary) group-hover:text-(--text-primary) transition-colors duration-300" />
+              <span className="font-jbmono text-xs text-(--text-secondary) font-medium leading-normal group-hover:text-(--text-primary) transition-colors duration-300">
                 Отмена
               </span>
             </button>
@@ -189,11 +161,14 @@ function CreateTicketPage() {
         </div>
         {/* Steps navigation */}
         <div className="xl:w-full xl:flex xl:justify-center xl:items-center xl:py-5 xl:mb-8">
-          <ProgressBar currentStep={currentStep} />
+          <ProgressBar
+            currentStep={currentStep}
+            selectedCategory={selectedCategory}
+          />
         </div>
       </div>
 
-      <div className="xl:w-full">
+      <div className="xl:w-full h-full">
         {currentStep === 1 && (
           <StepCategory
             onNext={nextStep}
@@ -229,8 +204,12 @@ function CreateTicketPage() {
         )}
       </div>
 
-      <div className="xl:fixed xl:bottom-6 xl:left-6 xl:flex xl:w-83 xl:gap-2.5">
-        <SupportButtons />
+      <div
+        className={`
+        ${!isDesktop ? "flex justify-center items-center my-4" : ""}
+        xl:fixed xl:bottom-6 xl:left-6 xl:flex xl:w-83 gap-2.5`}
+      >
+        {currentStep !== 4 && <SupportButtons />}
       </div>
     </div>
   );

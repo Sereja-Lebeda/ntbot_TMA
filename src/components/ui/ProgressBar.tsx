@@ -1,14 +1,24 @@
 import { Fragment } from "react";
 
-import type { CurrentStepType } from "../../types/createTicket.type";
+import type {
+  CategoriesPool,
+  CurrentStepType,
+} from "../../types/createTicket.type";
 
 import PassedStepIcon from "../../icons/createTicket/PassedStepIcon";
+import useMediaQuery from "../../hooks/useMediaQuery";
+import WizardStepHeader from "./WizardStepHeader";
 
 interface ProgressBarProps {
   currentStep: CurrentStepType;
+  selectedCategory: CategoriesPool;
 }
 
-function ProgressBar({ currentStep }: ProgressBarProps) {
+function ProgressBar({ currentStep, selectedCategory }: ProgressBarProps) {
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
+  const isTablet = useMediaQuery("(min-width: 501px) and (max-width: 1279px)");
+  const isMobile = useMediaQuery("(max-width: 500px)");
+
   const stepsNumAndLabel: { num: CurrentStepType; label: string }[] = [
     { num: 1, label: "Категория" },
     { num: 2, label: "Проблема" },
@@ -52,7 +62,7 @@ function ProgressBar({ currentStep }: ProgressBarProps) {
     );
   }
 
-  return (
+  return isDesktop ? (
     <div className="xl:max-w-224.5 xl:w-full xl:flex xl:items-start xl:py-5 xl:select-none">
       {stepsNumAndLabel.map((step, index) => (
         <Fragment key={step.num}>
@@ -75,6 +85,34 @@ function ProgressBar({ currentStep }: ProgressBarProps) {
         </Fragment>
       ))}
     </div>
+  ) : isTablet ? (
+    <div
+      className={`
+    w-full flex flex-col gap-2 my-4 select-none`}
+    >
+      <WizardStepHeader
+        selectedCategory={selectedCategory}
+        currentStep={currentStep}
+      />
+    </div>
+  ) : (
+    isMobile && (
+      <div className="my-4 w-full flex flex-col gap-2 select-none">
+        {/* Текст текущего шага */}
+        <span className="font-jbmono text-sm text-(--text-primary)">
+          {stepsNumAndLabel.find((s) => s.num === currentStep)?.label}
+        </span>
+        {/* Полоса прогресса */}
+        <div className="w-full h-1 bg-(--bg-border) rounded-xs overflow-hidden">
+          <div
+            className="h-full bg-(--bg-btn-primary) transition-all duration-300"
+            style={{
+              width: `${(currentStep / stepsNumAndLabel.length) * 100}%`,
+            }}
+          />
+        </div>
+      </div>
+    )
   );
 }
 
