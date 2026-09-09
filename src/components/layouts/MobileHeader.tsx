@@ -57,7 +57,10 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
           onClick={() => navigate("/")}
         >
           <MascootIcon className="w-5 h-5" />
-          <p className="text-2xl font-jbmono font-bold leading-7 select-none">
+          <p
+            className="text-2xl text-[#ede8de] font-jbmono font-bold leading-7
+          select-none"
+          >
             NTBot
           </p>
         </button>

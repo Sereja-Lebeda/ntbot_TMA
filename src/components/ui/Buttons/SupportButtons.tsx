@@ -17,13 +17,22 @@ function SupportButtons() {
         onClick={toggleTheme}
       >
         <ToggleBtn />
+        <span
+          className="font-jbmono text-(--text-secondary) group-hover:text-(--text-primary) text-sm font-medium leading-normal select-none
+        w-0 overflow-hidden group-hover:w-37.5 transition-all duration-300 whitespace-nowrap"
+        >
+          Сменить тему
+        </span>
       </button>
 
       <button
-        className={`w-full flex justify-center items-center px-3 py-2.5 bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none group rounded-xs gap-2 ${btnPressAnimationStyle}`}
+        className={`w-auto flex justify-center items-center px-3 py-2.5 bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none group rounded-xs ${btnPressAnimationStyle}`}
       >
-        <TelegramIcon className="group-hover:text-(--text-primary) text-(--text-secondary) " />
-        <span className="font-jbmono text-(--text-secondary) group-hover:text-(--text-primary) text-sm font-medium leading-normal select-none">
+        <TelegramIcon className="group-hover:text-(--text-primary) text-(--text-secondary)" />
+        <span
+          className="font-jbmono text-(--text-secondary) group-hover:text-(--text-primary) text-sm font-medium leading-normal select-none
+        w-0 overflow-hidden group-hover:w-37.5 transition-all duration-300 whitespace-nowrap"
+        >
           Задать вопрос
         </span>
       </button>

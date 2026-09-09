@@ -12,6 +12,7 @@ import { textPressAnimationStyle } from "../../../styles/pressAnimation";
 
 import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
 import useMediaQuery from "../../../hooks/useMediaQuery";
+import useIsTablet from "../../../hooks/useIsTablet";
 
 interface TicketHeaderInfoProps {
   ticket: Ticket | undefined;
@@ -37,6 +38,7 @@ function TicketHeaderInfo({
   currentStatus,
 }: TicketHeaderInfoProps) {
   const isDesktop = useMediaQuery("(min-width: 1280px)");
+  const isTablet = useIsTablet();
 
   if (!ticket) return null;
 
@@ -118,10 +120,13 @@ function TicketHeaderInfo({
           ) : null}
         </div>
       ) : (
-        <div className="w-full flex flex-col items-start gap-3">
+        <div className="w-full flex flex-col items-start gap-3 px-">
           {/* Ticket title */}
           <div className="w-full flex justify-start items-center gap-3">
-            <span className="font-jbmono font-normal text-2xl text-(--text-primary) leading-6 line-clamp-3">
+            <span
+              className={`font-jbmono font-normal 
+            ${!isDesktop && !isTablet && "text-2xl"} xl:text-[15px] text-(--text-primary) leading-6 line-clamp-2`}
+            >
               {ticket.title}
             </span>
           </div>

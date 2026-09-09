@@ -53,6 +53,8 @@ function ViewTicketModal({
 
   const currentUser = useUser();
   const isDesktop = useMediaQuery("(min-width:1280px)");
+  const isNarrow = useMediaQuery("(min-width: 700px)");
+
   if (!currentUser || !ticket || !action) return null;
   const permissions = getTicketPermissions(ticket, currentUser);
 
@@ -64,7 +66,7 @@ function ViewTicketModal({
   enabled:bg-(--bg-inactive-btn)
   ${shadowLiftButtonStyle}`;
 
-  const innerDivClassName = "flex items-center xl:gap-1";
+  const innerDivClassName = "flex items-center md:gap-2 xl:gap-2";
 
   return createPortal(
     <div
@@ -83,7 +85,7 @@ function ViewTicketModal({
             <FunctionBtn
               Icon={TelegramIcon}
               iconClassName={iconClassName}
-              text={isDesktop ? "Отправить сообщение" : ""}
+              text={isNarrow ? "Отправить сообщение" : ""}
               textClassName={textClassName}
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
@@ -93,7 +95,7 @@ function ViewTicketModal({
             <FunctionBtn
               Icon={RepeatIcon}
               iconClassName={iconClassName}
-              text={isDesktop ? "Повторить" : ""}
+              text={isNarrow ? "Повторить" : ""}
               textClassName={textClassName}
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
@@ -103,7 +105,7 @@ function ViewTicketModal({
             <FunctionBtn
               Icon={EditIcon}
               iconClassName={iconClassName}
-              text={isDesktop ? "Изменить" : ""}
+              text={isNarrow ? "Изменить" : ""}
               textClassName={textClassName}
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}
@@ -113,7 +115,7 @@ function ViewTicketModal({
             <FunctionBtn
               Icon={CancelIcon}
               iconClassName={iconClassName}
-              text={isDesktop ? "Отменить" : ""}
+              text={isNarrow ? "Отменить" : ""}
               textClassName={textClassName}
               btnClassName={btnClassName}
               innerDivClassName={innerDivClassName}

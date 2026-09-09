@@ -3,6 +3,7 @@ import useLockBodyScroll from "../../../hooks/useLockBodyScroll";
 import useUser from "../../../hooks/useUser";
 import useModalStackEntry from "../../../hooks/useModalStackEntry";
 import useEditRepeatForm from "../../../hooks/useEditRepeatForm";
+import useMediaQuery from "../../../hooks/useMediaQuery";
 
 import type { Action, PriorityLevel } from "../../../types/createTicket.type";
 import type {
@@ -21,6 +22,7 @@ import FormDropdown from "../../ui/FormDropdown";
 import EditableAttachmentField from "../../ui/Attachment/EditableAttachmentField";
 import AttachmentField from "../../ui/Attachment/AttachmentField";
 import FunctionBtn from "../../ui/Buttons/FunctionBtn";
+import CancelFormButton from "../../ui/Buttons/CancelFormButton";
 
 import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 
@@ -28,7 +30,6 @@ import FloppydiskIcon from "../../../icons/FloppydiskIcon";
 import RepeatIcon from "../../../icons/card/RepeatIcon";
 import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
-import CancelFormButton from "../../ui/Buttons/CancelFormButton";
 
 interface EditRepeatModalProps {
   ticket: Ticket | undefined;
@@ -109,6 +110,8 @@ function EditRepeatModal({
   useModalStackEntry(handleCloseAttempt);
 
   const currentUser = useUser();
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
+  const isMobile = useMediaQuery("(max-width: 500px)");
 
   if (!currentUser || !ticket || !action) return null;
   const permissions = getTicketPermissions(ticket, currentUser);
@@ -120,19 +123,19 @@ function EditRepeatModal({
     return createPortal(
       <div
         onClick={onClose}
-        className="xl:fixed xl:inset-0 xl:bg-black/50 xl:z-50 xl:flex xl:justify-center xl:items-center"
+        className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center"
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:p-8 xl:text-center xl:flex xl:flex-col xl:gap-4 xl:items-center"
+          className="bg-(--bg-secondary) border border-(--bg-border) rounded-xs p-8 text-center flex flex-col gap-4 items-center"
         >
-          <p className="xl:text-(--text-primary) xl:font-jbmono">
+          <p className="text-(--text-primary) font-jbmono">
             У вас нет прав на редактирование этой заявки.<br></br>
             Пожалуйста, обратитесь к администратору.
           </p>
           <button
             onClick={onClose}
-            className="xl:cursor-pointer xl:text-(--text-secondary) xl:hover:text-(--text-primary) xl:font-consolas"
+            className="cursor-pointer text-(--text-secondary) hover:text-(--text-primary) font-consolas"
           >
             Закрыть
           </button>
@@ -145,7 +148,7 @@ function EditRepeatModal({
   return createPortal(
     <div
       onClick={handleCloseAttempt}
-      className="xl:fixed xl:inset-0 xl:bg-black/50 xl:z-50 xl:flex xl:justify-center xl:items-center"
+      className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center"
     >
       {isConfirmCloseOpen && (
         <ConfirmModal
@@ -167,11 +170,14 @@ function EditRepeatModal({
             (document.activeElement as HTMLElement)?.blur();
           }
         }}
-        className="xl:w-[50vw] xl:max-h-[90vh] xl:flex xl:flex-col xl:items-center xl:gap-4 xl:bg-(--bg-secondary) xl:border xl:border-(--bg-border) xl:rounded-xs xl:py-10 xl:select-none overflow-y-auto"
+        className="w-[85vw] xl:max-w-275 max-h-[85vh] flex flex-col items-center gap-4 bg-(--bg-secondary) border border-(--bg-border) rounded-xs py-10 select-none overflow-y-auto"
       >
         {/* Header */}
         {mode === "edit" ? (
-          <div className="xl:w-full xl:gap-7 xl:flex xl:flex-col xl:items-start">
+          <div
+            className={`w-full xl:gap-7 xl:flex xl:flex-col xl:items-start
+          ${!isDesktop && "px-12.5"}`}
+          >
             <TicketHeaderInfo
               favoriteTickets={favoriteTickets}
               setFavoriteTickets={setFavoriteTickets}
@@ -186,38 +192,38 @@ function EditRepeatModal({
             />
           </div>
         ) : (
-          <div className="xl:w-full xl:flex xl:flex-col xl:justify-center xl:items-start xl:gap-3 xl:px-12.5">
-            <div className="xl:w-full xl:flex xl:items-center xl:gap-1">
-              <RepeatIcon className="xl:text(--text-secondary) xl:w-4 xl:h-4" />
-              <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-4">{`Повтор заявки #${ticket.ticketId}`}</span>
+          <div className="w-full flex flex-col justify-center items-start gap-3 px-12.5">
+            <div className="w-full flex items-center gap-1">
+              <RepeatIcon className="text(--text-secondary) w-4 h-4" />
+              <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-4">{`Повтор заявки #${ticket.ticketId}`}</span>
             </div>
 
             {/* Divider */}
-            <div className="xl:w-full xl:h-px xl:bg-(--bg-disable-btn)"></div>
+            <div className="w-full h-px bg-(--bg-disable-btn)"></div>
           </div>
         )}
 
         {/* Content */}
-        <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-7 xl:overflow-y-auto dropdown-scroll xl:px-12.5">
+        <div className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll px-12.5">
           {/* Ticket information */}
-          <div className="xl:w-full xl:flex xl:items-start xl:gap-1">
-            <TicketInfoIcon className="xl:text-(--text-primary)" />
-            <span className="xl:font-jbmono xl:font-normal xl:text-sm xl:text-(--text-primary) xl:leading-5">
+          <div className="w-full flex items-start gap-1">
+            <TicketInfoIcon className="text-(--text-primary)" />
+            <span className="font-jbmono font-normal text-sm text-(--text-primary) leading-5">
               Информация о заявке
             </span>
           </div>
-          <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:justify-center xl:gap-8">
-            <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-2">
-              <span className="xl:font-consolas xl:font-normal xl:text-xs xl:text-(--text-secondary) xl:leading-3">
+          <div className="w-full flex flex-col items-start justify-center gap-8">
+            <div className="w-full flex flex-col items-start gap-2">
+              <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                 Категории
               </span>
 
               {mode === "repeat" ? (
-                <div className="xl:flex xl:justify-start xl:items-center xl:gap-2">
+                <div className="flex justify-start items-center gap-2">
                   {ticket.breadcrumbs.map(getBreadcrumb)}
                 </div>
               ) : (
-                <div className="xl:w-full xl:flex xl:flex-col xl:gap-3">
+                <div className="w-full flex flex-col gap-3">
                   <FormDropdown
                     options={categoryOptions}
                     value={selectedCategory ?? ""}
@@ -277,7 +283,7 @@ function EditRepeatModal({
                 setIsDragging(false);
                 addFiles(e.dataTransfer.files);
               }}
-              className="xl:w-full"
+              className="w-full"
             >
               <AttachmentField
                 files={files}
@@ -289,30 +295,49 @@ function EditRepeatModal({
           )}
 
           {/* Divider */}
-          <div className="xl:w-full xl:h-px xl:bg-(--bg-disable-btn)"></div>
+          <div className="w-full h-px bg-(--bg-disable-btn)"></div>
         </div>
 
         {/* Buttons */}
-        <div className="xl:w-full xl:flex xl:justify-between xl:items-center xl:px-12.5">
+        <div className="w-full flex justify-between items-center px-12.5">
           {/* Back btn */}
 
-          <CancelFormButton onClick={handleCloseAttempt} isDesktop />
+          <CancelFormButton
+            onClick={handleCloseAttempt}
+            isDesktop={isDesktop}
+          />
 
           {/* Send ticket btn */}
-          <FunctionBtn
-            Icon={mode === "edit" ? FloppydiskIcon : SendFormIcon}
-            iconClassName="xl:w-4.5 xl:h-4.5 xl:text-(--text-btn)"
-            text={mode === "edit" ? "Сохранить" : "Отправить заявку"}
-            textClassName="xl:font-jbmono xl:font-medium xl:text-xs xl:text-(--text-btn) xl:leading-normal"
-            innerDivClassName="xl:flex xl:justify-center xl:items-center xl:gap-2"
-            btnClassName={`
-              xl:h-8.5 xl:px-4 xl:rounded-xs xl:group
+          {isMobile ? (
+            <FunctionBtn
+              Icon={mode === "edit" ? FloppydiskIcon : SendFormIcon}
+              iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+              textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
+              innerDivClassName="flex justify-center items-center"
+              btnClassName={`
+              h-8.5 px-4 rounded-xs group
               ${shadowLiftButtonStyle}
-              xl:enabled:bg-(--bg-btn-primary)
+              enabled:bg-(--bg-btn-primary)
               `}
-            onClick={handleSubmit}
-            disabled={isFormInvalid}
-          />
+              onClick={handleSubmit}
+              disabled={isFormInvalid}
+            />
+          ) : (
+            <FunctionBtn
+              Icon={mode === "edit" ? FloppydiskIcon : SendFormIcon}
+              iconClassName="w-4.5 h-4.5 text-(--text-btn)"
+              text={mode === "edit" ? "Сохранить" : "Отправить заявку"}
+              textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
+              innerDivClassName="flex justify-center items-center gap-2"
+              btnClassName={`
+              h-8.5 px-4 rounded-xs group
+              ${shadowLiftButtonStyle}
+              enabled:bg-(--bg-btn-primary)
+              `}
+              onClick={handleSubmit}
+              disabled={isFormInvalid}
+            />
+          )}
         </div>
       </div>
     </div>,

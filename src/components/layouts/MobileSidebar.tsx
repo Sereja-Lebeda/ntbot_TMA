@@ -176,7 +176,7 @@ function MobileSidebar({
         ref={panelRef}
         // NOTE: Duration should be equal as timeout duration in layout
         className={`
-          w-8/10 h-screen
+          w-8/10 h-dvh
           bg-(--bg-primary-second)
           flex flex-col justify-start items-start
           overflow-y-auto overscroll-contain scrollbar-gutter-stable dropdown-scroll
