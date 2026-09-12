@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useUser from "../hooks/useUser";
 import useMediaQuery from "../hooks/useMediaQuery";
 
-import { useLongPress } from "use-long-press";
+import { useLongPress, LongPressEventType } from "use-long-press";
 
 import type {
   Ticket,
@@ -40,6 +40,8 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   handleOpenView: (ticketId: number) => void;
   openMenuTicketId: number | null;
   setOpenMenuTicketId: (ticketId: number | null) => void;
+  revealedTicketId: number | null;
+  setRevealedTicketId: (ticketId: number | null) => void;
 }
 
 type actionRegistryType =
@@ -70,6 +72,8 @@ export default function TicketCard({
   handleOpenView,
   openMenuTicketId,
   setOpenMenuTicketId,
+  revealedTicketId,
+  setRevealedTicketId,
 }: TicketCardWithActionsProps) {
   const currentUser = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
@@ -84,6 +88,7 @@ export default function TicketCard({
     {
       threshold: 500, // сколько мс считать долгим нажатием
       cancelOnMovement: 15, // если палец сдвинулся больше 15px — это свайп, не долгое нажатие; отменяем
+      detect: LongPressEventType.Pointer,
       onCancel: (event, meta) => {
         // сработает, если отпустили РАНЬШЕ threshold — то есть это был короткий тап
         if (meta.reason === "cancelled-by-release")
@@ -92,7 +97,18 @@ export default function TicketCard({
     },
   );
 
+  // Left swipe hooks for ticket
+  const [swipeX, setSwipeX] = useState(0);
+  const startXRef = useRef(0);
+  const startYRef = useRef(0);
+  const directionRef = useRef<"horizontal" | "vertical" | null>(null);
+
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const permissions = currentUser
+    ? getTicketPermissions(ticket, currentUser)
+    : null;
+
   useEffect(() => {
     if (!isActionsOpen) return;
 
@@ -111,13 +127,54 @@ export default function TicketCard({
     };
   }, [isActionsOpen]);
 
+  useEffect(() => {
+    if (revealedTicketId !== ticket.ticketId && swipeX !== 0) {
+      setSwipeX(0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revealedTicketId]);
+
+  useEffect(() => {
+    if (revealedTicketId !== ticket.ticketId) return;
+
+    function handleClickOutside(e: MouseEvent | TouchEvent) {
+      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+        setRevealedTicketId(null);
+        setSwipeX(0);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revealedTicketId, ticket.ticketId]);
+
+  useEffect(() => {
+    if (!permissions?.canCancel && swipeX !== 0) {
+      setSwipeX(0);
+      if (revealedTicketId === ticket.ticketId) {
+        setRevealedTicketId(null);
+      }
+      directionRef.current = null;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [permissions?.canCancel, ticket.ticketId]);
+
   //Ctx menu for narrow pc screen
   const menuVisible = openMenuTicketId === ticket.ticketId;
+  // console.log("menuVisible:", menuVisible, "ticketId:", ticket.ticketId);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const cardWidthRef = useRef(0);
 
   const handleContextMenuPC = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    // console.log("context menu triggered for:", ticket.ticketId);
 
     const menuWidth = 200; // подставь реальную ширину меню
     const menuHeight = 150; // подставь реальную высоту меню
@@ -140,6 +197,7 @@ export default function TicketCard({
   };
 
   const handleOutsideClickPC = (e: MouseEvent) => {
+    // console.log("outside click");
     if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
       setOpenMenuTicketId(null);
     }
@@ -147,12 +205,14 @@ export default function TicketCard({
 
   useEffect(() => {
     if (!menuVisible) return;
+    // console.log("effect subscribed for ticket:", ticket.ticketId);
     document.addEventListener("click", handleOutsideClickPC);
     return () => document.removeEventListener("click", handleOutsideClickPC);
   }, [menuVisible]);
 
   if (!currentUser) return null;
-  const permissions = getTicketPermissions(ticket, currentUser);
+
+  const activateThreshold = -105;
 
   function handleToggleFavorite(ticketId: number) {
     if (favoriteTickets?.includes(ticketId)) {
@@ -161,6 +221,101 @@ export default function TicketCard({
     } else {
       setFavoriteTickets([...(favoriteTickets ?? []), ticketId]);
     }
+  }
+
+  const revealThreshold = -20; // px — минимальное движение, чтобы что-то засчиталось
+  const cancelThreshold = -180;
+  const maxSwipe = -320; // px — предел, за которым сразу активируется отмена
+
+  const revealMag = Math.abs(revealThreshold); // 20
+  const activateMag = Math.abs(activateThreshold); // 105
+  const cancelMag = Math.abs(cancelThreshold); // 180
+
+  // Появление — от revealThreshold (0) до activateThreshold (1)
+  const appearProgress = Math.min(
+    Math.max((Math.abs(swipeX) - revealMag) / (activateMag - revealMag), 0),
+    1,
+  );
+
+  // Исчезновение — от activateThreshold (0) до cancelThreshold (1)
+  const fadeProgress = Math.min(
+    Math.max((Math.abs(swipeX) - activateMag) / (cancelMag - activateMag), 0),
+    1,
+  );
+
+  const textOpacity = Math.min(appearProgress, 1 - fadeProgress);
+
+  function handlePointerDown(e: React.PointerEvent) {
+    if (!permissions?.canCancel) return;
+
+    startXRef.current = e.clientX;
+    startYRef.current = e.clientY;
+    cardWidthRef.current = cardRef.current?.offsetWidth ?? 0;
+
+    // Если это ДРУГАЯ карточка — сбрасываем её на 0, эта не должна была быть зафиксирована
+    if (ticket.ticketId !== revealedTicketId) {
+      setRevealedTicketId(null);
+    }
+  }
+
+  function handlePointerMove(e: React.PointerEvent) {
+    if (!permissions?.canCancel) return;
+
+    const deltaX = e.clientX - startXRef.current;
+    const deltaY = e.clientY - startYRef.current;
+
+    if (directionRef.current === null) {
+      const threshold = 10; // amount of px's before decide what action should be
+      if (Math.abs(deltaX) < threshold && Math.abs(deltaY) < threshold) {
+        return;
+      }
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        directionRef.current = "horizontal";
+      } else {
+        directionRef.current = "vertical";
+      }
+    }
+
+    if (directionRef.current === "horizontal") {
+      // Базовая позиция — либо 0 (обычный случай), либо уже зафиксированное значение (если карточка была revealed)
+      const basePosition =
+        revealedTicketId === ticket.ticketId ? activateThreshold : 0;
+      setSwipeX(Math.min(0, Math.max(basePosition + deltaX, maxSwipe)));
+    }
+  }
+
+  function handlePointerUp() {
+    if (swipeX > revealThreshold) {
+      setSwipeX(0);
+    } else if (swipeX > cancelThreshold) {
+      setRevealedTicketId(ticket.ticketId);
+      setSwipeX(activateThreshold);
+    } else {
+      if (permissions?.canCancel) {
+        onRequestCancel(ticket.ticketId);
+      }
+      setSwipeX(0);
+    }
+    directionRef.current = null;
+  }
+
+  const longPressBind = isTouchDevice
+    ? bind()
+    : ({} as ReturnType<typeof bind>);
+
+  function combinedPointerDown(e: React.PointerEvent) {
+    longPressBind.onPointerDown?.(e);
+    if (isTouchDevice) handlePointerDown(e);
+  }
+
+  function combinedPointerMove(e: React.PointerEvent) {
+    longPressBind.onPointerMove?.(e);
+    if (isTouchDevice) handlePointerMove(e);
+  }
+
+  function combinedPointerUp(e: React.PointerEvent) {
+    longPressBind.onPointerUp?.(e);
+    if (isTouchDevice) handlePointerUp();
   }
 
   const actionRegistry = {
@@ -260,10 +415,10 @@ export default function TicketCard({
           .filter((key) => key !== "telegram")
           .filter((key) => {
             if (key === "cancel") {
-              return permissions.canCancel;
+              return permissions?.canCancel;
             }
             if (key === "edit") {
-              return permissions.canEdit;
+              return permissions?.canEdit;
             }
 
             return true;
@@ -305,294 +460,343 @@ export default function TicketCard({
   }
 
   return (
-    <div
-      onContextMenu={
-        isTouchDevice
-          ? (e) => {
-              e.preventDefault();
-            }
-          : handleContextMenuPC
-      }
-      ref={cardRef}
-      {...(isTouchDevice
-        ? bind()
-        : { onClick: () => handleOpenView(ticket.ticketId) })}
-      className={`relative xl:relative
-        w-full px-5 py-3 gap-2 rounded-xs cursor-pointer
-        flex flex-col justify-between items-start
-      ${ticketView === "my" ? "min-h-41 h-auto xl:min-h-38" : "min-h-41 h-auto xl:min-h-47 "}
-      ${shadowLiftCardStyle}
-      bg-(--bg-secondary) border border-(--bg-border)
-      hover:border-(--text-tertiary)
-      xl:relative select-none shrink-0
-      -webkit-touch-callout: none
-      `}
-    >
-      {/* Title, dep, employee name and Meta info as manager*/}
-      {ticketView === "team" ? (
-        <div className="w-full flex flex-col gap-2">
-          {/* Строка 1: имя/отдел и ID/дата */}
-          {isDesktop ? (
-            // Team pc version view
-            <div
-              className="w-full flex justify-start items-center gap-2
-          xl:flex xl:justify-between xl:items-center xl:gap-0"
-            >
-              <div
-                className="flex items-center gap-2 text-(--text-secondary)
-            font-jbmono font-medium
-            text-[10px] xl:text-xs
-            leading-2.5 xl:leading-3"
-              >
-                {ticket.userName}
-                <span>|</span>
-                {ticket.department}
-              </div>
-
-              <div
-                className="w-auto flex items-center font-jbmono text-(--text-secondary)
-            font-medium gap-2 select-none
-            text-[10px] xl:text-xs
-            leading-2.5 xl:leading-3 "
-              >
-                <span>ID: </span>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigator.clipboard.writeText(ticket.ticketId.toString());
-                  }}
-                  className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
-                >
-                  {ticket.ticketId}
-                </div>
-                <span>|</span>
-                <div>{ticket.createDate}</div>
-              </div>
-            </div>
-          ) : (
-            // Team mobile version view
-            <div
-              className="w-full flex justify-start items-center gap-2
-          xl:flex xl:justify-between xl:items-center xl:gap-0"
-            >
-              <div
-                className="flex items-center gap-2 text-(--text-secondary)
-            font-jbmono font-medium
-            text-[10px] xl:text-xs
-            leading-2.5 xl:leading-3"
-              >
-                <span>ID: </span>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigator.clipboard.writeText(ticket.ticketId.toString());
-                  }}
-                  className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
-                >
-                  {ticket.ticketId}
-                </div>
-                <span>|</span>
-                <div>{ticket.createDate}</div>
-                <span>|</span>
-                {ticket.userName}
-                <span>|</span>
-                {ticket.department}
-              </div>
-            </div>
-          )}
-
-          {/* Строка 2: заголовок */}
-          <div
-            className="flex flex-1
-          justify-between xl:justify-start
-          items-start xl:gap-1.5 min-w-0"
-          >
-            <div
-              className="text-(--text-primary) font-jbmono text-[15px]
-            font-bold xl:font-medium
-            leading-5 xl:leading-6
-            line-clamp-2 xl:line-clamp-1
-            select-none cursor-pointer
-            xl:truncate"
-            >
-              {ticket.title}
-            </div>
-            {ticket.attachedFiles.length > 0 && (
-              <AttachIcon className="shrink-0 text-(--text-primary)" />
-            )}
-          </div>
-        </div>
-      ) : (
-        // Title and Meta info as user
+    <div ref={cardRef} className="relative w-full">
+      {swipeX < 0 && (
         <div
-          className="w-full flex
-        justify-start xl:justify-between
-        items-center xl:py-0.5"
+          className="absolute inset-y-0 right-0 flex items-center justify-center"
+          style={{ width: Math.abs(swipeX) }}
         >
-          {isDesktop ? (
-            <>
-              {/* Personal pc version view  */}
-              <div
-                className="flex flex-1
-          justify-start
-          items-center gap-1.5 xl:min-w-0"
-              >
-                {/* title */}
-                <div
-                  className="text-(--text-primary) font-jbmono text-[15px]
-            font-bold xl:font-medium
-            leading-5 xl:leading-6
-            select-none cursor-pointer truncate"
-                >
-                  {ticket.title}
-                </div>
-                {ticket.attachedFiles.length > 0 && (
-                  <AttachIcon className="shrink-0 text-(--text-primary)" />
-                )}
-              </div>
-              {/* meta info */}
-              <div
-                className="w-auto flex items-center font-jbmono text-(--text-secondary)
-          text-[10px] xl:text-xs
-          leading-2 xl:leading-3
-          font-medium
-          xl:gap-2
-          select-none"
-              >
-                <span>ID: </span>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigator.clipboard.writeText(ticket.ticketId.toString());
-                  }}
-                  className={`xl:flex xl:gap-1.5 xl:hover:text-(--text-primary) ${textPressAnimationStyle}`}
-                >
-                  {ticket.ticketId}
-                </div>
-                <span>|</span>
-                <div>{ticket.createDate}</div>
-              </div>
-            </>
-          ) : (
-            <div className="w-full flex flex-col items-start gap-3">
-              {/* Personal mobile version view */}
-              {/* meta info */}
-              <div
-                className="w-auto flex items-center font-jbmono text-(--text-secondary)
-          text-[10px] xl:text-xs
-          leading-2 xl:leading-3
-          font-medium gap-2 select-none"
-              >
-                <span>ID: </span>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigator.clipboard.writeText(ticket.ticketId.toString());
-                  }}
-                  className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
-                >
-                  {ticket.ticketId}
-                </div>
-                <span>|</span>
-                <div>{ticket.createDate}</div>
-              </div>
-
-              {/* title */}
-              <div
-                className="w-full flex flex-1
-          justify-between
-          items-start gap-1.5 min-w-0"
-              >
-                <div
-                  className="text-(--text-primary) font-jbmono text-[15px]
-            font-bold xl:font-medium
-            leading-5 xl:leading-6
-            line-clamp-2 xl:line-clamp-1
-            select-none cursor-pointer
-            xl:truncate"
-                >
-                  {ticket.title}
-                </div>
-                {ticket.attachedFiles.length > 0 && (
-                  <AttachIcon className="shrink-0 text-(--text-primary)" />
-                )}
-              </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!permissions?.canCancel) return;
+              onRequestCancel(ticket.ticketId);
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            onPointerUp={(e) => e.stopPropagation()}
+            className="h-full flex flex-col justify-center items-center gap-2"
+          >
+            <CancelIcon
+              style={{
+                opacity: appearProgress,
+                transform: `scale(${1 + fadeProgress * 0.5})`,
+              }}
+              className="w-14 h-14 text-[#0c0b0b] dark:text-(--text-primary)"
+            />
+            <div
+              style={{
+                opacity: textOpacity,
+                maxHeight: textOpacity * 40, // 40 — примерная исходная высота текстового блока в px, подбери по факту
+                overflow: "hidden",
+              }}
+              className="flex flex-col items-center leading-none"
+            >
+              <span className="block h-4 leading-4 font-consolas font-bold text-xl text-(--text-primary)">
+                Отменить
+              </span>
             </div>
-          )}
+          </button>
         </div>
       )}
 
-      {/* Description */}
       <div
-        className="w-full flex-1
+        onContextMenu={
+          isTouchDevice
+            ? (e) => {
+                e.preventDefault();
+              }
+            : handleContextMenuPC
+        }
+        {...(isTouchDevice
+          ? longPressBind
+          : { onClick: () => handleOpenView(ticket.ticketId) })}
+        onPointerDown={isTouchDevice ? combinedPointerDown : undefined}
+        onPointerMove={isTouchDevice ? combinedPointerMove : undefined}
+        onPointerUp={isTouchDevice ? combinedPointerUp : undefined}
+        className={`relative xl:relative
+          w-full px-5 py-3 gap-2 rounded-xs cursor-pointer
+          flex flex-col justify-between items-start
+          ${ticketView === "my" ? "min-h-41 h-auto xl:min-h-38" : "min-h-41 h-auto xl:min-h-47 "}
+          ${shadowLiftCardStyle}
+          bg-(--bg-secondary) border border-(--bg-border)
+          hover:border-(--text-tertiary)
+          xl:relative select-none shrink-0
+          -webkit-touch-callout: none
+          touch-pan-y
+          `}
+        style={{
+          transform: `translateX(${swipeX}px)`,
+          transition: directionRef.current
+            ? "none"
+            : "transform 200ms ease-out",
+        }}
+      >
+        {/* Title, dep, employee name and Meta info as manager*/}
+        {ticketView === "team" ? (
+          <div className="w-full flex flex-col gap-2">
+            {/* Строка 1: имя/отдел и ID/дата */}
+            {isDesktop ? (
+              // Team pc version view
+              <div
+                className="w-full flex justify-start items-center gap-2
+          xl:flex xl:justify-between xl:items-center xl:gap-0"
+              >
+                <div
+                  className="flex items-center gap-2 text-(--text-secondary)
+                font-jbmono font-medium
+                text-[10px] xl:text-xs
+                leading-2.5 xl:leading-3"
+                >
+                  {ticket.userName}
+                  <span>|</span>
+                  {ticket.department}
+                </div>
+
+                <div
+                  className="w-auto flex items-center font-jbmono text-(--text-secondary)
+                font-medium gap-2 select-none
+                text-[10px] xl:text-xs
+                leading-2.5 xl:leading-3 "
+                >
+                  <span>ID: </span>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(ticket.ticketId.toString());
+                    }}
+                    className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
+                  >
+                    {ticket.ticketId}
+                  </div>
+                  <span>|</span>
+                  <div>{ticket.createDate}</div>
+                </div>
+              </div>
+            ) : (
+              // Team mobile version view
+              <div
+                className="w-full flex justify-start items-center gap-2
+            xl:flex xl:justify-between xl:items-center xl:gap-0"
+              >
+                <div
+                  className="flex items-center gap-2 text-(--text-secondary)
+                font-jbmono font-medium
+                text-[10px] xl:text-xs
+                leading-2.5 xl:leading-3"
+                >
+                  <span>ID: </span>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(ticket.ticketId.toString());
+                    }}
+                    className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
+                  >
+                    {ticket.ticketId}
+                  </div>
+                  <span>|</span>
+                  <div>{ticket.createDate}</div>
+                  <span>|</span>
+                  {ticket.userName}
+                  <span>|</span>
+                  {ticket.department}
+                </div>
+              </div>
+            )}
+
+            {/* Строка 2: заголовок */}
+            <div
+              className="flex flex-1
+            justify-between xl:justify-start
+            items-start xl:gap-1.5 min-w-0"
+            >
+              <div
+                className="text-(--text-primary) font-jbmono text-[15px]
+              font-bold xl:font-medium
+              leading-5 xl:leading-6
+              line-clamp-2 xl:line-clamp-1
+              select-none cursor-pointer
+              xl:truncate"
+              >
+                {ticket.title}
+              </div>
+              {ticket.attachedFiles.length > 0 && (
+                <AttachIcon className="shrink-0 text-(--text-primary)" />
+              )}
+            </div>
+          </div>
+        ) : (
+          // Title and Meta info as user
+          <div
+            className="w-full flex
+        justify-start xl:justify-between
+        items-center xl:py-0.5"
+          >
+            {isDesktop ? (
+              <>
+                {/* Personal pc version view  */}
+                <div
+                  className="flex flex-1
+                justify-start
+                items-center gap-1.5 xl:min-w-0"
+                >
+                  {/* title */}
+                  <div
+                    className="text-(--text-primary) font-jbmono text-[15px]
+                  font-bold xl:font-medium
+                  leading-5 xl:leading-6
+                  select-none cursor-pointer truncate"
+                  >
+                    {ticket.title}
+                  </div>
+                  {ticket.attachedFiles.length > 0 && (
+                    <AttachIcon className="shrink-0 text-(--text-primary)" />
+                  )}
+                </div>
+                {/* meta info */}
+                <div
+                  className="w-auto flex items-center font-jbmono text-(--text-secondary)
+                text-[10px] xl:text-xs
+                leading-2 xl:leading-3
+                font-medium
+                xl:gap-2
+          select-none"
+                >
+                  <span>ID: </span>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(ticket.ticketId.toString());
+                    }}
+                    className={`xl:flex xl:gap-1.5 xl:hover:text-(--text-primary) ${textPressAnimationStyle}`}
+                  >
+                    {ticket.ticketId}
+                  </div>
+                  <span>|</span>
+                  <div>{ticket.createDate}</div>
+                </div>
+              </>
+            ) : (
+              <div className="w-full flex flex-col items-start gap-3">
+                {/* Personal mobile version view */}
+                {/* meta info */}
+                <div
+                  className="w-auto flex items-center font-jbmono text-(--text-secondary)
+                text-[10px] xl:text-xs
+                leading-2 xl:leading-3
+                font-medium gap-2 select-none"
+                >
+                  <span>ID: </span>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(ticket.ticketId.toString());
+                    }}
+                    className={`flex gap-1.5 hover:text-(--text-primary) ${textPressAnimationStyle}`}
+                  >
+                    {ticket.ticketId}
+                  </div>
+                  <span>|</span>
+                  <div>{ticket.createDate}</div>
+                </div>
+
+                {/* title */}
+                <div
+                  className="w-full flex flex-1
+                justify-between
+                items-start gap-1.5 min-w-0"
+                >
+                  <div
+                    className="text-(--text-primary) font-jbmono text-[15px]
+                  font-bold xl:font-medium
+                  leading-5 xl:leading-6
+                  line-clamp-2 xl:line-clamp-1
+                  select-none cursor-pointer
+                  xl:truncate"
+                  >
+                    {ticket.title}
+                  </div>
+                  {ticket.attachedFiles.length > 0 && (
+                    <AttachIcon className="shrink-0 text-(--text-primary)" />
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Description */}
+        <div
+          className="w-full flex-1
         pt-2 mb-1
         text-(--text-secondary) text-sm
         font-consolas font-normal
-      leading-4 xl:leading-5
-      line-clamp-2 select-none"
-      >
-        {ticket.description}
-      </div>
-
-      {/* Status, priority, category, icons */}
-      <div
-        className="w-full py-2 flex
-      justify-start xl:justify-between
-      items-center"
-      >
-        {/* Status, priority, category */}
-        <div className="flex items-center gap-3 font-jbmono text-xs">
-          <div className={getStatusColor(ticket.status)}>
-            {getStatusTitle(ticket.status, "singular")}
-          </div>
-          <div className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5 bg-(--text-primary) text-(--bg-primary) dark:bg-transparent dark:border dark:border-(--text-tertiary) dark:text-(--text-tertiary) rounded-xs font-bold leading-3 select-none">
-            {getPriorityTitle(ticket.priority)}
-          </div>
-          <div className="h-6 flex justify-center items-center py-1.5 gap-2.5 font-medium leading-3 text-(--text-tertiary) select-none">
-            {ticket.breadcrumbs[0]}
-          </div>
+        leading-4 xl:leading-5
+        line-clamp-2 select-none"
+        >
+          {ticket.description}
         </div>
 
-        {isDesktop ? (
-          // {/* icons*/}
-          <div>{getStatusIcon(ticket.status, "row")}</div>
-        ) : isTouchDevice ? (
-          <>
-            {isActionsOpen && (
-              <div
-                onClick={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onPointerUp={(e) => e.stopPropagation()}
-                className="absolute right-2 top-2 z-10 
+        {/* Status, priority, category, icons */}
+        <div
+          className="w-full py-2 flex
+        justify-start xl:justify-between
+        items-center"
+        >
+          {/* Status, priority, category */}
+          <div className="flex items-center gap-3 font-jbmono text-xs">
+            <div className={getStatusColor(ticket.status)}>
+              {getStatusTitle(ticket.status, "singular")}
+            </div>
+            <div className="h-5 flex justify-center items-center px-2 py-1.5 gap-2.5 bg-(--text-primary) text-(--bg-primary) dark:bg-transparent dark:border dark:border-(--text-tertiary) dark:text-(--text-tertiary) rounded-xs font-bold leading-3 select-none">
+              {getPriorityTitle(ticket.priority)}
+            </div>
+            <div className="h-6 flex justify-center items-center py-1.5 gap-2.5 font-medium leading-3 text-(--text-tertiary) select-none">
+              {ticket.breadcrumbs[0]}
+            </div>
+          </div>
+
+          {isDesktop ? (
+            // {/* icons*/}
+            <div>{getStatusIcon(ticket.status, "row")}</div>
+          ) : isTouchDevice ? (
+            <>
+              {isActionsOpen && (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onPointerUp={(e) => e.stopPropagation()}
+                  className="absolute right-2 top-2 z-10 
               min-w-40
               bg-(--bg-secondary) border border-(--bg-border) rounded-xs p-2 flex flex-col gap-1"
-              >
-                {getStatusIcon(ticket.status, "column")}
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            {menuVisible && (
-              <div
-                ref={menuRef}
-                onClick={(e) => e.stopPropagation()}
-                onPointerDown={(e) => e.stopPropagation()}
-                onPointerUp={(e) => e.stopPropagation()}
-                style={{
-                  top: `${menuPosition.y}px`,
-                  left: `${menuPosition.x}px`,
-                }}
-                className="pc-ctx-menu
+                >
+                  {getStatusIcon(ticket.status, "column")}
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {menuVisible && (
+                <div
+                  ref={menuRef}
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onPointerUp={(e) => e.stopPropagation()}
+                  style={{
+                    top: `${menuPosition.y}px`,
+                    left: `${menuPosition.x}px`,
+                  }}
+                  className="pc-ctx-menu
                 fixed
                 border border-(--bg-border)
                 z-30"
-              >
-                {getStatusIcon(ticket.status, "column", true)}
-              </div>
-            )}
-          </>
-        )}
+                >
+                  {getStatusIcon(ticket.status, "column", true)}
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

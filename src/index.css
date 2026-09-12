@@ -107,3 +107,8 @@ body::-webkit-scrollbar {
 .dropdown-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}

@@ -48,6 +48,7 @@ function MobileHeroSector({
   const navigate = useNavigate();
 
   const [openMenuTicketId, setOpenMenuTicketId] = useState<number | null>(null);
+  const [revealedTicketId, setRevealedTicketId] = useState<number | null>(null);
 
   const currentUserId = useUser()?.id;
   const allTickets = mockTicket;
@@ -70,7 +71,7 @@ function MobileHeroSector({
         className="fixed top-15.5
        h-13 w-full
       flex items-center
-      overflow-x-auto scrollbar-none z-20"
+      overflow-x-hidden scrollbar-none z-20"
       >
         {/* Status row */}
         <div className={pillStyle}>
@@ -132,7 +133,7 @@ function MobileHeroSector({
       </div>
 
       <div
-        className="overflow-y-auto scrollbar-none
+        className="overflow-y-auto scrollbar-none overflow-x-hidden
       w-full h-full
       pt-30.5 pb-22
       flex flex-1 flex-col justify-start items-center
@@ -152,6 +153,8 @@ function MobileHeroSector({
             handleOpenView={handleOpenView}
             openMenuTicketId={openMenuTicketId}
             setOpenMenuTicketId={setOpenMenuTicketId}
+            revealedTicketId={revealedTicketId}
+            setRevealedTicketId={setRevealedTicketId}
           />
         ))}
         <button
