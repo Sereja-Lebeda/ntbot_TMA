@@ -47,7 +47,7 @@ function MobileHeroSector({
 }: MobileHeroSectorProps) {
   const navigate = useNavigate();
 
-  const [openMenuTicketId, setOpenMenuTicketId] = useState<number | null>(null);
+  const [expandedTicketId, setExpandedTicketId] = useState<number | null>(null);
   const [revealedTicketId, setRevealedTicketId] = useState<number | null>(null);
 
   const currentUserId = useUser()?.id;
@@ -151,8 +151,8 @@ function MobileHeroSector({
             onRequestRepeat={handleRequestRepeat}
             onRequestEdit={handleRequestEdit}
             handleOpenView={handleOpenView}
-            openMenuTicketId={openMenuTicketId}
-            setOpenMenuTicketId={setOpenMenuTicketId}
+            expandedTicketId={expandedTicketId}
+            setExpandedTicketId={setExpandedTicketId}
             revealedTicketId={revealedTicketId}
             setRevealedTicketId={setRevealedTicketId}
           />

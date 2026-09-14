@@ -38,8 +38,8 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   onRequestRepeat: (ticketId: number) => void;
   onRequestEdit: (ticketId: number) => void;
   handleOpenView: (ticketId: number) => void;
-  openMenuTicketId: number | null;
-  setOpenMenuTicketId: (ticketId: number | null) => void;
+  expandedTicketId: number | null;
+  setExpandedTicketId: (ticketId: number | null) => void;
   revealedTicketId: number | null;
   setRevealedTicketId: (ticketId: number | null) => void;
 }
@@ -70,8 +70,8 @@ export default function TicketCard({
   onRequestRepeat,
   onRequestEdit,
   handleOpenView,
-  openMenuTicketId,
-  setOpenMenuTicketId,
+  expandedTicketId,
+  setExpandedTicketId,
   revealedTicketId,
   setRevealedTicketId,
 }: TicketCardWithActionsProps) {
@@ -80,10 +80,9 @@ export default function TicketCard({
   const isTouchDevice = useMediaQuery("(pointer: coarse)");
 
   // Long press for dropdown in mobile ver
-  const [isActionsOpen, setIsActionsOpen] = useState(false);
   const bind = useLongPress(
     () => {
-      setIsActionsOpen(true); // сработает через `threshold` мс удержания
+      setExpandedTicketId(ticket.ticketId); // сработает через `threshold` мс удержания
     },
     {
       threshold: 500, // сколько мс считать долгим нажатием
@@ -108,24 +107,6 @@ export default function TicketCard({
   const permissions = currentUser
     ? getTicketPermissions(ticket, currentUser)
     : null;
-
-  useEffect(() => {
-    if (!isActionsOpen) return;
-
-    function handleClickOutside(e: MouseEvent | TouchEvent) {
-      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-        setIsActionsOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, [isActionsOpen]);
 
   useEffect(() => {
     if (revealedTicketId !== ticket.ticketId && swipeX !== 0) {
@@ -165,11 +146,43 @@ export default function TicketCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [permissions?.canCancel, ticket.ticketId]);
 
+  useEffect(() => {
+    if (expandedTicketId !== ticket.ticketId || ticket.status === "Complete")
+      return;
+
+    function handleClickOutsideExpand(e: MouseEvent | TouchEvent) {
+      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+        setExpandedTicketId(null);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutsideExpand);
+    document.addEventListener("touchstart", handleClickOutsideExpand);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideExpand);
+      document.removeEventListener("touchstart", handleClickOutsideExpand);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expandedTicketId, ticket.ticketId, ticket.status]);
+
+  const iconsRowRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState(0);
+
+  const isExpanded =
+    expandedTicketId === ticket.ticketId || ticket.status === "Complete";
+
+  useEffect(() => {
+    if (iconsRowRef.current) {
+      setContentHeight(iconsRowRef.current.offsetHeight);
+    }
+  }, [isExpanded, ticket.status]);
+
   //Ctx menu for narrow pc screen
-  const menuVisible = openMenuTicketId === ticket.ticketId;
+  const menuVisible = expandedTicketId === ticket.ticketId;
   // console.log("menuVisible:", menuVisible, "ticketId:", ticket.ticketId);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  // const menuRef = useRef<HTMLDivElement | null>(null);
   const cardWidthRef = useRef(0);
 
   const handleContextMenuPC = (e: React.MouseEvent<HTMLElement>) => {
@@ -193,13 +206,13 @@ export default function TicketCard({
     }
 
     setMenuPosition({ x, y });
-    setOpenMenuTicketId(ticket.ticketId);
+    setExpandedTicketId(ticket.ticketId);
   };
 
   const handleOutsideClickPC = (e: MouseEvent) => {
     // console.log("outside click");
-    if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-      setOpenMenuTicketId(null);
+    if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+      setExpandedTicketId(null);
     }
   };
 
@@ -352,26 +365,34 @@ export default function TicketCard({
     },
   };
 
+  const keysToShow =
+    currentUser.role === "admin"
+      ? Object.keys(actionRegistry)
+      : statusActions[ticket.status];
+
   function getStatusIcon(
     status: StatusType,
-    layout: "row" | "column",
+
     ctxMenu?: boolean,
   ): React.ReactNode {
-    const baseStyle =
-      layout === "row"
-        ? "flex items-center gap-2"
-        : "flex flex-col justify-center items-start";
+    const baseStyle = "flex items-center gap-2";
 
     //todo: make auto "yes" answer after 48h if user didn't choose
     if (status === "Complete") {
       return (
-        <div className="xl:flex xl:items-center xl:gap-2 xl:font-jbmono">
-          <span className="xl:text-(--text-primary) xl:text-xs xl:font-medium xl:leading-3 xl:select-none">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
+          className={`flex items-center gap-2 font-jbmono
+        ${!isDesktop ? "justify-center" : ""}`}
+        >
+          <span className="text-(--text-primary) text-xs font-medium leading-3 select-none">
             Заявка выполнена?
           </span>
           <div className={`${baseStyle} `}>
             <button
-              className="xl:h-6 xl:bg-(--bg-task-complete) xl:dark:bg-(--bg-btn-primary) xl:flex xl:items-center xl:px-1.5 xl:py-0.5 xl:gap-1 xl:rounded-xs xl:select-none xl:cursor-pointer xl:hover:bg-(--text-primary) xl:group"
+              className="h-6 bg-(--bg-task-complete) dark:bg-(--bg-btn-primary) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
               onClick={() =>
                 setTickets((prev) =>
                   prev.map((t) =>
@@ -382,14 +403,13 @@ export default function TicketCard({
                 )
               }
             >
-              <CheckIcon className="xl:text-(--text-primary) xl:group-hover:text-(--bg-primary) xl:dark:text-(--bg-primary)" />
-              <span className="xl:font-bold xl:leading-3 xl:text-xs xl:text-(--text-primary) xl:group-hover:text-(--bg-primary) xl:dark:text-(--bg-primary)">
+              <CheckIcon className="text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
+              <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
                 Да
               </span>
             </button>
             <button
-              // onClick={() => }
-              className="xl:h-6 xl:bg-(--bg-task-cancelled) xl:dark:bg-(--bg-task-cancelled) xl:flex xl:items-center xl:px-1.5 xl:py-0.5 xl:gap-1 xl:rounded-xs xl:select-none xl:cursor-pointer xl:hover:bg-(--text-primary) xl:group"
+              className="h-6 bg-(--bg-task-cancelled) dark:bg-(--bg-task-cancelled) flex items-center px-1.5 py-0.5 gap-1 rounded-xs select-none cursor-pointer hover:bg-(--text-primary) group"
               onClick={() =>
                 setTickets((prev) =>
                   prev.map((t) =>
@@ -400,8 +420,8 @@ export default function TicketCard({
                 )
               }
             >
-              <CrossIcon className="xl:w-2.5 xl:h-2.5 xl:text-(--text-primary) xl:group-hover:text-(--bg-primary) xl:dark:text-(--bg-primary)" />
-              <span className="xl:font-bold xl:leading-3 xl:text-xs xl:text-(--text-primary) xl:group-hover:text-(--bg-primary) xl:dark:text-(--bg-primary)">
+              <CrossIcon className="w-2.5 h-2.5 text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
+              <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
                 Нет
               </span>
             </button>
@@ -424,12 +444,11 @@ export default function TicketCard({
             return true;
           })
           .map((key) => {
-            const { Icon, onClick, description } = actionRegistry[key];
+            const { Icon, onClick } = actionRegistry[key];
             return (
               <CardActionButton
                 key={key}
                 onClick={onClick}
-                text={layout === "column" ? description : null}
                 className={`${isDesktop ? "" : "w-full flex items-center gap-2 border-b border-(--text-secondary) py-1 px-2 "} cursor-pointer outline-0
                 ${ctxMenu ? "bg-(--bg-primary) hover:bg-(--border-hover-btn)" : ""}
                 group`}
@@ -444,7 +463,6 @@ export default function TicketCard({
 
         {statusActions[status].includes("telegram") && (
           <CardActionButton
-            text={layout === "column" ? "Телеграм" : null}
             className={`${isDesktop ? "" : "w-full flex items-center gap-2 py-1 px-2"} cursor-pointer group
             ${ctxMenu ? "bg-(--bg-primary) hover:bg-(--border-hover-btn)" : ""}`}
             textClassName={` ${isDesktop ? "" : "text-md text-(--text-secondary) font-normal font-consolas"} 
@@ -491,7 +509,7 @@ export default function TicketCard({
               }}
               className="flex flex-col items-center leading-none"
             >
-              <span className="block h-4 leading-4 font-consolas font-bold text-xl text-(--text-primary)">
+              <span className="h-7 leading-4 font-consolas font-bold flex items-center text-xl text-(--text-primary) pt-1">
                 Отменить
               </span>
             </div>
@@ -523,13 +541,18 @@ export default function TicketCard({
           xl:relative select-none shrink-0
           -webkit-touch-callout: none
           touch-pan-y
+          ${!isDesktop && isExpanded ? "-translate-y-1 border-(--text-primary) shadow-[0_4px_0_0_var(--text-tertiary)]" : ""}
           `}
-        style={{
-          transform: `translateX(${swipeX}px)`,
-          transition: directionRef.current
-            ? "none"
-            : "transform 200ms ease-out",
-        }}
+        style={
+          isTouchDevice
+            ? {
+                transform: `translateX(${swipeX}px)`,
+                transition: directionRef.current
+                  ? "none"
+                  : "transform 200ms ease-out",
+              }
+            : undefined
+        }
       >
         {/* Title, dep, employee name and Meta info as manager*/}
         {ticketView === "team" ? (
@@ -758,27 +781,11 @@ export default function TicketCard({
 
           {isDesktop ? (
             // {/* icons*/}
-            <div>{getStatusIcon(ticket.status, "row")}</div>
-          ) : isTouchDevice ? (
-            <>
-              {isActionsOpen && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  onPointerDown={(e) => e.stopPropagation()}
-                  onPointerUp={(e) => e.stopPropagation()}
-                  className="absolute right-2 top-2 z-10 
-              min-w-40
-              bg-(--bg-secondary) border border-(--bg-border) rounded-xs p-2 flex flex-col gap-1"
-                >
-                  {getStatusIcon(ticket.status, "column")}
-                </div>
-              )}
-            </>
+            <div>{getStatusIcon(ticket.status)}</div>
           ) : (
             <>
               {menuVisible && (
                 <div
-                  ref={menuRef}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
                   onPointerUp={(e) => e.stopPropagation()}
@@ -791,12 +798,66 @@ export default function TicketCard({
                 border border-(--bg-border)
                 z-30"
                 >
-                  {getStatusIcon(ticket.status, "column", true)}
+                  {(getStatusIcon(ticket.status), true)}
                 </div>
               )}
             </>
           )}
         </div>
+        {!isDesktop && (
+          <div
+            className={`w-full overflow-hidden transition-all duration-300
+            `}
+            style={{
+              maxHeight: isExpanded ? contentHeight : 0,
+              marginTop: isExpanded ? 0 : -8,
+            }}
+          >
+            <div onClick={(e) => e.stopPropagation()} ref={iconsRowRef}>
+              {ticket.status === "Complete" ? (
+                getStatusIcon(ticket.status)
+              ) : (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
+                  onPointerUp={(e) => e.stopPropagation()}
+                  className="w-full flex justify-evenly items-center gap-2 cursor-default"
+                >
+                  {keysToShow
+                    .filter((key) => key !== "telegram")
+                    .filter((key) => {
+                      if (key === "cancel") return permissions?.canCancel;
+                      if (key === "edit") return permissions?.canEdit;
+                      return true;
+                    })
+                    .map((key) => {
+                      const { Icon, onClick } =
+                        actionRegistry[key as keyof typeof actionRegistry];
+                      return (
+                        <CardActionButton
+                          key={key}
+                          onClick={onClick}
+                          className="cursor-pointer outline-0 group"
+                          textClassName={`text-md text-(--text-secondary) font-normal font-consolas ${textPressAnimationStyle} group-hover:text-(--text-primary)`}
+                        >
+                          <Icon className="group-hover:text-(--text-primary) duration-600 ease-in-out w-7 h-7" />
+                        </CardActionButton>
+                      );
+                    })}
+                  {keysToShow.includes("telegram") && (
+                    <CardActionButton
+                      onClick={actionRegistry.telegram.onClick}
+                      className="cursor-pointer outline-0 group p-2"
+                      textClassName={`group-hover:text-(--text-primary)`}
+                    >
+                      <TelegramIcon className="w-7 h-7 text-(--text-tertiary) group-hover:text-(--text-primary) duration-600 ease-in-out" />
+                    </CardActionButton>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
