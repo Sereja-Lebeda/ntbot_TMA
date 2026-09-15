@@ -179,7 +179,7 @@ function MobileSidebar({
           w-8/10 h-dvh
           bg-(--bg-primary-second)
           flex flex-col justify-start items-start
-          overflow-y-auto overscroll-contain scrollbar-gutter-stable dropdown-scroll
+          
           transition-transform duration-600 ${isVisible ? "translate-x-0" : "-translate-x-full"}
           `}
       >
@@ -208,189 +208,194 @@ function MobileSidebar({
         {/* Infoblock */}
         {/* User Info */}
         <div
-          className="w-full h-fu
+          className="w-full min-h-0 flex-1 flex flex-col
+        overscroll-contain overflow-y-auto scrollbar-gutter-stable dropdown-scroll"
+        >
+          <div
+            className="w-full h-fu
         flex flex-col justify-center items-start
         p-5 gap-3 border-y border-(--bg-border) bg-(--bg-primary-second)"
-        >
-          {/* User name */}
-          <div
-            className="w-full h-5
+          >
+            {/* User name */}
+            <div
+              className="w-full h-5
           flex items-start
           px-1"
-          >
-            <span className="font-jbmono text-(--text-primary) text-md font-normal leading-5 mb-3">
-              {currentUsername()}
-            </span>
+            >
+              <span className="font-jbmono text-(--text-primary) text-md font-normal leading-5 mb-3">
+                {currentUsername()}
+              </span>
+            </div>
+
+            {/* User pc Info */}
+            <div className="w-full flex flex-col items-start gap-1.5">
+              {/* user ip  */}
+              <div
+                onClick={() => {
+                  navigator.clipboard.writeText(currentUser?.localIp);
+                  setCopiedField("ip");
+                  setTimeout(() => setCopiedField(null), 1000);
+                }}
+                className={`${baseStyle} cursor-pointer`}
+              >
+                <IpIcon />
+                <span className={`${textStyle} ${textPressAnimationStyle} `}>
+                  {currentUser?.localIp}
+                </span>
+                <span className={`${copyHintIpAnimation}`}>
+                  <CopyHint />
+                </span>
+              </div>
+              {/* pc name  */}
+              <div
+                onClick={() => {
+                  navigator.clipboard.writeText(currentUser?.pcName);
+                  setCopiedField("pcName");
+                  setTimeout(() => setCopiedField(null), 1000);
+                }}
+                className={`${baseStyle} cursor-pointer`}
+              >
+                <div className="w-5 h-5 flex justify-center items-center">
+                  <PcIcon />
+                </div>
+
+                <span className={`${textStyle} ${textPressAnimationStyle}`}>
+                  {currentUser?.pcName}
+                </span>
+                <span className={`${copyHintPcNameAnimation}`}>
+                  <CopyHint />
+                </span>
+              </div>
+              {/* access date  */}
+              <div className={baseStyle}>
+                <div className="w-5 h-5 flex justify-center items-center dark:bg-[#A1FF6226] bg-[#71C13B40] rounded-xs">
+                  <AccessIcon className="text-(--bg-task-complete) dark:text-(--bg-btn-primary)" />
+                </div>
+                {/* //TODO: Add ternar for access  */}
+                <span className={textStyle}>
+                  Доступ до {currentUser?.remoteAccessDate}
+                </span>
+              </div>
+            </div>
           </div>
 
-          {/* User pc Info */}
-          <div className="w-full flex flex-col items-start gap-1.5">
-            {/* user ip  */}
-            <div
-              onClick={() => {
-                navigator.clipboard.writeText(currentUser?.localIp);
-                setCopiedField("ip");
-                setTimeout(() => setCopiedField(null), 1000);
-              }}
-              className={`${baseStyle} cursor-pointer`}
-            >
-              <IpIcon />
-              <span className={`${textStyle} ${textPressAnimationStyle} `}>
-                {currentUser?.localIp}
-              </span>
-              <span className={`${copyHintIpAnimation}`}>
-                <CopyHint />
-              </span>
-            </div>
-            {/* pc name  */}
-            <div
-              onClick={() => {
-                navigator.clipboard.writeText(currentUser?.pcName);
-                setCopiedField("pcName");
-                setTimeout(() => setCopiedField(null), 1000);
-              }}
-              className={`${baseStyle} cursor-pointer`}
-            >
-              <div className="w-5 h-5 flex justify-center items-center">
-                <PcIcon />
-              </div>
-
-              <span className={`${textStyle} ${textPressAnimationStyle}`}>
-                {currentUser?.pcName}
-              </span>
-              <span className={`${copyHintPcNameAnimation}`}>
-                <CopyHint />
-              </span>
-            </div>
-            {/* access date  */}
-            <div className={baseStyle}>
-              <div className="w-5 h-5 flex justify-center items-center dark:bg-[#A1FF6226] bg-[#71C13B40] rounded-xs">
-                <AccessIcon className="text-(--bg-task-complete) dark:text-(--bg-btn-primary)" />
-              </div>
-              {/* //TODO: Add ternar for access  */}
-              <span className={textStyle}>
-                Доступ до {currentUser?.remoteAccessDate}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Filter btns */}
-        {/* Row of buttons */}
-        <div
-          className="w-full h-21
+          {/* Filter btns */}
+          {/* Row of buttons */}
+          <div
+            className="w-full h-21
           border-b border-(--bg-border)
         flex justify-evenly items-center
         p-5"
-        >
-          <SearchMenuBtn
-            onClick={() => setShowFavorites(!showFavorites)}
-            icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
-            isActive={true}
-          />
-          {isPrivilegeUser && (
+          >
             <SearchMenuBtn
-              icon={
-                ticketView === "my" ? (
-                  <UserIcon />
-                ) : (
-                  <ManagerIcon className="text-(--bg-btn-primary)" />
-                )
-              }
-              onClick={() => {
-                setTicketView(ticketView === "my" ? "team" : "my");
-                setFilter("Статус");
-              }}
+              onClick={() => setShowFavorites(!showFavorites)}
+              icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
               isActive={true}
             />
-          )}
-          <SearchMenuBtn
-            icon={
-              sortOldToNew ? (
-                <TimeSortActiveIcon className="text-(--bg-btn-primary)" />
-              ) : (
-                <TimeSortIcon />
-              )
-            }
-            onClick={() => setSortOldToNew(!sortOldToNew)}
-            isActive={true}
-          />
-          <SearchMenuBtn
-            icon={
-              sortByStatus === "default" ? (
-                <PrioritySortIcon />
-              ) : sortByStatus === "new" ? (
-                <PriorityNewSortIcon className="text-(--bg-btn-primary)" />
-              ) : (
-                <PriorityCompleteSortIcon className="text-(--bg-btn-primary)" />
-              )
-            }
-            onClick={() => changePrioritySort()}
-            isActive={true}
-          />
-          <SearchMenuBtn
-            icon={<DeleteFilterIcon />}
-            onClick={() => {
-              resetFilters();
-            }}
-            isActive={hasActiveFilters}
-            inactiveClassName="bg-(--bg-border) xl:dark:bg-(--bg-inactive-btn)"
-          />
-        </div>
+            {isPrivilegeUser && (
+              <SearchMenuBtn
+                icon={
+                  ticketView === "my" ? (
+                    <UserIcon />
+                  ) : (
+                    <ManagerIcon className="text-(--bg-btn-primary)" />
+                  )
+                }
+                onClick={() => {
+                  setTicketView(ticketView === "my" ? "team" : "my");
+                  setFilter("Статус");
+                }}
+                isActive={true}
+              />
+            )}
+            <SearchMenuBtn
+              icon={
+                sortOldToNew ? (
+                  <TimeSortActiveIcon className="text-(--bg-btn-primary)" />
+                ) : (
+                  <TimeSortIcon />
+                )
+              }
+              onClick={() => setSortOldToNew(!sortOldToNew)}
+              isActive={true}
+            />
+            <SearchMenuBtn
+              icon={
+                sortByStatus === "default" ? (
+                  <PrioritySortIcon />
+                ) : sortByStatus === "new" ? (
+                  <PriorityNewSortIcon className="text-(--bg-btn-primary)" />
+                ) : (
+                  <PriorityCompleteSortIcon className="text-(--bg-btn-primary)" />
+                )
+              }
+              onClick={() => changePrioritySort()}
+              isActive={true}
+            />
+            <SearchMenuBtn
+              icon={<DeleteFilterIcon />}
+              onClick={() => {
+                resetFilters();
+              }}
+              isActive={hasActiveFilters}
+              inactiveClassName="bg-(--bg-border) xl:dark:bg-(--bg-inactive-btn)"
+            />
+          </div>
 
-        {/* Filter dropdowns */}
-        <div className="w-full flex flex-col items-start xl:pt-5 xl:px-2.5">
-          <DropdownList
-            title="Статус"
-            isOpen={filter === "Статус"}
-            items={statuses}
-            onChange={(title) => changeFilter(title)}
-            selectedItems={selectedStatuses}
-            setSelectedItems={setSelectedStatuses}
-            showResetButton={true}
-          />
-          <DropdownList
-            title="Период"
-            isOpen={filter === "Период"}
-            items={statuses}
-            onChange={(title) => changeFilter(title)}
-            showResetButton={true}
-          />
-          <DropdownList
-            title="Категории"
-            isOpen={filter === "Категории"}
-            items={categories}
-            onChange={(title) => changeFilter(title)}
-            selectedItems={selectedCategories}
-            setSelectedItems={setSelectedCategories}
-            showResetButton={true}
-          />
-          {isPrivilegeUser && ticketView === "team" && (
+          {/* Filter dropdowns */}
+          <div className="w-full flex flex-col items-start xl:pt-5 xl:px-2.5">
             <DropdownList
-              title="Отделы"
-              isOpen={filter === "Отделы"}
-              items={departments}
+              title="Статус"
+              isOpen={filter === "Статус"}
+              items={statuses}
               onChange={(title) => changeFilter(title)}
-              selectedItems={selectedDepartments}
-              setSelectedItems={setSelectedDepartments}
+              selectedItems={selectedStatuses}
+              setSelectedItems={setSelectedStatuses}
               showResetButton={true}
             />
-          )}
-          {isPrivilegeUser && ticketView === "team" && (
             <DropdownList
-              title="Сотрудники"
-              isOpen={filter === "Сотрудники"}
-              items={usernames}
+              title="Период"
+              isOpen={filter === "Период"}
+              items={statuses}
               onChange={(title) => changeFilter(title)}
-              selectedItems={selectedEmployees}
-              setSelectedItems={setSelectedEmployees}
               showResetButton={true}
             />
-          )}
+            <DropdownList
+              title="Категории"
+              isOpen={filter === "Категории"}
+              items={categories}
+              onChange={(title) => changeFilter(title)}
+              selectedItems={selectedCategories}
+              setSelectedItems={setSelectedCategories}
+              showResetButton={true}
+            />
+            {isPrivilegeUser && ticketView === "team" && (
+              <DropdownList
+                title="Отделы"
+                isOpen={filter === "Отделы"}
+                items={departments}
+                onChange={(title) => changeFilter(title)}
+                selectedItems={selectedDepartments}
+                setSelectedItems={setSelectedDepartments}
+                showResetButton={true}
+              />
+            )}
+            {isPrivilegeUser && ticketView === "team" && (
+              <DropdownList
+                title="Сотрудники"
+                isOpen={filter === "Сотрудники"}
+                items={usernames}
+                onChange={(title) => changeFilter(title)}
+                selectedItems={selectedEmployees}
+                setSelectedItems={setSelectedEmployees}
+                showResetButton={true}
+              />
+            )}
+          </div>
         </div>
 
         {/* Theme and tg btns */}
-        <div className="w-full flex flex-1 justify-center items-end p-5 bg-(--bg-primary-second) rounded-xs gap-2.5">
+        <div className="w-full flex justify-center items-end p-5 bg-(--bg-primary-second) rounded-xs gap-2.5">
           <SupportButtons />
         </div>
       </div>

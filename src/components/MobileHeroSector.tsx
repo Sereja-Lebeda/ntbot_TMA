@@ -71,7 +71,7 @@ function MobileHeroSector({
         className="fixed top-15.5
        h-13 w-full
       flex items-center
-      overflow-x-hidden scrollbar-none z-20"
+      overflow-x-auto scrollbar-none z-20"
       >
         {/* Status row */}
         <div className={pillStyle}>
@@ -133,7 +133,7 @@ function MobileHeroSector({
       </div>
 
       <div
-        className="overflow-y-auto scrollbar-none overflow-x-hidden
+        className="overflow-y-auto scrollbar-none overflow-x-none
       w-full h-full
       pt-30.5 pb-22
       flex flex-1 flex-col justify-start items-center
