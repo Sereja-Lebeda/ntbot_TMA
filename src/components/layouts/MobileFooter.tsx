@@ -1,20 +1,25 @@
+import { useLocation, useNavigate } from "react-router";
 import useMediaQuery from "../../hooks/useMediaQuery";
-
-import type { activeSectionType } from "../../types/header.types";
 
 import TicketIcon from "../../icons/header/TicketIcon";
 import FooterBtn from "../ui/Buttons/FooterBtn";
 import RatingIcon from "../../icons/header/RatingIcon";
 import KnowledgeBaseIcon from "../../icons/header/KnowledgeBaseIcon";
 
-interface FooterProps {
-  activeSection: activeSectionType;
-  setActiveSection: (section: activeSectionType) => void;
-}
-
-function Footer({ activeSection, setActiveSection }: FooterProps) {
+function MobileFooter() {
   const isDesktop = useMediaQuery("(min-width:1280px)");
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
   if (isDesktop) return null;
+
+  const activeSection =
+    location.pathname === "/"
+      ? "tickets"
+      : location.pathname === "/rating"
+        ? "rating"
+        : "knowledge";
 
   return (
     <div
@@ -27,19 +32,19 @@ function Footer({ activeSection, setActiveSection }: FooterProps) {
   "
     >
       <FooterBtn
-        onClick={() => setActiveSection("tickets")}
+        onClick={() => navigate("/")}
         icon={<TicketIcon activeSection={activeSection} />}
         text={"Заявки"}
         textClassName={`${activeSection === "tickets" ? "text-(--bg-btn-primary)" : "group-hover:text-[#ede8de] text-(--text-secondary)"}`}
       />
       <FooterBtn
-        onClick={() => setActiveSection("rating")}
+        onClick={() => navigate("/rating")}
         icon={<RatingIcon activeSection={activeSection} />}
         text={"Статистика"}
         textClassName={`${activeSection === "rating" ? "text-(--bg-btn-primary)" : "group-hover:text-[#ede8de] text-(--text-secondary)"}`}
       />
       <FooterBtn
-        onClick={() => setActiveSection("knowledge")}
+        onClick={() => navigate("/knowledge-base")}
         icon={<KnowledgeBaseIcon activeSection={activeSection} />}
         text={"Инструкции"}
         textClassName={`${activeSection === "knowledge" ? "text-(--bg-btn-primary)" : "group-hover:text-[#ede8de] text-(--text-secondary)"}`}
@@ -48,4 +53,4 @@ function Footer({ activeSection, setActiveSection }: FooterProps) {
   );
 }
 
-export default Footer;
+export default MobileFooter;

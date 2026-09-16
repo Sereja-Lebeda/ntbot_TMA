@@ -1,7 +1,5 @@
 import { useNavigate, useLocation } from "react-router";
 
-import type { activeSectionType } from "../../types/header.types";
-
 import FunctionBtn from "../ui/Buttons/FunctionBtn";
 
 import { shadowLiftButtonStyle } from "../../styles/shadowLift";
@@ -12,19 +10,17 @@ import PlusIcon from "../../icons/header/PlusIcon";
 import RatingIcon from "../../icons/header/RatingIcon";
 import TicketIcon from "../../icons/header/TicketIcon";
 
-interface DesktopHeaderProps {
-  activeSection: activeSectionType;
-  setActiveSection: (section: activeSectionType) => void;
-}
-
-export default function DesktopHeader({
-  activeSection,
-  setActiveSection,
-}: DesktopHeaderProps) {
+export default function DesktopHeader() {
   const navigate = useNavigate();
   const location = useLocation();
   const isOnCreatePage = location.pathname === "/tickets/new";
   const isOnMainPage = location.pathname === "/";
+
+  const activeSection = isOnMainPage
+    ? "tickets"
+    : location.pathname === "/rating"
+      ? "rating"
+      : "knowledge";
 
   return (
     <div className="xl:max-w-389 xl:mx-auto xl:w-full xl:h-18 xl:bg-[#0e0e0e] xl:border-b xl:border-x xl:border-[#201e1e] xl:flex xl:justify-center xl:items-center xl:gap-2.5 xl:px-8 xl:py-7">
@@ -46,22 +42,19 @@ export default function DesktopHeader({
             <button className="xl:cursor-pointer">
               <TicketIcon
                 activeSection={activeSection}
-                // setActiveSection={setActiveSection}
-                onClick={() => setActiveSection("tickets")}
+                onClick={() => navigate("/")}
               />
             </button>
             <button className="xl:cursor-pointer">
               <RatingIcon
                 activeSection={activeSection}
-                // setActiveSection={setActiveSection}
-                onClick={() => setActiveSection("rating")}
+                onClick={() => navigate("/rating")}
               />
             </button>
             <button className="xl:cursor-pointer">
               <KnowledgeBaseIcon
                 activeSection={activeSection}
-                // setActiveSection={setActiveSection}
-                onClick={() => setActiveSection("knowledge")}
+                onClick={() => navigate("/knowledge-base")}
               />
             </button>
           </div>

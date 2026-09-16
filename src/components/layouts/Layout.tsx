@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import useUser from "../../hooks/useUser";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
-import type { activeSectionType } from "../../types/header.types";
 import type {
   SortByStatusType,
   StatusType,
@@ -15,7 +14,7 @@ import type { ModalTypes } from "../../types/modalTypes";
 
 import Header from "./Header";
 import MobileSidebar from "./MobileSidebar";
-import Footer from "./Footer";
+import MobileFooter from "./MobileFooter";
 import ConfirmModal from "../pages/modalCardWindows/ConfirmModal";
 
 import getTicketDescription from "../../utils/getTicketDescription";
@@ -53,8 +52,6 @@ export default function Layout() {
   const isPrivilegeUser =
     currentUser?.role === "admin" || currentUser?.role === "manager";
 
-  const [activeSection, setActiveSection] =
-    useState<activeSectionType>("tickets");
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>(["Все"]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([
     "Все",
@@ -267,11 +264,7 @@ export default function Layout() {
     // onMouseDown={(e) => e.preventDefault()}
     /* твой onMouseDown для blur инпута, если нужен глобально */
     >
-      <Header
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-        openSidebar={openSidebar}
-      />
+      <Header openSidebar={openSidebar} />
       {shouldSidebarRender && (
         <MobileSidebar
           closeSidebar={closeSidebar}
@@ -349,10 +342,7 @@ export default function Layout() {
         }}
       />
       {/* сюда подставляется страница */}
-      <Footer
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-      />{" "}
+      <MobileFooter />{" "}
     </div>
   );
 }

@@ -11,6 +11,8 @@ import MobileStepProblem from "./src/components/pages/ticketSteps/MobileStepProb
 import MobileStepDetails from "./src/components/pages/ticketSteps/MobileStepDetails";
 import MobileStepDone from "./src/components/pages/ticketSteps/MobileStepDone";
 import CreateTicketWizardLayout from "./src/components/pages/CreateTicketWizardLayout";
+import RatingPage from "./src/components/pages/RatingPage";
+import KnowledgeBasePage from "./src/components/pages/KnowledgeBasePage";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +24,8 @@ export const router = createBrowserRouter([
     ), // общая обёртка с хедером
     children: [
       { index: true, element: <HomePage /> }, // "/"
+      { path: "rating", element: <RatingPage /> },
+      { path: "knowledge-base", element: <KnowledgeBasePage /> },
       // { path: "tickets/new", element: <CreateTicketPage /> },
       { path: "tickets/:ticketId", element: <TicketViewPage /> },
       { path: "tickets/:ticketId/edit", element: <TicketEditPage /> },
