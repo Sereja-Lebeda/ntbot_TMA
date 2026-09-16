@@ -35,6 +35,7 @@ import PrioritySortIcon from "../../icons/searchmenu/PrioritySortIcon";
 import TimeSortActiveIcon from "../../icons/searchmenu/TimeSortActiveIcon";
 import TimeSortIcon from "../../icons/searchmenu/TimeSortIcon";
 import UserIcon from "../../icons/searchmenu/UserIcon";
+import { useLocation } from "react-router";
 
 interface MobileSidebarProps {
   closeSidebar: () => void;
@@ -98,6 +99,10 @@ function MobileSidebar({
 }: MobileSidebarProps) {
   useLockBodyScroll();
   useModalStackEntry(closeSidebar);
+
+  const location = useLocation();
+  const isBlockedByRoute = location.pathname !== "/";
+
   const panelRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -291,6 +296,7 @@ function MobileSidebar({
               onClick={() => setShowFavorites(!showFavorites)}
               icon={<FavoriteFilterBtn showFavorites={showFavorites} />}
               isActive={true}
+              isBtnDisabled={isBlockedByRoute ? true : false}
             />
             {isPrivilegeUser && (
               <SearchMenuBtn
@@ -306,6 +312,7 @@ function MobileSidebar({
                   setFilter("Статус");
                 }}
                 isActive={true}
+                isBtnDisabled={isBlockedByRoute ? true : false}
               />
             )}
             <SearchMenuBtn
@@ -318,6 +325,7 @@ function MobileSidebar({
               }
               onClick={() => setSortOldToNew(!sortOldToNew)}
               isActive={true}
+              isBtnDisabled={isBlockedByRoute ? true : false}
             />
             <SearchMenuBtn
               icon={
@@ -331,6 +339,7 @@ function MobileSidebar({
               }
               onClick={() => changePrioritySort()}
               isActive={true}
+              isBtnDisabled={isBlockedByRoute ? true : false}
             />
             <SearchMenuBtn
               icon={<DeleteFilterIcon />}
@@ -338,7 +347,9 @@ function MobileSidebar({
                 resetFilters();
               }}
               isActive={hasActiveFilters}
-              inactiveClassName="bg-(--bg-border) xl:dark:bg-(--bg-inactive-btn)"
+              isBtnDisabled={isBlockedByRoute ? true : false}
+
+              // inactiveClassName="bg-(--bg-border) xl:dark:bg-(--bg-inactive-btn)"
             />
           </div>
 
@@ -352,6 +363,7 @@ function MobileSidebar({
               selectedItems={selectedStatuses}
               setSelectedItems={setSelectedStatuses}
               showResetButton={true}
+              isDropdownDisabled={isBlockedByRoute ? true : false}
             />
             <DropdownList
               title="Период"
@@ -359,6 +371,7 @@ function MobileSidebar({
               items={statuses}
               onChange={(title) => changeFilter(title)}
               showResetButton={true}
+              isDropdownDisabled={isBlockedByRoute ? true : false}
             />
             <DropdownList
               title="Категории"
@@ -368,6 +381,7 @@ function MobileSidebar({
               selectedItems={selectedCategories}
               setSelectedItems={setSelectedCategories}
               showResetButton={true}
+              isDropdownDisabled={isBlockedByRoute ? true : false}
             />
             {isPrivilegeUser && ticketView === "team" && (
               <DropdownList
@@ -378,6 +392,7 @@ function MobileSidebar({
                 selectedItems={selectedDepartments}
                 setSelectedItems={setSelectedDepartments}
                 showResetButton={true}
+                isDropdownDisabled={isBlockedByRoute ? true : false}
               />
             )}
             {isPrivilegeUser && ticketView === "team" && (
@@ -389,6 +404,7 @@ function MobileSidebar({
                 selectedItems={selectedEmployees}
                 setSelectedItems={setSelectedEmployees}
                 showResetButton={true}
+                isDropdownDisabled={isBlockedByRoute ? true : false}
               />
             )}
           </div>

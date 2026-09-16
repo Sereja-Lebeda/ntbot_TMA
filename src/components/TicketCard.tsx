@@ -221,6 +221,7 @@ export default function TicketCard({
     // console.log("effect subscribed for ticket:", ticket.ticketId);
     document.addEventListener("click", handleOutsideClickPC);
     return () => document.removeEventListener("click", handleOutsideClickPC);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuVisible]);
 
   if (!currentUser) return null;

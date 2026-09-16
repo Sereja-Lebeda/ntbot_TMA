@@ -13,6 +13,7 @@ interface DropdownListProps {
   selectedItems?: string[];
   setSelectedItems?: (filter: string[]) => void;
   showResetButton?: boolean;
+  isDropdownDisabled?: boolean;
 }
 
 function DropdownList({
@@ -23,10 +24,14 @@ function DropdownList({
   selectedItems,
   setSelectedItems,
   showResetButton,
+  isDropdownDisabled = false,
 }: DropdownListProps) {
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
+  const isDropdownOpen = isOpen && !isDropdownDisabled;
+
   const handleSelect = (item: string) => {
+    if (isDropdownDisabled) return;
     if (setSelectedItems && selectedItems) {
       if (item === "Все") {
         setSelectedItems(["Все"]);
@@ -53,12 +58,15 @@ function DropdownList({
   return (
     <div className="w-full flex flex-col items-start bg-(--bg-primary-second) group/dropdown cursor-pointer">
       <div
-        className={`w-full flex justify-between items-center border-b border-(--bg-border) bg-(--bg-primary-second) px-5 py-3.75 ${isOpen ? "" : "group-hover/dropdown:border-b group-hover/dropdown:border-(--text-primary)"}`}
-        onClick={() => onChange(title)}
+        className={`w-full flex justify-between items-center border-b border-(--bg-border)  px-5 py-3.75
+          
+          ${isDropdownDisabled ? "bg-(--bg-disable-btn) select-none" : "bg-(--bg-primary-second)"}
+          ${isDropdownOpen ? "" : "group-hover/dropdown:border-b group-hover/dropdown:border-(--text-primary)"}`}
+        onClick={isDropdownDisabled ? undefined : () => onChange(title)}
       >
         <div className="flex gap-2 items-center">
           <span
-            className={`font-jbmono text-sm font-normal leading-4 select-none ${isOpen ? "text-(--text-primary)" : "group-hover/dropdown:text-(--text-primary) text-(--text-secondary)"}`}
+            className={`font-jbmono text-sm font-normal leading-4 select-none ${isDropdownOpen ? "text-(--text-primary)" : "group-hover/dropdown:text-(--text-primary) text-(--text-secondary)"}`}
           >
             {title}
           </span>
@@ -80,13 +88,13 @@ function DropdownList({
           )}
         </div>
         <ArrowIcon
-          className={`${isOpen ? "text-(--text-primary)" : "rotate-180 dark:text-(--text-secondary) text-(--text-secondary)"}  group-hover/dropdown:text-(--text-primary)`}
+          className={`${isDropdownOpen ? "text-(--text-primary)" : "rotate-180 dark:text-(--text-secondary) text-(--text-secondary)"}  group-hover/dropdown:text-(--text-primary)`}
         />
       </div>
 
       {isDesktop ? (
         <div
-          className={`xl:w-full xl:flex xl:flex-col xl:justify-start xl:items-start xl:gap-1 xl:py-1 xl:overflow-hidden xl:transition-all xl:duration-300 ${isOpen ? "xl:max-h-79 xl:overflow-y-auto xl:overscroll-contain dropdown-scroll" : "xl:max-h-0"}`}
+          className={`xl:w-full xl:flex xl:flex-col xl:justify-start xl:items-start xl:gap-1 xl:py-1 xl:overflow-hidden xl:transition-all xl:duration-300 ${isDropdownOpen ? "xl:max-h-79 xl:overflow-y-auto xl:overscroll-contain dropdown-scroll" : "xl:max-h-0"}`}
         >
           {items.map((item) => {
             return (
@@ -117,7 +125,7 @@ function DropdownList({
       ) : (
         // TODO: ask should scroll menu block all sidebar?
         <div
-          className={`w-full flex flex-col justify-start items-start gap-1 overflow-hidden transition-all duration-300 ${isOpen ? "max-h-79 overflow-y-auto overscroll-y-auto overscroll-contain dropdown-scroll" : "max-h-0"}`}
+          className={`w-full flex flex-col justify-start items-start gap-1 overflow-hidden transition-all duration-300 ${isDropdownOpen ? "max-h-79 overflow-y-auto overscroll-y-auto overscroll-contain dropdown-scroll" : "max-h-0"}`}
         >
           {items.map((item) => {
             return (
