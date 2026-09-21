@@ -75,7 +75,7 @@ function ViewTicketModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[] min-w-[50vw] max-w-[90vw] max-h-[90vh] flex flex-col items-center bg-(--bg-secondary) border border-(--bg-border) rounded-xs py-10 select-none"
+        className="w-[85vw] xl:max-w-275 max-h-[85vh] flex flex-col items-center bg-(--bg-secondary) border border-(--bg-border) rounded-xs py-10 select-none"
       >
         {/* Header with btns */}
         <div className="w-full h-8.5 mb-2 px-12.5 flex justify-between items-center gap-4">
@@ -170,7 +170,7 @@ function ViewTicketModal({
                 <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                   Категории
                 </span>
-                <div className="flex justify-start items-center gap-2">
+                <div className="flex justify-start items-center flex-wrap gap-2">
                   {ticket.breadcrumbs.map(getBreadcrumb)}
                 </div>
               </div>

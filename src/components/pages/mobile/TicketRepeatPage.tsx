@@ -149,7 +149,7 @@ function TicketRepeatPage() {
               </span>
 
               <div
-                className={` ${isMobile ? "flex-col space-y-2" : "flex gap-2"} justify-start items-center `}
+                className={`flex justify-start items-center flex-wrap gap-2`}
               >
                 {repeatedTicket.breadcrumbs.map(getBreadcrumb)}
               </div>
@@ -199,7 +199,7 @@ function TicketRepeatPage() {
         </div>
 
         {/* Buttons */}
-        <div className="w-full flex justify-between items-center ">
+        <div className="w-full flex flex-1 justify-between items-end ">
           {/* Back btn */}
           <CancelFormButton onClick={handleCloseAttempt} />
 

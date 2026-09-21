@@ -19,6 +19,7 @@ import ForwardArrowIcon from "../../../icons/createTicket/ForwardArrowIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
+import ConfirmModal from "../modalCardWindows/ConfirmModal";
 
 interface OutletContextProps {
   selectedAction: Action;
@@ -31,6 +32,8 @@ interface OutletContextProps {
   multiData: Record<string, string[]>;
   setMultiData: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
   submitTicket: () => void;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function MobileStepDetails() {
@@ -48,6 +51,8 @@ function MobileStepDetails() {
     multiData,
     setMultiData,
     submitTicket,
+    isModalOpen,
+    setIsModalOpen,
   } = useOutletContext<OutletContextProps>();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -111,12 +116,31 @@ function MobileStepDetails() {
     navigate("../done");
   }
 
-  function onPrev() {
+  // function onPrev() {
+  //   navigate("/");
+  // }
+
+  function onConfirm() {
     navigate("/");
   }
 
+  function onCancel() {
+    setIsModalOpen(false);
+  }
+
+  const inputText =
+    "Вы уверены, что хотите прервать создание заявки?\n\nВведенная информация не сохранится.";
+
   return (
     <div className="w-full px-2 max-w-251">
+      {isModalOpen && (
+        <ConfirmModal
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+          inputText={inputText}
+        />
+      )}
+
       <div
         className="w-full flex flex-col justify-center items-center
       gap-8 px-5 py-6
@@ -187,7 +211,7 @@ function MobileStepDetails() {
         <div className="w-full flex justify-between items-center">
           {/* Back btn */}
           <button
-            onClick={onPrev}
+            onClick={() => setIsModalOpen(true)}
             className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group select-none"
           >
             <CrossIcon className="w-2 h-2 text-(--text-secondary) group-hover:text-(--text-primary)" />

@@ -219,7 +219,7 @@ function EditRepeatModal({
               </span>
 
               {mode === "repeat" ? (
-                <div className="flex justify-start items-center gap-2">
+                <div className="flex justify-start items-center flex-wrap gap-2">
                   {ticket.breadcrumbs.map(getBreadcrumb)}
                 </div>
               ) : (
