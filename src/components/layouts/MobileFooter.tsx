@@ -1,5 +1,5 @@
-import { useLocation, useNavigate } from "react-router";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import useSectionNav from "../../hooks/useSectionNav";
 
 import TicketIcon from "../../icons/header/TicketIcon";
 import FooterBtn from "../ui/Buttons/FooterBtn";
@@ -9,17 +9,9 @@ import KnowledgeBaseIcon from "../../icons/header/KnowledgeBaseIcon";
 function MobileFooter() {
   const isDesktop = useMediaQuery("(min-width:1280px)");
 
-  const navigate = useNavigate();
-  const location = useLocation();
-
+  const [activeSection, goToSection] = useSectionNav();
+  if (!activeSection) return null;
   if (isDesktop) return null;
-
-  const activeSection =
-    location.pathname === "/"
-      ? "tickets"
-      : location.pathname === "/rating"
-        ? "rating"
-        : "knowledge";
 
   return (
     <div
@@ -32,19 +24,19 @@ function MobileFooter() {
   "
     >
       <FooterBtn
-        onClick={() => navigate("/")}
+        onClick={() => goToSection("tickets")}
         icon={<TicketIcon activeSection={activeSection} />}
         text={"Заявки"}
         textClassName={`${activeSection === "tickets" ? "text-(--bg-btn-primary)" : "group-hover:text-[#ede8de] text-(--text-secondary)"}`}
       />
       <FooterBtn
-        onClick={() => navigate("/rating")}
+        onClick={() => goToSection("rating")}
         icon={<RatingIcon activeSection={activeSection} />}
         text={"Статистика"}
         textClassName={`${activeSection === "rating" ? "text-(--bg-btn-primary)" : "group-hover:text-[#ede8de] text-(--text-secondary)"}`}
       />
       <FooterBtn
-        onClick={() => navigate("/knowledge-base")}
+        onClick={() => goToSection("knowledge")}
         icon={<KnowledgeBaseIcon activeSection={activeSection} />}
         text={"Инструкции"}
         textClassName={`${activeSection === "knowledge" ? "text-(--bg-btn-primary)" : "group-hover:text-[#ede8de] text-(--text-secondary)"}`}

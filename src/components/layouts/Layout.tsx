@@ -260,9 +260,9 @@ export default function Layout() {
 
   return (
     <div
-
-    // onMouseDown={(e) => e.preventDefault()}
-    /* твой onMouseDown для blur инпута, если нужен глобально */
+      className="h-dvh flex flex-col"
+      // onMouseDown={(e) => e.preventDefault()}
+      /* твой onMouseDown для blur инпута, если нужен глобально */
     >
       <Header openSidebar={openSidebar} />
       {shouldSidebarRender && (
@@ -300,47 +300,49 @@ export default function Layout() {
           inputText={inputText}
         />
       )}
-      <Outlet
-        context={{
-          selectedStatuses,
-          setSelectedStatuses,
-          selectedCategories,
-          setSelectedCategories,
-          selectedDepartments,
-          setSelectedDepartments,
-          selectedEmployees,
-          setSelectedEmployees,
-          favoriteTickets,
-          setFavoriteTickets,
-          showFavorites,
-          setShowFavorites,
-          sortOldToNew,
-          setSortOldToNew,
-          sortByStatus,
-          setSortByStatus,
-          ticketView,
-          setTicketView,
-          filter,
-          setFilter,
-          resetFilters,
-          changePrioritySort,
-          hasActiveFilters,
-          changeFilter,
-          tickets,
-          setTickets,
-          activeModal,
-          setActiveModal,
-          handleRequestCancel,
-          handleStatusChange,
-          handleRepeatCancel,
-          handleEditCancel,
-          handleRequestEdit,
-          handleRequestRepeat,
-          handleOpenView,
-          handleRepeatSubmit,
-          handleEditSubmit,
-        }}
-      />
+      <div className="flex-1 min-h-0">
+        <Outlet
+          context={{
+            selectedStatuses,
+            setSelectedStatuses,
+            selectedCategories,
+            setSelectedCategories,
+            selectedDepartments,
+            setSelectedDepartments,
+            selectedEmployees,
+            setSelectedEmployees,
+            favoriteTickets,
+            setFavoriteTickets,
+            showFavorites,
+            setShowFavorites,
+            sortOldToNew,
+            setSortOldToNew,
+            sortByStatus,
+            setSortByStatus,
+            ticketView,
+            setTicketView,
+            filter,
+            setFilter,
+            resetFilters,
+            changePrioritySort,
+            hasActiveFilters,
+            changeFilter,
+            tickets,
+            setTickets,
+            activeModal,
+            setActiveModal,
+            handleRequestCancel,
+            handleStatusChange,
+            handleRepeatCancel,
+            handleEditCancel,
+            handleRequestEdit,
+            handleRequestRepeat,
+            handleOpenView,
+            handleRepeatSubmit,
+            handleEditSubmit,
+          }}
+        />
+      </div>
       {/* сюда подставляется страница */}
       <MobileFooter />{" "}
     </div>

@@ -1,1 +1,1 @@
-export type activeSectionType = "tickets" | "rating" | "knowledge";
+export type activeSectionType = "tickets" | "rating" | "knowledge" | undefined;

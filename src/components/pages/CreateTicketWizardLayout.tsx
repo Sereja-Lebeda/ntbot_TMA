@@ -77,7 +77,7 @@ function CreateTicketWizardLayout() {
       <WizardStepHeader selectedCategory={selectedCategory} />
 
       <div
-        className={`w-full h-full flex-1 flex flex-col justify-center items-center ${isDesktop ? "" : "justify-start pb-20"}`}
+        className={`w-full h-full flex-1 flex flex-col justify-center items-center ${isDesktop ? "" : "justify-start pb-2"}`}
       >
         <Outlet
           context={{

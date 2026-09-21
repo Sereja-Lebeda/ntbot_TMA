@@ -77,7 +77,7 @@ function TicketViewPage() {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="max-w-200 mx-auto w-full h-full flex flex-col items-center rounded-xs py-10 px-1.5 p-auto select-none"
+      className="max-w-200 mx-auto w-full h-full flex flex-col items-center rounded-xs py-10 pb-1.5 px-1.5 p-auto select-none"
     >
       {/* Functional btns */}
       <div
@@ -143,12 +143,13 @@ function TicketViewPage() {
       </div>
 
       {/*  border */}
+      {/* NOTE: delete h-full to make page less heigh */}
       <div
-        className={`w-full h-full
+        className={`w-full h-full min-h-0
       flex flex-col justify-center items-center
       border border-(--bg-border)
       bg-(--bg-secondary)
-      ${isDesktop ? "" : "mt-22 mb-12"}
+      ${isDesktop ? "" : "mt-22 mb-0.5"}
       px-5 py-6 
       gap-5
       `}
@@ -166,7 +167,7 @@ function TicketViewPage() {
         </div>
 
         {/* Ticket header and content */}
-        <div className="w-full h-full gap-7 flex flex-col items-start overflow-y-auto dropdown-scroll">
+        <div className="w-full h-full min-h-0 gap-7 flex flex-col items-start overflow-y-auto dropdown-scroll scrollbar-none">
           <TicketHeaderInfo
             favoriteTickets={favoriteTickets}
             setFavoriteTickets={setFavoriteTickets}
@@ -180,7 +181,7 @@ function TicketViewPage() {
             className="xl:px-0!"
           />
           {/* Divider */}
-          <div className="w-full h-px bg-(--bg-disable-btn) my-3"></div>
+          <div className="w-full shrink-0 h-px bg-(--bg-disable-btn) my-3"></div>
           {/* Content */}
           <div className="w-full h-full flex flex-col items-start gap-7">
             {/* Section container */}
@@ -196,7 +197,7 @@ function TicketViewPage() {
                 <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                   Категории
                 </span>
-                <div className="flex justify-start items-center gap-2">
+                <div className="flex justify-start items-center flex-wrap gap-2">
                   {viewedTicket.breadcrumbs.map(getBreadcrumb)}
                 </div>
               </div>
@@ -223,7 +224,7 @@ function TicketViewPage() {
             </div>
 
             {/* Divider */}
-            <div className="w-full h-px bg-(--bg-disable-btn) my-3"></div>
+            <div className="w-full shrink-0 h-px bg-(--bg-disable-btn) my-3"></div>
 
             {/* Attachment */}
             {viewedTicket.attachedFiles.length > 0 && (

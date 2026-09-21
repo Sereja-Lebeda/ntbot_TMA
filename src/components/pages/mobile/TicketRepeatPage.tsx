@@ -103,7 +103,7 @@ function TicketRepeatPage() {
     "Вы уверены, что хотите прервать создание заявки?\n\nВведенная информация не сохранится.";
 
   return (
-    <div className="px-2">
+    <div className="h-full flex flex-col px-1.5">
       {isConfirmCloseOpen && (
         <ConfirmModal
           inputText={inputText}
@@ -116,14 +116,14 @@ function TicketRepeatPage() {
       )}
 
       <div
-        className={`w-full h-full max-w-200 mx-auto py-6 px-5
+        className={`w-full h-full min-h-0 max-w-200 mx-auto py-6 px-5
         flex flex-col items-center gap-4
         bg-(--bg-secondary) border border-(--bg-border)
         select-none overflow-y-auto
-        ${isDesktop ? "mt-2 mb-2" : "mt-17 mb-22"}
+        ${isDesktop ? "mt-2 mb-2" : "mt-17 mb-2"}
     `}
       >
-        <div className="w-full flex flex-col justify-center items-start gap-3 ">
+        <div className="w-full min-h-0 flex flex-col justify-center items-start gap-3 ">
           <div className="w-full flex items-center gap-1">
             <RepeatIcon className="text(--text-secondary) w-4 h-4" />
             <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-4">{`Повтор заявки #${repeatedTicket.ticketId}`}</span>
@@ -134,7 +134,7 @@ function TicketRepeatPage() {
         </div>
 
         {/* Content */}
-        <div className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll ">
+        <div className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll scrollbar-none">
           {/* Ticket information */}
           <div className="w-full flex items-start gap-1">
             <TicketInfoIcon className="text-(--text-primary)" />

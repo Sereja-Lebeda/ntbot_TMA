@@ -139,7 +139,7 @@ function TicketEditPage() {
   }
 
   return (
-    <div className="px-2">
+    <div className="h-full flex flex-col px-1.5">
       {isConfirmCloseOpen && (
         <ConfirmModal
           inputText={inputText}
@@ -152,11 +152,11 @@ function TicketEditPage() {
       )}
 
       <div
-        className={`w-full h-full max-w-200 mx-auto py-6 px-5
+        className={`w-full h-full min-h-0 max-w-200 mx-auto py-6 px-5
         flex flex-col items-center gap-4
         bg-(--bg-secondary) border border-(--bg-border)
-        select-none overflow-y-auto
-        ${isDesktop ? "mt-2 mb-2" : "mt-17 mb-22"}
+        select-none 
+        ${isDesktop ? "mt-2 mb-2" : "mt-17 mb-2"}
     `}
       >
         <div className="w-full gap-7 flex flex-col items-start">
@@ -178,7 +178,7 @@ function TicketEditPage() {
         <div className="w-full h-px bg-(--bg-border)"></div>
 
         {/* Content */}
-        <div className="w-full flex flex-col items-start gap-7 overflow-y-auto dropdown-scroll">
+        <div className="w-full min-h-0 flex flex-1 flex-col items-start gap-7 overflow-y-auto dropdown-scroll scrollbar-none">
           {/* Ticket information */}
           <div className="w-full flex items-start gap-1">
             <TicketInfoIcon className="text-(--text-primary)" />

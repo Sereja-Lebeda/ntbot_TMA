@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from "react-router";
+import useSectionNav from "../../hooks/useSectionNav";
 
 import FunctionBtn from "../ui/Buttons/FunctionBtn";
 
@@ -11,16 +12,11 @@ import RatingIcon from "../../icons/header/RatingIcon";
 import TicketIcon from "../../icons/header/TicketIcon";
 
 export default function DesktopHeader() {
+  const [activeSection, goToSection] = useSectionNav();
+
   const navigate = useNavigate();
   const location = useLocation();
   const isOnCreatePage = location.pathname === "/tickets/new";
-  const isOnMainPage = location.pathname === "/";
-
-  const activeSection = isOnMainPage
-    ? "tickets"
-    : location.pathname === "/rating"
-      ? "rating"
-      : "knowledge";
 
   return (
     <div className="xl:max-w-389 xl:mx-auto xl:w-full xl:h-18 xl:bg-[#0e0e0e] xl:border-b xl:border-x xl:border-[#201e1e] xl:flex xl:justify-center xl:items-center xl:gap-2.5 xl:px-8 xl:py-7">
@@ -42,19 +38,19 @@ export default function DesktopHeader() {
             <button className="xl:cursor-pointer">
               <TicketIcon
                 activeSection={activeSection}
-                onClick={() => navigate("/")}
+                onClick={() => goToSection("tickets")}
               />
             </button>
             <button className="xl:cursor-pointer">
               <RatingIcon
                 activeSection={activeSection}
-                onClick={() => navigate("/rating")}
+                onClick={() => goToSection("rating")}
               />
             </button>
             <button className="xl:cursor-pointer">
               <KnowledgeBaseIcon
                 activeSection={activeSection}
-                onClick={() => navigate("/knowledge-base")}
+                onClick={() => goToSection("knowledge")}
               />
             </button>
           </div>
@@ -71,7 +67,7 @@ export default function DesktopHeader() {
               xl:enabled:bg-(--bg-btn-primary)`}
             innerDivClassName={"xl:flex xl:items-center xl:gap-1"}
             onClick={() => navigate("/tickets/new")}
-            disabled={isOnCreatePage || !isOnMainPage}
+            disabled={isOnCreatePage}
           />
         </div>
       </div>
