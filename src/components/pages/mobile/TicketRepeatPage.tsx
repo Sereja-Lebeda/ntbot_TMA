@@ -42,7 +42,7 @@ interface OutletContextProps {
 function TicketRepeatPage() {
   const currentUser = useUser();
   const navigate = useNavigate();
-  const isDesktop = useMediaQuery("(min-width: 1280px)");
+  // const isDesktop = useMediaQuery("(min-width: 1280px)");
   const isMobile = useMediaQuery("(max-width: 500px)");
 
   const params = useParams<{ ticketId: string }>();
@@ -120,7 +120,7 @@ function TicketRepeatPage() {
         flex flex-col items-center gap-4
         bg-(--bg-secondary) border border-(--bg-border)
         select-none overflow-y-auto
-        ${isDesktop ? "mt-2 mb-2" : "mt-17 mb-2"}
+        mt-2 mb-2
     `}
       >
         <div className="w-full min-h-0 flex flex-col justify-center items-start gap-3 ">

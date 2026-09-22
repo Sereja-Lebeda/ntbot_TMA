@@ -16,6 +16,7 @@ import WizardStepHeader from "../ui/WizardStepHeader";
 
 function CreateTicketWizardLayout() {
   const isDesktop = useMediaQuery("(min-width: 1280px)");
+  const isMobile = useMediaQuery("(max-width: 500px)");
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
@@ -71,8 +72,9 @@ function CreateTicketWizardLayout() {
 
   return (
     <div
-      className={`w-full ${isDesktop ? "min-h-[calc(100dvh-4.5rem)] xl:min-h-0" : "min-h-dvh pt-22"}
-    flex flex-col justify-center items-center px-8`}
+      className={`w-full ${isDesktop ? "h-full" : "min-h-dvh pt-2"}
+    flex flex-col justify-center items-center
+    ${isMobile ? "px-4" : "px-8"}`}
     >
       <WizardStepHeader selectedCategory={selectedCategory} />
 

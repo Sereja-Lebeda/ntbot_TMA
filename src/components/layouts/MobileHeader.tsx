@@ -31,10 +31,10 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
 
   return (
     <div
-      className="fixed w-full h-15.5 top-0
+      className=" w-full h-15.5
   flex justify-between items-center
   bg-[#0e0e0e] border-b border-[#201e1e]
-  px-5 py-4 z-40"
+  px-5 py-4"
     >
       <button onClick={openSidebar} className="outline-none cursor-pointer">
         <BurgerIcon

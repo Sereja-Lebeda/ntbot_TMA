@@ -86,9 +86,9 @@ export default function HomePage() {
           inputRef.current?.blur();
         }
       }}
-      className=""
+      className="h-full"
     >
-      <div className="xl:flex xl:justify-center xl:max-w-395 xl:mx-auto">
+      <div className="h-full xl:flex xl:justify-center xl:max-w-395 xl:mx-auto">
         {isDesktop && (
           <Infoblock
             ticketStatuses={selectedStatuses}

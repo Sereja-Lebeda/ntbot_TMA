@@ -77,12 +77,12 @@ function TicketViewPage() {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="max-w-200 mx-auto w-full h-full flex flex-col items-center rounded-xs py-10 pb-1.5 px-1.5 p-auto select-none"
+      className="max-w-200 mx-auto w-full h-full flex flex-col items-center rounded-xs pb-1.5 px-1.5 p-auto select-none"
     >
       {/* Functional btns */}
       <div
         className={`max-w-200 mx-auto
-         ${isDesktop ? "sticky " : "fixed top-15.5"}
+         ${isDesktop ? "sticky " : ""}
         
       w-full h-15 z-30
       flex justify-center select-none`}
@@ -149,8 +149,7 @@ function TicketViewPage() {
       flex flex-col justify-center items-center
       border border-(--bg-border)
       bg-(--bg-secondary)
-      ${isDesktop ? "" : "mt-22 mb-0.5"}
-      px-5 py-6 
+      px-5 py-6 mt-2
       gap-5
       `}
       >

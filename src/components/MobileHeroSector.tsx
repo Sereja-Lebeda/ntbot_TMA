@@ -68,7 +68,7 @@ function MobileHeroSector({
   return (
     <>
       <div
-        className="fixed top-15.5
+        className="
        h-13 w-full
       flex items-center
       overflow-x-auto scrollbar-none z-20"
@@ -135,9 +135,9 @@ function MobileHeroSector({
       <div
         className="overflow-y-auto scrollbar-none overflow-x-none
       w-full h-full
-      pt-30.5 pb-22
+
       flex flex-1 flex-col justify-start items-center
-      gap-2 select-none px-1.5"
+      gap-2 select-none px-2 py-2"
       >
         {tickets.map((ticket) => (
           <TicketCard
