@@ -88,7 +88,7 @@ export default function HomePage() {
       }}
       className="h-full"
     >
-      <div className="h-full xl:flex xl:justify-center xl:max-w-395 xl:mx-auto">
+      <div className="h-full xl:flex xl:justify-center xl:max-w-395 xl:mx-auto xl:p-3">
         {isDesktop && (
           <Infoblock
             ticketStatuses={selectedStatuses}

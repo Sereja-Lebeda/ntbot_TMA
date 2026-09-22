@@ -77,10 +77,10 @@ function Infoblock({
     // Whole left side
     <div
       onMouseDown={(e) => e.preventDefault()}
-      className="xl:h-246 xl:w-79 xl:flex xl:flex-col xl:items-center xl:my-3 xl:gap-3 xl:shrink-0"
+      className="xl:h-full xl:w-79 xl:flex xl:flex-col xl:items-center xl:gap-3 xl:shrink-0"
     >
       {/* Info block  */}
-      <div className="xl:h-223 xl:w-full xl:flex xl:flex-col xl:items-center xl:p-5 xl:pt-5 xl:pb-90 xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:rounded-xs xl:gap-3">
+      <div className="xl:min-h-0 xl:w-full xl:flex xl:flex-col xl:flex-1 xl:items-center xl:p-5 xl:pt-5 xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:rounded-xs xl:gap-3 xl:overflow-y-auto xl:overflow-x-hidden scrollbar-gutter-stable dropdown-scroll">
         {/* User Info */}
         <div className="xl:w-69 xl:flex xl:flex-col xl:justify-center xl:items-start xl:px-4 xl:py-6 xl:gap-3 xl:border xl:border-(--bg-border) xl:bg-(--bg-tertiary) xl:rounded-xs xl:select-none">
           {/* User name */}
@@ -165,7 +165,7 @@ function Infoblock({
       </div>
 
       {/* // Toggle and telegram block */}
-      <div className="xl:w-full xl:h-full xl:flex xl:justify-center xl:items-center xl:p-5 xl:bg-(--bg-primary-second) xl:border xl:border-(--bg-border) xl:rounded-xs xl:gap-2.5">
+      <div className="xl:w-full xl:h-auto xl:flex xl:justify-center xl:items-center xl:p-5 xl:bg-(--bg-primary-second) xl:border xl:border-(--bg-border) xl:rounded-xs xl:gap-2.5">
         <SupportButtons />
       </div>
     </div>

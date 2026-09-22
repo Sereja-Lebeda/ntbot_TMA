@@ -77,7 +77,7 @@ function SortFilterBlock({
     // TODO: delete shrink 0 for adaptive interface?
     <div
       onMouseDown={(e) => e.preventDefault()}
-      className="xl:h-246 xl:w-79 xl:flex xl:flex-col xl:items-center xl:my-3 xl:gap-3 xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:rounded-xs xl:shrink-0"
+      className="xl:h-full xl:w-79 xl:flex xl:flex-col xl:items-center xl:gap-3 xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:rounded-xs xl:shrink-0 xl:overflow-y-auto xl:overflow-x-hidden scrollbar-gutter-stable dropdown-scroll"
     >
       <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:pt-5 xl:px-2.5">
         <DropdownList

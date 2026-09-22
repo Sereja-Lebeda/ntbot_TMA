@@ -230,7 +230,7 @@ export default function HeroSector({
 
   return (
     <div
-      className={`h-full xl:relative xl:flex-1 xl:max-w-225 xl:min-w-130 xl:h-246 flex flex-col xl:items-center xl:rounded-xs xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:m-3 xl:p-5 ${className} `}
+      className={`h-full xl:relative xl:flex-1 xl:max-w-225 xl:min-w-130 xl:h-full flex flex-col xl:items-center xl:rounded-xs xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:mx-3 xl:p-5 ${className} `}
     >
       {activeModal?.type === "view" && (
         <ViewTicketModal
