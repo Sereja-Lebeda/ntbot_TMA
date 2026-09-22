@@ -13,7 +13,7 @@ import TicketCard from "./TicketCard";
 import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
 import MobilePlusIcon from "../icons/mobile/MobilePlusIcon";
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface MobileHeroSectorProps {
   tickets: Ticket[]; // уже отфильтрованный и отсортированный массив
@@ -47,6 +47,63 @@ function MobileHeroSector({
 }: MobileHeroSectorProps) {
   const navigate = useNavigate();
 
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startXRef = useRef(0);
+  const startScrollLeftRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const hasDraggedRef = useRef(false);
+
+  useEffect(() => {
+    const handleBlur = () => {
+      setIsDragging(false);
+      isDraggingRef.current = false;
+    };
+
+    if (isDragging) {
+      window.addEventListener("blur", handleBlur);
+    }
+    return () => {
+      window.removeEventListener("blur", handleBlur);
+    };
+  }, [isDragging]);
+
+  function handlePointerDown(e: React.PointerEvent) {
+    if (!containerRef.current) return;
+    if (e.pointerType !== "mouse") return;
+    setIsDragging(true);
+    startXRef.current = e.clientX;
+    startScrollLeftRef.current = containerRef.current.scrollLeft;
+    isDraggingRef.current = true;
+    hasDraggedRef.current = false;
+  }
+
+  function handlePointerMove(e: React.PointerEvent) {
+    if (!containerRef.current) return;
+    if (!isDraggingRef.current || e.pointerType !== "mouse") return;
+
+    const deltaX = e.clientX - startXRef.current;
+
+    if (Math.abs(deltaX) > 5 && !hasDraggedRef.current) {
+      hasDraggedRef.current = true;
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+
+    containerRef.current.scrollLeft = startScrollLeftRef.current - deltaX;
+  }
+
+  function handlePointerUp(e: React.PointerEvent) {
+    e.currentTarget.releasePointerCapture(e.pointerId);
+    setIsDragging(false);
+    isDraggingRef.current = false;
+  }
+
+  function handleClickCapture(e: React.MouseEvent) {
+    if (hasDraggedRef.current) {
+      e.stopPropagation();
+    }
+  }
+
   const [expandedTicketId, setExpandedTicketId] = useState<number | null>(null);
   const [revealedTicketId, setRevealedTicketId] = useState<number | null>(null);
 
@@ -68,11 +125,19 @@ function MobileHeroSector({
   return (
     <>
       <div
-        className="
+        onClickCapture={handleClickCapture}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        ref={containerRef}
+        className={`
        h-13 w-full
       flex items-center
-      overflow-x-auto scrollbar-none z-20"
+      overflow-x-auto scrollbar-none z-20
+      ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
       >
+        {/* NOTE: [&_*]:pointer-events-none - condition to show grab cursor. Use it in style above */}
         {/* Status row */}
         <div className={pillStyle}>
           <div
@@ -120,13 +185,13 @@ function MobileHeroSector({
               status={status as StatusType}
               plateHeight="h-full"
               selectedItems={ticketStatuses}
-              onClick={() =>
+              onClick={() => {
                 handleStatusSelect({
                   item: getStatusTitle(status, "statusBlock"),
                   selectedItems: ticketStatuses,
                   setSelectedItems: setTicketStatuses,
-                })
-              }
+                });
+              }}
             />
           </div>
         ))}
