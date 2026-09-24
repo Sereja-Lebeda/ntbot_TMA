@@ -72,14 +72,15 @@ function CreateTicketWizardLayout() {
 
   return (
     <div
-      className={`w-full ${isDesktop ? "h-full" : "min-h-dvh pt-2"}
+      className={`w-full ${isDesktop ? "h-full" : "h-full pt-2"}
     flex flex-col justify-center items-center
     ${isMobile ? "px-4" : "px-8"}`}
     >
       <WizardStepHeader selectedCategory={selectedCategory} />
 
+      {/* NOTE: add overflow-y-auto to scroll only content container and make wizard static */}
       <div
-        className={`w-full h-full flex-1 flex flex-col justify-center items-center ${isDesktop ? "" : "justify-start pb-2"}`}
+        className={`w-full h-full min-h-0 flex-1 flex flex-col justify-center items-center ${isDesktop ? "" : "justify-start pb-2"}`}
       >
         <Outlet
           context={{

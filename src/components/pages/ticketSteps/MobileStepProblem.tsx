@@ -67,7 +67,7 @@ function MobileStepProblem() {
 
   return (
     <div
-      className={`w-full max-w-251 flex-1 flex flex-col gap-7
+      className={`w-full max-w-251 min-h-0 flex-1 flex flex-col gap-7
     px-2`}
     >
       {/* //TODO: Add debounce after connection to BD */}
