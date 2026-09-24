@@ -42,6 +42,7 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   setExpandedTicketId: (ticketId: number | null) => void;
   revealedTicketId: number | null;
   setRevealedTicketId: (ticketId: number | null) => void;
+  scrollContainerRef: React.RefObject<HTMLDivElement | null>;
 }
 
 type actionRegistryType =
@@ -74,6 +75,7 @@ export default function TicketCard({
   setExpandedTicketId,
   revealedTicketId,
   setRevealedTicketId,
+  scrollContainerRef,
 }: TicketCardWithActionsProps) {
   const currentUser = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
@@ -103,6 +105,7 @@ export default function TicketCard({
   const directionRef = useRef<"horizontal" | "vertical" | null>(null);
 
   const cardRef = useRef<HTMLDivElement>(null);
+  const startScrollTopRef = useRef(0);
 
   const permissions = currentUser
     ? getTicketPermissions(ticket, currentUser)
@@ -260,7 +263,10 @@ export default function TicketCard({
   const textOpacity = Math.min(appearProgress, 1 - fadeProgress);
 
   function handlePointerDown(e: React.PointerEvent) {
-    if (!permissions?.canCancel) return;
+    // if (!permissions?.canCancel) return;
+    if (!scrollContainerRef.current) return;
+
+    startScrollTopRef.current = scrollContainerRef.current.scrollTop;
 
     startXRef.current = e.clientX;
     startYRef.current = e.clientY;
@@ -273,28 +279,33 @@ export default function TicketCard({
   }
 
   function handlePointerMove(e: React.PointerEvent) {
-    if (!permissions?.canCancel) return;
+    // if (!permissions?.canCancel) return;
 
     const deltaX = e.clientX - startXRef.current;
     const deltaY = e.clientY - startYRef.current;
+    const horizontalBias = 3; // во сколько раз X "весомее" Y при определении направления
 
     if (directionRef.current === null) {
       const threshold = 10; // amount of px's before decide what action should be
       if (Math.abs(deltaX) < threshold && Math.abs(deltaY) < threshold) {
         return;
       }
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (Math.abs(deltaX) * horizontalBias > Math.abs(deltaY)) {
         directionRef.current = "horizontal";
       } else {
         directionRef.current = "vertical";
       }
     }
 
-    if (directionRef.current === "horizontal") {
+    if (directionRef.current === "horizontal" && permissions?.canCancel) {
       // Базовая позиция — либо 0 (обычный случай), либо уже зафиксированное значение (если карточка была revealed)
       const basePosition =
         revealedTicketId === ticket.ticketId ? activateThreshold : 0;
       setSwipeX(Math.min(0, Math.max(basePosition + deltaX, maxSwipe)));
+    }
+
+    if (directionRef.current === "vertical" && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = startScrollTopRef.current - deltaY;
     }
   }
 
@@ -541,7 +552,7 @@ export default function TicketCard({
           hover:border-(--text-tertiary)
           xl:relative select-none shrink-0
           -webkit-touch-callout: none
-          touch-pan-y
+touch-none
           ${!isDesktop && isExpanded ? "-translate-y-1 border-(--text-primary) shadow-[0_4px_0_0_var(--text-tertiary)]" : ""}
           `}
         style={

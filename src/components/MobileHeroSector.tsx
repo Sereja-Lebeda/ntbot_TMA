@@ -54,6 +54,8 @@ function MobileHeroSector({
   const isDraggingRef = useRef(false);
   const hasDraggedRef = useRef(false);
 
+  const listScrollRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleBlur = () => {
       setIsDragging(false);
@@ -198,6 +200,7 @@ function MobileHeroSector({
       </div>
 
       <div
+        ref={listScrollRef}
         className="overflow-y-auto scrollbar-none overflow-x-none
       w-full h-full
 
@@ -220,6 +223,7 @@ function MobileHeroSector({
             setExpandedTicketId={setExpandedTicketId}
             revealedTicketId={revealedTicketId}
             setRevealedTicketId={setRevealedTicketId}
+            scrollContainerRef={listScrollRef}
           />
         ))}
         <button
