@@ -293,13 +293,12 @@ export default function Layout() {
           filter={filter}
         />
       )}
-      {activeModal?.type === "cancel" && (
-        <ConfirmModal
-          onConfirm={onConfirm}
-          onCancel={onCancelConfirmModal}
-          inputText={inputText}
-        />
-      )}
+      <ConfirmModal
+        isOpen={activeModal?.type === "cancel"}
+        onConfirm={onConfirm}
+        onCancel={onCancelConfirmModal}
+        inputText={inputText}
+      />
       <div className="flex-1 min-h-0">
         <Outlet
           context={{

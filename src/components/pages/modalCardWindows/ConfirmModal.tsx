@@ -4,19 +4,64 @@ import useModalStackEntry from "../../../hooks/useModalStackEntry";
 import CheckIcon from "../../../icons/card/CheckIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import ModalIcon from "../../../icons/createTicket/ModalIcon";
+import { useEffect, useRef, useState } from "react";
 
 interface ConfirmModalProps {
   onConfirm: () => void;
   onCancel: () => void;
   inputText: string;
+  isOpen: boolean;
 }
 
-function ConfirmModal({ onConfirm, onCancel, inputText }: ConfirmModalProps) {
-  useModalStackEntry(onCancel);
+function ConfirmModal({
+  onConfirm,
+  onCancel,
+  inputText,
+  isOpen,
+}: ConfirmModalProps) {
+  useModalStackEntry(onCancel, isOpen);
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+    } else {
+      const timerId = setTimeout(() => {
+        setShouldRender(false);
+      }, 400);
+      return () => clearTimeout(timerId);
+    }
+
+    return;
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!shouldRender) return;
+
+    if (isOpen) {
+      void modalRef.current?.offsetHeight;
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  }, [shouldRender, isOpen]);
+
+  if (!shouldRender) return null;
 
   return createPortal(
-    <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center">
-      <div className="h-38.25 w-78 px-8 py-3 gap-2 flex flex-col justify-center items-center bg-(--bg-secondary) border border-(--bg-border) rounded-xs select-none">
+    <div
+      className={`fixed inset-0 bg-black/50 z-50 flex justify-center items-center
+    transition-opacity duration-400 ${isVisible ? "opacity-100" : "opacity-0"}`}
+    >
+      <div
+        ref={modalRef}
+        className={`h-38.25 w-78 px-8 py-3 gap-2 flex flex-col justify-center items-center bg-(--bg-secondary) border border-(--bg-border) rounded-xs select-none
+          transition-all duration-400 ease-out ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+      >
         {/* icon and text */}
         <div className="w-full pt-6 pb-2 flex justify-center items-center gap-3">
           <ModalIcon className="w-6 h-6 text-(--text-primary) shrink-0" />

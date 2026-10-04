@@ -120,13 +120,13 @@ function CreateTicketPage() {
     w-full xl:h-full xl:flex xl:flex-col xl:justify-center xl:items-center xl:min-w-130 max-w-225 xl:mx-auto xl:pt-4 xl:pb-7`}
     >
       {/* Modal window  */}
-      {isModalOpen && (
-        <ConfirmModal
-          onConfirm={onConfirm}
-          onCancel={onCancel}
-          inputText={inputText}
-        />
-      )}
+
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        inputText={inputText}
+      />
 
       {/* Step container */}
       <div

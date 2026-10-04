@@ -150,16 +150,15 @@ function EditRepeatModal({
       onClick={handleCloseAttempt}
       className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center"
     >
-      {isConfirmCloseOpen && (
-        <ConfirmModal
-          inputText={inputText}
-          onConfirm={() => {
-            setIsConfirmCloseOpen(false);
-            onClose();
-          }}
-          onCancel={() => setIsConfirmCloseOpen(false)}
-        />
-      )}
+      <ConfirmModal
+        isOpen={isConfirmCloseOpen}
+        inputText={inputText}
+        onConfirm={() => {
+          setIsConfirmCloseOpen(false);
+          onClose();
+        }}
+        onCancel={() => setIsConfirmCloseOpen(false)}
+      />
 
       <div
         onClick={(e) => e.stopPropagation()}

@@ -76,13 +76,12 @@ function EditableAttachmentField({
         ${isMobile ? "flex flex-col justify-start items-center gap-2" : "flex justify-start gap-5 overflow-x-auto"}
         dropdown-scroll `}
     >
-      {isModalOpen && (
-        <ConfirmModal
-          onConfirm={onConfirm}
-          onCancel={onCancel}
-          inputText={inputText}
-        />
-      )}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        inputText={inputText}
+      />
 
       <input
         type="file"

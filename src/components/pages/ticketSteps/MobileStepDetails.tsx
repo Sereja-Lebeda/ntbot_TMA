@@ -133,13 +133,12 @@ function MobileStepDetails() {
 
   return (
     <div className="w-full px-2 max-w-251">
-      {isModalOpen && (
-        <ConfirmModal
-          onConfirm={onConfirm}
-          onCancel={onCancel}
-          inputText={inputText}
-        />
-      )}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        inputText={inputText}
+      />
 
       <div
         className="w-full flex flex-col justify-center items-center

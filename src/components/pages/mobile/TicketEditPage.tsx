@@ -140,16 +140,15 @@ function TicketEditPage() {
 
   return (
     <div className="h-full flex flex-col px-1.5">
-      {isConfirmCloseOpen && (
-        <ConfirmModal
-          inputText={inputText}
-          onConfirm={() => {
-            setIsConfirmCloseOpen(false);
-            onClose();
-          }}
-          onCancel={() => setIsConfirmCloseOpen(false)}
-        />
-      )}
+      <ConfirmModal
+        isOpen={isConfirmCloseOpen}
+        inputText={inputText}
+        onConfirm={() => {
+          setIsConfirmCloseOpen(false);
+          onClose();
+        }}
+        onCancel={() => setIsConfirmCloseOpen(false)}
+      />
 
       <div
         className={`w-full h-full min-h-0 max-w-200 mx-auto py-6 px-5

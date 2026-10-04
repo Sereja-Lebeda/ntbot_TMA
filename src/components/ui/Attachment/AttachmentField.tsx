@@ -60,13 +60,12 @@ function AttachmentField({
 
   return (
     <div className="w-full">
-      {isModalOpen && (
-        <ConfirmModal
-          onConfirm={onConfirm}
-          onCancel={onCancel}
-          inputText={inputText}
-        />
-      )}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        inputText={inputText}
+      />
 
       <input
         type="file"
