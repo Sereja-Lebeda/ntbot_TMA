@@ -13,6 +13,7 @@ import MobileStepDone from "./src/components/pages/ticketSteps/MobileStepDone";
 import CreateTicketWizardLayout from "./src/components/pages/CreateTicketWizardLayout";
 import RatingPage from "./src/components/pages/RatingPage";
 import KnowledgeBasePage from "./src/components/pages/KnowledgeBasePage";
+import NotFoundPage from "./src/components/pages/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
@@ -43,4 +44,5 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  { path: "*", element: <NotFoundPage /> },
 ]);
