@@ -21,7 +21,7 @@ function StepCategory({ onNext, setSelectedCategory }: StepCategoryProps) {
     >
       {/* Header component */}
       {!isTablet && (
-        <div className="flex flex-col justify-center xl:items-center gap-2 xl:gap-4 py-1 pb-2">
+        <div className="flex flex-col justify-center xl:items-center gap-2 xl:gap-4 py-1 pb-2 select-none">
           <span className="font-jbmono font-normal text-xl text-(--text-primary) leading-5 tracking-[0.8px]">
             Выберите категорию
           </span>

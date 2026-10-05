@@ -80,7 +80,7 @@ function CreateTicketWizardLayout() {
 
       {/* NOTE: add overflow-y-auto to scroll only content container and make wizard static */}
       <div
-        className={`w-full h-full min-h-0 flex-1 flex flex-col justify-center items-center ${isDesktop ? "" : "justify-start pb-2"}`}
+        className={`w-full h-full min-h-0 flex-1 flex flex-col justify-start items-center overflow-y-auto scrollbar-none ${isDesktop ? "" : "pb-2"}`}
       >
         <Outlet
           context={{

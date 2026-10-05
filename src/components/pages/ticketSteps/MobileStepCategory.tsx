@@ -32,8 +32,8 @@ function MobileStepCategory() {
     // Grid of categories
     <>
       <div
-        className={`w-full h-full
-        flex justify-center items-start
+        className={`w-full
+        flex justify-center items-center
         ${isTablet && ""}
         `}
       >
