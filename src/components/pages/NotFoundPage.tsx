@@ -5,12 +5,12 @@ function NotFoundPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center select-none">
+    <div className="w-full h-dvh flex flex-col items-center justify-center select-none">
       <img
         src="src\assets\404error.png"
         alt=""
-        className="object-contain w-175 max-w-full
-h-175 max-h-full select-none"
+        className="object-contain w-full max-w-125
+h-full max-h-125 select-none"
       />
 
       <button
