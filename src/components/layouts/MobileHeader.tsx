@@ -30,55 +30,52 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
   const isOnMainPage = location.pathname === "/";
 
   return (
-    <div
-      className=" w-full h-15.5
-  flex justify-between items-center
-  bg-[#0e0e0e] border-b border-[#201e1e]
-  px-5 py-4 gap-4"
-    >
-      <button onClick={openSidebar} className="outline-none cursor-pointer">
-        <BurgerIcon
-          className="w-5 h-5
+    <div className="w-full pt-(--app-safe-top) bg-[#0e0e0e] border-b border-[#201e1e]">
+      <div className="w-full h-15.5 flex justify-between items-center px-5 py-4 gap-4">
+        <button onClick={openSidebar} className="outline-none cursor-pointer">
+          <BurgerIcon
+            className="w-5 h-5
         text-(--text-secondary)
         hover:text-[#ede8de]"
-        />
-      </button>
-
-      {isSearchbarOpen ? (
-        <Searchbar
-          searchRequest={searchRequest}
-          setSearchRequest={setSearchRequest}
-          variant="mobile"
-          ref={inputRef}
-        />
-      ) : (
-        <button
-          className="flex justify-center items-center gap-1 cursor-pointer"
-          onClick={() => navigate("/")}
-        >
-          <MascootIcon className="w-5 h-5" />
-          <p
-            className="text-2xl text-[#ede8de] font-jbmono font-bold leading-7
-          select-none"
-          >
-            NTBot
-          </p>
+          />
         </button>
-      )}
 
-      <button
-        onClick={() => setIsSearchbarOpen((prev) => !prev)}
-        className={`
+        {isSearchbarOpen ? (
+          <Searchbar
+            searchRequest={searchRequest}
+            setSearchRequest={setSearchRequest}
+            variant="mobile"
+            ref={inputRef}
+          />
+        ) : (
+          <button
+            className="flex justify-center items-center gap-1 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <MascootIcon className="w-5 h-5" />
+            <p
+              className="text-2xl text-[#ede8de] font-jbmono font-bold leading-7
+          select-none"
+            >
+              NTBot
+            </p>
+          </button>
+        )}
+
+        <button
+          onClick={() => setIsSearchbarOpen((prev) => !prev)}
+          className={`
           ${isOnMainPage ? "visible" : "invisible"}
           cursor-pointer`}
-        disabled={!isOnMainPage}
-      >
-        <MagnifyIcon
-          className="w-5 h-5
+          disabled={!isOnMainPage}
+        >
+          <MagnifyIcon
+            className="w-5 h-5
         text-(--text-secondary)
         hover:text-[#ede8de]"
-        />
-      </button>
+          />
+        </button>
+      </div>
     </div>
   );
 }

@@ -189,25 +189,22 @@ function MobileSidebar({
           `}
       >
         {/* Logo and cross */}
-        <div
-          className="w-full
-        flex justify-between items-center
-        bg-[#0e0e0e]
-        px-5 py-4"
-        >
-          <div
-            className="
+        <div className="w-full bg-[#0e0e0e] pt-(--app-safe-top)">
+          <div className="w-full flex justify-between items-center px-5 py-4">
+            <div
+              className="
           flex justify-center items-center
           gap-1"
-          >
-            <MascootIcon className="w-5 h-5" />
-            <p className="text-2xl font-jbmono font-bold leading-7 select-none">
-              NTBot
-            </p>
+            >
+              <MascootIcon className="w-5 h-5" />
+              <p className="text-2xl font-jbmono font-bold leading-7 select-none">
+                NTBot
+              </p>
+            </div>
+            <button onClick={closeSidebar} className="cursor-pointer">
+              <CrossIcon className="w-4 h-4" />
+            </button>
           </div>
-          <button onClick={closeSidebar} className="cursor-pointer">
-            <CrossIcon className="w-4 h-4" />
-          </button>
         </div>
 
         {/* Infoblock */}

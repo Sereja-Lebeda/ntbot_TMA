@@ -15,7 +15,8 @@ function MobileFooter() {
 
   return (
     <div
-      className="w-full h-20
+      className="pb-(--app-safe-bottom)
+      w-full h-20
   flex justify-center items-center
   px-5 py-4  gap-10
   bg-[#0e0e0e] border-t border-[#201e1e]

@@ -15,6 +15,13 @@
 }
 
 :root {
+  /* Telegram safe area */
+  --app-safe-top: calc(
+    var(--tg-safe-area-inset-top, 0px) +
+      var(--tg-content-safe-area-inset-top, 0px)
+  );
+  --app-safe-bottom: var(--tg-safe-area-inset-bottom, 0px);
+
   /* Color bg */
   background: var(--bg-primary);
   --bg-primary: #ede8de;
@@ -86,6 +93,11 @@
   --bg-task-cancelled: #dd4d4d;
   --bg-task-closed: #969090;
   --bg-task-error: #842222;
+}
+
+html,
+body {
+  overscroll-behavior: none;
 }
 
 /* body {

@@ -1,0 +1,1016 @@
+openapi: 3.0.3
+info:
+  title: BASS-API
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: "{{host}}"
+  - url: https://localhost
+paths:
+  /:
+    get:
+      summary: index
+      description: index
+      operationId: index
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "16"
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Aug 2026 11:43:14 GMT
+          content:
+            text/plain:
+              examples:
+                "200":
+                  value: Hello, Bass api!
+      security:
+        - {}
+  /user:
+    get:
+      summary: User
+      description: User
+      operationId: user
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "83"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:11:10 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 7
+                  name:
+                    type: string
+                    example: kuznetsov_vova
+                  role:
+                    type: string
+                    example: base
+                  tg_id:
+                    type: number
+                    example: 301849701
+                  ticket_ids:
+                    type: array
+                    items:
+                      type: number
+                      example: 2
+                    example:
+                      - 2
+                      - 1
+              examples:
+                "200":
+                  value:
+                    id: 7
+                    name: kuznetsov_vova
+                    role: base
+                    tg_id: 301849701
+                    ticket_ids:
+                      - 2
+                      - 1
+        "401":
+          description: "401"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "48"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:09:17 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: initData valdation - sign is missing
+              examples:
+                "401":
+                  value:
+                    error: initData valdation - sign is missing
+  /ticket/{id}:
+    get:
+      summary: Ticket
+      description: Ticket
+      operationId: ticket
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "436"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:24:00 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  action_id:
+                    type: number
+                    example: 2
+                  body:
+                    type: object
+                    properties:
+                      Название БД:
+                        type: string
+                        example: PG
+                      Обоснование запроса:
+                        type: string
+                        example: Работа стоит
+                      Описание проблемы:
+                        type: string
+                        example: Написал в лс
+                      Уровень доступа:
+                        type: string
+                        example: Чтение и запись
+                  category_id:
+                    type: number
+                    example: 2
+                  creation_timestamp:
+                    type: number
+                    example: 1741725100
+                  msg_ids:
+                    nullable: true
+                    example: null
+                  priority:
+                    type: string
+                    example: low
+                  status:
+                    type: string
+                    example: todo
+                  subcategory_id:
+                    type: number
+                    example: 2
+                  ticket_id:
+                    type: number
+                    example: 3
+                  ticket_name:
+                    type: string
+                    example: Запрос доступа к БД
+                  user_id:
+                    type: number
+                    example: 7
+              examples:
+                "200":
+                  value:
+                    action_id: 2
+                    body:
+                      Название БД: PG
+                      Обоснование запроса: Работа стоит
+                      Описание проблемы: Написал в лс
+                      Уровень доступа: Чтение и запись
+                    category_id: 2
+                    creation_timestamp: 1741725100
+                    msg_ids: null
+                    priority: low
+                    status: todo
+                    subcategory_id: 2
+                    ticket_id: 3
+                    ticket_name: Запрос доступа к БД
+                    user_id: 7
+        "404":
+          description: 404 - foreign ticket
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "46"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:28:27 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: getting ticket from db - not found
+              examples:
+                404 - foreign ticket:
+                  value:
+                    error: getting ticket from db - not found
+        "500":
+          description: 500 - not existing ticket
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "139"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:30:15 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "getting ticket from db - making get request to db - dbconn returned
+                      status 404 with message: getting ticket from db - not
+                      found"
+              examples:
+                500 - not existing ticket:
+                  value:
+                    error: "getting ticket from db - making get request to db - dbconn returned
+                      status 404 with message: getting ticket from db - not
+                      found"
+    put:
+      summary: Ticket
+      description: Ticket
+      operationId: ticket2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: object
+                  properties:
+                    Название БД:
+                      type: string
+                      example: PG
+                    Обоснование запроса:
+                      type: string
+                      example: Горит
+                    Описание проблемы:
+                      type: string
+                      example: Не работает
+                    Уровень доступа:
+                      type: string
+                      example: Чтение
+                priority:
+                  type: string
+                  example: normal
+            examples:
+              Ticket:
+                value:
+                  body:
+                    Название БД: PG
+                    Обоснование запроса: Горит
+                    Описание проблемы: Не работает
+                    Уровень доступа: Чтение
+                  priority: normal
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "2"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:31:56 GMT
+          content:
+            text/plain:
+              examples:
+                "200":
+                  value: OK
+        "400":
+          description: 400 - missing field / 400 - wrong dropdown value / 400 - wrong status
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "101"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:36:21 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: parsing ticket - validating ticket's body - field Обоснование запроса
+                      is missing from ticket body
+              examples:
+                400 - missing field:
+                  value:
+                    error: parsing ticket - validating ticket's body - field Обоснование запроса is
+                      missing from ticket body
+                400 - wrong dropdown value:
+                  value:
+                    error: parsing ticket - validating ticket's body - value Slug is not allowed in
+                      field Уровень доступа
+                400 - wrong status:
+                  value:
+                    error: parsing ticket - validating ticket's fields - expected priority
+                      high|normal|low, got Slug
+    delete:
+      summary: Ticket
+      description: Ticket
+      operationId: ticket3
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "2"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:37:36 GMT
+          content:
+            text/plain:
+              examples:
+                "200":
+                  value: OK
+        "404":
+          description: "404"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "46"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:38:02 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: getting ticket from db - not found
+              examples:
+                "404":
+                  value:
+                    error: getting ticket from db - not found
+        "409":
+          description: "409"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "31"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:37:50 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: ticket is immutable
+              examples:
+                "409":
+                  value:
+                    error: ticket is immutable
+        "500":
+          description: 500 (404)
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "139"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:38:19 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "getting ticket from db - making get request to db - dbconn returned
+                      status 404 with message: getting ticket from db - not
+                      found"
+              examples:
+                500 (404):
+                  value:
+                    error: "getting ticket from db - making get request to db - dbconn returned
+                      status 404 with message: getting ticket from db - not
+                      found"
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ""
+  /ticketList:
+    get:
+      summary: Tickets List
+      description: Tickets List
+      operationId: ticketsList
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "1290"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:22:05 GMT
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    action_id:
+                      type: number
+                      example: 2
+                    body:
+                      type: object
+                      properties:
+                        Название БД:
+                          type: string
+                          example: PG
+                        Обоснование запроса:
+                          type: string
+                          example: Работа стоит
+                        Описание проблемы:
+                          type: string
+                          example: Написал в лс
+                        Уровень доступа:
+                          type: string
+                          example: Чтение и запись
+                    category_id:
+                      type: number
+                      example: 2
+                    creation_timestamp:
+                      type: number
+                      example: 1741725100
+                    msg_ids:
+                      nullable: true
+                      example: null
+                    priority:
+                      type: string
+                      example: low
+                    status:
+                      type: string
+                      example: todo
+                    subcategory_id:
+                      type: number
+                      example: 2
+                    ticket_id:
+                      type: number
+                      example: 3
+                    ticket_name:
+                      type: string
+                      example: Запрос доступа к БД
+                    user_id:
+                      type: number
+                      example: 7
+                example:
+                  - action_id: 2
+                    body:
+                      Название БД: PG
+                      Обоснование запроса: Работа стоит
+                      Описание проблемы: Написал в лс
+                      Уровень доступа: Чтение и запись
+                    category_id: 2
+                    creation_timestamp: 1741725100
+                    msg_ids: null
+                    priority: low
+                    status: todo
+                    subcategory_id: 2
+                    ticket_id: 3
+                    ticket_name: Запрос доступа к БД
+                    user_id: 7
+                  - action_id: 2
+                    body:
+                      Название БД: PG
+                      Обоснование запроса: Работа стоит
+                      Описание проблемы: Написал в лс
+                      Уровень доступа: Чтение и запись
+                    category_id: 2
+                    creation_timestamp: 1741725100
+                    msg_ids: null
+                    priority: low
+                    status: todo
+                    subcategory_id: 2
+                    ticket_id: 2
+                    ticket_name: Запрос доступа к БД
+                    user_id: 7
+                  - action_id: 2
+                    body:
+                      Название БД: PG
+                      Обоснование запроса: Горит
+                      Описание проблемы: Не работает
+                      Уровень доступа: Чтение
+                    category_id: 2
+                    creation_timestamp: 1741725100
+                    msg_ids: null
+                    priority: normal
+                    status: cancelled
+                    subcategory_id: 2
+                    ticket_id: 1
+                    ticket_name: Запрос доступа к БД
+                    user_id: 7
+              examples:
+                "200":
+                  value:
+                    - action_id: 2
+                      body:
+                        Название БД: PG
+                        Обоснование запроса: Работа стоит
+                        Описание проблемы: Написал в лс
+                        Уровень доступа: Чтение и запись
+                      category_id: 2
+                      creation_timestamp: 1741725100
+                      msg_ids: null
+                      priority: low
+                      status: todo
+                      subcategory_id: 2
+                      ticket_id: 3
+                      ticket_name: Запрос доступа к БД
+                      user_id: 7
+                    - action_id: 2
+                      body:
+                        Название БД: PG
+                        Обоснование запроса: Работа стоит
+                        Описание проблемы: Написал в лс
+                        Уровень доступа: Чтение и запись
+                      category_id: 2
+                      creation_timestamp: 1741725100
+                      msg_ids: null
+                      priority: low
+                      status: todo
+                      subcategory_id: 2
+                      ticket_id: 2
+                      ticket_name: Запрос доступа к БД
+                      user_id: 7
+                    - action_id: 2
+                      body:
+                        Название БД: PG
+                        Обоснование запроса: Горит
+                        Описание проблемы: Не работает
+                        Уровень доступа: Чтение
+                      category_id: 2
+                      creation_timestamp: 1741725100
+                      msg_ids: null
+                      priority: normal
+                      status: cancelled
+                      subcategory_id: 2
+                      ticket_id: 1
+                      ticket_name: Запрос доступа к БД
+                      user_id: 7
+  /ticket:
+    post:
+      summary: Ticket
+      description: Ticket
+      operationId: ticket1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action_id:
+                  type: number
+                  example: 2
+                body:
+                  type: object
+                  properties: 
+                    Название БД:
+                      type: string
+                    Обоснование запроса:
+                      type: string
+                    Описание проблемы:
+                      type: string
+                    Уровень доступа:
+                      type: string
+                category_id:
+                  type: number
+                  example: 2
+                creation_timestamp:
+                  type: number
+                  example: 1741725100
+                priority:
+                  type: string
+                  example: low
+                subcategory_id:
+                  type: number
+                  example: 2
+                ticket_name:
+                  type: string
+                  example: Запрос доступа к БД
+            examples:
+              Ticket:
+                value:
+                  action_id: 2
+                  body:
+                    Название БД: PG
+                    Обоснование запроса: Работа стоит
+                    Описание проблемы: Написал в лс
+                    Уровень доступа: Чтение и запись
+                  category_id: 2
+                  creation_timestamp: 1741725100
+                  priority: low
+                  subcategory_id: 2
+                  ticket_name: Запрос доступа к БД
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "2"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:21:15 GMT
+          content:
+            text/plain:
+              examples:
+                "200":
+                  value: OK
+        "400":
+          description: 400 - wrong dropdown value / 400 - missing field / 400 - wrong
+            status / 400 - missing timestamp / 400 - wrong action id / 400 -
+            empty body
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "76"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:44:01 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: parsing ticket - validating ticket's body - value Slug is not allowed
+                      in field Уровень доступа
+              examples:
+                400 - empty body:
+                  value:
+                    error: parsing ticket - validating ticket's fields - body has no fields
+                400 - missing field:
+                  value:
+                    error: parsing ticket - validating ticket's body - field Обоснование запроса is
+                      missing from ticket body
+                400 - missing timestamp:
+                  value:
+                    error: parsing ticket - validating ticket's fields - creation timestamp is
+                      zero-value
+                400 - wrong action id:
+                  value:
+                    error: parsing ticket - validating ticket's fields - action id must be positive
+                400 - wrong dropdown value:
+                  value:
+                    error: parsing ticket - validating ticket's body - value Slug is not allowed in
+                      field Уровень доступа
+                400 - wrong status:
+                  value:
+                    error: parsing ticket - validating ticket's fields - expected priority
+                      high|normal|low, got slug
+  /cats:
+    get:
+      summary: Categories
+      description: Categories
+      operationId: categories
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "336"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:11:59 GMT
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    category_id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: NTMincer
+                example:
+                  - category_id: 1
+                    name: NTMincer
+                  - category_id: 2
+                    name: База Данных
+                  - category_id: 3
+                    name: Доступы
+                  - category_id: 4
+                    name: Закупка
+                  - category_id: 5
+                    name: Интернет
+                  - category_id: 6
+                    name: Компьютер и устройства
+                  - category_id: 7
+                    name: Папки и файлы
+              examples:
+                "200":
+                  value:
+                    - category_id: 1
+                      name: NTMincer
+                    - category_id: 2
+                      name: База Данных
+                    - category_id: 3
+                      name: Доступы
+                    - category_id: 4
+                      name: Закупка
+                    - category_id: 5
+                      name: Интернет
+                    - category_id: 6
+                      name: Компьютер и устройства
+                    - category_id: 7
+                      name: Папки и файлы
+  /cat/{id}:
+    get:
+      summary: Category
+      description: Category
+      operationId: category
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "167"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:12:27 GMT
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    category_id:
+                      type: number
+                      example: 6
+                    name:
+                      type: string
+                      example: Компьютер и ноутбуки
+                    subcategory_id:
+                      type: number
+                      example: 6
+                example:
+                  - category_id: 6
+                    name: Компьютер и ноутбуки
+                    subcategory_id: 6
+                  - category_id: 6
+                    name: Принтеры и сканеры
+                    subcategory_id: 7
+              examples:
+                "200":
+                  value:
+                    - category_id: 6
+                      name: Компьютер и ноутбуки
+                      subcategory_id: 6
+                    - category_id: 6
+                      name: Принтеры и сканеры
+                      subcategory_id: 7
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ""
+  /subcat/{id}:
+    get:
+      summary: Subcategory
+      description: Subcategory
+      operationId: subcategory
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "111"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:18:20 GMT
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    action_id:
+                      type: number
+                      example: 2
+                    category_id:
+                      type: number
+                      example: 2
+                    config_id:
+                      type: number
+                      example: 2
+                    name:
+                      type: string
+                      example: Запрос доступа к БД
+                    subcategory_id:
+                      type: number
+                      example: 2
+                example:
+                  - action_id: 2
+                    category_id: 2
+                    config_id: 2
+                    name: Запрос доступа к БД
+                    subcategory_id: 2
+              examples:
+                "200":
+                  value:
+                    - action_id: 2
+                      category_id: 2
+                      config_id: 2
+                      name: Запрос доступа к БД
+                      subcategory_id: 2
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ""
+  /action/{id}:
+    get:
+      summary: Action
+      description: Action
+      operationId: action
+      responses:
+        "200":
+          description: "200"
+          headers:
+            Content-Length:
+              schema:
+                type: string
+                example: "636"
+            Date:
+              schema:
+                type: string
+                example: Mon, 10 Aug 2026 09:18:40 GMT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  config_id:
+                    type: number
+                    example: 2
+                  fields:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        default_value:
+                          type: string
+                          example: ""
+                        dropdown_values:
+                          type: array
+                          items:
+                            type: string
+                            example: Чтение
+                          example:
+                            - Чтение
+                            - Запись
+                            - Чтение и запись
+                        field_id:
+                          type: number
+                          example: 4
+                        field_name:
+                          type: string
+                          example: Название БД
+                        field_type:
+                          type: string
+                          example: short text
+                        required:
+                          type: boolean
+                          example: true
+                    example:
+                      - default_value: ""
+                        field_id: 4
+                        field_name: Название БД
+                        field_type: short text
+                        required: true
+                      - default_value: ""
+                        field_id: 5
+                        field_name: Обоснование запроса
+                        field_type: long text
+                        required: true
+                      - default_value: ""
+                        field_id: 2
+                        field_name: Описание проблемы
+                        field_type: long text
+                        required: true
+                      - default_value: ""
+                        dropdown_values:
+                          - Чтение
+                          - Запись
+                          - Чтение и запись
+                        field_id: 6
+                        field_name: Уровень доступа
+                        field_type: dropdown
+                        required: true
+                  name:
+                    type: string
+                    example: Запрос доступа к БД
+              examples:
+                "200":
+                  value:
+                    config_id: 2
+                    fields:
+                      - default_value: ""
+                        field_id: 4
+                        field_name: Название БД
+                        field_type: short text
+                        required: true
+                      - default_value: ""
+                        field_id: 5
+                        field_name: Обоснование запроса
+                        field_type: long text
+                        required: true
+                      - default_value: ""
+                        field_id: 2
+                        field_name: Описание проблемы
+                        field_type: long text
+                        required: true
+                      - default_value: ""
+                        dropdown_values:
+                          - Чтение
+                          - Запись
+                          - Чтение и запись
+                        field_id: 6
+                        field_name: Уровень доступа
+                        field_type: dropdown
+                        required: true
+                    name: Запрос доступа к БД
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: ""
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: Authorization
+      in: header
+security:
+  - apiKey: []
+tags: []
