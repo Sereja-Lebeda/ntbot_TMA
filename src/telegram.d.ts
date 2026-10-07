@@ -5,6 +5,14 @@ interface Inset {
   right: number;
 }
 
+interface BackButton {
+  isVisible: boolean;
+  show(): void;
+  hide(): void;
+  onClick(cb: () => void): void;
+  offClick(cb: () => void): void;
+}
+
 interface TelegramWebApp {
   colorScheme: "light" | "dark";
   version: string;
@@ -15,6 +23,7 @@ interface TelegramWebApp {
   ready(): void;
   expand(): void;
   disableVerticalSwipes(): void;
+  BackButton: BackButton;
 }
 
 interface Window {

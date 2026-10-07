@@ -1,5 +1,7 @@
 import { Outlet } from "react-router";
 import { useEffect, useState } from "react";
+import useIosEdgeSwipeBack from "../../hooks/useIosEdgeSwipeBack";
+import useTelegramBackButton from "../../hooks/useTelegramBackButton";
 import useUser from "../../hooks/useUser";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
@@ -22,6 +24,9 @@ import getTicketDescription from "../../utils/getTicketDescription";
 import mockData from "../../../mockTicketInfo.json";
 
 export default function Layout() {
+  useIosEdgeSwipeBack();
+  useTelegramBackButton();
+
   const currentUser = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
