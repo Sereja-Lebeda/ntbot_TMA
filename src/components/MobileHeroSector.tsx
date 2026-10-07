@@ -14,6 +14,7 @@ import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
 import MobilePlusIcon from "../icons/mobile/MobilePlusIcon";
 import React, { useEffect, useRef, useState } from "react";
+import { hapticTap } from "../utils/haptics";
 
 interface MobileHeroSectorProps {
   tickets: Ticket[]; // уже отфильтрованный и отсортированный массив
@@ -227,7 +228,10 @@ function MobileHeroSector({
           />
         ))}
         <button
-          onClick={() => navigate("/tickets/new/category")}
+          onClick={() => {
+            hapticTap();
+            navigate("/tickets/new/category");
+          }}
           className="fixed right-5 bottom-24
         w-15 h-15
         bg-(--bg-btn-primary) rounded-xs

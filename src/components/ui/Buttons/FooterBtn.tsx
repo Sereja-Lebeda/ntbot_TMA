@@ -1,3 +1,5 @@
+import { hapticTap } from "../../../utils/haptics";
+
 interface FooterBtnProps {
   icon: React.ReactNode;
   text: string;
@@ -9,6 +11,7 @@ function FooterBtn({ icon, text, textClassName, onClick }: FooterBtnProps) {
   return (
     <button
       onClick={onClick}
+      onPointerDown={hapticTap}
       className={`h-full max-w-20
   flex flex-col justify-center items-center gap-1.5
   flex-1 cursor-pointer group

@@ -12,6 +12,7 @@ import { hoverAnimationStyle } from "../../../styles/pressAnimation";
 import { shadowLiftCategoryStyle } from "../../../styles/shadowLift";
 import ArrowIcon from "../../../icons/filterblock/ArrowIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
+import { hapticTap } from "../../../utils/haptics";
 
 interface OutletContextProps {
   selectedCategory: CategoriesPool;
@@ -49,6 +50,9 @@ function MobileStepProblem() {
   const subcategories = [...new Set(filteredActions.map((a) => a.subcategory))];
 
   function toggleSubcategory(sub: string) {
+    if (searchQuery === "") {
+      hapticTap();
+    }
     setOpenSubcategories(
       (prev) =>
         prev.includes(sub)
@@ -62,6 +66,7 @@ function MobileStepProblem() {
   }
 
   function onPrev() {
+    hapticTap();
     navigate("/");
   }
 
@@ -92,7 +97,9 @@ function MobileStepProblem() {
               <div
                 className={`w-full flex flex-col justify-start bg-(--bg-secondary) px-5 py-4 transition-transform duration-900 border border-(--bg-border) cursor-pointer ${isOpen ? "border-(--border-hover-btn)!" : "hover:border-(--border-hover-btn)"}`}
                 key={sub}
-                onClick={() => toggleSubcategory(sub)}
+                onClick={() => {
+                  toggleSubcategory(sub);
+                }}
               >
                 {/* Заголовок аккордеона */}
                 <div
@@ -128,7 +135,9 @@ function MobileStepProblem() {
                             ${isDesktop ? "hover:text-(--text-primary)" : "hover:text-(--bg-btn-primary)"}
                             ${shadowLiftCategoryStyle}
                             `}
-                          onClick={() => {
+                          onClick={(e) => {
+                            hapticTap();
+                            e.stopPropagation();
                             setSelectedAction(action);
                             onNext();
                           }}

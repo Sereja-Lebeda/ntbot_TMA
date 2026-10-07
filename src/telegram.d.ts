@@ -13,6 +13,12 @@ interface BackButton {
   offClick(cb: () => void): void;
 }
 
+interface HapticFeedback {
+  selectionChanged(): void;
+  impactOccurred(style: "light" | "medium" | "heavy" | "rigid" | "soft"): void;
+  notificationOccurred(type: "success" | "warning" | "error"): void;
+}
+
 interface TelegramWebApp {
   colorScheme: "light" | "dark";
   version: string;
@@ -24,6 +30,7 @@ interface TelegramWebApp {
   expand(): void;
   disableVerticalSwipes(): void;
   BackButton: BackButton;
+  HapticFeedback: HapticFeedback;
 }
 
 interface Window {

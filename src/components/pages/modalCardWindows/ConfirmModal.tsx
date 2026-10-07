@@ -5,6 +5,7 @@ import CheckIcon from "../../../icons/card/CheckIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import ModalIcon from "../../../icons/createTicket/ModalIcon";
 import { useEffect, useRef, useState } from "react";
+import { hapticTap } from "../../../utils/haptics";
 
 interface ConfirmModalProps {
   onConfirm: () => void;
@@ -78,6 +79,7 @@ function ConfirmModal({
               onCancel();
             }}
             className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
+            onPointerDown={hapticTap}
           >
             <CrossIcon className="w-2.5 h-2.5 text-(--text-secondary) group-hover:text-(--text-primary)" />
             <span className="font-bold leading-3 text-xs text-(--text-secondary) group-hover:text-(--text-primary)">
@@ -91,6 +93,7 @@ function ConfirmModal({
               onConfirm();
             }}
             className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
+            onPointerDown={hapticTap}
           >
             <CheckIcon className="text-(--text-secondary) group-hover:text-(--text-primary)" />
             <span className="font-bold leading-3 text-xs text-(--text-secondary) group-hover:text-(--text-primary)">

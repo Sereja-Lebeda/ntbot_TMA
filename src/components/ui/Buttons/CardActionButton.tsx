@@ -1,3 +1,5 @@
+import { hapticTap } from "../../../utils/haptics";
+
 interface CardActionButtonProps {
   onClick?: () => void;
   className?: string;
@@ -16,6 +18,7 @@ export default function CardActionButton({
   return (
     <button
       className={className}
+      onPointerDown={hapticTap}
       onClick={(e) => {
         e.stopPropagation();
         onClick?.();

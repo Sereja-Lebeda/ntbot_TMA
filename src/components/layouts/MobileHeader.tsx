@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import useSearch from "../../hooks/useSearch";
 
+import { hapticTap } from "../../utils/haptics";
+
 import Searchbar from "../ui/Searchbar";
 
 import BurgerIcon from "../../icons/header/BurgerIcon";
@@ -32,7 +34,11 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
   return (
     <div className="w-full pt-(--app-safe-top) bg-[#0e0e0e] border-b border-[#201e1e]">
       <div className="w-full h-15.5 flex justify-between items-center px-5 py-4 gap-4">
-        <button onClick={openSidebar} className="outline-none cursor-pointer">
+        <button
+          onClick={openSidebar}
+          className="outline-none cursor-pointer"
+          onPointerDown={hapticTap}
+        >
           <BurgerIcon
             className="w-5 h-5
         text-(--text-secondary)
@@ -51,6 +57,7 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
           <button
             className="flex justify-center items-center gap-1 cursor-pointer"
             onClick={() => navigate("/")}
+            onPointerDown={hapticTap}
           >
             <MascootIcon className="w-5 h-5" />
             <p
@@ -68,6 +75,7 @@ function MobileHeader({ openSidebar }: MobileHeaderProps) {
           ${isOnMainPage ? "visible" : "invisible"}
           cursor-pointer`}
           disabled={!isOnMainPage}
+          onPointerDown={hapticTap}
         >
           <MagnifyIcon
             className="w-5 h-5

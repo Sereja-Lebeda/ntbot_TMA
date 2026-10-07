@@ -1,4 +1,5 @@
 import CrossIcon from "../../../icons/card/CrossIcon";
+import { hapticTap } from "../../../utils/haptics";
 
 interface CancelFormButtonProps {
   onClick: () => void;
@@ -6,9 +7,14 @@ interface CancelFormButtonProps {
 }
 
 function CancelFormButton({ onClick, isDesktop }: CancelFormButtonProps) {
+  function handleClick() {
+    hapticTap();
+    onClick();
+  }
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       className={
         isDesktop
           ? "xl:flex xl:justify-center xl:items-center xl:gap-1 xl:py-2.25 xl:cursor-pointer xl:group"

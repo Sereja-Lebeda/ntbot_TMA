@@ -16,6 +16,7 @@ import LowPriorityIcon from "../icons/createTicket/LowPriorityIcon";
 import MidPriorityIcon from "../icons/createTicket/MidPriorityIcon";
 import HighPriorityIcon from "../icons/createTicket/HighPriorityIcon";
 import useMediaQuery from "../hooks/useMediaQuery";
+import { hapticTap } from "../utils/haptics";
 
 interface TicketFormProps {
   selectedAction: Action | null;
@@ -75,6 +76,7 @@ function TicketForm({
               ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
             >
               <input
+                onFocus={hapticTap}
                 value={formData[field.name] ?? ""}
                 onBlur={() => {
                   const err = validateSingleField(field, formData, multiData);
@@ -111,6 +113,7 @@ function TicketForm({
               ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
                 >
                   <input
+                    onFocus={hapticTap}
                     value={value}
                     onBlur={() => {
                       const err = validateSingleField(
@@ -148,26 +151,28 @@ function TicketForm({
                   {index === 0 ? (
                     <button
                       className="w-full h-full flex items-center justify-center cursor-pointer"
-                      onClick={() =>
+                      onClick={() => {
+                        hapticTap();
                         setMultiData((prev) => {
                           const arr = [...(prev[field.name] ?? [""])];
                           return { ...prev, [field.name]: [...arr, ""] };
-                        })
-                      }
+                        });
+                      }}
                     >
                       <PlusFieldIcon className="w-4 h-4 text-(--text-secondary) group-hover:text-(--text-primary)" />
                     </button>
                   ) : (
                     <button
                       className="w-full h-full flex items-center justify-center cursor-pointer"
-                      onClick={() =>
+                      onClick={() => {
+                        hapticTap();
                         setMultiData((prev) => {
                           const arr = (prev[field.name] ?? []).filter(
                             (_, i) => i !== index,
                           );
                           return { ...prev, [field.name]: arr };
-                        })
-                      }
+                        });
+                      }}
                     >
                       <MinusIcon className="w-4 h-4 text-(--text-secondary) group-hover:text-(--text-primary)" />
                     </button>
@@ -191,6 +196,7 @@ function TicketForm({
         ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
           >
             <textarea
+              onFocus={hapticTap}
               value={formData[field.name] ?? ""}
               onBlur={() => {
                 const err = validateSingleField(field, formData, multiData);
@@ -265,6 +271,7 @@ function TicketForm({
               <label
                 key={option}
                 onClick={() => {
+                  hapticTap();
                   setFormData((prev) => ({ ...prev, [field.name]: option }));
                   clearError(field.name);
                 }}
@@ -310,6 +317,7 @@ function TicketForm({
             <button
               key={p.value}
               onClick={() => {
+                hapticTap();
                 setPriority(p.value);
                 clearError("priority");
               }}

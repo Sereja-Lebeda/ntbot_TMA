@@ -2,6 +2,7 @@ import { useNavigate, useOutletContext } from "react-router";
 import useTheme from "../../../hooks/useTheme";
 
 import type { CategoriesPool } from "../../../types/createTicket.type";
+import { hapticTap } from "../../../utils/haptics";
 
 import { categories } from "../../../data/categories";
 
@@ -25,6 +26,7 @@ function MobileStepCategory() {
   }
 
   function onPrev() {
+    hapticTap();
     navigate("/");
   }
 

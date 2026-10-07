@@ -36,6 +36,7 @@ import TimeSortActiveIcon from "../../icons/searchmenu/TimeSortActiveIcon";
 import TimeSortIcon from "../../icons/searchmenu/TimeSortIcon";
 import UserIcon from "../../icons/searchmenu/UserIcon";
 import { useLocation } from "react-router";
+import { hapticTap } from "../../utils/haptics";
 
 interface MobileSidebarProps {
   closeSidebar: () => void;
@@ -166,15 +167,20 @@ function MobileSidebar({
     ...new Set(mock.map((ticket: Ticket) => ticket.department)),
   ];
 
+  function handleBackdropPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    if (e.target === e.currentTarget) {
+      hapticTap();
+    }
+  }
+
   return createPortal(
     <div
+      onPointerDown={handleBackdropPointerDown}
       onClick={closeSidebar}
       className="
       fixed inset-0
       flex justify-start items-center
-      bg-black/50 z-50
-
-  "
+      bg-black/50 z-50"
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -201,7 +207,11 @@ function MobileSidebar({
                 NTBot
               </p>
             </div>
-            <button onClick={closeSidebar} className="cursor-pointer">
+            <button
+              onPointerDown={hapticTap}
+              onClick={closeSidebar}
+              className="cursor-pointer"
+            >
               <CrossIcon className="w-4 h-4" />
             </button>
           </div>
@@ -235,6 +245,7 @@ function MobileSidebar({
               <div
                 onClick={() => {
                   navigator.clipboard.writeText(currentUser?.localIp);
+                  hapticTap();
                   setCopiedField("ip");
                   setTimeout(() => setCopiedField(null), 1000);
                 }}
@@ -252,6 +263,7 @@ function MobileSidebar({
               <div
                 onClick={() => {
                   navigator.clipboard.writeText(currentUser?.pcName);
+                  hapticTap();
                   setCopiedField("pcName");
                   setTimeout(() => setCopiedField(null), 1000);
                 }}

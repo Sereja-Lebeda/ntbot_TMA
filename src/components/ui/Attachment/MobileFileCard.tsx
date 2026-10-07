@@ -3,6 +3,7 @@ import {
   hoverAnimationStyle,
   btnPressAnimationStyle,
 } from "../../../styles/pressAnimation";
+import { hapticTap } from "../../../utils/haptics";
 
 interface MobileFileCardProps {
   name: string;
@@ -16,6 +17,11 @@ function MobileFileCard({
   dateLabel,
   onDelete,
 }: MobileFileCardProps) {
+  function handleDeleteClick() {
+    hapticTap();
+    onDelete?.();
+  }
+
   return (
     <div
       className={`w-full h-auto flex flex-col items-start border-[0.8px] border-(--bg-border) rounded-xs group shrink-0
@@ -45,7 +51,7 @@ function MobileFileCard({
 
         {onDelete && (
           <div
-            onClick={onDelete}
+            onClick={handleDeleteClick}
             className="w-10 h-5 flex justify-center items-center bg-(--bg-secondary) rounded-xs group/delete cursor-pointer"
           >
             <CrossIcon

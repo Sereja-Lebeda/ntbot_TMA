@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router";
 import useGoBack from "./useGoBack";
+import { hapticNavigationThresholdCrossed } from "../utils/haptics";
 
 /**
  * useIosEdgeSwipeBack — жест «провести пальцем от левого края вправо» = «назад».
@@ -63,6 +64,8 @@ export default function useIosEdgeSwipeBack() {
     let startX = 0; // координаты точки, где палец коснулся экрана
     let startY = 0;
 
+    let backBorder = false;
+
     // Тип TouchEvent — нативный (глобальный), потому что подписываемся через
     // document.addEventListener. React.TouchEvent / React.PointerEvent — только
     // для JSX-пропсов (onTouchStart={...}); у PointerEvent вообще нет touches.
@@ -80,6 +83,7 @@ export default function useIosEdgeSwipeBack() {
       // Начинаем слежение, только если касание началось у самого края.
       if (touch.clientX <= EDGE_ZONE) {
         isTracking = true;
+        backBorder = false;
         startX = touch.clientX;
         startY = touch.clientY;
       }
@@ -97,6 +101,16 @@ export default function useIosEdgeSwipeBack() {
       // случайно «засчитаться» как свайп назад.
       if (Math.abs(dy) > Math.abs(dx)) {
         isTracking = false;
+        return;
+      }
+
+      if (dx > SWIPE_THRESHOLD) {
+        if (!backBorder) {
+          backBorder = true;
+          hapticNavigationThresholdCrossed();
+        }
+      } else {
+        backBorder = false;
       }
     };
 
@@ -116,6 +130,7 @@ export default function useIosEdgeSwipeBack() {
       }
       // В любом случае палец убран — жест закончен.
       isTracking = false;
+      backBorder = false;
     };
 
     // touchcancel: система перехватила касание (например, свой жест iOS).
