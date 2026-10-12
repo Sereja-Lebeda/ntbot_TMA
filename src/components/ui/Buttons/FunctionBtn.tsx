@@ -1,3 +1,5 @@
+import { hapticTap } from "../../../utils/haptics";
+
 interface FunctionBtnProps {
   Icon: React.ComponentType<{ className?: string }>;
   iconClassName?: string;
@@ -22,8 +24,13 @@ function FunctionBtn({
   textClassName,
   disabled,
 }: FunctionBtnProps) {
+  function handleClick() {
+    hapticTap();
+    onClick();
+  }
+
   return (
-    <button disabled={disabled} onClick={onClick} className={btnClassName}>
+    <button disabled={disabled} onClick={handleClick} className={btnClassName}>
       {/* Top layer of btn */}
       <div className={innerDivClassName}>
         <Icon className={iconClassName} />

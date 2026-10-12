@@ -27,6 +27,7 @@ import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import FloppydiskIcon from "../../../icons/FloppydiskIcon";
 import useEscButton from "../../../hooks/useEscButton";
 import CancelFormButton from "../../ui/Buttons/CancelFormButton";
+import { hapticTap } from "../../../utils/haptics";
 
 interface OutletContextProps {
   tickets: Ticket[];
@@ -120,7 +121,9 @@ function TicketEditPage() {
     return (
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/50 select-none">
         <div
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
           className="bg-(--bg-secondary) border border-(--bg-border) rounded-xs p-8 text-center flex flex-col gap-4 items-center"
         >
           <p className="text-(--text-primary) font-jbmono">
@@ -128,7 +131,10 @@ function TicketEditPage() {
             Пожалуйста, обратитесь к администратору.
           </p>
           <button
-            onClick={onClose}
+            onClick={() => {
+              hapticTap();
+              onClose();
+            }}
             className="cursor-pointer text-(--text-secondary) hover:text-(--text-primary) font-consolas"
           >
             Закрыть

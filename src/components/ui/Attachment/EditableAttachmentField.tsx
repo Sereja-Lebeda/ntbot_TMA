@@ -7,6 +7,7 @@ import ConfirmModal from "../../pages/modalCardWindows/ConfirmModal";
 
 import PlusAttachIcon from "../../../icons/createTicket/PlusAttachIcon";
 import MobileFileCard from "./MobileFileCard";
+import { hapticTap } from "../../../utils/haptics";
 
 interface EditableAttachmentFieldProps {
   files: TicketFileItem[];
@@ -54,6 +55,11 @@ function EditableAttachmentField({
   function onCancel() {
     setFileToDelete(null);
     setIsModalOpen(false);
+  }
+
+  function openFilePicker() {
+    hapticTap();
+    refFileAttach.current?.click();
   }
 
   return (
@@ -151,7 +157,7 @@ function EditableAttachmentField({
 
       {files.length === 0 ? (
         <button
-          onClick={() => refFileAttach.current?.click()}
+          onClick={openFilePicker}
           className={`w-full h-32.5 px-4 py-2.5
           flex flex-col items-center justify-center gap-2.5
           border border-dashed border-(--bg-border)
@@ -169,7 +175,7 @@ function EditableAttachmentField({
         </button>
       ) : isMobile ? (
         <button
-          onClick={() => refFileAttach.current?.click()}
+          onClick={openFilePicker}
           className={`w-full h-12
         flex items-center justify-center gap-1
         border border-dashed border-(--bg-border) rounded-xs
@@ -183,7 +189,7 @@ function EditableAttachmentField({
         </button>
       ) : (
         <button
-          onClick={() => refFileAttach.current?.click()}
+          onClick={openFilePicker}
           className={`w-47 h-53
               flex items-center justify-center gap-1
           border border-dashed border-(--bg-border) rounded-xs

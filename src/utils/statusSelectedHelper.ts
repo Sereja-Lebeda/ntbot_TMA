@@ -1,3 +1,5 @@
+import { hapticTap } from "./haptics";
+
 interface handleStatusSelectProps {
   item: string;
   selectedItems: string[];
@@ -10,6 +12,7 @@ export default function handleStatusSelect({
   setSelectedItems,
 }: handleStatusSelectProps) {
   if (setSelectedItems && selectedItems) {
+    hapticTap();
     if (item === "Все") {
       setSelectedItems(["Все"]);
     } else {

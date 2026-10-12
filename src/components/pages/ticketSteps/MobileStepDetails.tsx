@@ -20,6 +20,7 @@ import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
 import CrossIcon from "../../../icons/card/CrossIcon";
 import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 import ConfirmModal from "../modalCardWindows/ConfirmModal";
+import { hapticTap } from "../../../utils/haptics";
 
 interface OutletContextProps {
   selectedAction: Action;
@@ -194,6 +195,7 @@ function MobileStepDetails() {
             addFiles(e.dataTransfer.files);
           }}
           className="w-full"
+          // onClick={hapticTap}
         >
           <AttachmentField
             files={files}
@@ -210,7 +212,10 @@ function MobileStepDetails() {
         <div className="w-full flex justify-between items-center">
           {/* Back btn */}
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              hapticTap();
+              setIsModalOpen(true);
+            }}
             className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group select-none"
           >
             <CrossIcon className="w-2 h-2 text-(--text-secondary) group-hover:text-(--text-primary)" />

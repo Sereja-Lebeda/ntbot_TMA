@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import ArrowIcon from "../../icons/filterblock/ArrowIcon";
+import { hapticTap } from "../../utils/haptics";
 
 interface MultiSelectDropdownProps {
   options: string[];
@@ -47,11 +48,12 @@ function MultiSelectDropdown({
       ref={dropdownRef}
       tabIndex={0}
       onClick={() => {
+        hapticTap();
         setIsOpen((prev) => !prev);
       }}
       className={`relative 
     w-full h-10 flex flex-col justify-center items-start
-    border ${isOpen ? "border-[#E7E6E6]!" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
+    border ${isOpen ? "border-[#141414] dark:border-[#E7E6E6]!" : "border-(--bg-border) hover:border-(--border-hover-btn)"} rounded-xs
     ${hasError ? "border-(--bg-task-error)!" : ""}
     group hover:border-(--border-hover-btn)
     px-4 py-2.5 cursor-pointer ${isOpen ? "z-30" : "z-20"}`}
@@ -79,14 +81,15 @@ function MultiSelectDropdown({
               <div
                 key={option}
                 onClick={(e) => {
+                  hapticTap();
                   e.stopPropagation();
                   toggleOption(option);
                 }}
                 className={`w-full h-10 flex items-center justify-between px-6 py-2.5
                 font-consolas font-normal text-sm leading-normal
                 border border-(--bg-border)
-                hover:bg-[#1B1B1B]
-                ${isSelected ? "text-(--bg-btn-primary) bg-[#1B1B1B]" : "text-(--text-primary)"}`}
+               hover:bg-(--bg-inactive-btn) dark:hover:bg-[#1B1B1B]
+                ${isSelected ? "text-(--bg-btn-primary) bg-(--bg-inactive-btn) dark:bg-[#1B1B1B]" : "text-(--text-primary)"}`}
               >
                 <span>{option}</span>
                 {isSelected && <span>✓</span>}

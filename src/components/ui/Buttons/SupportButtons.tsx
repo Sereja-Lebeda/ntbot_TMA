@@ -7,6 +7,7 @@ import ToggleBtn from "./ToggleBtn";
 import { btnPressAnimationStyle } from "../../../styles/pressAnimation";
 
 import TelegramIcon from "../../../icons/card/TelegramIcon";
+import { hapticTap } from "../../../utils/haptics";
 
 type BtnMode = "compact" | "static" | "hover";
 type ContentBtnType = { className: string; text: string };
@@ -66,6 +67,7 @@ function SupportButtons() {
         className={`flex items-center bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none
       peer group rounded-xs p-2 ${btnPressAnimationStyle}`}
         onClick={toggleTheme}
+        onPointerDown={hapticTap}
       >
         <ToggleBtn />
         <span
@@ -78,6 +80,7 @@ function SupportButtons() {
       </button>
 
       <button
+        onPointerDown={hapticTap}
         className={`w-auto flex justify-center items-center px-3 py-2.5 bg-(--bg-primary-second) border border-(--bg-border) hover:border-(--border-hover-btn) select-none group rounded-xs ${btnPressAnimationStyle}
         ${mode === "hover" ? "peer-hover:[&>span]:w-0" : ""}`}
       >

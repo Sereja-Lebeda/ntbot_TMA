@@ -1,5 +1,6 @@
 import useMediaQuery from "../../hooks/useMediaQuery";
 import { shadowLiftCategoryStyle } from "../../styles/shadowLift";
+import { hapticTap } from "../../utils/haptics";
 
 interface CategoryGridCardProps {
   iconPng: string;
@@ -8,8 +9,14 @@ interface CategoryGridCardProps {
 }
 
 function CategoryGridCard({ iconPng, title, onClick }: CategoryGridCardProps) {
-  const isMobile = useMediaQuery("(max-width: 550px");
-  const isDesktop = useMediaQuery("(min-width: 1280px");
+  const isMobile = useMediaQuery("(max-width: 550px)");
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
+
+  function handleClick() {
+    hapticTap();
+    onClick();
+  }
+
   return (
     <div
       className={`w-full px-8 py-9 gap-2.5
@@ -21,7 +28,7 @@ function CategoryGridCard({ iconPng, title, onClick }: CategoryGridCardProps) {
         hover:border-(--text-primary)
         ${shadowLiftCategoryStyle}
         `}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {/* Icon */}
       <div className="w-10 h-10 flex justify-center items-center bg-(--text-secondary) group-hover:bg-(--text-primary) rounded-xs shrink-0">
@@ -30,7 +37,7 @@ function CategoryGridCard({ iconPng, title, onClick }: CategoryGridCardProps) {
       {/* Title */}
       <span
         className={`
-          ${isMobile && "flex justify-center items-center"}
+          ${isMobile ? "flex justify-center items-center" : ""}
           ${isDesktop ? "group-hover:text-(--bg-btn-primary)" : "group-hover:text-(--text-primary)"}
         flex-1 font-consolas font-normal text-lg leading-4.5 tracking-[0.8px] text-(--text-secondary) `}
       >

@@ -70,6 +70,7 @@ function StatusInfoBtn({
   const isSelected = selectedItems.includes(
     getStatusTitle(status, "statusBlock"),
   );
+
   return (
     <div
       onClick={onClick}

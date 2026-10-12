@@ -4,6 +4,7 @@ import CrossIcon from "../../icons/card/CrossIcon";
 import ArrowIcon from "../../icons/filterblock/ArrowIcon";
 import SquareCheckIcon from "../../icons/filterblock/SquareCheckIcon";
 import SquareIcon from "../../icons/filterblock/SquareIcon";
+import { hapticTap } from "../../utils/haptics";
 
 interface DropdownListProps {
   items: string[];
@@ -33,6 +34,7 @@ function DropdownList({
   const handleSelect = (item: string) => {
     if (isDropdownDisabled) return;
     if (setSelectedItems && selectedItems) {
+      hapticTap();
       if (item === "Все") {
         setSelectedItems(["Все"]);
       } else {
@@ -62,7 +64,14 @@ function DropdownList({
           
           ${isDropdownDisabled ? "bg-(--bg-disable-btn) select-none" : "bg-(--bg-primary-second)"}
           ${isDropdownOpen ? "" : "group-hover/dropdown:border-b group-hover/dropdown:border-(--text-primary)"}`}
-        onClick={isDropdownDisabled ? undefined : () => onChange(title)}
+        onClick={
+          isDropdownDisabled
+            ? undefined
+            : () => {
+                hapticTap();
+                onChange(title);
+              }
+        }
       >
         <div className="flex gap-2 items-center">
           <span

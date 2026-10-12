@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
 import ArrowIcon from "../../icons/filterblock/ArrowIcon";
+import { hapticTap } from "../../utils/haptics";
 
 interface StatusDropdownProps {
   options: string[];
@@ -45,7 +46,10 @@ function StatusDropdown({
       ref={dropdownRef}
       tabIndex={0}
       onClick={() => {
-        if (!disabled) setIsOpen((prev) => !prev);
+        if (!disabled) {
+          hapticTap();
+          setIsOpen((prev) => !prev);
+        }
       }}
       className={`relative ${badgeClassName} ${disabled ? "opacity-40" : "cursor-pointer group"} ${isOpen ? "z-50" : "z-20"}`}
     >

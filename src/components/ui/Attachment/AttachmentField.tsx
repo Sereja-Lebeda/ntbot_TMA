@@ -10,6 +10,7 @@ import FileCard from "./FileCard";
 import MobileFileCard from "./MobileFileCard";
 
 import PlusAttachIcon from "../../../icons/createTicket/PlusAttachIcon";
+import { hapticTap } from "../../../utils/haptics";
 
 interface AttachmentFieldProps {
   files: AttachedFile[];
@@ -58,6 +59,11 @@ function AttachmentField({
     setIsModalOpen(false);
   }
 
+  function openFilePicker() {
+    hapticTap();
+    refFileAttach.current?.click();
+  }
+
   return (
     <div className="w-full">
       <ConfirmModal
@@ -85,7 +91,7 @@ function AttachmentField({
         <div className="w-full">
           {/* Drag field */}
           <button
-            onClick={() => refFileAttach.current?.click()}
+            onClick={openFilePicker}
             className={`w-full h-32.5 px-4 py-2.5
           flex flex-col items-center justify-center gap-2.5
           border border-dashed border-(--bg-border)
@@ -119,7 +125,7 @@ function AttachmentField({
 
           {/* Button add attachment for MOBILE */}
           <button
-            onClick={() => refFileAttach.current?.click()}
+            onClick={openFilePicker}
             className={`w-full h-12
         flex items-center justify-center gap-1
         border border-dashed border-(--bg-border) rounded-xs
@@ -155,7 +161,7 @@ function AttachmentField({
             ))}
           {/* Button add another attachment */}
           <button
-            onClick={() => refFileAttach.current?.click()}
+            onClick={openFilePicker}
             className={`w-47 h-53
               flex items-center justify-center gap-1
           border border-dashed border-(--bg-border) rounded-xs

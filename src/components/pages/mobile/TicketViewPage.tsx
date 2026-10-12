@@ -25,6 +25,7 @@ import AttachmentIcon from "../../../icons/createTicket/AttachmentIcon";
 import MobileArrowIcon from "../../../icons/mobile/MobileArrowIcon";
 import useMediaQuery from "../../../hooks/useMediaQuery";
 import useEscButton from "../../../hooks/useEscButton";
+import { hapticTap } from "../../../utils/haptics";
 
 interface TicketViewPageProps {
   tickets: Ticket[];
@@ -158,6 +159,7 @@ function TicketViewPage() {
           <button
             className="cursor-pointer"
             onClick={() => {
+              hapticTap();
               navigate(-1);
             }}
           >

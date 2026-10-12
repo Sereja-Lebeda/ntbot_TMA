@@ -14,8 +14,9 @@ function CopyHintVectorIcon({ className }: CopyHintVectorProps) {
     >
       <path
         d="M6.56016 8.49907L6.43848 0.5L0.500014 4.5908L6.56016 8.49907Z"
-        fill="#201E1E"
-        stroke="#201E1E"
+        // fill="#201E1E"
+        fill={className}
+        stroke={className}
         strokeLinejoin="round"
       />
     </svg>

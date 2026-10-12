@@ -28,6 +28,10 @@ import EditIcon from "../icons/card/EditIcon";
 import RepeatIcon from "../icons/card/RepeatIcon";
 import TelegramIcon from "../icons/card/TelegramIcon";
 import FavoriteTicketIcon from "../icons/card/FavoriteTicketIcon";
+import hapticLongPress, {
+  hapticDestructiveThresholdCrossed,
+  hapticTap,
+} from "../utils/haptics";
 
 interface TicketCardWithActionsProps extends TicketCardProps {
   favoriteTickets: number[];
@@ -85,6 +89,7 @@ export default function TicketCard({
   const bind = useLongPress(
     () => {
       setExpandedTicketId(ticket.ticketId); // сработает через `threshold` мс удержания
+      hapticLongPress();
     },
     {
       threshold: 500, // сколько мс считать долгим нажатием
@@ -92,8 +97,10 @@ export default function TicketCard({
       detect: LongPressEventType.Pointer,
       onCancel: (event, meta) => {
         // сработает, если отпустили РАНЬШЕ threshold — то есть это был короткий тап
-        if (meta.reason === "cancelled-by-release")
+        if (meta.reason === "cancelled-by-release") {
+          hapticTap();
           handleOpenView(ticket.ticketId);
+        }
       },
     },
   );
@@ -103,6 +110,7 @@ export default function TicketCard({
   const startXRef = useRef(0);
   const startYRef = useRef(0);
   const directionRef = useRef<"horizontal" | "vertical" | null>(null);
+  const cancelThresholdPassedRef = useRef<boolean>(false);
 
   const cardRef = useRef<HTMLDivElement>(null);
   const startScrollTopRef = useRef(0);
@@ -264,6 +272,8 @@ export default function TicketCard({
 
   function handlePointerDown(e: React.PointerEvent) {
     // if (!permissions?.canCancel) return;
+    cancelThresholdPassedRef.current = false;
+    directionRef.current = null;
     if (!scrollContainerRef.current) return;
 
     startScrollTopRef.current = scrollContainerRef.current.scrollTop;
@@ -301,7 +311,16 @@ export default function TicketCard({
       // Базовая позиция — либо 0 (обычный случай), либо уже зафиксированное значение (если карточка была revealed)
       const basePosition =
         revealedTicketId === ticket.ticketId ? activateThreshold : 0;
-      setSwipeX(Math.min(0, Math.max(basePosition + deltaX, maxSwipe)));
+      const calcSwipeX = Math.min(0, Math.max(basePosition + deltaX, maxSwipe));
+      if (calcSwipeX <= cancelThreshold) {
+        if (!cancelThresholdPassedRef.current) {
+          cancelThresholdPassedRef.current = true;
+          hapticDestructiveThresholdCrossed();
+        }
+      } else {
+        cancelThresholdPassedRef.current = false;
+      }
+      setSwipeX(calcSwipeX);
     }
 
     if (directionRef.current === "vertical" && scrollContainerRef.current) {
@@ -322,6 +341,7 @@ export default function TicketCard({
       setSwipeX(0);
     }
     directionRef.current = null;
+    cancelThresholdPassedRef.current = false;
   }
 
   const longPressBind = isTouchDevice
@@ -414,6 +434,7 @@ export default function TicketCard({
                   ),
                 )
               }
+              onPointerDown={hapticTap}
             >
               <CheckIcon className="text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
               <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
@@ -431,6 +452,7 @@ export default function TicketCard({
                   ),
                 )
               }
+              onPointerDown={hapticTap}
             >
               <CrossIcon className="w-2.5 h-2.5 text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)" />
               <span className="font-bold leading-3 text-xs text-(--text-primary) group-hover:text-(--bg-primary) dark:text-(--bg-primary)">
@@ -500,6 +522,7 @@ export default function TicketCard({
             onClick={(e) => {
               e.stopPropagation();
               if (!permissions?.canCancel) return;
+              hapticTap();
               onRequestCancel(ticket.ticketId);
             }}
             onPointerDown={(e) => e.stopPropagation()}
@@ -810,7 +833,7 @@ touch-none
                 border border-(--bg-border)
                 z-30"
                 >
-                  {(getStatusIcon(ticket.status), true)}
+                  {/* {getStatusIcon(ticket.status, true)} */}
                 </div>
               )}
             </>

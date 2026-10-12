@@ -1,4 +1,5 @@
 import { btnPressAnimationStyle } from "../../../styles/pressAnimation";
+import { hapticTap } from "../../../utils/haptics";
 
 interface SearchMenuBtnProps {
   icon: React.ReactNode;
@@ -23,10 +24,17 @@ export default function SearchMenuBtn({
       ? "bg-(--bg-secondary)"
       : "bg-(--bg-inactive-btn)";
 
+  function handleClick() {
+    if (isActive) {
+      hapticTap();
+    }
+    onClick?.();
+  }
+
   return (
     <div
       onMouseDown={(e) => e.preventDefault()}
-      onClick={isBtnDisabled ? undefined : onClick}
+      onClick={isBtnDisabled ? undefined : handleClick}
       className={`w-10 h-10 flex justify-center items-center rounded-xs border border-(--bg-border) ${
         !isBtnDisabled && isActive
           ? `${bgClass} hover:border-(--border-hover-btn) select-none group ${className} ${btnPressAnimationStyle}`

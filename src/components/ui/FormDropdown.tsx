@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import ArrowIcon from "../../icons/filterblock/ArrowIcon";
+import { hapticTap } from "../../utils/haptics";
 
 interface FormDropownProps {
   options: string[];
@@ -38,7 +39,10 @@ function FormDropdown({
       ref={dropdownRef}
       tabIndex={0}
       onClick={() => {
-        if (!disabled) setIsOpen((prev) => !prev);
+        if (!disabled) {
+          setIsOpen((prev) => !prev);
+          hapticTap();
+        }
       }}
       className={`relative
     w-full h-10 flex flex-col justify-center items-start
@@ -72,8 +76,10 @@ function FormDropdown({
           {options.map((option) => (
             <div
               key={option}
-              onClick={() => onChange(option)}
-              className="w-full h-10 flex items-center justify-start px-6 py-2.5 font-consolas font-normal text-sm text-(--text-primary) leading-normal border border-(--bg-border) hover:bg-[#1B1B1B]"
+              onClick={() => {
+                onChange(option);
+              }}
+              className="w-full h-10 flex items-center justify-start px-6 py-2.5 font-consolas font-normal text-sm text-(--text-primary) leading-normal border border-(--bg-border) hover:bg-(--bg-inactive-btn) dark:hover:bg-[#1B1B1B]"
             >
               {option}
             </div>

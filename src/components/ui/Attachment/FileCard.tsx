@@ -4,6 +4,7 @@ import {
   hoverAnimationStyle,
 } from "../../../styles/pressAnimation";
 import { getFileIcon } from "../../../utils/getFileIcon";
+import { hapticTap } from "../../../utils/haptics";
 
 interface FileCardProps {
   name: string;
@@ -20,6 +21,11 @@ export default function FileCard({
   dateLabel,
   onDelete,
 }: FileCardProps) {
+  function handleDeleteClick() {
+    hapticTap();
+    onDelete?.();
+  }
+
   return (
     <div className="w-47 h-53 flex flex-col items-center border-[0.8px] border-(--bg-border) rounded-xs group shrink-0">
       <div className="relative w-full h-37.25 overflow-hidden rounded-xs flex justify-center items-center">
@@ -40,7 +46,7 @@ export default function FileCard({
         )}
         {onDelete && (
           <div
-            onClick={onDelete}
+            onClick={handleDeleteClick}
             className="absolute top-2 right-2 w-5 h-5 flex justify-center items-center bg-(--bg-secondary) border-[0.8px] border-(--bg-border) rounded-xs group/delete cursor-pointer"
           >
             <CrossIcon

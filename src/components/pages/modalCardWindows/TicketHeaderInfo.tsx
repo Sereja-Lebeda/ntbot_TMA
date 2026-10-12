@@ -13,6 +13,7 @@ import { textPressAnimationStyle } from "../../../styles/pressAnimation";
 import FavoriteTicketIcon from "../../../icons/card/FavoriteTicketIcon";
 import useMediaQuery from "../../../hooks/useMediaQuery";
 import useIsTablet from "../../../hooks/useIsTablet";
+import { hapticTap } from "../../../utils/haptics";
 
 interface TicketHeaderInfoProps {
   ticket: Ticket | undefined;
@@ -45,6 +46,7 @@ function TicketHeaderInfo({
   const displayStatus = currentStatus ?? ticket.status;
 
   function handleToggleFavorite(ticketId: number) {
+    hapticTap();
     if (favoriteTickets?.includes(ticketId)) {
       const newFavorite = favoriteTickets.filter((i) => i !== ticketId);
       setFavoriteTickets(newFavorite);
@@ -120,7 +122,7 @@ function TicketHeaderInfo({
           ) : null}
         </div>
       ) : (
-        <div className="w-full flex flex-col items-start gap-3 px-">
+        <div className="w-full flex flex-col items-start gap-3">
           {/* Ticket title */}
           <div className="w-full flex justify-start items-center gap-3">
             <span
@@ -137,6 +139,7 @@ function TicketHeaderInfo({
             <span
               onClick={() => {
                 navigator.clipboard.writeText(`${ticket.ticketId}`);
+                hapticTap();
               }}
               className={`${textPressAnimationStyle} cursor-pointer`}
             >
