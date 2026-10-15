@@ -30,8 +30,7 @@ function Infoblock({
 }: InfoblockProps) {
   const [copiedField, setCopiedField] = useState<"ip" | "pcName" | null>(null);
 
-  const { user: currentUser } = useUser();
-  if (!currentUser) return null;
+  const { user: currentUser, isLoading } = useUser();
 
   const allTickets = mockTicket;
 
@@ -64,7 +63,7 @@ function Infoblock({
   ];
   const ticketStatusOrder = allStatuses;
 
-  const currentUserId = currentUser.id;
+  const currentUserId = currentUser?.id;
   const filteredTicketQuantities = allTickets.filter((ticket) => {
     return ticketView === "my"
       ? ticket.userId === currentUserId
@@ -85,62 +84,82 @@ function Infoblock({
         {/* User Info */}
         <div className="xl:w-69 xl:flex xl:flex-col xl:justify-center xl:items-start xl:px-4 xl:py-6 xl:gap-3 xl:border xl:border-(--bg-border) xl:bg-(--bg-tertiary) xl:rounded-xs xl:select-none">
           {/* User name */}
-          <div className="xl:h-10 xl:w-full xl:flex xl:items-center xl:px-1 xl:border-b xl:border-(--bg-disable-btn)">
-            <span className="xl:font-jbmono xl:text-(--text-primary) xl:text-lg xl:font-bold xl:leading-5.5 xl:mb-6">
-              {currentUser.name}
+          {currentUser ? (
+            <>
+              <div className="xl:h-10 xl:w-full xl:flex xl:items-center xl:px-1 xl:border-b xl:border-(--bg-disable-btn)">
+                <span className="xl:font-jbmono xl:text-(--text-primary) xl:text-lg xl:font-bold xl:leading-5.5 xl:mb-6">
+                  {currentUser.name}
+                </span>
+              </div>
+              {/* User pc Info */}
+              <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-3.5">
+                {/* user ip  */}
+                <div
+                  onClick={() => {
+                    navigator.clipboard.writeText(currentUser.localIp);
+                    setCopiedField("ip");
+                    setTimeout(() => setCopiedField(null), 1000);
+                  }}
+                  className={`${baseStyle} cursor-pointer`}
+                >
+                  <IpIcon />
+                  <span className={`${textStyle} ${textPressAnimationStyle} `}>
+                    {currentUser.localIp}
+                  </span>
+                  <span className={`${copyHintIpAnimation}`}>
+                    <CopyHint />
+                  </span>
+                </div>
+                {/* pc name  */}
+                <div
+                  onClick={() => {
+                    navigator.clipboard.writeText(currentUser.pcName);
+                    setCopiedField("pcName");
+                    setTimeout(() => setCopiedField(null), 1000);
+                  }}
+                  className={`${baseStyle} cursor-pointer`}
+                >
+                  <div className="xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center">
+                    <PcIcon />
+                  </div>
+
+                  <span className={`${textStyle} ${textPressAnimationStyle}`}>
+                    {currentUser.pcName}
+                  </span>
+                  <span className={`${copyHintPcNameAnimation}`}>
+                    <CopyHint />
+                  </span>
+                </div>
+                {/* access date  */}
+                <div className={baseStyle}>
+                  <div className="xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center xl:dark:bg-[#A1FF6226] xl:bg-[#71C13B40] xl:rounded-xs">
+                    <AccessIcon className="xl:text-(--bg-task-complete) xl:dark:text-(--bg-btn-primary)" />
+                  </div>
+                  {/* //TODO: Add ternar for access  */}
+                  <span className={textStyle}>
+                    Доступ до {currentUser.remoteAccessDate}
+                  </span>
+                </div>
+              </div>
+            </>
+          ) : isLoading ? (
+            <span
+              className={`w-full h-full 
+                flex justify-center items-center
+              ${textStyle}`}
+            >
+              Загрузка...
             </span>
-          </div>
-
-          {/* User pc Info */}
-          <div className="xl:w-full xl:flex xl:flex-col xl:items-start xl:gap-3.5">
-            {/* user ip  */}
-            <div
-              onClick={() => {
-                navigator.clipboard.writeText(currentUser.localIp);
-                setCopiedField("ip");
-                setTimeout(() => setCopiedField(null), 1000);
-              }}
-              className={`${baseStyle} cursor-pointer`}
+          ) : (
+            <span
+              className={`w-full h-full 
+                flex justify-center items-center
+                font-extrabold! text-(--bg-task-error)!
+              ${textStyle}`}
             >
-              <IpIcon />
-              <span className={`${textStyle} ${textPressAnimationStyle} `}>
-                {currentUser.localIp}
-              </span>
-              <span className={`${copyHintIpAnimation}`}>
-                <CopyHint />
-              </span>
-            </div>
-            {/* pc name  */}
-            <div
-              onClick={() => {
-                navigator.clipboard.writeText(currentUser.pcName);
-                setCopiedField("pcName");
-                setTimeout(() => setCopiedField(null), 1000);
-              }}
-              className={`${baseStyle} cursor-pointer`}
-            >
-              <div className="xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center">
-                <PcIcon />
-              </div>
-
-              <span className={`${textStyle} ${textPressAnimationStyle}`}>
-                {currentUser.pcName}
-              </span>
-              <span className={`${copyHintPcNameAnimation}`}>
-                <CopyHint />
-              </span>
-            </div>
-            {/* access date  */}
-            <div className={baseStyle}>
-              <div className="xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center xl:dark:bg-[#A1FF6226] xl:bg-[#71C13B40] xl:rounded-xs">
-                <AccessIcon className="xl:text-(--bg-task-complete) xl:dark:text-(--bg-btn-primary)" />
-              </div>
-              {/* //TODO: Add ternar for access  */}
-              <span className={textStyle}>
-                Доступ до {currentUser.remoteAccessDate}
-              </span>
-            </div>
-          </div>
+              Не удалось загрузить данные
+            </span>
+          )}
         </div>
 
         {/* Status of tickets */}
