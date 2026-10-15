@@ -14,6 +14,8 @@ import Searchbar from "./ui/Searchbar";
 import { hoverAnimationStyle } from "../styles/pressAnimation";
 import type { Ticket, TicketViewType } from "../types/ticket.types";
 import TicketCard from "./TicketCard";
+import type { ListStateVariant } from "../types/listState.types";
+import ListStateMessage from "./ui/ListStateMessage";
 
 interface DesktopHeroSectorProps {
   tickets: Ticket[]; // уже отфильтрованный и отсортированный массив
@@ -47,6 +49,9 @@ interface DesktopHeroSectorProps {
   hasActiveFilters: boolean | undefined;
 
   isPrivilegeUser: boolean;
+
+  listState: ListStateVariant | null;
+  onRetry: () => void;
 }
 
 function DesktopHeroSector({
@@ -73,6 +78,8 @@ function DesktopHeroSector({
   handleRequestCancel,
   handleRequestEdit,
   handleRequestRepeat,
+  listState,
+  onRetry,
 }: DesktopHeroSectorProps) {
   return (
     <>
@@ -142,20 +149,24 @@ function DesktopHeroSector({
       </div>
 
       <div className="xl:overflow-y-auto xl:scrollbar-none xl:w-full xl:flex xl:flex-1 xl:flex-col xl:justify-start xl:items-center xl:gap-2 xl:select-none xl:p-1">
-        {tickets.map((ticket) => (
-          <TicketCard
-            key={ticket.ticketId}
-            ticket={ticket}
-            favoriteTickets={favoriteTickets}
-            setFavoriteTickets={setFavoriteTickets}
-            ticketView={ticketView}
-            setTickets={setTickets}
-            onRequestCancel={handleRequestCancel}
-            onRequestRepeat={handleRequestRepeat}
-            onRequestEdit={handleRequestEdit}
-            handleOpenView={handleOpenView}
-          />
-        ))}
+        {listState !== null ? (
+          <ListStateMessage variant={listState} onRetry={onRetry} />
+        ) : (
+          tickets.map((ticket) => (
+            <TicketCard
+              key={ticket.ticketId}
+              ticket={ticket}
+              favoriteTickets={favoriteTickets}
+              setFavoriteTickets={setFavoriteTickets}
+              ticketView={ticketView}
+              setTickets={setTickets}
+              onRequestCancel={handleRequestCancel}
+              onRequestRepeat={handleRequestRepeat}
+              onRequestEdit={handleRequestEdit}
+              handleOpenView={handleOpenView}
+            />
+          ))
+        )}
       </div>
     </>
   );

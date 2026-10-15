@@ -27,7 +27,7 @@ export default function Layout() {
   useIosEdgeSwipeBack();
   useTelegramBackButton();
 
-  const { tickets, setTickets } = useTickets();
+  const { tickets, setTickets, isLoading, error, reload } = useTickets();
 
   const { user: currentUser } = useUser();
 
@@ -343,6 +343,9 @@ export default function Layout() {
             handleOpenView,
             handleRepeatSubmit,
             handleEditSubmit,
+            isLoading,
+            error,
+            reload,
           }}
         />
       </div>

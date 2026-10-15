@@ -7,6 +7,11 @@ export default function useTickets() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  function reload() {
+    setReloadKey((k) => k + 1);
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -27,7 +32,7 @@ export default function useTickets() {
 
     load();
     return () => controller.abort();
-  }, []);
+  }, [reloadKey]);
 
-  return { tickets, setTickets, isLoading, error };
+  return { tickets, setTickets, isLoading, error, reload };
 }

@@ -15,6 +15,8 @@ import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 import MobilePlusIcon from "../icons/mobile/MobilePlusIcon";
 import React, { useEffect, useRef, useState } from "react";
 import { hapticTap } from "../utils/haptics";
+import type { ListStateVariant } from "../types/listState.types";
+import ListStateMessage from "./ui/ListStateMessage";
 
 interface MobileHeroSectorProps {
   tickets: Ticket[]; // уже отфильтрованный и отсортированный массив
@@ -31,6 +33,9 @@ interface MobileHeroSectorProps {
   handleRequestRepeat: (ticketId: number) => void;
   handleRequestEdit: (ticketId: number) => void;
   handleOpenView: (ticketId: number) => void;
+
+  listState: ListStateVariant | null;
+  onRetry: () => void;
 }
 
 function MobileHeroSector({
@@ -45,6 +50,8 @@ function MobileHeroSector({
   handleRequestCancel,
   handleRequestEdit,
   handleRequestRepeat,
+  listState,
+  onRetry,
 }: MobileHeroSectorProps) {
   const navigate = useNavigate();
 
@@ -209,27 +216,31 @@ function MobileHeroSector({
       flex flex-1 flex-col justify-start items-center
       gap-2 select-none px-2 py-2"
       >
-        {tickets.map((ticket) => (
-          <TicketCard
-            key={ticket.ticketId}
-            ticket={ticket}
-            favoriteTickets={favoriteTickets}
-            setFavoriteTickets={setFavoriteTickets}
-            ticketView={ticketView}
-            setTickets={setTickets}
-            onRequestCancel={handleRequestCancel}
-            onRequestRepeat={handleRequestRepeat}
-            onRequestEdit={handleRequestEdit}
-            handleOpenView={handleOpenView}
-            swipe={{
-              expandedTicketId,
-              setExpandedTicketId,
-              revealedTicketId,
-              setRevealedTicketId,
-              scrollContainerRef: listScrollRef,
-            }}
-          />
-        ))}
+        {listState !== null ? (
+          <ListStateMessage variant={listState} onRetry={onRetry} />
+        ) : (
+          tickets.map((ticket) => (
+            <TicketCard
+              key={ticket.ticketId}
+              ticket={ticket}
+              favoriteTickets={favoriteTickets}
+              setFavoriteTickets={setFavoriteTickets}
+              ticketView={ticketView}
+              setTickets={setTickets}
+              onRequestCancel={handleRequestCancel}
+              onRequestRepeat={handleRequestRepeat}
+              onRequestEdit={handleRequestEdit}
+              handleOpenView={handleOpenView}
+              swipe={{
+                expandedTicketId,
+                setExpandedTicketId,
+                revealedTicketId,
+                setRevealedTicketId,
+                scrollContainerRef: listScrollRef,
+              }}
+            />
+          ))
+        )}
         <button
           onClick={() => {
             hapticTap();

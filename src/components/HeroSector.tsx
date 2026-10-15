@@ -22,6 +22,7 @@ import MobileHeroSector from "./MobileHeroSector";
 
 import getStatusTitle from "../utils/ticketBadgeHelpers";
 import { allActions } from "../utils/allActions";
+import getListStateVariant from "../utils/getListStateVariant";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -89,6 +90,10 @@ interface OutletContextProps {
   ) => void;
 
   handleOpenView: (ticketId: number) => void;
+
+  isLoading: boolean;
+  error: Error | null;
+  reload: () => void;
 }
 
 export default function HeroSector({
@@ -114,7 +119,11 @@ export default function HeroSector({
   changePrioritySort,
   hasActiveFilters,
 }: selectedTicketStatusesProps) {
-  const { user: currentUser } = useUser();
+  const {
+    user: currentUser,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
   const {
@@ -131,7 +140,13 @@ export default function HeroSector({
     handleEditCancel,
     handleRepeatSubmit,
     handleEditSubmit,
+    isLoading: isTicketsLoading,
+    error: ticketsError,
+    reload,
   } = useOutletContext<OutletContextProps>();
+
+  const isLoading = isUserLoading || isTicketsLoading;
+  const error = ticketsError ?? userError;
 
   const { searchRequest, setSearchRequest } = useSearch();
 
@@ -155,8 +170,6 @@ export default function HeroSector({
 
   const navigate = useNavigate();
 
-  if (!currentUser) return null;
-
   const statusPriority = {
     New: 0,
     "In progress": 1,
@@ -166,7 +179,21 @@ export default function HeroSector({
     Complete: 5,
   };
 
-  const filteredTickets = tickets
+  // Filter tickets by role
+
+  const visibleTickets = currentUser
+    ? tickets.filter((ticket) => {
+        if (currentUser.role === "admin" && ticketView === "team") {
+          return true;
+        }
+        if (currentUser.role === "manager" && ticketView === "team") {
+          return ticket.department === currentUser.department;
+        }
+        return ticket.userId === currentUser.id;
+      })
+    : [];
+
+  const filteredTickets = visibleTickets
     // Filter by Searchbar
     .filter((ticket) => ticketMatchesSearch(ticket, searchRequest))
     // Filter by filter side layout
@@ -189,16 +216,6 @@ export default function HeroSector({
     .filter(
       (ticket) => !showFavorites || favoriteTickets.includes(ticket.ticketId),
     )
-    // Filter tickets by role
-    .filter((ticket) => {
-      if (currentUser.role === "admin" && ticketView === "team") {
-        return true;
-      }
-      if (currentUser.role === "manager" && ticketView === "team") {
-        return ticket.department === currentUser.department;
-      }
-      return ticket.userId === currentUser.id;
-    })
     .sort((a, b) =>
       sortOldToNew
         ? Date.parse(a.createDate.split(".").reverse().join("-")) -
@@ -217,6 +234,13 @@ export default function HeroSector({
       }
       return 0;
     });
+
+  const listState = getListStateVariant({
+    isLoading,
+    error,
+    ticketQuantity: visibleTickets.length,
+    filteredTicketQuantity: filteredTickets.length,
+  });
 
   function ticketMatchesSearch(ticket: Ticket, query: string): boolean {
     return [
@@ -322,6 +346,8 @@ export default function HeroSector({
           handleRequestCancel={handleRequestCancel}
           handleRequestEdit={handleRequestEdit}
           handleRequestRepeat={handleRequestRepeat}
+          listState={listState}
+          onRetry={reload}
         />
       ) : (
         <MobileHeroSector
@@ -342,6 +368,8 @@ export default function HeroSector({
           handleRequestRepeat={(ticketId: number) => {
             navigate(`/tickets/${ticketId}/repeat`);
           }}
+          listState={listState}
+          onRetry={reload}
         />
       )}
     </div>
