@@ -304,7 +304,7 @@ function TicketForm({
       label: string;
     }[] = [
       { value: "Low", icon: LowPriorityIcon, label: "Низкий" },
-      { value: "Medium", icon: MidPriorityIcon, label: "Средний" },
+      { value: "Normal", icon: MidPriorityIcon, label: "Средний" },
       { value: "High", icon: HighPriorityIcon, label: "Высокий" },
     ];
 

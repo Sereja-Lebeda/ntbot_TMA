@@ -220,11 +220,13 @@ function MobileHeroSector({
             onRequestRepeat={handleRequestRepeat}
             onRequestEdit={handleRequestEdit}
             handleOpenView={handleOpenView}
-            expandedTicketId={expandedTicketId}
-            setExpandedTicketId={setExpandedTicketId}
-            revealedTicketId={revealedTicketId}
-            setRevealedTicketId={setRevealedTicketId}
-            scrollContainerRef={listScrollRef}
+            swipe={{
+              expandedTicketId,
+              setExpandedTicketId,
+              revealedTicketId,
+              setRevealedTicketId,
+              scrollContainerRef: listScrollRef,
+            }}
           />
         ))}
         <button

@@ -42,11 +42,13 @@ interface TicketCardWithActionsProps extends TicketCardProps {
   onRequestRepeat: (ticketId: number) => void;
   onRequestEdit: (ticketId: number) => void;
   handleOpenView: (ticketId: number) => void;
-  expandedTicketId: number | null;
-  setExpandedTicketId: (ticketId: number | null) => void;
-  revealedTicketId: number | null;
-  setRevealedTicketId: (ticketId: number | null) => void;
-  scrollContainerRef: React.RefObject<HTMLDivElement | null>;
+  swipe?: {
+    expandedTicketId: number | null;
+    setExpandedTicketId: (ticketId: number | null) => void;
+    revealedTicketId: number | null;
+    setRevealedTicketId: (ticketId: number | null) => void;
+    scrollContainerRef: React.RefObject<HTMLDivElement | null>;
+  };
 }
 
 type actionRegistryType =
@@ -75,27 +77,26 @@ export default function TicketCard({
   onRequestRepeat,
   onRequestEdit,
   handleOpenView,
-  expandedTicketId,
-  setExpandedTicketId,
-  revealedTicketId,
-  setRevealedTicketId,
-  scrollContainerRef,
+  swipe,
 }: TicketCardWithActionsProps) {
   const currentUser = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
   const isTouchDevice = useMediaQuery("(pointer: coarse)");
 
+  const expandedTicketId = swipe?.expandedTicketId ?? null;
+  const revealedTicketId = swipe?.revealedTicketId ?? null;
+
   // Long press for dropdown in mobile ver
   const bind = useLongPress(
     () => {
-      setExpandedTicketId(ticket.ticketId); // сработает через `threshold` мс удержания
+      swipe?.setExpandedTicketId(ticket.ticketId); // сработает через `threshold` мс удержания
       hapticLongPress();
     },
     {
       threshold: 500, // сколько мс считать долгим нажатием
       cancelOnMovement: 15, // если палец сдвинулся больше 15px — это свайп, не долгое нажатие; отменяем
       detect: LongPressEventType.Pointer,
-      onCancel: (event, meta) => {
+      onCancel: (_event, meta) => {
         // сработает, если отпустили РАНЬШЕ threshold — то есть это был короткий тап
         if (meta.reason === "cancelled-by-release") {
           hapticTap();
@@ -131,7 +132,7 @@ export default function TicketCard({
 
     function handleClickOutside(e: MouseEvent | TouchEvent) {
       if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-        setRevealedTicketId(null);
+        swipe?.setRevealedTicketId(null);
         setSwipeX(0);
       }
     }
@@ -150,7 +151,7 @@ export default function TicketCard({
     if (!permissions?.canCancel && swipeX !== 0) {
       setSwipeX(0);
       if (revealedTicketId === ticket.ticketId) {
-        setRevealedTicketId(null);
+        swipe?.setRevealedTicketId(null);
       }
       directionRef.current = null;
     }
@@ -163,7 +164,7 @@ export default function TicketCard({
 
     function handleClickOutsideExpand(e: MouseEvent | TouchEvent) {
       if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-        setExpandedTicketId(null);
+        swipe?.setExpandedTicketId(null);
       }
     }
 
@@ -217,13 +218,13 @@ export default function TicketCard({
     }
 
     setMenuPosition({ x, y });
-    setExpandedTicketId(ticket.ticketId);
+    swipe?.setExpandedTicketId(ticket.ticketId);
   };
 
   const handleOutsideClickPC = (e: MouseEvent) => {
     // console.log("outside click");
     if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-      setExpandedTicketId(null);
+      swipe?.setExpandedTicketId(null);
     }
   };
 
@@ -274,9 +275,9 @@ export default function TicketCard({
     // if (!permissions?.canCancel) return;
     cancelThresholdPassedRef.current = false;
     directionRef.current = null;
-    if (!scrollContainerRef.current) return;
-
-    startScrollTopRef.current = scrollContainerRef.current.scrollTop;
+    const scrollEl = swipe?.scrollContainerRef.current;
+    if (!scrollEl) return;
+    startScrollTopRef.current = scrollEl.scrollTop;
 
     startXRef.current = e.clientX;
     startYRef.current = e.clientY;
@@ -284,7 +285,7 @@ export default function TicketCard({
 
     // Если это ДРУГАЯ карточка — сбрасываем её на 0, эта не должна была быть зафиксирована
     if (ticket.ticketId !== revealedTicketId) {
-      setRevealedTicketId(null);
+      swipe?.setRevealedTicketId(null);
     }
   }
 
@@ -323,8 +324,9 @@ export default function TicketCard({
       setSwipeX(calcSwipeX);
     }
 
-    if (directionRef.current === "vertical" && scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = startScrollTopRef.current - deltaY;
+    const scrollEl = swipe?.scrollContainerRef.current;
+    if (directionRef.current === "vertical" && scrollEl) {
+      scrollEl.scrollTop = startScrollTopRef.current - deltaY;
     }
   }
 
@@ -332,7 +334,7 @@ export default function TicketCard({
     if (swipeX > revealThreshold) {
       setSwipeX(0);
     } else if (swipeX > cancelThreshold) {
-      setRevealedTicketId(ticket.ticketId);
+      swipe?.setRevealedTicketId(ticket.ticketId);
       setSwipeX(activateThreshold);
     } else {
       if (permissions?.canCancel) {
@@ -348,19 +350,21 @@ export default function TicketCard({
     ? bind()
     : ({} as ReturnType<typeof bind>);
 
+  const swipeEnabled = isTouchDevice && !!swipe;
+
   function combinedPointerDown(e: React.PointerEvent) {
     longPressBind.onPointerDown?.(e);
-    if (isTouchDevice) handlePointerDown(e);
+    if (swipeEnabled) handlePointerDown(e);
   }
 
   function combinedPointerMove(e: React.PointerEvent) {
     longPressBind.onPointerMove?.(e);
-    if (isTouchDevice) handlePointerMove(e);
+    if (swipeEnabled) handlePointerMove(e);
   }
 
   function combinedPointerUp(e: React.PointerEvent) {
     longPressBind.onPointerUp?.(e);
-    if (isTouchDevice) handlePointerUp();
+    if (swipeEnabled) handlePointerUp();
   }
 
   const actionRegistry = {

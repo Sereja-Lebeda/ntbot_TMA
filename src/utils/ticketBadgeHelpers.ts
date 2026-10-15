@@ -68,7 +68,7 @@ export function getPriorityTitle(priority: PriorityLevel) {
   switch (priority) {
     case "Low":
       return "НИЗКИЙ";
-    case "Medium":
+    case "Normal":
       return "СРЕДНИЙ";
     case "High":
       return "ВЫСОКИЙ";

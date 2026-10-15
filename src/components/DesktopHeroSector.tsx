@@ -137,7 +137,6 @@ function DesktopHeroSector({
               resetFilters();
             }}
             isActive={hasActiveFilters}
-            inactiveClassName="xl:bg-(--bg-border) xl:dark:bg-(--bg-inactive-btn)"
           />
         </div>
       </div>

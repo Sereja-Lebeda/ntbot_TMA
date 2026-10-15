@@ -1,6 +1,6 @@
 export type CurrentStepType = 1 | 2 | 3 | 4;
 
-export type PriorityLevel = "Low" | "Medium" | "High" | null;
+export type PriorityLevel = "Low" | "Normal" | "High" | null;
 
 export type CategoryName =
   | "Доступы и коммуникация"
