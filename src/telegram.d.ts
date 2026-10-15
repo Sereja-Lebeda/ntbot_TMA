@@ -20,6 +20,7 @@ interface HapticFeedback {
 }
 
 interface TelegramWebApp {
+  initData: string;
   colorScheme: "light" | "dark";
   version: string;
   platform: string;

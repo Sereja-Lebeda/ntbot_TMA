@@ -8,5 +8,11 @@ export default defineConfig({
   server: {
     port: 1920,
     host: true,
+    proxy: {
+      "/api": {
+        target: "https://newtechbot.ru",
+        changeOrigin: true,
+      },
+    },
   },
 });
