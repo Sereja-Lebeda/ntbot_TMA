@@ -21,11 +21,13 @@ import ConfirmModal from "../pages/modalCardWindows/ConfirmModal";
 
 import getTicketDescription from "../../utils/getTicketDescription";
 
-import mockData from "../../../mockTicketInfo.json";
+import useTickets from "../../hooks/useTickets";
 
 export default function Layout() {
   useIosEdgeSwipeBack();
   useTelegramBackButton();
+
+  const { tickets, setTickets } = useTickets();
 
   const currentUser = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
@@ -75,10 +77,6 @@ export default function Layout() {
 
   const [filter, setFilter] = useState<string | null>("Статус"); // какой дроп открыт
 
-  // Modal states
-  const [tickets, setTickets] = useState<Ticket[]>(
-    mockData as unknown as Ticket[],
-  );
   const [activeModal, setActiveModal] = useState<ModalTypes>(null);
   function handleRequestCancel(ticketId: number) {
     setActiveModal({ type: "cancel", ticketId });

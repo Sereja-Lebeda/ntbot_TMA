@@ -1,0 +1,33 @@
+import { useEffect, useState } from "react";
+import type { Ticket } from "../types/ticket.types";
+import { getTicketList } from "../api/requests";
+import { isAbortError } from "../api/client";
+
+export default function useTickets() {
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function load() {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const list = await getTicketList(controller.signal);
+        setTickets(list);
+      } catch (e) {
+        if (isAbortError(e)) return;
+        setError(e instanceof Error ? e : new Error(String(e)));
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false);
+      }
+    }
+
+    load();
+    return () => controller.abort();
+  }, []);
+
+  return { tickets, setTickets, isLoading, error };
+}
