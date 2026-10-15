@@ -67,7 +67,7 @@
       "sections": ["Финансы", "HR"]
     },
     "status": "Complete",
-    "priority": "Medium",
+    "priority": "Normal",
     "breadcrumbs": [
       "Доступы и коммуникация",
       "Папки и файлы",
@@ -113,7 +113,7 @@
       "urls": ["https://example.com/source1", "https://example.com/source2"]
     },
     "status": "Closed",
-    "priority": "Medium",
+    "priority": "Normal",
     "breadcrumbs": ["NTMincer", "Парсинг", "Парсинг Мой дом"],
     "attachedFiles": [],
     "department": "Разметка",
@@ -292,7 +292,7 @@
       "sections": ["Общее"]
     },
     "status": "New",
-    "priority": "Medium",
+    "priority": "Normal",
     "breadcrumbs": [
       "Доступы и коммуникация",
       "Папки и файлы",
