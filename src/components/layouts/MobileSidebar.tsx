@@ -121,7 +121,7 @@ function MobileSidebar({
     }
   }, [isAnimatingIn]);
 
-  const currentUser = useUser();
+  const { user: currentUser } = useUser();
 
   const [copiedField, setCopiedField] = useState<"ip" | "pcName" | null>(null);
 

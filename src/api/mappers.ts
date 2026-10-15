@@ -1,6 +1,7 @@
 import type { PriorityLevel } from "../types/createTicket.type";
 import type { StatusType, Ticket } from "../types/ticket.types";
-import type { CategoryDto, TicketDto } from "./api.types";
+import type { UserRole, UserType } from "../types/user.types";
+import type { CategoryDto, TicketDto, UserDto } from "./api.types";
 
 const STATUS_MAP: Record<string, StatusType> = {
   todo: "New",
@@ -16,6 +17,13 @@ const PRIORITY_MAP: Record<string, PriorityLevel> = {
   low: "Low",
   normal: "Normal",
   high: "High",
+};
+
+//todo: change base to employee after backend will do it
+const ROLE_MAP: Record<string, UserRole> = {
+  base: "employee",
+  manager: "manager",
+  admin: "admin",
 };
 
 function normalizeKey(raw: string): string {
@@ -78,4 +86,26 @@ export function mapTicket(
     department: "",
     userName: "",
   };
+}
+
+export function mapRole(raw: string): UserRole {
+  const role = ROLE_MAP[normalizeKey(raw)];
+  if (!role) {
+    console.warn("Unknown role role from backend:", raw);
+    return "employee";
+  }
+  return role;
+}
+
+export function mapUser(dto: UserDto): UserType {
+  const user = {
+    id: dto.id,
+    name: dto.name,
+    role: mapRole(dto.role),
+    department: "",
+    localIp: "",
+    pcName: "",
+    remoteAccessDate: "",
+  };
+  return user;
 }

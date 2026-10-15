@@ -79,7 +79,8 @@ export default function TicketCard({
   handleOpenView,
   swipe,
 }: TicketCardWithActionsProps) {
-  const currentUser = useUser();
+  const { user: currentUser } = useUser();
+
   const isDesktop = useMediaQuery("(min-width: 1280px)");
   const isTouchDevice = useMediaQuery("(pointer: coarse)");
 

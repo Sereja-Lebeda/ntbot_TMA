@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import type { UserType } from "../types/user.types";
 import type { StatusType, Ticket } from "../types/ticket.types";
 import { textPressAnimationStyle } from "../styles/pressAnimation";
 
@@ -8,7 +7,6 @@ import handleStatusSelect from "../utils/statusSelectedHelper";
 import getTicketQuantity from "../utils/getTicketQuantity";
 import getStatusTitle, { allStatuses } from "../utils/ticketBadgeHelpers";
 
-import mockUser from "../../mockUserInfo.json";
 import mockTicket from "../../mockTicketInfo.json";
 import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
@@ -17,6 +15,7 @@ import SupportButtons from "./ui/Buttons/SupportButtons";
 import IpIcon from "../icons/infoblock/IpIcon";
 import PcIcon from "../icons/infoblock/PcIcon";
 import AccessIcon from "../icons/infoblock/AccessIcon";
+import useUser from "../hooks/useUser";
 
 interface InfoblockProps {
   ticketStatuses: string[];
@@ -31,7 +30,9 @@ function Infoblock({
 }: InfoblockProps) {
   const [copiedField, setCopiedField] = useState<"ip" | "pcName" | null>(null);
 
-  const mockUserInfo = mockUser as UserType;
+  const { user: currentUser } = useUser();
+  if (!currentUser) return null;
+
   const allTickets = mockTicket;
 
   const baseStyle = "xl:w-full xl:flex xl:items-center xl:px-0.5 xl:gap-2";
@@ -63,7 +64,7 @@ function Infoblock({
   ];
   const ticketStatusOrder = allStatuses;
 
-  const currentUserId = mockUserInfo.id;
+  const currentUserId = currentUser.id;
   const filteredTicketQuantities = allTickets.filter((ticket) => {
     return ticketView === "my"
       ? ticket.userId === currentUserId
@@ -86,7 +87,7 @@ function Infoblock({
           {/* User name */}
           <div className="xl:h-10 xl:w-full xl:flex xl:items-center xl:px-1 xl:border-b xl:border-(--bg-disable-btn)">
             <span className="xl:font-jbmono xl:text-(--text-primary) xl:text-lg xl:font-bold xl:leading-5.5 xl:mb-6">
-              {mockUserInfo.name}
+              {currentUser.name}
             </span>
           </div>
 
@@ -95,7 +96,7 @@ function Infoblock({
             {/* user ip  */}
             <div
               onClick={() => {
-                navigator.clipboard.writeText(mockUserInfo.localIp);
+                navigator.clipboard.writeText(currentUser.localIp);
                 setCopiedField("ip");
                 setTimeout(() => setCopiedField(null), 1000);
               }}
@@ -103,7 +104,7 @@ function Infoblock({
             >
               <IpIcon />
               <span className={`${textStyle} ${textPressAnimationStyle} `}>
-                {mockUserInfo.localIp}
+                {currentUser.localIp}
               </span>
               <span className={`${copyHintIpAnimation}`}>
                 <CopyHint />
@@ -112,7 +113,7 @@ function Infoblock({
             {/* pc name  */}
             <div
               onClick={() => {
-                navigator.clipboard.writeText(mockUserInfo.pcName);
+                navigator.clipboard.writeText(currentUser.pcName);
                 setCopiedField("pcName");
                 setTimeout(() => setCopiedField(null), 1000);
               }}
@@ -123,7 +124,7 @@ function Infoblock({
               </div>
 
               <span className={`${textStyle} ${textPressAnimationStyle}`}>
-                {mockUserInfo.pcName}
+                {currentUser.pcName}
               </span>
               <span className={`${copyHintPcNameAnimation}`}>
                 <CopyHint />
@@ -136,7 +137,7 @@ function Infoblock({
               </div>
               {/* //TODO: Add ternar for access  */}
               <span className={textStyle}>
-                Доступ до {mockUserInfo.remoteAccessDate}
+                Доступ до {currentUser.remoteAccessDate}
               </span>
             </div>
           </div>

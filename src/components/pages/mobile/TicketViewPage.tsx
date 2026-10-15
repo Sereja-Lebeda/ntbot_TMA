@@ -51,7 +51,8 @@ function TicketViewPage() {
     setActiveModal,
   } = useOutletContext<TicketViewPageProps>();
 
-  const currentUser = useUser();
+  const { user: currentUser } = useUser();
+
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
   const { ticket: viewedTicket, action: viewedAction } = useTicketAndAction({

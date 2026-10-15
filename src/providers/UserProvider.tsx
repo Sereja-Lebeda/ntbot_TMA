@@ -1,12 +1,11 @@
 import { UserContext } from "../context/UserContext";
-import type { UserType } from "../types/user.types";
-import mockUserInfo from "../../mockUserInfo.json";
+import useUserLoader from "../hooks/useUserLoader";
 
 function UserProvider({ children }: { children: React.ReactNode }) {
-  const currentUser = mockUserInfo as UserType;
+  const userState = useUserLoader();
 
   return (
-    <UserContext.Provider value={currentUser}>{children}</UserContext.Provider>
+    <UserContext.Provider value={userState}>{children}</UserContext.Provider>
   );
 }
 

@@ -110,7 +110,8 @@ function MobileHeroSector({
   const [expandedTicketId, setExpandedTicketId] = useState<number | null>(null);
   const [revealedTicketId, setRevealedTicketId] = useState<number | null>(null);
 
-  const currentUserId = useUser()?.id;
+  const { user } = useUser();
+  const currentUserId = user?.id;
   const allTickets = mockTicket;
 
   const ticketStatusOrder = allStatuses;

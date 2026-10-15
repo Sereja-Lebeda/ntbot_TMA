@@ -29,7 +29,8 @@ export default function Layout() {
 
   const { tickets, setTickets } = useTickets();
 
-  const currentUser = useUser();
+  const { user: currentUser } = useUser();
+
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
   const [shouldSidebarRender, setShouldSidebarRender] = useState(false);

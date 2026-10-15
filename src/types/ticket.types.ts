@@ -4,7 +4,8 @@ export interface Ticket {
   userId: number;
   title: string;
   ticketId: number;
-  createDate: string; // TODO: change this to UNIX createStamp
+  createDate: string; // NOTE: string for frontend
+  createStamp: number; // NOTE: number from backend to transform in milliseconds
   actionId: number;
   body: Record<string, string>;
   description: string;

@@ -9,3 +9,9 @@ export interface UserType {
   pcName: string;
   remoteAccessDate: string;
 }
+
+export interface UserContextValue {
+  user: UserType | null;
+  isLoading: boolean;
+  error: Error | null;
+}

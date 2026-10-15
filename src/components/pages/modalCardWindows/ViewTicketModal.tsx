@@ -51,7 +51,8 @@ function ViewTicketModal({
   useLockBodyScroll();
   useModalStackEntry(onClose);
 
-  const currentUser = useUser();
+  const { user: currentUser } = useUser();
+
   const isDesktop = useMediaQuery("(min-width:1280px)");
   const isNarrow = useMediaQuery("(min-width: 700px)");
 

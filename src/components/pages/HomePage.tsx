@@ -40,8 +40,6 @@ interface OutletContextProps {
 }
 
 export default function HomePage() {
-  useUser();
-
   const {
     selectedStatuses,
     setSelectedStatuses,
@@ -68,7 +66,8 @@ export default function HomePage() {
   } = useOutletContext<OutletContextProps>();
   const isDesktop = useMediaQuery("(min-width:1280px)");
 
-  const currentUser = useUser();
+  const { user: currentUser } = useUser();
+
   const isPrivilegeUser =
     currentUser?.role === "admin" || currentUser?.role === "manager";
 
