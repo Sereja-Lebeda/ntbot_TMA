@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-
+import { useLocation } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import useLockBodyScroll from "../../hooks/useLockBodyScroll";
 import useModalStackEntry from "../../hooks/useModalStackEntry";
@@ -12,7 +12,8 @@ import {
   type TicketViewType,
 } from "../../types/ticket.types";
 
-import { mock } from "../SortFilterBlock";
+import { hapticTap } from "../../utils/haptics";
+import getFilterOptions from "../../utils/getFilterOptions";
 
 import CopyHint from "../ui/CopyHint";
 import SearchMenuBtn from "../ui/Buttons/SearchMenuBtn";
@@ -35,8 +36,6 @@ import PrioritySortIcon from "../../icons/searchmenu/PrioritySortIcon";
 import TimeSortActiveIcon from "../../icons/searchmenu/TimeSortActiveIcon";
 import TimeSortIcon from "../../icons/searchmenu/TimeSortIcon";
 import UserIcon from "../../icons/searchmenu/UserIcon";
-import { useLocation } from "react-router";
-import { hapticTap } from "../../utils/haptics";
 
 interface MobileSidebarProps {
   closeSidebar: () => void;
@@ -70,6 +69,8 @@ interface MobileSidebarProps {
   changeFilter: (status: string) => void;
 
   isPrivilegeUser: boolean;
+
+  visibleTickets: Ticket[];
 }
 
 function MobileSidebar({
@@ -97,6 +98,7 @@ function MobileSidebar({
   hasActiveFilters,
   changeFilter,
   isPrivilegeUser,
+  visibleTickets,
 }: MobileSidebarProps) {
   useLockBodyScroll();
   useModalStackEntry(closeSidebar);
@@ -149,23 +151,8 @@ function MobileSidebar({
     "font-consolas text-sm font-normal text-(--text-secondary) select-none";
 
   const statuses = StatusesOfTicket;
-  // TODO: pull categories from backend
-  const categories = [
-    "Все",
-    ...new Set(mock.map((ticket: Ticket) => ticket.breadcrumbs[0])),
-  ];
-
-  // TODO: pull names from backend
-  const usernames = [
-    "Все",
-    ...new Set(mock.map((ticket: Ticket) => ticket.userName)),
-  ];
-
-  // TODO: pull departments from backend
-  const departments = [
-    "Все",
-    ...new Set(mock.map((ticket: Ticket) => ticket.department)),
-  ];
+  const { categories, departments, usernames } =
+    getFilterOptions(visibleTickets);
 
   function handleBackdropPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     if (e.target === e.currentTarget) {

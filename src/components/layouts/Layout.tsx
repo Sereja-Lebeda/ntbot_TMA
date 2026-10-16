@@ -302,6 +302,7 @@ export default function Layout() {
           isPrivilegeUser={isPrivilegeUser}
           changeFilter={changeFilter}
           filter={filter}
+          visibleTickets={visibleTickets}
         />
       )}
       <ConfirmModal

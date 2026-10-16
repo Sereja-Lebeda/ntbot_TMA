@@ -1,11 +1,11 @@
-import DropdownList from "./ui/DropdownList";
-import mockData from "../../mockTicketInfo.json";
+import { useOutletContext } from "react-router";
 import {
   StatusesOfTicket,
   type Ticket,
   type TicketViewType,
 } from "../types/ticket.types";
-import { useOutletContext } from "react-router";
+import getFilterOptions from "../utils/getFilterOptions";
+import DropdownList from "./ui/DropdownList";
 
 export interface OpenDropdownFilterProps {
   openDropdownFilter: string | null;
@@ -24,9 +24,8 @@ export interface OpenDropdownFilterProps {
 
 interface OutletContextProps {
   changeFilter: (status: string) => void;
+  visibleTickets: Ticket[];
 }
-
-export const mock = mockData as unknown as Ticket[];
 
 function SortFilterBlock({
   openDropdownFilter,
@@ -41,37 +40,13 @@ function SortFilterBlock({
   isPrivilegeUser,
   ticketView,
 }: OpenDropdownFilterProps) {
-  const { changeFilter } = useOutletContext<OutletContextProps>();
+  const { changeFilter, visibleTickets } =
+    useOutletContext<OutletContextProps>();
 
   const statuses = StatusesOfTicket;
 
-  // TODO: pull categories from backend
-  const categories = [
-    "Все",
-    ...new Set(mock.map((ticket: Ticket) => ticket.breadcrumbs[0])),
-  ];
-
-  // TODO: pull names from backend
-  const usernames = [
-    "Все",
-    ...new Set(mock.map((ticket: Ticket) => ticket.userName)),
-  ];
-
-  // TODO: pull departments from backend
-  const departments = [
-    "Все",
-    ...new Set(mock.map((ticket: Ticket) => ticket.department)),
-  ];
-
-  // function changeFilter(name: string) {
-  //   if (openDropdownFilter === name) {
-  //     setOpenDropdownFilter(null);
-  //   } else {
-  //     if (name !== "Статус") setTicketStatuses(["Все"]);
-  //     if (name !== "Категории") setTicketCategories(["Все"]);
-  //     setOpenDropdownFilter(name);
-  //   }
-  // }
+  const { categories, departments, usernames } =
+    getFilterOptions(visibleTickets);
 
   return (
     // TODO: delete shrink 0 for adaptive interface?

@@ -1,5 +1,4 @@
 import type { Action, PriorityLevel, Field } from "../types/createTicket.type";
-import mockUserInfo from "../../mockUserInfo.json";
 
 import { validateSingleField } from "../utils/validateForm";
 
@@ -17,6 +16,7 @@ import MidPriorityIcon from "../icons/createTicket/MidPriorityIcon";
 import HighPriorityIcon from "../icons/createTicket/HighPriorityIcon";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { hapticTap } from "../utils/haptics";
+import useUser from "../hooks/useUser";
 
 interface TicketFormProps {
   selectedAction: Action | null;
@@ -44,6 +44,7 @@ function TicketForm({
   setFieldError,
 }: TicketFormProps) {
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const { user: currentUser } = useUser();
 
   if (!selectedAction) {
     return (
@@ -53,7 +54,7 @@ function TicketForm({
     );
   }
 
-  const userFullName = mockUserInfo.name;
+  const userFullName = currentUser?.name ?? "";
 
   const defaultInputStyle = `w-full h-10 flex items-center px-4 py-2.5
     border border-(--bg-border)
