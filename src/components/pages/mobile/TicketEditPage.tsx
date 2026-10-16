@@ -28,6 +28,16 @@ import FloppydiskIcon from "../../../icons/FloppydiskIcon";
 import useEscButton from "../../../hooks/useEscButton";
 import CancelFormButton from "../../ui/Buttons/CancelFormButton";
 import { hapticTap } from "../../../utils/haptics";
+import getTicketPageState from "../../../utils/getTicketPageState";
+import ListStateMessage from "../../ui/ListStateMessage";
+
+interface TicketEditFormProps {
+  ticket: Ticket;
+  action: Action;
+  favoriteTickets: number[];
+  setFavoriteTickets: (id: number[]) => void;
+  handleEditSubmit: OutletContextProps["handleEditSubmit"];
+}
 
 interface OutletContextProps {
   tickets: Ticket[];
@@ -44,26 +54,23 @@ interface OutletContextProps {
     },
     editTicket: Ticket | undefined,
   ): void;
+  isLoading: boolean;
+  error: Error | null;
+  reload: () => void;
 }
 
-function TicketEditPage() {
+function TicketEditForm({
+  ticket: editedTicket,
+  action: editedAction,
+  favoriteTickets,
+  setFavoriteTickets,
+  handleEditSubmit,
+}: TicketEditFormProps) {
   const { user: currentUser } = useUser();
 
   const navigate = useNavigate();
   // const isDesktop = useMediaQuery("(min-width: 1280px)");
   const isMobile = useMediaQuery("(max-width: 500px)");
-
-  const params = useParams<{ ticketId: string }>();
-  const ticketId = Number(params.ticketId);
-
-  const { tickets, favoriteTickets, setFavoriteTickets, handleEditSubmit } =
-    useOutletContext<OutletContextProps>();
-
-  const { ticket: editedTicket, action: editedAction } = useTicketAndAction({
-    ticketId,
-    tickets,
-    allActions,
-  });
 
   function onClose() {
     return navigate(-1);
@@ -113,7 +120,7 @@ function TicketEditPage() {
 
   useEscButton(handleCloseAttempt);
 
-  if (!currentUser || !editedTicket || !editedAction) return null;
+  if (!currentUser) return null;
   const permissions = getTicketPermissions(editedTicket, currentUser);
 
   // permissions.canEdit = false;
@@ -286,6 +293,44 @@ function TicketEditPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function TicketEditPage() {
+  const params = useParams<{ ticketId: string }>();
+  const ticketId = Number(params.ticketId);
+
+  const {
+    tickets,
+    favoriteTickets,
+    setFavoriteTickets,
+    handleEditSubmit,
+    isLoading,
+    error,
+    reload,
+  } = useOutletContext<OutletContextProps>();
+
+  const { ticket, action } = useTicketAndAction({
+    ticketId,
+    tickets,
+    allActions,
+  });
+
+  const pageState = getTicketPageState({ isLoading, error, ticket });
+  if (pageState) {
+    return <ListStateMessage variant={pageState} onRetry={reload} />;
+  }
+  if (!ticket || !action) return null;
+
+  return (
+    <TicketEditForm
+      key={ticket.ticketId}
+      ticket={ticket}
+      action={action}
+      favoriteTickets={favoriteTickets}
+      setFavoriteTickets={setFavoriteTickets}
+      handleEditSubmit={handleEditSubmit}
+    />
   );
 }
 
