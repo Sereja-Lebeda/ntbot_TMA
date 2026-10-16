@@ -26,6 +26,8 @@ import MobileArrowIcon from "../../../icons/mobile/MobileArrowIcon";
 import useMediaQuery from "../../../hooks/useMediaQuery";
 import useEscButton from "../../../hooks/useEscButton";
 import { hapticTap } from "../../../utils/haptics";
+import ListStateMessage from "../../ui/ListStateMessage";
+import getTicketPageState from "../../../utils/getTicketPageState";
 
 interface TicketViewPageProps {
   tickets: Ticket[];
@@ -34,6 +36,10 @@ interface TicketViewPageProps {
 
   handleStatusChange: (ticketId: number, status: StatusType) => void;
   setActiveModal: React.Dispatch<React.SetStateAction<ModalTypes>>;
+
+  isLoading: boolean;
+  error: Error | null;
+  reload: () => void;
 }
 
 function TicketViewPage() {
@@ -49,6 +55,9 @@ function TicketViewPage() {
     setFavoriteTickets,
     handleStatusChange,
     setActiveModal,
+    isLoading,
+    error,
+    reload,
   } = useOutletContext<TicketViewPageProps>();
 
   const { user: currentUser } = useUser();
@@ -60,6 +69,16 @@ function TicketViewPage() {
     tickets,
     allActions,
   });
+
+  const pageState = getTicketPageState({
+    isLoading,
+    error,
+    ticket: viewedTicket,
+  });
+
+  if (pageState) {
+    return <ListStateMessage variant={pageState} onRetry={reload} />;
+  }
 
   if (!currentUser || !viewedTicket || !viewedAction) return null;
 

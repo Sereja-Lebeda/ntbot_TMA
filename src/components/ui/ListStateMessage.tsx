@@ -16,6 +16,7 @@ const STATE_MAP: Record<ListStateVariant, string> = {
   unauthorized: "Сессия истекла, откройте приложение заново",
   empty: "У вас пока нет заявок",
   emptyFiltered: "По выбранным фильтрам ничего не найдено",
+  notFound: "Заявка не найдена или недоступна",
 };
 
 function ListStateMessage({ variant, onRetry }: ListStateMessageProps) {

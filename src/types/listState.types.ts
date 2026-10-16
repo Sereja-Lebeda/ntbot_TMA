@@ -3,4 +3,5 @@ export type ListStateVariant =
   | "error"
   | "unauthorized"
   | "empty"
-  | "emptyFiltered";
+  | "emptyFiltered"
+  | "notFound";
