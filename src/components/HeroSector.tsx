@@ -23,6 +23,7 @@ import MobileHeroSector from "./MobileHeroSector";
 import getStatusTitle from "../utils/ticketBadgeHelpers";
 import { allActions } from "../utils/allActions";
 import getListStateVariant from "../utils/getListStateVariant";
+import TicketUnavailableModal from "./pages/modalCardWindows/TicketUnavailableModal";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -161,7 +162,7 @@ export default function HeroSector({
     allActions,
   });
 
-  const { ticket: editTicket, action: editAction } = useTicketAndAction({
+  const { ticket: editedTicket, action: editedAction } = useTicketAndAction({
     ticketId: activeModal?.type === "edit" ? activeModal.ticketId : undefined,
     tickets,
     allActions,
@@ -241,70 +242,73 @@ export default function HeroSector({
     <div
       className={`h-full xl:relative xl:flex-1 xl:max-w-225 xl:min-w-130 xl:h-full flex flex-col xl:items-center xl:rounded-xs xl:border xl:border-(--bg-border) xl:bg-(--bg-primary-second) xl:mx-3 xl:p-5 ${className} `}
     >
-      {activeModal?.type === "view" && (
-        <ViewTicketModal
-          ticket={viewedTicket}
-          action={viewedAction}
-          onClose={() => {
-            setActiveModal(null);
-          }}
-          favoriteTickets={favoriteTickets}
-          setFavoriteTickets={setFavoriteTickets}
-          onCancel={() => {
-            if (viewedTicket) {
+      {activeModal?.type === "view" &&
+        (viewedTicket && viewedAction ? (
+          <ViewTicketModal
+            ticket={viewedTicket}
+            action={viewedAction}
+            onClose={() => {
+              setActiveModal(null);
+            }}
+            favoriteTickets={favoriteTickets}
+            setFavoriteTickets={setFavoriteTickets}
+            onCancel={() => {
               setActiveModal({
                 type: "cancel",
                 ticketId: viewedTicket.ticketId,
                 from: "view",
               });
-            }
-          }}
-          onRepeat={() => {
-            if (viewedTicket) {
+            }}
+            onRepeat={() => {
               setActiveModal({
                 type: "repeat",
                 ticketId: viewedTicket.ticketId,
                 from: "view",
               });
-            }
-          }}
-          onEdit={() => {
-            if (viewedTicket) {
+            }}
+            onEdit={() => {
               setActiveModal({
                 type: "edit",
                 ticketId: viewedTicket.ticketId,
                 from: "view",
               });
+            }}
+            onChangeStatus={handleStatusChange}
+          />
+        ) : (
+          <TicketUnavailableModal onClose={() => setActiveModal(null)} />
+        ))}
+      {activeModal?.type === "repeat" &&
+        (repeatTicket && repeatAction ? (
+          <EditRepeatModal
+            ticket={repeatTicket}
+            action={repeatAction}
+            onClose={handleRepeatCancel}
+            onSubmit={(data) =>
+              handleRepeatSubmit(data, repeatTicket, repeatAction)
             }
-          }}
-          onChangeStatus={handleStatusChange}
-        />
-      )}
-      {activeModal?.type === "repeat" && (
-        <EditRepeatModal
-          ticket={repeatTicket}
-          action={repeatAction}
-          onClose={handleRepeatCancel}
-          onSubmit={(data) =>
-            handleRepeatSubmit(data, repeatTicket, repeatAction)
-          }
-          mode="repeat"
-          favoriteTickets={favoriteTickets}
-          setFavoriteTickets={setFavoriteTickets}
-        />
-      )}
+            mode="repeat"
+            favoriteTickets={favoriteTickets}
+            setFavoriteTickets={setFavoriteTickets}
+          />
+        ) : (
+          <TicketUnavailableModal onClose={() => setActiveModal(null)} />
+        ))}
 
-      {activeModal?.type === "edit" && (
-        <EditRepeatModal
-          ticket={editTicket}
-          action={editAction}
-          onClose={handleEditCancel}
-          onSubmit={(data) => handleEditSubmit(data, editTicket)}
-          mode="edit"
-          favoriteTickets={favoriteTickets}
-          setFavoriteTickets={setFavoriteTickets}
-        />
-      )}
+      {activeModal?.type === "edit" &&
+        (editedTicket && editedAction ? (
+          <EditRepeatModal
+            ticket={editedTicket}
+            action={editedAction}
+            onClose={handleEditCancel}
+            onSubmit={(data) => handleEditSubmit(data, editedTicket)}
+            mode="edit"
+            favoriteTickets={favoriteTickets}
+            setFavoriteTickets={setFavoriteTickets}
+          />
+        ) : (
+          <TicketUnavailableModal onClose={() => setActiveModal(null)} />
+        ))}
 
       {isDesktop ? (
         <DesktopHeroSector

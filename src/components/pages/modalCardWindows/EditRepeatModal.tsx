@@ -32,8 +32,8 @@ import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
 
 interface EditRepeatModalProps {
-  ticket: Ticket | undefined;
-  action: Action | undefined;
+  ticket: Ticket;
+  action: Action;
 
   onClose: () => void;
   onSubmit: (data: {
@@ -114,7 +114,7 @@ function EditRepeatModal({
   const isDesktop = useMediaQuery("(min-width: 1280px)");
   const isMobile = useMediaQuery("(max-width: 500px)");
 
-  if (!currentUser || !ticket || !action) return null;
+  if (!currentUser) return null;
   const permissions = getTicketPermissions(ticket, currentUser);
 
   //NOTE: comment above to edit modal window with restricted message
