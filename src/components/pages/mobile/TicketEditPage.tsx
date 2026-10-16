@@ -316,7 +316,7 @@ function TicketEditPage() {
     allActions,
   });
 
-  const pageState = getTicketPageState({ isLoading, error, ticket });
+  const pageState = getTicketPageState({ isLoading, error, ticket, action });
   if (pageState) {
     return <ListStateMessage variant={pageState} onRetry={reload} />;
   }

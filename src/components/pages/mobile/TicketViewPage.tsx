@@ -74,6 +74,7 @@ function TicketViewPage() {
     isLoading,
     error,
     ticket: viewedTicket,
+    action: viewedAction,
   });
 
   if (pageState) {

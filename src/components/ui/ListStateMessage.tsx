@@ -12,11 +12,12 @@ const textStyle = "font-consolas text-sm font-bold select-none";
 
 const STATE_MAP: Record<ListStateVariant, string> = {
   loading: "Загрузка...",
-  error: "Не удалось загрузить заявки",
+  error: "Не удалось загрузить данные",
   unauthorized: "Сессия истекла, откройте приложение заново",
   empty: "У вас пока нет заявок",
   emptyFiltered: "По выбранным фильтрам ничего не найдено",
-  notFound: "Заявка не найдена или недоступна",
+  ticketNotFound: "Заявка не найдена или недоступна",
+  actionNotFound: "Не удалось открыть заявку",
 };
 
 function ListStateMessage({ variant, onRetry }: ListStateMessageProps) {

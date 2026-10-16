@@ -4,4 +4,5 @@ export type ListStateVariant =
   | "unauthorized"
   | "empty"
   | "emptyFiltered"
-  | "notFound";
+  | "ticketNotFound"
+  | "actionNotFound";
