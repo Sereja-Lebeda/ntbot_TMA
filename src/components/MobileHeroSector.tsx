@@ -1,22 +1,19 @@
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import useUser from "../hooks/useUser";
 
+import type { ListStateVariant } from "../types/listState.types";
 import type { StatusType, Ticket, TicketViewType } from "../types/ticket.types";
-
-import mockTicket from "../../mockTicketInfo.json";
 
 import getStatusTitle, { allStatuses } from "../utils/ticketBadgeHelpers";
 import getTicketQuantity from "../utils/getTicketQuantity";
 import handleStatusSelect from "../utils/statusSelectedHelper";
+import { hapticTap } from "../utils/haptics";
 
 import TicketCard from "./TicketCard";
 import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
+import ListStateMessage from "./ui/ListStateMessage";
 
 import MobilePlusIcon from "../icons/mobile/MobilePlusIcon";
-import React, { useEffect, useRef, useState } from "react";
-import { hapticTap } from "../utils/haptics";
-import type { ListStateVariant } from "../types/listState.types";
-import ListStateMessage from "./ui/ListStateMessage";
 
 interface MobileHeroSectorProps {
   tickets: Ticket[]; // уже отфильтрованный и отсортированный массив
@@ -36,6 +33,8 @@ interface MobileHeroSectorProps {
 
   listState: ListStateVariant | null;
   onRetry: () => void;
+
+  visibleTickets: Ticket[];
 }
 
 function MobileHeroSector({
@@ -52,6 +51,7 @@ function MobileHeroSector({
   handleRequestRepeat,
   listState,
   onRetry,
+  visibleTickets,
 }: MobileHeroSectorProps) {
   const navigate = useNavigate();
 
@@ -117,19 +117,9 @@ function MobileHeroSector({
   const [expandedTicketId, setExpandedTicketId] = useState<number | null>(null);
   const [revealedTicketId, setRevealedTicketId] = useState<number | null>(null);
 
-  const { user } = useUser();
-  const currentUserId = user?.id;
-  const allTickets = mockTicket;
-
   const ticketStatusOrder = allStatuses;
-  const filteredTicketQuantities = allTickets.filter((ticket) => {
-    return ticketView === "my"
-      ? ticket.userId === currentUserId
-      : ticket.userId !== currentUserId;
-  });
-  const ticketQuantities = getTicketQuantity(
-    filteredTicketQuantities as unknown as Ticket[],
-  );
+
+  const ticketQuantities = getTicketQuantity(visibleTickets);
 
   const pillStyle = "flex-1 min-w-19 h-full";
 
@@ -174,7 +164,7 @@ function MobileHeroSector({
                     : "text-(--text-primary)"
                 } group-hover:text-(--text-primary)`}
               >
-                {filteredTicketQuantities.length}
+                {visibleTickets.length}
               </div>
               {/* Label */}
               <div

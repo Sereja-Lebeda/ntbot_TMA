@@ -22,6 +22,7 @@ import ConfirmModal from "../pages/modalCardWindows/ConfirmModal";
 import getTicketDescription from "../../utils/getTicketDescription";
 
 import useTickets from "../../hooks/useTickets";
+import getVisibleTickets from "../../utils/getVisibleTickets";
 
 export default function Layout() {
   useIosEdgeSwipeBack();
@@ -75,6 +76,12 @@ export default function Layout() {
   const [sortOldToNew, setSortOldToNew] = useState(false);
   const [sortByStatus, setSortByStatus] = useState<SortByStatusType>("default");
   const [ticketView, setTicketView] = useState<"my" | "team">("my");
+
+  const visibleTickets = getVisibleTickets({
+    tickets,
+    user: currentUser,
+    ticketView,
+  });
 
   const [filter, setFilter] = useState<string | null>("Статус"); // какой дроп открыт
 
@@ -346,6 +353,7 @@ export default function Layout() {
             isLoading,
             error,
             reload,
+            visibleTickets,
           }}
         />
       </div>

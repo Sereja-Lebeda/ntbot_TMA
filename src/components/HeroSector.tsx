@@ -94,6 +94,8 @@ interface OutletContextProps {
   isLoading: boolean;
   error: Error | null;
   reload: () => void;
+
+  visibleTickets: Ticket[];
 }
 
 export default function HeroSector({
@@ -119,11 +121,7 @@ export default function HeroSector({
   changePrioritySort,
   hasActiveFilters,
 }: selectedTicketStatusesProps) {
-  const {
-    user: currentUser,
-    isLoading: isUserLoading,
-    error: userError,
-  } = useUser();
+  const { isLoading: isUserLoading, error: userError } = useUser();
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
   const {
@@ -143,6 +141,7 @@ export default function HeroSector({
     isLoading: isTicketsLoading,
     error: ticketsError,
     reload,
+    visibleTickets,
   } = useOutletContext<OutletContextProps>();
 
   const isLoading = isUserLoading || isTicketsLoading;
@@ -178,20 +177,6 @@ export default function HeroSector({
     Cancelled: 4,
     Complete: 5,
   };
-
-  // Filter tickets by role
-
-  const visibleTickets = currentUser
-    ? tickets.filter((ticket) => {
-        if (currentUser.role === "admin" && ticketView === "team") {
-          return true;
-        }
-        if (currentUser.role === "manager" && ticketView === "team") {
-          return ticket.department === currentUser.department;
-        }
-        return ticket.userId === currentUser.id;
-      })
-    : [];
 
   const filteredTickets = visibleTickets
     // Filter by Searchbar
@@ -370,6 +355,7 @@ export default function HeroSector({
           }}
           listState={listState}
           onRetry={reload}
+          visibleTickets={visibleTickets}
         />
       )}
     </div>

@@ -7,7 +7,6 @@ import handleStatusSelect from "../utils/statusSelectedHelper";
 import getTicketQuantity from "../utils/getTicketQuantity";
 import getStatusTitle, { allStatuses } from "../utils/ticketBadgeHelpers";
 
-import mockTicket from "../../mockTicketInfo.json";
 import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
 import CopyHint from "../components/ui/CopyHint";
@@ -20,19 +19,17 @@ import useUser from "../hooks/useUser";
 interface InfoblockProps {
   ticketStatuses: string[];
   setTicketStatuses: (status: string[]) => void;
-  ticketView: string;
+  visibleTickets: Ticket[];
 }
 
 function Infoblock({
   ticketStatuses,
   setTicketStatuses,
-  ticketView,
+  visibleTickets,
 }: InfoblockProps) {
   const [copiedField, setCopiedField] = useState<"ip" | "pcName" | null>(null);
 
   const { user: currentUser, isLoading } = useUser();
-
-  const allTickets = mockTicket;
 
   const baseStyle = "xl:w-full xl:flex xl:items-center xl:px-0.5 xl:gap-2";
   const textStyle =
@@ -62,16 +59,7 @@ function Infoblock({
     "xl:h-18",
   ];
   const ticketStatusOrder = allStatuses;
-
-  const currentUserId = currentUser?.id;
-  const filteredTicketQuantities = allTickets.filter((ticket) => {
-    return ticketView === "my"
-      ? ticket.userId === currentUserId
-      : ticket.userId !== currentUserId;
-  });
-  const ticketQuantities = getTicketQuantity(
-    filteredTicketQuantities as unknown as Ticket[],
-  );
+  const ticketQuantities = getTicketQuantity(visibleTickets);
 
   return (
     // Whole left side

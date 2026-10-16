@@ -1,15 +1,16 @@
+import { useOutletContext } from "react-router";
 import { useRef } from "react";
+import useUser from "../../hooks/useUser";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import type {
   SortByStatusType,
+  Ticket,
   TicketViewType,
 } from "../../types/ticket.types";
 
 import HeroSector from "../HeroSector";
 import Infoblock from "../Infoblock";
 import SortFilterBlock from "../SortFilterBlock";
-import useUser from "../../hooks/useUser";
-import { useOutletContext } from "react-router";
-import useMediaQuery from "../../hooks/useMediaQuery";
 
 interface OutletContextProps {
   selectedStatuses: string[];
@@ -37,6 +38,8 @@ interface OutletContextProps {
   resetFilters: () => void;
   changePrioritySort: () => void;
   hasActiveFilters: boolean | undefined;
+
+  visibleTickets: Ticket[];
 }
 
 export default function HomePage() {
@@ -63,6 +66,7 @@ export default function HomePage() {
     resetFilters,
     changePrioritySort,
     hasActiveFilters,
+    visibleTickets,
   } = useOutletContext<OutletContextProps>();
   const isDesktop = useMediaQuery("(min-width:1280px)");
 
@@ -92,7 +96,7 @@ export default function HomePage() {
           <Infoblock
             ticketStatuses={selectedStatuses}
             setTicketStatuses={setSelectedStatuses}
-            ticketView={ticketView}
+            visibleTickets={visibleTickets}
           />
         )}
         <HeroSector
