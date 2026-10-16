@@ -22,6 +22,14 @@ import TicketInfoIcon from "../../../icons/card/TicketInfoIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
 import useEscButton from "../../../hooks/useEscButton";
 import CancelFormButton from "../../ui/Buttons/CancelFormButton";
+import getTicketPageState from "../../../utils/getTicketPageState";
+import ListStateMessage from "../../ui/ListStateMessage";
+
+interface TicketRepeatFormProps {
+  ticket: Ticket;
+  action: Action;
+  handleRepeatSubmit: OutletContextProps["handleRepeatSubmit"];
+}
 
 interface OutletContextProps {
   tickets: Ticket[];
@@ -37,28 +45,21 @@ interface OutletContextProps {
     repeatTicket: Ticket | undefined,
     repeatAction: Action | undefined,
   ): void;
+  isLoading: boolean;
+  error: Error | null;
+  reload: () => void;
 }
 
-function TicketRepeatPage() {
+function TicketRepeatForm({
+  ticket: repeatedTicket,
+  action: repeatedAction,
+  handleRepeatSubmit,
+}: TicketRepeatFormProps) {
   const { user: currentUser } = useUser();
 
   const navigate = useNavigate();
   // const isDesktop = useMediaQuery("(min-width: 1280px)");
   const isMobile = useMediaQuery("(max-width: 500px)");
-
-  const params = useParams<{ ticketId: string }>();
-  const ticketId = Number(params.ticketId);
-
-  const { tickets, handleRepeatSubmit } =
-    useOutletContext<OutletContextProps>();
-
-  const { ticket: repeatedTicket, action: repeatedAction } = useTicketAndAction(
-    {
-      ticketId,
-      tickets,
-      allActions,
-    },
-  );
 
   function onClose() {
     return navigate(-1);
@@ -98,7 +99,7 @@ function TicketRepeatPage() {
 
   useEscButton(handleCloseAttempt);
 
-  if (!currentUser || !repeatedTicket || !repeatedAction) return null;
+  if (!currentUser) return null;
 
   const inputText =
     "Вы уверены, что хотите прервать создание заявки?\n\nВведенная информация не сохранится.";
@@ -125,7 +126,7 @@ function TicketRepeatPage() {
       >
         <div className="w-full min-h-0 flex flex-col justify-center items-start gap-3 ">
           <div className="w-full flex items-center gap-1">
-            <RepeatIcon className="text(--text-secondary) w-4 h-4" />
+            <RepeatIcon className="text-(--text-secondary) w-4 h-4" />
             <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-4">{`Повтор заявки #${repeatedTicket.ticketId}`}</span>
           </div>
 
@@ -242,4 +243,32 @@ function TicketRepeatPage() {
   );
 }
 
+function TicketRepeatPage() {
+  const params = useParams<{ ticketId: string }>();
+  const ticketId = Number(params.ticketId);
+
+  const { tickets, handleRepeatSubmit, isLoading, error, reload } =
+    useOutletContext<OutletContextProps>();
+
+  const { ticket, action } = useTicketAndAction({
+    ticketId,
+    tickets,
+    allActions,
+  });
+
+  const pageState = getTicketPageState({ isLoading, error, ticket });
+  if (pageState) {
+    return <ListStateMessage variant={pageState} onRetry={reload} />;
+  }
+  if (!ticket || !action) return null;
+
+  return (
+    <TicketRepeatForm
+      key={ticket.ticketId}
+      ticket={ticket}
+      action={action}
+      handleRepeatSubmit={handleRepeatSubmit}
+    />
+  );
+}
 export default TicketRepeatPage;
