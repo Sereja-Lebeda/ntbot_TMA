@@ -17,6 +17,7 @@ import HighPriorityIcon from "../icons/createTicket/HighPriorityIcon";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { hapticTap } from "../utils/haptics";
 import useUser from "../hooks/useUser";
+import blurOnEnter from "../utils/blurOnEnter";
 
 interface TicketFormProps {
   selectedAction: Action | null;
@@ -77,6 +78,8 @@ function TicketForm({
               ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
             >
               <input
+                onKeyDown={blurOnEnter}
+                enterKeyHint="done"
                 onFocus={hapticTap}
                 value={formData[field.name] ?? ""}
                 onBlur={() => {
@@ -114,6 +117,8 @@ function TicketForm({
               ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
                 >
                   <input
+                    onKeyDown={blurOnEnter}
+                    enterKeyHint="done"
                     onFocus={hapticTap}
                     value={value}
                     onBlur={() => {

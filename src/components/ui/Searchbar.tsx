@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 
 import MagnifyIcon from "../../icons/searchmenu/MagnifyIcon";
+import blurOnEnter from "../../utils/blurOnEnter";
 
 interface searchRequestProps {
   searchRequest: string;
@@ -33,6 +34,8 @@ const Searchbar = forwardRef<HTMLInputElement, searchRequestProps>(
         {/* //TODO: add debounce after connetion to db */}
 
         <input
+          onKeyDown={blurOnEnter}
+          enterKeyHint="done"
           ref={ref}
           type="text"
           placeholder="Найти..."
