@@ -28,9 +28,15 @@ export default function Layout() {
   useIosEdgeSwipeBack();
   useTelegramBackButton();
 
-  const { tickets, setTickets, isLoading, error, reload } = useTickets();
+  const {
+    tickets,
+    setTickets,
+    isLoading,
+    error: ticketsError,
+    reload: ticketsReload,
+  } = useTickets();
 
-  const { user: currentUser } = useUser();
+  const { user: currentUser, error: userError, reload: userReload } = useUser();
 
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
@@ -269,6 +275,11 @@ export default function Layout() {
     setActiveModal(null);
   }
 
+  function handleRetry() {
+    if (userError) userReload();
+    if (ticketsError) ticketsReload();
+  }
+
   return (
     <div
       className="h-dvh flex flex-col"
@@ -352,8 +363,8 @@ export default function Layout() {
             handleRepeatSubmit,
             handleEditSubmit,
             isLoading,
-            error,
-            reload,
+            error: ticketsError,
+            reload: handleRetry,
             visibleTickets,
           }}
         />

@@ -8,6 +8,11 @@ function useUserLoader() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  function reload() {
+    setReloadKey((k) => k + 1);
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -28,9 +33,9 @@ function useUserLoader() {
 
     load();
     return () => controller.abort();
-  }, []);
+  }, [reloadKey]);
 
-  return { user, isLoading, error };
+  return { user, isLoading, error, reload };
 }
 
 export default useUserLoader;

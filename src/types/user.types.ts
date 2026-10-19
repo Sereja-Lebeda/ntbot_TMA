@@ -14,4 +14,5 @@ export interface UserContextValue {
   user: UserType | null;
   isLoading: boolean;
   error: Error | null;
+  reload: () => void;
 }

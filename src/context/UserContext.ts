@@ -5,4 +5,5 @@ export const UserContext = createContext<UserContextValue>({
   user: null,
   isLoading: true,
   error: null,
+  reload: () => {},
 });
