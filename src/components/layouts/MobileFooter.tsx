@@ -5,13 +5,18 @@ import TicketIcon from "../../icons/header/TicketIcon";
 import FooterBtn from "../ui/Buttons/FooterBtn";
 import RatingIcon from "../../icons/header/RatingIcon";
 import KnowledgeBaseIcon from "../../icons/header/KnowledgeBaseIcon";
+import useIsTyping from "../../hooks/useIsTyping";
 
 function MobileFooter() {
   const isDesktop = useMediaQuery("(min-width:1280px)");
 
+  const isTyping = useIsTyping();
+  const isTouch = useMediaQuery("(pointer: coarse)");
+
   const [activeSection, goToSection] = useSectionNav();
   if (!activeSection) return null;
   if (isDesktop) return null;
+  if (isTyping && isTouch) return null;
 
   return (
     <div className="w-full pb-(--app-safe-bottom) bg-[#0e0e0e] border-t border-[#201e1e]">
