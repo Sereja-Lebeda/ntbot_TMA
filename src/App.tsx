@@ -4,16 +4,19 @@ import { router } from "../router";
 import ThemeProvider from "./providers/ThemeProvider";
 import UserProvider from "./providers/UserProvider";
 import ModalStackProvider from "./providers/ModalStackProvider";
+import TelegramGate from "./components/TelegramGate";
 
 function App() {
   return (
     <>
       <ThemeProvider>
-        <UserProvider>
-          <ModalStackProvider>
-            <RouterProvider router={router} />
-          </ModalStackProvider>
-        </UserProvider>
+        <TelegramGate>
+          <UserProvider>
+            <ModalStackProvider>
+              <RouterProvider router={router} />
+            </ModalStackProvider>
+          </UserProvider>
+        </TelegramGate>
       </ThemeProvider>
     </>
   );

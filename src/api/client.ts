@@ -1,3 +1,5 @@
+import getInitData from "../utils/getInitData";
+
 const API_BASE = "/api";
 
 export class ApiError extends Error {
@@ -40,7 +42,7 @@ export async function apiFetch<T>(
 }
 
 function getAuthHeaders(): Record<string, string> {
-  const initData = window.Telegram?.WebApp?.initData;
+  const initData = getInitData();
   if (!initData) return {};
   return { Authorization: "tma " + initData };
 }
