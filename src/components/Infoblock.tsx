@@ -15,6 +15,8 @@ import IpIcon from "../icons/infoblock/IpIcon";
 import PcIcon from "../icons/infoblock/PcIcon";
 import AccessIcon from "../icons/infoblock/AccessIcon";
 import useUser from "../hooks/useUser";
+import displayOrDash from "../utils/displayOrDash";
+import isEmptyValue from "../utils/isEmptyValue";
 
 interface InfoblockProps {
   ticketStatuses: string[];
@@ -84,15 +86,18 @@ function Infoblock({
                 {/* user ip  */}
                 <div
                   onClick={() => {
+                    if (isEmptyValue(currentUser.localIp)) return;
                     navigator.clipboard.writeText(currentUser.localIp);
                     setCopiedField("ip");
                     setTimeout(() => setCopiedField(null), 1000);
                   }}
-                  className={`${baseStyle} cursor-pointer`}
+                  className={`${baseStyle} ${isEmptyValue(currentUser.localIp) ? "" : "cursor-pointer"}`}
                 >
                   <IpIcon />
-                  <span className={`${textStyle} ${textPressAnimationStyle} `}>
-                    {currentUser.localIp}
+                  <span
+                    className={`${textStyle} ${isEmptyValue(currentUser.localIp) ? "" : textPressAnimationStyle}`}
+                  >
+                    {displayOrDash(currentUser.localIp)}
                   </span>
                   <span className={`${copyHintIpAnimation}`}>
                     <CopyHint />
@@ -101,18 +106,21 @@ function Infoblock({
                 {/* pc name  */}
                 <div
                   onClick={() => {
+                    if (isEmptyValue(currentUser.pcName)) return;
                     navigator.clipboard.writeText(currentUser.pcName);
                     setCopiedField("pcName");
                     setTimeout(() => setCopiedField(null), 1000);
                   }}
-                  className={`${baseStyle} cursor-pointer`}
+                  className={`${baseStyle} ${isEmptyValue(currentUser.pcName) ? "" : "cursor-pointer"}`}
                 >
                   <div className="xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center">
                     <PcIcon />
                   </div>
 
-                  <span className={`${textStyle} ${textPressAnimationStyle}`}>
-                    {currentUser.pcName}
+                  <span
+                    className={`${textStyle} ${isEmptyValue(currentUser.pcName) ? "" : textPressAnimationStyle}`}
+                  >
+                    {displayOrDash(currentUser.pcName)}
                   </span>
                   <span className={`${copyHintPcNameAnimation}`}>
                     <CopyHint />
@@ -123,9 +131,8 @@ function Infoblock({
                   <div className="xl:w-5 xl:h-5 xl:flex xl:justify-center xl:items-center xl:dark:bg-[#A1FF6226] xl:bg-[#71C13B40] xl:rounded-xs">
                     <AccessIcon className="xl:text-(--bg-task-complete) xl:dark:text-(--bg-btn-primary)" />
                   </div>
-                  {/* //TODO: Add ternar for access  */}
                   <span className={textStyle}>
-                    Доступ до {currentUser.remoteAccessDate}
+                    Доступ до {displayOrDash(currentUser.remoteAccessDate)}
                   </span>
                 </div>
               </div>

@@ -36,6 +36,8 @@ import PrioritySortIcon from "../../icons/searchmenu/PrioritySortIcon";
 import TimeSortActiveIcon from "../../icons/searchmenu/TimeSortActiveIcon";
 import TimeSortIcon from "../../icons/searchmenu/TimeSortIcon";
 import UserIcon from "../../icons/searchmenu/UserIcon";
+import displayOrDash from "../../utils/displayOrDash";
+import isEmptyValue from "../../utils/isEmptyValue";
 
 interface MobileSidebarProps {
   closeSidebar: () => void;
@@ -71,6 +73,17 @@ interface MobileSidebarProps {
   isPrivilegeUser: boolean;
 
   visibleTickets: Ticket[];
+}
+
+function getCurrentUsername(username: string) {
+  const splitUsername = username.split(" ");
+  switch (splitUsername.length) {
+    case 3:
+    case 2:
+      return splitUsername[1] + " " + splitUsername[0];
+    default:
+      return splitUsername[0];
+  }
 }
 
 function MobileSidebar({
@@ -123,22 +136,9 @@ function MobileSidebar({
     }
   }, [isAnimatingIn]);
 
-  const { user: currentUser } = useUser();
+  const { user: currentUser, isLoading } = useUser();
 
   const [copiedField, setCopiedField] = useState<"ip" | "pcName" | null>(null);
-
-  if (!currentUser) return;
-
-  const currentUsername = () => {
-    const splitUsername = currentUser.name.split(" ");
-    switch (splitUsername.length) {
-      case 3:
-      case 2:
-        return splitUsername[1] + " " + splitUsername[0];
-      default:
-        return splitUsername[0];
-    }
-  };
 
   // Style for hints near user info
   const copyHintBase =
@@ -206,79 +206,108 @@ function MobileSidebar({
 
         {/* Infoblock */}
         {/* User Info */}
+
         <div
           className="w-full min-h-0 flex-1 flex flex-col
         overscroll-contain overflow-y-auto scrollbar-gutter-stable dropdown-scroll"
         >
-          <div
-            className="w-full h-fu
+          {currentUser ? (
+            <div
+              className="w-full
         flex flex-col justify-center items-start
         p-5 gap-3 border-y border-(--bg-border) bg-(--bg-primary-second)"
-          >
-            {/* User name */}
-            <div
-              className="w-full h-5
+            >
+              {/* User name */}
+              <div
+                className="w-full h-5
           flex items-start
           px-1"
-            >
-              <span className="font-jbmono text-(--text-primary) text-md font-normal leading-5 mb-3">
-                {currentUsername()}
+              >
+                <span className="font-jbmono text-(--text-primary) text-md font-normal leading-5 mb-3">
+                  {getCurrentUsername(currentUser.name)}
+                </span>
+              </div>
+
+              {/* User pc Info */}
+              <div className="w-full flex flex-col items-start gap-1.5">
+                {/* user ip  */}
+                <div
+                  onClick={() => {
+                    if (isEmptyValue(currentUser.localIp)) return;
+                    hapticTap();
+                    navigator.clipboard.writeText(currentUser.localIp);
+                    setCopiedField("ip");
+                    setTimeout(() => setCopiedField(null), 1000);
+                  }}
+                  className={`${baseStyle} ${isEmptyValue(currentUser.localIp) ? "" : "cursor-pointer"}`}
+                >
+                  <IpIcon />
+                  <span
+                    className={`${textStyle} ${isEmptyValue(currentUser.localIp) ? "" : textPressAnimationStyle}`}
+                  >
+                    {displayOrDash(currentUser.localIp)}
+                  </span>
+                  <span className={`${copyHintIpAnimation}`}>
+                    <CopyHint />
+                  </span>
+                </div>
+                {/* pc name  */}
+                <div
+                  onClick={() => {
+                    if (isEmptyValue(currentUser.pcName)) return;
+                    hapticTap();
+                    navigator.clipboard.writeText(currentUser.pcName);
+                    setCopiedField("pcName");
+                    setTimeout(() => setCopiedField(null), 1000);
+                  }}
+                  className={`${baseStyle} ${isEmptyValue(currentUser.pcName) ? "" : "cursor-pointer"}`}
+                >
+                  <div className="w-5 h-5 flex justify-center items-center">
+                    <PcIcon />
+                  </div>
+
+                  <span
+                    className={`${textStyle} ${isEmptyValue(currentUser.pcName) ? "" : textPressAnimationStyle}`}
+                  >
+                    {displayOrDash(currentUser.pcName)}
+                  </span>
+                  <span className={`${copyHintPcNameAnimation}`}>
+                    <CopyHint />
+                  </span>
+                </div>
+                {/* access date  */}
+                <div className={baseStyle}>
+                  <div className="w-5 h-5 flex justify-center items-center dark:bg-[#A1FF6226] bg-[#71C13B40] rounded-xs">
+                    <AccessIcon className="text-(--bg-task-complete) dark:text-(--bg-btn-primary)" />
+                  </div>
+                  <span className={textStyle}>
+                    Доступ до {displayOrDash(currentUser.remoteAccessDate)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : isLoading ? (
+            <div className="p-5 border-y border-(--bg-border)">
+              <span
+                className={`w-full h-full 
+                flex justify-center items-center
+                ${textStyle}`}
+              >
+                Загрузка...
               </span>
             </div>
-
-            {/* User pc Info */}
-            <div className="w-full flex flex-col items-start gap-1.5">
-              {/* user ip  */}
-              <div
-                onClick={() => {
-                  navigator.clipboard.writeText(currentUser?.localIp);
-                  hapticTap();
-                  setCopiedField("ip");
-                  setTimeout(() => setCopiedField(null), 1000);
-                }}
-                className={`${baseStyle} cursor-pointer`}
+          ) : (
+            <div className="p-5 border-y border-(--bg-border)">
+              <span
+                className={`w-full h-full 
+                flex justify-center items-center
+                font-extrabold! text-(--bg-task-error)!
+                ${textStyle}`}
               >
-                <IpIcon />
-                <span className={`${textStyle} ${textPressAnimationStyle} `}>
-                  {currentUser?.localIp}
-                </span>
-                <span className={`${copyHintIpAnimation}`}>
-                  <CopyHint />
-                </span>
-              </div>
-              {/* pc name  */}
-              <div
-                onClick={() => {
-                  navigator.clipboard.writeText(currentUser?.pcName);
-                  hapticTap();
-                  setCopiedField("pcName");
-                  setTimeout(() => setCopiedField(null), 1000);
-                }}
-                className={`${baseStyle} cursor-pointer`}
-              >
-                <div className="w-5 h-5 flex justify-center items-center">
-                  <PcIcon />
-                </div>
-
-                <span className={`${textStyle} ${textPressAnimationStyle}`}>
-                  {currentUser?.pcName}
-                </span>
-                <span className={`${copyHintPcNameAnimation}`}>
-                  <CopyHint />
-                </span>
-              </div>
-              {/* access date  */}
-              <div className={baseStyle}>
-                <div className="w-5 h-5 flex justify-center items-center dark:bg-[#A1FF6226] bg-[#71C13B40] rounded-xs">
-                  <AccessIcon className="text-(--bg-task-complete) dark:text-(--bg-btn-primary)" />
-                </div>
-                {/* //TODO: Add ternar for access  */}
-                <span className={textStyle}>
-                  Доступ до {currentUser?.remoteAccessDate}
-                </span>
-              </div>
+                Не удалось загрузить данные
+              </span>
             </div>
-          </div>
+          )}
 
           {/* Filter btns */}
           {/* Row of buttons */}
