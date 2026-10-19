@@ -204,10 +204,8 @@ export default function HeroSector({
     )
     .sort((a, b) =>
       sortOldToNew
-        ? Date.parse(a.createDate.split(".").reverse().join("-")) -
-          Date.parse(b.createDate.split(".").reverse().join("-"))
-        : Date.parse(b.createDate.split(".").reverse().join("-")) -
-          Date.parse(a.createDate.split(".").reverse().join("-")),
+        ? a.createStamp - b.createStamp
+        : b.createStamp - a.createStamp,
     )
     .sort((a, b) => {
       if (sortByStatus === "default") return 0;

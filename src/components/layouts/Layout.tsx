@@ -220,6 +220,7 @@ export default function Layout() {
       ...repeatTicket,
       // TODO: change logic to receive ticketid from server
       ticketId: Math.max(...tickets.map((t) => t.ticketId)) + 1,
+      createStamp: Date.now(),
       createDate: new Date().toLocaleDateString("ru-RU"),
       status: "New",
       userId: currentUser.id,
