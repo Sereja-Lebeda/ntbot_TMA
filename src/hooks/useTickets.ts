@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Ticket } from "../types/ticket.types";
 import { getTicketList } from "../api/requests";
 import { isAbortError } from "../api/client";
@@ -9,6 +9,8 @@ export default function useTickets() {
   const [error, setError] = useState<Error | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
+  const hasLoadedRef = useRef(false);
+
   function reload() {
     setReloadKey((k) => k + 1);
   }
@@ -18,10 +20,14 @@ export default function useTickets() {
 
     async function load() {
       try {
-        setIsLoading(true);
+        if (!hasLoadedRef.current) {
+          setIsLoading(true);
+        }
+
         setError(null);
         const list = await getTicketList(controller.signal);
         setTickets(list);
+        hasLoadedRef.current = true;
       } catch (e) {
         if (isAbortError(e)) return;
         setError(e instanceof Error ? e : new Error(String(e)));

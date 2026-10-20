@@ -367,6 +367,7 @@ export default function Layout() {
             error: ticketsError,
             reload: handleRetry,
             visibleTickets,
+            reloadTickets: ticketsReload,
           }}
         />
       </div>
