@@ -1,6 +1,6 @@
 // type TicketStatus = "todo" | "inprogress" | "onhold" | "onapproval" | "complete" | "cancelled" | "rejected"
 
-// type TicketPriority = "low" | "normal" | "high"
+export type PriorityDto = "low" | "normal" | "high";
 
 export interface TicketDto {
   ticket_id: number;
@@ -14,6 +14,16 @@ export interface TicketDto {
   creation_timestamp: number;
   msg_ids: number[] | null;
   body: Record<string, string>;
+}
+
+export interface CreateTicketDto {
+  action_id: number;
+  category_id: number;
+  subcategory_id: number;
+  ticket_name: string;
+  priority: PriorityDto;
+  body: Record<string, string>;
+  creation_timestamp: number;
 }
 
 export interface UserDto {

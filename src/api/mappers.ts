@@ -1,7 +1,13 @@
-import type { PriorityLevel } from "../types/createTicket.type";
+import type { Action, PriorityLevel } from "../types/createTicket.type";
 import type { StatusType, Ticket } from "../types/ticket.types";
 import type { UserRole, UserType } from "../types/user.types";
-import type { CategoryDto, TicketDto, UserDto } from "./api.types";
+import type {
+  CategoryDto,
+  CreateTicketDto,
+  PriorityDto,
+  TicketDto,
+  UserDto,
+} from "./api.types";
 
 const STATUS_MAP: Record<string, StatusType> = {
   todo: "New",
@@ -17,6 +23,12 @@ const PRIORITY_MAP: Record<string, PriorityLevel> = {
   low: "Low",
   normal: "Normal",
   high: "High",
+};
+
+const REVERSE_PRIORITY_MAP: Record<NonNullable<PriorityLevel>, PriorityDto> = {
+  Low: "low",
+  Normal: "normal",
+  High: "high",
 };
 
 //todo: change base to employee after backend will do it
@@ -86,6 +98,30 @@ export function mapTicket(
     department: "",
     userName: "",
   };
+}
+
+interface CreateTicketInput {
+  action: Action;
+  formData: Record<string, string>;
+  priority: NonNullable<PriorityLevel>;
+}
+
+export function mapCreateTicket({
+  action,
+  formData,
+  priority,
+}: CreateTicketInput): CreateTicketDto {
+  const ticket = {
+    action_id: action.id,
+    category_id: action.categoryId,
+    subcategory_id: action.subcategoryId,
+    ticket_name: action.name,
+    priority: REVERSE_PRIORITY_MAP[priority],
+    body: formData,
+    creation_timestamp: Math.floor(Date.now() / 1000),
+  };
+
+  return ticket;
 }
 
 export function mapRole(raw: string): UserRole {
