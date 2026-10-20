@@ -8,7 +8,6 @@ import type {
   AttachedFile,
   CategoriesPool,
   PriorityLevel,
-  TicketStatusType,
 } from "../../types/createTicket.type";
 
 import WizardStepHeader from "../ui/WizardStepHeader";
@@ -44,8 +43,7 @@ function CreateTicketWizardLayout() {
   const [priority, setPriority] = useState<PriorityLevel>(null);
   const [files, setFiles] = useState<AttachedFile[]>([]);
   //NOTE: setters are for backend fetch
-  const [ticketId, setTicketId] = useState<number>(542);
-  const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Success");
+  const [ticketId, setTicketId] = useState<number | null>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<SubmitErrorKind | null>(null);
@@ -121,8 +119,6 @@ function CreateTicketWizardLayout() {
             setFiles,
             ticketId,
             setTicketId,
-            ticketStatus,
-            setTicketStatus,
             isModalOpen,
             setIsModalOpen,
             submitTicket,

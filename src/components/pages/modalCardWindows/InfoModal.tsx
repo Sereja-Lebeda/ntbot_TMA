@@ -52,7 +52,7 @@ function InfoModal({ isOpen, onClose, text }: InfoModalProps) {
     >
       <div
         ref={modalRef}
-        className={`min-h min-h-30 w-78 px-8 py-3 gap-2 flex flex-col justify-center items-center bg-(--bg-secondary) border border-(--bg-border) rounded-xs select-none
+        className={`min-h-30 w-78 px-8 py-3 gap-2 flex flex-col justify-center items-center bg-(--bg-secondary) border border-(--bg-border) rounded-xs select-none
           transition-all duration-400 ease-out ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
       >
         {/* icon and text */}

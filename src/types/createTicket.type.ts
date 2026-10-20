@@ -22,8 +22,6 @@ export type AttachedFile = { file: File; url: string };
 
 export type CategoriesPool = CategoryName | null;
 
-export type TicketStatusType = "Success" | "Failed";
-
 export interface Action {
   id: number;
   category: CategoryName;

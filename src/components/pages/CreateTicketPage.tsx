@@ -7,7 +7,6 @@ import type {
   Action,
   PriorityLevel,
   AttachedFile,
-  TicketStatusType,
 } from "../../types/createTicket.type";
 
 import StepCategory from "./ticketSteps/StepCategory";
@@ -39,10 +38,8 @@ interface OutletContextProps {
   setPriority: React.Dispatch<React.SetStateAction<PriorityLevel>>;
   files: AttachedFile[];
   setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
-  ticketId: number;
-  setTicketId: React.Dispatch<React.SetStateAction<number>>;
-  ticketStatus: TicketStatusType;
-  setTicketStatus: React.Dispatch<React.SetStateAction<TicketStatusType>>;
+  ticketId: number | null;
+  setTicketId: React.Dispatch<React.SetStateAction<number | null>>;
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   submitTicket: () => Promise<boolean>;
@@ -66,9 +63,6 @@ function CreateTicketPage() {
     files,
     setFiles,
     ticketId,
-    // setTicketId,
-    ticketStatus,
-    // setTicketStatus,
     isModalOpen,
     setIsModalOpen,
     submitTicket,
@@ -203,9 +197,7 @@ function CreateTicketPage() {
               isSubmitting={isSubmitting}
             />
           )}
-          {currentStep === 4 && (
-            <StepDone ticketId={ticketId} ticketStatus={ticketStatus} />
-          )}
+          {currentStep === 4 && <StepDone ticketId={ticketId} />}
         </div>
 
         <div
