@@ -12,12 +12,29 @@ export class ApiError extends Error {
   }
 }
 
+type RequestMethods = "GET" | "POST" | "PUT" | "DELETE";
+
+interface ApiOptions {
+  method?: RequestMethods;
+  body?: unknown;
+  signal?: AbortSignal;
+}
+
 export async function apiFetch<T>(
   path: string,
-  signal?: AbortSignal,
+  options: ApiOptions = {},
 ): Promise<T> {
+  const { method = "GET", body, signal } = options;
+  const headers: Record<string, string> = getAuthHeaders();
+
+  if (body !== undefined) {
+    headers["Content-Type"] = "application/json";
+  }
+
   const response = await fetch(API_BASE + path, {
-    headers: getAuthHeaders(),
+    headers,
+    method,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
     signal,
   });
 
