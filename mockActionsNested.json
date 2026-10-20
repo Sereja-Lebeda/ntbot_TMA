@@ -1,9 +1,11 @@
 [
   {
     "category": "Доступы и коммуникация",
+    "categoryId": 3,
     "subcategories": [
       {
         "subcategory": "Папки и файлы",
+        "subcategoryId": 101,
         "actions": [
           {
             "id": 1,
@@ -70,7 +72,7 @@
             ]
           },
           {
-            "id": 2,
+            "id": 8,
             "name": "Изменить доступ",
             "fields": [
               {
@@ -150,6 +152,7 @@
       },
       {
         "subcategory": "Базы данных",
+        "subcategoryId": 102,
         "actions": [
           {
             "id": 4,
@@ -203,10 +206,60 @@
     ]
   },
   {
+    "category": "Базы данных",
+    "categoryId": 2,
+    "subcategories": [
+      {
+        "subcategory": "Запросы доступа",
+        "subcategoryId": 2,
+        "actions": [
+          {
+            "id": 2,
+            "name": "Запрос доступа к БД",
+            "attachment": false,
+            "fields": [
+              {
+                "name": "Название БД",
+                "label": "Название БД",
+                "type": "short text",
+                "placeholder": "Например, PG",
+                "required": true
+              },
+              {
+                "name": "Обоснование запроса",
+                "label": "Обоснование запроса",
+                "type": "long text",
+                "placeholder": "Зачем нужен доступ",
+                "required": true
+              },
+              {
+                "name": "Описание проблемы",
+                "label": "Описание проблемы",
+                "type": "long text",
+                "placeholder": "Опишите проблему",
+                "required": true
+              },
+              {
+                "name": "Уровень доступа",
+                "label": "Уровень доступа",
+                "type": "select",
+                "placeholder": "Выберите уровень доступа",
+                "required": true,
+                "options": ["Чтение", "Запись", "Чтение и запись"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     "category": "NTMincer",
+    "categoryId": 1,
     "subcategories": [
       {
         "subcategory": "Парсинг",
+        "subcategoryId": 103,
         "actions": [
           {
             "id": 5,
@@ -263,6 +316,7 @@
       },
       {
         "subcategory": "Нейроразметка",
+        "subcategoryId": 104,
         "actions": [
           {
             "id": 7,

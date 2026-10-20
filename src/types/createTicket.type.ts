@@ -27,7 +27,9 @@ export type TicketStatusType = "Success" | "Failed";
 export interface Action {
   id: number;
   category: CategoryName;
+  categoryId: number;
   subcategory: string;
+  subcategoryId: number;
   name: string;
   attachment?: boolean;
   fields: Field[];
@@ -56,9 +58,11 @@ export type FieldType =
 //Types for nested actions
 export interface CategoryNode {
   category: CategoryName;
+  categoryId: number;
   subcategories: SubcategoryNode[];
 }
 export interface SubcategoryNode {
   subcategory: string;
+  subcategoryId: number;
   actions: Action[];
 }

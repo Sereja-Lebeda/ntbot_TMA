@@ -7,7 +7,9 @@ export default function flattenActions(categories: CategoryNode[]): Action[] {
       subcategory.actions.map((action) => ({
         ...action,
         category: category.category,
+        categoryId: category.categoryId,
         subcategory: subcategory.subcategory,
+        subcategoryId: subcategory.subcategoryId,
       })),
     ),
   );

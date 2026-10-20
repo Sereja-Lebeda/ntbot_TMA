@@ -6,7 +6,6 @@
     "ticketId": 420,
     "createDate": "12.12.2026",
     "actionId": 1,
-
     "body": {
       "comment": "Срочно нужен доступ",
       "description": "Не могу открыть общую папку отдела, пишет отказано в доступе",
@@ -34,7 +33,7 @@
     "description": "Смена уровня доступа сотруднику",
     "ticketId": 413,
     "createDate": "30.03.1984",
-    "actionId": 2,
+    "actionId": 8,
     "body": {
       "name": "Попенко Попа Попович",
       "new_level": "Редактирование",
@@ -220,7 +219,7 @@
     "description": "Изменение уровня доступа",
     "ticketId": 890,
     "createDate": "20.05.2026",
-    "actionId": 2,
+    "actionId": 8,
     "body": {
       "name": "Иванов Иван Иванович",
       "new_level": "Просмотр",
