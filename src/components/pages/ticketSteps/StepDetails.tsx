@@ -18,6 +18,7 @@ import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 import BackArrowIcon from "../../../icons/createTicket/BackArrowIcon";
 import ForwardArrowIcon from "../../../icons/createTicket/ForwardArrowIcon";
 import SendFormIcon from "../../../icons/createTicket/SendFormIcon";
+import SendingTicketIcon from "../../../icons/SendingTicketIcon";
 
 interface StepDetailsProps {
   onPrev: () => void;
@@ -31,7 +32,8 @@ interface StepDetailsProps {
   setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
   multiData: Record<string, string[]>;
   setMultiData: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
-  submitTicket: () => void;
+  submitTicket: () => Promise<boolean>;
+  isSubmitting: boolean;
 }
 
 // TODO: Add network errors and others, so 4th step will have only success
@@ -49,6 +51,7 @@ function StepDetails({
   multiData,
   setMultiData,
   submitTicket,
+  isSubmitting,
 }: StepDetailsProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -82,7 +85,7 @@ function StepDetails({
     setErrors((prev) => ({ ...prev, [field]: message }));
   }
 
-  function submitForm() {
+  async function submitForm() {
     const newErrors = validateForm(
       formData,
       multiData,
@@ -92,8 +95,7 @@ function StepDetails({
     setErrors(newErrors); // родитель ставит стейт
     if (Object.keys(newErrors).length === 0) {
       // валидно?
-      submitTicket();
-      onNext();
+      if (await submitTicket()) onNext();
     }
   }
 
@@ -219,7 +221,7 @@ function StepDetails({
             {/* Send ticket btn */}
             {isMobile ? (
               <FunctionBtn
-                Icon={SendFormIcon}
+                Icon={isSubmitting ? SendingTicketIcon : SendFormIcon}
                 iconClassName="w-4.5 h-4.5 text-(--text-btn)"
                 textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
                 btnClassName={`h-8.5
@@ -229,13 +231,13 @@ function StepDetails({
                 `}
                 innerDivClassName="flex justify-center items-center rounded-xs px-4"
                 onClick={submitForm}
-                disabled={isFormInvalid}
+                disabled={isFormInvalid || isSubmitting}
               />
             ) : (
               <FunctionBtn
-                Icon={SendFormIcon}
+                Icon={isSubmitting ? SendingTicketIcon : SendFormIcon}
                 iconClassName="w-4.5 h-4.5 text-(--text-btn)"
-                text="Отправить заявку"
+                text={isSubmitting ? "Отправка" : "Отрпавить заявку"}
                 textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
                 btnClassName={`h-8.5
                 flex justify-center items-center
@@ -244,7 +246,7 @@ function StepDetails({
                 `}
                 innerDivClassName="flex justify-center items-center gap-2 rounded-xs px-4"
                 onClick={submitForm}
-                disabled={isFormInvalid}
+                disabled={isFormInvalid || isSubmitting}
               />
             )}
           </div>

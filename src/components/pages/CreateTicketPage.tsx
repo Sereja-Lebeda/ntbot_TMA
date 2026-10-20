@@ -45,7 +45,8 @@ interface OutletContextProps {
   setTicketStatus: React.Dispatch<React.SetStateAction<TicketStatusType>>;
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  submitTicket: () => void;
+  submitTicket: () => Promise<boolean>;
+  isSubmitting: boolean;
 }
 
 function CreateTicketPage() {
@@ -71,6 +72,7 @@ function CreateTicketPage() {
     isModalOpen,
     setIsModalOpen,
     submitTicket,
+    isSubmitting,
   } = useOutletContext<OutletContextProps>();
 
   const navigate = useNavigate();
@@ -198,6 +200,7 @@ function CreateTicketPage() {
               multiData={multiData}
               setMultiData={setMultiData}
               submitTicket={submitTicket}
+              isSubmitting={isSubmitting}
             />
           )}
           {currentStep === 4 && (

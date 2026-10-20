@@ -21,6 +21,7 @@ import CrossIcon from "../../../icons/card/CrossIcon";
 import { shadowLiftButtonStyle } from "../../../styles/shadowLift";
 import ConfirmModal from "../modalCardWindows/ConfirmModal";
 import { hapticTap } from "../../../utils/haptics";
+import SendingTicketIcon from "../../../icons/SendingTicketIcon";
 
 interface OutletContextProps {
   selectedAction: Action;
@@ -32,7 +33,8 @@ interface OutletContextProps {
   setFiles: React.Dispatch<React.SetStateAction<AttachedFile[]>>;
   multiData: Record<string, string[]>;
   setMultiData: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
-  submitTicket: () => void;
+  submitTicket: () => Promise<boolean>;
+  isSubmitting: boolean;
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -54,6 +56,7 @@ function MobileStepDetails() {
     submitTicket,
     isModalOpen,
     setIsModalOpen,
+    isSubmitting,
   } = useOutletContext<OutletContextProps>();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -87,7 +90,7 @@ function MobileStepDetails() {
     setErrors((prev) => ({ ...prev, [field]: message }));
   }
 
-  function submitForm() {
+  async function submitForm() {
     const newErrors = validateForm(
       formData,
       multiData,
@@ -97,9 +100,7 @@ function MobileStepDetails() {
     setErrors(newErrors); // родитель ставит стейт
     if (Object.keys(newErrors).length === 0) {
       // валидно?
-      submitTicket();
-      console.log("message");
-      onNext();
+      if (await submitTicket()) onNext();
     }
   }
 
@@ -227,7 +228,7 @@ function MobileStepDetails() {
           {/* Send ticket btn */}
           {isMobile ? (
             <FunctionBtn
-              Icon={SendFormIcon}
+              Icon={isSubmitting ? SendingTicketIcon : SendFormIcon}
               iconClassName="w-4.5 h-4.5 text-(--text-btn)"
               textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
               innerDivClassName="flex justify-center items-center rounded-xs"
@@ -238,11 +239,11 @@ function MobileStepDetails() {
               ${shadowLiftButtonStyle}
               `}
               onClick={submitForm}
-              disabled={isFormInvalid}
+              disabled={isFormInvalid || isSubmitting}
             />
           ) : (
             <FunctionBtn
-              Icon={SendFormIcon}
+              Icon={isSubmitting ? SendingTicketIcon : SendFormIcon}
               iconClassName="w-4.5 h-4.5 text-(--text-btn)"
               text="Отправить заявку"
               textClassName="font-jbmono font-medium text-xs text-(--text-btn) leading-normal"
@@ -253,7 +254,7 @@ function MobileStepDetails() {
               ${shadowLiftButtonStyle}
               `}
               onClick={submitForm}
-              disabled={isFormInvalid}
+              disabled={isFormInvalid || isSubmitting}
             />
           )}
         </div>

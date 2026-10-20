@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet, useOutletContext } from "react-router";
 import { useState } from "react";
 import useModalStackEntry from "../../hooks/useModalStackEntry";
 import useMediaQuery from "../../hooks/useMediaQuery";
@@ -11,8 +11,21 @@ import type {
   TicketStatusType,
 } from "../../types/createTicket.type";
 
-import getTicketDescription from "../../utils/getTicketDescription";
 import WizardStepHeader from "../ui/WizardStepHeader";
+import { createTicket } from "../../api/requests";
+import { mapCreateTicket } from "../../api/mappers";
+import InfoModal from "./modalCardWindows/InfoModal";
+import { ApiError } from "../../api/client";
+
+interface OutletContextProps {
+  reloadTickets: () => void;
+}
+
+type SubmitErrorKind = "session" | "unknown";
+const ERROR_TEXTS: Record<SubmitErrorKind, string> = {
+  session: "Сессия истекла. Закройте приложение и откройте его заново",
+  unknown: "Не удалось отправить заявку. Попробуйте ещё раз",
+};
 
 function CreateTicketWizardLayout() {
   const isDesktop = useMediaQuery("(min-width: 1280px)");
@@ -34,40 +47,50 @@ function CreateTicketWizardLayout() {
   const [ticketId, setTicketId] = useState<number>(542);
   const [ticketStatus, setTicketStatus] = useState<TicketStatusType>("Success");
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<SubmitErrorKind | null>(null);
+
+  const { reloadTickets } = useOutletContext<OutletContextProps>();
+
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+
   // todo: make check and redirect
   // if (!selectedCategory) return {
   //   navigate("category", { replace: true })
   // }
 
-  function submitTicket() {
-    if (!selectedAction) return;
+  async function submitTicket(): Promise<boolean> {
+    if (!selectedAction) return false;
+    if (priority === null) return false;
+    if (isSubmitting) return false;
 
-    const breadcrumbs = [
-      selectedAction.category,
-      selectedAction.subcategory,
-      selectedAction.name,
-    ];
-    const ticket = {
-      //TODO: userID:  NOTE: take id from db?
-      //TODO: ticketID: NOTE: need to take id from db
-      actionId: selectedAction.id,
-      breadcrumbs,
-      priority,
-      body: formData,
-      multiBody: multiData,
-      description: getTicketDescription(formData, selectedAction),
-    };
+    setIsSubmitting(true);
+    setSubmitError(null);
 
-    const formDataToSend = new FormData(); // браузерный FormData (не стейт formData)
-    formDataToSend.append("ticket", JSON.stringify(ticket)); // JSON тикета
-    files.forEach((item) => {
-      formDataToSend.append("files", item.file); // каждый файл
-    });
-
-    setHasSubmitted(true);
-
-    // TODO: fetch отправка, когда бэк готов
-    console.log(ticket); // пока проверить сборку
+    try {
+      const dto = mapCreateTicket({
+        action: selectedAction,
+        formData,
+        priority,
+      });
+      await createTicket(dto);
+      //NOTE: timeout for icon animation check. Should I delete it?
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      setHasSubmitted(true);
+      reloadTickets();
+      return true;
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        setSubmitError("session");
+      } else {
+        setSubmitError("unknown");
+      }
+      console.error(e);
+      setIsErrorOpen(true);
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -105,9 +128,16 @@ function CreateTicketWizardLayout() {
             submitTicket,
             hasSubmitted,
             setHasSubmitted,
+            isSubmitting,
           }}
         />
       </div>
+
+      <InfoModal
+        isOpen={isErrorOpen}
+        onClose={() => setIsErrorOpen(false)}
+        text={submitError === null ? "" : ERROR_TEXTS[submitError]}
+      />
     </div>
   );
 }
