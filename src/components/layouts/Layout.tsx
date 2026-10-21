@@ -23,6 +23,17 @@ import getTicketDescription from "../../utils/getTicketDescription";
 
 import useTickets from "../../hooks/useTickets";
 import getVisibleTickets from "../../utils/getVisibleTickets";
+import { cancelTicket } from "../../api/requests";
+import { ApiError } from "../../api/client";
+import InfoModal from "../pages/modalCardWindows/InfoModal";
+
+type CancelErrorKind = "session" | "immutable" | "unknown";
+
+const CANCEL_ERROR_TEXT: Record<CancelErrorKind, string> = {
+  session: "Сессия истекла. Закройте приложение и откройте его заново",
+  immutable: "Заявку уже взяли в работу, отменить её нельзя",
+  unknown: "Не удалось отменить заявку. Попробуйте еще раз",
+};
 
 export default function Layout() {
   useIosEdgeSwipeBack();
@@ -92,6 +103,10 @@ export default function Layout() {
   const [filter, setFilter] = useState<string | null>("Статус"); // какой дроп открыт
 
   const [activeModal, setActiveModal] = useState<ModalTypes>(null);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [errorKind, setErrorKind] = useState<CancelErrorKind | null>(null);
+  const [isErrorOpen, setIsErrorOpen] = useState(false);
+
   function handleRequestCancel(ticketId: number) {
     setActiveModal({ type: "cancel", ticketId });
   }
@@ -178,21 +193,35 @@ export default function Layout() {
   const inputText =
     "Вы уверены, что хотите отменить заявку?\n\nЗаново запустить её в работу будет невозможно.";
 
-  function onConfirm() {
-    // отмена заявки: статус → Cancelled, id из activeModal
-    if (activeModal?.type === "cancel") {
-      setTickets((prev) =>
-        prev.map((t) =>
-          t.ticketId === activeModal.ticketId
-            ? { ...t, status: "Cancelled" }
-            : t,
-        ),
-      );
+  async function onConfirm() {
+    if (isCancelling || activeModal?.type !== "cancel") return;
+
+    const ticketId = activeModal.ticketId;
+    setIsCancelling(true);
+
+    try {
+      await cancelTicket(ticketId);
+      setActiveModal(null);
+      ticketsReload();
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        setErrorKind("session");
+      } else if (e instanceof ApiError && e.status === 409) {
+        setErrorKind("immutable");
+        ticketsReload();
+      } else {
+        setErrorKind("unknown");
+      }
+      console.error(e);
+      setActiveModal(null);
+      setIsErrorOpen(true);
+    } finally {
+      setIsCancelling(false);
     }
-    setActiveModal(null); // закрыть
   }
 
   function onCancelConfirmModal() {
+    if (isCancelling) return;
     if (!isDesktop) {
       setActiveModal(null);
     } else {
@@ -318,10 +347,16 @@ export default function Layout() {
         />
       )}
       <ConfirmModal
+        isBusy={isCancelling}
         isOpen={activeModal?.type === "cancel"}
         onConfirm={onConfirm}
         onCancel={onCancelConfirmModal}
         inputText={inputText}
+      />
+      <InfoModal
+        isOpen={isErrorOpen}
+        onClose={() => setIsErrorOpen(false)}
+        text={errorKind !== null ? CANCEL_ERROR_TEXT[errorKind] : ""}
       />
       <div className="flex-1 min-h-0">
         <Outlet

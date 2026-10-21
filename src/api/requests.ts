@@ -34,3 +34,9 @@ export async function createTicket(dto: CreateTicketDto): Promise<void> {
     body: dto,
   });
 }
+
+export async function cancelTicket(ticketId: number): Promise<void> {
+  await apiFetch<string>(`/ticket/${ticketId}`, {
+    method: "DELETE",
+  });
+}

@@ -12,6 +12,7 @@ interface ConfirmModalProps {
   onCancel: () => void;
   inputText: string;
   isOpen: boolean;
+  isBusy?: boolean;
 }
 
 function ConfirmModal({
@@ -19,6 +20,7 @@ function ConfirmModal({
   onCancel,
   inputText,
   isOpen,
+  isBusy = false,
 }: ConfirmModalProps) {
   useModalStackEntry(onCancel, isOpen);
 
@@ -74,29 +76,33 @@ function ConfirmModal({
         {/* buttons */}
         <div className="w-full h-full flex justify-center items-center gap-18">
           <button
+            disabled={isBusy}
             onClick={(e) => {
               e.stopPropagation();
               onCancel();
             }}
-            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
+            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group
+            disabled:opacity-50 disabled:cursor-default"
             onPointerDown={hapticTap}
           >
-            <CrossIcon className="w-2.5 h-2.5 text-(--text-secondary) group-hover:text-(--text-primary)" />
-            <span className="font-bold leading-3 text-xs text-(--text-secondary) group-hover:text-(--text-primary)">
+            <CrossIcon className="w-2.5 h-2.5 text-(--text-secondary) group-enabled:group-hover:text-(--text-primary)" />
+            <span className="font-bold leading-3 text-xs text-(--text-secondary) group-enabled:group-hover:text-(--text-primary)">
               Нет
             </span>
           </button>
 
           <button
+            disabled={isBusy}
             onClick={(e) => {
               e.stopPropagation();
               onConfirm();
             }}
-            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group"
+            className="flex justify-center items-center gap-1 py-2.25 cursor-pointer group
+            disabled:opacity-50 disabled:cursor-default"
             onPointerDown={hapticTap}
           >
-            <CheckIcon className="text-(--text-secondary) group-hover:text-(--text-primary)" />
-            <span className="font-bold leading-3 text-xs text-(--text-secondary) group-hover:text-(--text-primary)">
+            <CheckIcon className="text-(--text-secondary) group-enabled:group-hover:text-(--text-primary)" />
+            <span className="font-bold leading-3 text-xs text-(--text-secondary) group-enabled:group-hover:text-(--text-primary)">
               Да
             </span>
           </button>
