@@ -402,9 +402,9 @@ export default function TicketCard({
     },
   };
 
-  const keysToShow =
+  const keysToShow: actionRegistryType[] =
     currentUser.role === "admin"
-      ? Object.keys(actionRegistry)
+      ? (Object.keys(actionRegistry) as actionRegistryType[])
       : statusActions[ticket.status];
 
   function getStatusIcon(
@@ -470,7 +470,7 @@ export default function TicketCard({
     }
     return (
       <div className={baseStyle}>
-        {statusActions[status]
+        {keysToShow
           .filter((key) => key !== "telegram")
           .filter((key) => {
             if (key === "cancel") {
@@ -500,7 +500,7 @@ export default function TicketCard({
             );
           })}
 
-        {statusActions[status].includes("telegram") && (
+        {keysToShow.includes("telegram") && (
           <CardActionButton
             className={`${isDesktop ? "" : "w-full flex items-center gap-2 py-1 px-2"} cursor-pointer group
             ${ctxMenu ? "bg-(--bg-primary) hover:bg-(--border-hover-btn)" : ""}`}
