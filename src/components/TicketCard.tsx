@@ -62,6 +62,7 @@ const statusActions: Record<StatusType, actionRegistryType[]> = {
   New: ["cancel", "edit", "repeat", "favorite", "telegram"],
   "In progress": ["repeat", "favorite", "telegram"],
   Paused: ["repeat", "favorite", "telegram"],
+  Pending: ["repeat", "favorite", "telegram"],
   Closed: ["repeat", "favorite"],
   Cancelled: ["repeat", "favorite"],
   Complete: [],

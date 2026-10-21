@@ -34,6 +34,13 @@ const textStyles = {
       "text-sm font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5",
     container: "flex flex-col items-center xl:h-full justify-center gap-1",
   },
+  Pending: {
+    quantity:
+      " font-jbmono text-sm xl:text-[22px] font-normal xl:font-extralight leading-5  xl:leading-7",
+    statusLabel:
+      "text-sm font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5",
+    container: "flex flex-col items-center xl:h-full justify-center gap-1",
+  },
   Complete: {
     quantity:
       " font-jbmono text-sm xl:text-[28px] font-normal xl:font-extralight leading-5  xl:leading-9",

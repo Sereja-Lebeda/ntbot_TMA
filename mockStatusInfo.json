@@ -3,6 +3,7 @@
   "In progress": 22,
   "Complete": 44,
   "Paused": 33,
+  "Pending": 67,
   "Cancelled": 2,
   "Closed": 55
 }

@@ -22,6 +22,12 @@ const titles: Record<string, Record<FormType, string>> = {
     statusBlock: "На паузе",
     infoBlock: "на паузе",
   },
+  Pending: {
+    singular: "ОЖИДАНИЕ",
+    plural: "ОЖИДАНИЕ",
+    statusBlock: "Ожидание",
+    infoBlock: "ожидание",
+  },
   Complete: {
     singular: "ГОТОВА",
     plural: "ГОТОВЫХ",
@@ -55,6 +61,8 @@ export function getStatusColor(status: StatusType) {
       return `${baseStyle} bg-(--bg-task-inprogress)`;
     case "Paused":
       return `${baseStyle} bg-(--bg-task-paused)`;
+    case "Pending":
+      return `${baseStyle} bg-(--bg-task-paused)`;
     case "Complete":
       return `${baseStyle} bg-(--bg-task-complete)`;
     case "Closed":
@@ -81,6 +89,7 @@ export const allStatuses: StatusType[] = [
   "New",
   "In progress",
   "Paused",
+  "Pending",
   "Complete",
   "Closed",
   "Cancelled",

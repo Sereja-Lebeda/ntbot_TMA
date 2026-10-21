@@ -174,6 +174,7 @@ export default function HeroSector({
     New: 0,
     "In progress": 1,
     Paused: 2,
+    Pending: 2,
     Closed: 3,
     Cancelled: 4,
     Complete: 5,

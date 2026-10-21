@@ -24,6 +24,7 @@ export type StatusType =
   | "New"
   | "In progress"
   | "Paused"
+  | "Pending"
   | "Complete"
   | "Closed"
   | "Cancelled";
@@ -33,6 +34,7 @@ export const StatusesOfTicket = [
   "Новые",
   "В работе",
   "На паузе",
+  "Ожидание",
   "Готовы",
   "Отклонены",
   "Закрыты",
