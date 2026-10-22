@@ -5,6 +5,7 @@ import type {
   CategoryDto,
   UserDto,
   CreateTicketDto,
+  UpdateTicketDto,
 } from "./api.types";
 import { apiFetch } from "./client";
 import { buildCategoryMap, mapTicket, mapUser } from "./mappers";
@@ -38,5 +39,15 @@ export async function createTicket(dto: CreateTicketDto): Promise<void> {
 export async function cancelTicket(ticketId: number): Promise<void> {
   await apiFetch<string>(`/ticket/${ticketId}`, {
     method: "DELETE",
+  });
+}
+
+export async function updateTicket(
+  ticketId: number,
+  dto: UpdateTicketDto,
+): Promise<void> {
+  await apiFetch<string>(`/ticket/${ticketId}`, {
+    method: "PUT",
+    body: dto,
   });
 }

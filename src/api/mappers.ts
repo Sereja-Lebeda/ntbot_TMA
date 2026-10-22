@@ -6,6 +6,7 @@ import type {
   CreateTicketDto,
   PriorityDto,
   TicketDto,
+  UpdateTicketDto,
   UserDto,
 } from "./api.types";
 
@@ -107,6 +108,11 @@ interface CreateTicketInput {
   priority: NonNullable<PriorityLevel>;
 }
 
+interface UpdateTicketInput {
+  formData: Record<string, string>;
+  priority: NonNullable<PriorityLevel>;
+}
+
 export function mapCreateTicket({
   action,
   formData,
@@ -123,6 +129,18 @@ export function mapCreateTicket({
   };
 
   return ticket;
+}
+
+export function mapUpdateTicket({
+  formData,
+  priority,
+}: UpdateTicketInput): UpdateTicketDto {
+  const ticketUpdate = {
+    body: formData,
+    priority: REVERSE_PRIORITY_MAP[priority],
+  };
+
+  return ticketUpdate;
 }
 
 export function mapRole(raw: string): UserRole {

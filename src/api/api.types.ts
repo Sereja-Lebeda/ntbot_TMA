@@ -26,6 +26,11 @@ export interface CreateTicketDto {
   creation_timestamp: number;
 }
 
+export interface UpdateTicketDto {
+  priority: PriorityDto;
+  body: Record<string, string>;
+}
+
 export interface UserDto {
   id: number;
   name: string;
