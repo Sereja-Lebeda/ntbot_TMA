@@ -6,11 +6,7 @@ import useEditRepeatForm from "../../../hooks/useEditRepeatForm";
 import useMediaQuery from "../../../hooks/useMediaQuery";
 
 import type { Action, PriorityLevel } from "../../../types/createTicket.type";
-import type {
-  StatusType,
-  Ticket,
-  TicketAttachmentType,
-} from "../../../types/ticket.types";
+import type { Ticket, TicketAttachmentType } from "../../../types/ticket.types";
 import TicketForm from "../../TicketForm";
 
 import { getTicketPermissions } from "../../../utils/ticketPermissions";
@@ -18,7 +14,7 @@ import getBreadcrumb from "../../../utils/getBreadcrumbs";
 
 import TicketHeaderInfo from "./TicketHeaderInfo";
 import ConfirmModal from "./ConfirmModal";
-import FormDropdown from "../../ui/FormDropdown";
+
 import EditableAttachmentField from "../../ui/Attachment/EditableAttachmentField";
 import AttachmentField from "../../ui/Attachment/AttachmentField";
 import FunctionBtn from "../../ui/Buttons/FunctionBtn";
@@ -42,8 +38,7 @@ interface EditRepeatModalProps {
     priority: PriorityLevel;
     action: Action;
     attachedFiles: TicketAttachmentType;
-    status: StatusType;
-  }) => void;
+  }) => void | Promise<void>;
   mode: ModeType;
 
   favoriteTickets: number[];
@@ -77,28 +72,21 @@ function EditRepeatModal({
     setEditFiles,
     isDragging,
     setIsDragging,
-    selectedCategory,
-    selectedSubcategory,
-    selectedActionState,
-    newStatus,
-    setNewStatus,
+
     isConfirmCloseOpen,
     setIsConfirmCloseOpen,
     inputText,
     handleCloseAttempt,
-    handleCategoryChange,
-    handleSubcategoryChange,
-    handleActionChange,
+
     handleSubmit,
     addFiles,
     addEditFiles,
     clearError,
     setFieldError,
-    categoryOptions,
-    subcategoryOptions,
-    actionOptions,
+
     currentAction,
     isFormInvalid,
+    isSubmitting,
   } = useEditRepeatForm({
     ticket,
     action,
@@ -183,12 +171,7 @@ function EditRepeatModal({
               setFavoriteTickets={setFavoriteTickets}
               ticket={ticket}
               modalMode="edit"
-              onStatusChange={
-                permissions.canChangeStatus
-                  ? (status) => setNewStatus(status)
-                  : undefined
-              }
-              currentStatus={newStatus}
+              currentStatus={ticket.status}
             />
           </div>
         ) : (
@@ -218,34 +201,9 @@ function EditRepeatModal({
                 Категории
               </span>
 
-              {mode === "repeat" ? (
-                <div className="flex justify-start items-center flex-wrap gap-2">
-                  {ticket.breadcrumbs.map(getBreadcrumb)}
-                </div>
-              ) : (
-                <div className="w-full flex flex-col gap-3">
-                  <FormDropdown
-                    options={categoryOptions}
-                    value={selectedCategory ?? ""}
-                    onChange={handleCategoryChange}
-                    placeholder="Выберите категорию"
-                  />
-                  <FormDropdown
-                    options={subcategoryOptions}
-                    value={selectedSubcategory ?? ""}
-                    onChange={handleSubcategoryChange}
-                    placeholder="Выберите подкатегорию"
-                    disabled={!selectedCategory}
-                  />
-                  <FormDropdown
-                    options={actionOptions}
-                    value={selectedActionState?.name ?? ""}
-                    onChange={handleActionChange}
-                    placeholder="Выберите действие"
-                    disabled={!selectedSubcategory}
-                  />
-                </div>
-              )}
+              <div className="flex justify-start items-center flex-wrap gap-2">
+                {ticket.breadcrumbs.map(getBreadcrumb)}
+              </div>
             </div>
           </div>
           <TicketForm
@@ -320,7 +278,7 @@ function EditRepeatModal({
               enabled:bg-(--bg-btn-primary)
               `}
               onClick={handleSubmit}
-              disabled={isFormInvalid}
+              disabled={isFormInvalid || isSubmitting}
             />
           ) : (
             <FunctionBtn
@@ -335,7 +293,7 @@ function EditRepeatModal({
               enabled:bg-(--bg-btn-primary)
               `}
               onClick={handleSubmit}
-              disabled={isFormInvalid}
+              disabled={isFormInvalid || isSubmitting}
             />
           )}
         </div>

@@ -8,7 +8,6 @@ import type {
   PriorityLevel,
 } from "../types/createTicket.type";
 import type {
-  StatusType,
   Ticket,
   TicketAttachmentType,
   TicketFileItem,
@@ -31,8 +30,7 @@ interface useEditRepeatFormProps {
     priority: PriorityLevel;
     action: Action;
     attachedFiles: TicketAttachmentType;
-    status: StatusType;
-  }) => void;
+  }) => void | Promise<void>;
 }
 
 function useEditRepeatForm({
@@ -70,9 +68,8 @@ function useEditRepeatForm({
   const [selectedActionState, setSelectedActionState] = useState<Action | null>(
     action ?? null,
   );
-  const [newStatus, setNewStatus] = useState<StatusType>(
-    ticket?.status ?? "New",
-  );
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const lastActionRef = useRef<Action | null>(action ?? null);
   useEffect(() => {
@@ -165,8 +162,9 @@ function useEditRepeatForm({
     setErrors({});
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!currentAction) return;
+    if (isSubmitting) return;
 
     const newErrors = validateForm(
       formData,
@@ -182,14 +180,18 @@ function useEditRepeatForm({
         ? attachedFilesFromMixed(editFiles)
         : attachedFilesFromNew(files);
 
-    onSubmit({
-      formData,
-      multiData,
-      priority,
-      action: currentAction,
-      attachedFiles,
-      status: newStatus,
-    });
+    setIsSubmitting(true);
+    try {
+      await onSubmit({
+        formData,
+        multiData,
+        priority,
+        action: currentAction,
+        attachedFiles,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function addFiles(fileList: FileList) {
@@ -306,8 +308,6 @@ function useEditRepeatForm({
     setSelectedSubcategory,
     selectedActionState,
     setSelectedActionState,
-    newStatus,
-    setNewStatus,
     isConfirmCloseOpen,
     setIsConfirmCloseOpen,
     inputText,
@@ -330,6 +330,7 @@ function useEditRepeatForm({
     currentAction,
     currentErrors,
     isFormInvalid,
+    isSubmitting,
   };
 }
 

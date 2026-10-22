@@ -23,9 +23,10 @@ import getTicketDescription from "../../utils/getTicketDescription";
 
 import useTickets from "../../hooks/useTickets";
 import getVisibleTickets from "../../utils/getVisibleTickets";
-import { cancelTicket } from "../../api/requests";
+import { cancelTicket, updateTicket } from "../../api/requests";
 import { ApiError } from "../../api/client";
 import InfoModal from "../pages/modalCardWindows/InfoModal";
+import { mapUpdateTicket } from "../../api/mappers";
 
 type CancelErrorKind = "session" | "immutable" | "unknown";
 
@@ -33,6 +34,14 @@ const CANCEL_ERROR_TEXT: Record<CancelErrorKind, string> = {
   session: "Сессия истекла. Закройте приложение и откройте его заново",
   immutable: "Заявку уже взяли в работу, отменить её нельзя",
   unknown: "Не удалось отменить заявку. Попробуйте еще раз",
+};
+
+type EditErrorKind = "session" | "invalid" | "unknown";
+
+const EDIT_ERROR_TEXT: Record<EditErrorKind, string> = {
+  session: "Сессия истекла. Закройте приложение и откройте его заново",
+  invalid: "Проверьте заполненные поля и попробуйте ещё раз",
+  unknown: "Не удалось сохранить изменения. Попробуйте ещё раз",
 };
 
 export default function Layout() {
@@ -104,8 +113,9 @@ export default function Layout() {
 
   const [activeModal, setActiveModal] = useState<ModalTypes>(null);
   const [isCancelling, setIsCancelling] = useState(false);
-  const [errorKind, setErrorKind] = useState<CancelErrorKind | null>(null);
+  const [errorText, setErrorText] = useState<string>("");
   const [isErrorOpen, setIsErrorOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   function handleRequestCancel(ticketId: number) {
     setActiveModal({ type: "cancel", ticketId });
@@ -205,12 +215,12 @@ export default function Layout() {
       ticketsReload();
     } catch (e) {
       if (e instanceof ApiError && e.status === 401) {
-        setErrorKind("session");
+        setErrorText(CANCEL_ERROR_TEXT.session);
       } else if (e instanceof ApiError && e.status === 409) {
-        setErrorKind("immutable");
+        setErrorText(CANCEL_ERROR_TEXT.immutable);
         ticketsReload();
       } else {
-        setErrorKind("unknown");
+        setErrorText(CANCEL_ERROR_TEXT.unknown);
       }
       console.error(e);
       setActiveModal(null);
@@ -266,43 +276,43 @@ export default function Layout() {
     setActiveModal(null);
   }
 
-  function handleEditSubmit(
+  async function handleEditSubmit(
     data: {
       formData: Record<string, string>;
       multiData: Record<string, string[]>;
       priority: PriorityLevel;
-      action: Action;
       attachedFiles: TicketAttachmentType;
-      status: StatusType;
     },
     editTicket: Ticket | undefined,
-  ) {
-    if (!editTicket) return;
+  ): Promise<boolean> {
+    if (isUpdating || !editTicket || !data.priority) return false;
 
-    const newBreadcrumbs = [
-      data.action.category,
-      data.action.subcategory,
-      data.action.name,
-    ];
+    const ticketId = editTicket.ticketId;
+    const dto = mapUpdateTicket({
+      formData: data.formData,
+      priority: data.priority,
+    });
 
-    setTickets((prev) =>
-      prev.map((t) =>
-        t.ticketId === editTicket.ticketId
-          ? {
-              ...t,
-              body: data.formData,
-              multiBody: data.multiData,
-              priority: data.priority,
-              actionId: data.action.id,
-              breadcrumbs: newBreadcrumbs,
-              description: getTicketDescription(data.formData, data.action),
-              attachedFiles: data.attachedFiles,
-              status: data.status,
-            }
-          : t,
-      ),
-    );
-    setActiveModal(null);
+    setIsUpdating(true);
+    try {
+      await updateTicket(ticketId, dto);
+      setActiveModal(null);
+      ticketsReload();
+      return true;
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        setErrorText(EDIT_ERROR_TEXT.session);
+      } else if (e instanceof ApiError && e.status === 400) {
+        setErrorText(EDIT_ERROR_TEXT.invalid);
+      } else {
+        setErrorText(EDIT_ERROR_TEXT.unknown);
+      }
+      console.error(e);
+      setIsErrorOpen(true);
+      return false;
+    } finally {
+      setIsUpdating(false);
+    }
   }
 
   function handleRetry() {
@@ -356,7 +366,7 @@ export default function Layout() {
       <InfoModal
         isOpen={isErrorOpen}
         onClose={() => setIsErrorOpen(false)}
-        text={errorKind !== null ? CANCEL_ERROR_TEXT[errorKind] : ""}
+        text={errorText}
       />
       <div className="flex-1 min-h-0">
         <Outlet

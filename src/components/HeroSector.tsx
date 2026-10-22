@@ -83,12 +83,11 @@ interface OutletContextProps {
       formData: Record<string, string>;
       multiData: Record<string, string[]>;
       priority: PriorityLevel;
-      action: Action;
+
       attachedFiles: TicketAttachmentType;
-      status: StatusType;
     },
     ticket: Ticket | undefined,
-  ) => void;
+  ) => Promise<boolean>;
 
   handleOpenView: (ticketId: number) => void;
 
@@ -300,7 +299,9 @@ export default function HeroSector({
             ticket={editedTicket}
             action={editedAction}
             onClose={handleEditCancel}
-            onSubmit={(data) => handleEditSubmit(data, editedTicket)}
+            onSubmit={async (data) => {
+              await handleEditSubmit(data, editedTicket);
+            }}
             mode="edit"
             favoriteTickets={favoriteTickets}
             setFavoriteTickets={setFavoriteTickets}

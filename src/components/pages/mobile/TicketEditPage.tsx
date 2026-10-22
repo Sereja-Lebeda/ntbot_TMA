@@ -4,11 +4,7 @@ import useUser from "../../../hooks/useUser";
 import useEditRepeatForm from "../../../hooks/useEditRepeatForm";
 import useMediaQuery from "../../../hooks/useMediaQuery";
 
-import type {
-  StatusType,
-  Ticket,
-  TicketAttachmentType,
-} from "../../../types/ticket.types";
+import type { Ticket, TicketAttachmentType } from "../../../types/ticket.types";
 import type { Action, PriorityLevel } from "../../../types/createTicket.type";
 
 import { allActions } from "../../../utils/allActions";
@@ -17,7 +13,7 @@ import { getTicketPermissions } from "../../../utils/ticketPermissions";
 import TicketHeaderInfo from "../modalCardWindows/TicketHeaderInfo";
 import ConfirmModal from "../modalCardWindows/ConfirmModal";
 import TicketForm from "../../TicketForm";
-import FormDropdown from "../../ui/FormDropdown";
+
 import EditableAttachmentField from "../../ui/Attachment/EditableAttachmentField";
 import FunctionBtn from "../../ui/Buttons/FunctionBtn";
 
@@ -30,6 +26,7 @@ import CancelFormButton from "../../ui/Buttons/CancelFormButton";
 import { hapticTap } from "../../../utils/haptics";
 import getTicketPageState from "../../../utils/getTicketPageState";
 import ListStateMessage from "../../ui/ListStateMessage";
+import getBreadcrumb from "../../../utils/getBreadcrumbs";
 
 interface TicketEditFormProps {
   ticket: Ticket;
@@ -48,12 +45,11 @@ interface OutletContextProps {
       formData: Record<string, string>;
       multiData: Record<string, string[]>;
       priority: PriorityLevel;
-      action: Action;
+
       attachedFiles: TicketAttachmentType;
-      status: StatusType;
     },
     editTicket: Ticket | undefined,
-  ): void;
+  ): Promise<boolean>;
   isLoading: boolean;
   error: Error | null;
   reload: () => void;
@@ -86,35 +82,28 @@ function TicketEditForm({
     errors,
     editFiles,
     setEditFiles,
-    selectedCategory,
-    selectedSubcategory,
-    selectedActionState,
-    newStatus,
-    setNewStatus,
+
     isConfirmCloseOpen,
     setIsConfirmCloseOpen,
     inputText,
     handleCloseAttempt,
-    handleCategoryChange,
-    handleSubcategoryChange,
-    handleActionChange,
+
     handleSubmit,
     addEditFiles,
     clearError,
     setFieldError,
-    categoryOptions,
-    subcategoryOptions,
-    actionOptions,
+
     currentAction,
     isFormInvalid,
+    isSubmitting,
   } = useEditRepeatForm({
     ticket: editedTicket,
     action: editedAction,
     mode: "edit",
     onClose,
-    onSubmit: (data) => {
-      handleEditSubmit(data, editedTicket);
-      onClose();
+    onSubmit: async (data) => {
+      const isSaved = await handleEditSubmit(data, editedTicket);
+      if (isSaved) onClose();
     },
   });
 
@@ -178,12 +167,7 @@ function TicketEditForm({
             setFavoriteTickets={setFavoriteTickets}
             ticket={editedTicket}
             modalMode="edit"
-            onStatusChange={
-              permissions.canChangeStatus
-                ? (status) => setNewStatus(status)
-                : undefined
-            }
-            currentStatus={newStatus}
+            currentStatus={editedTicket.status}
           />
         </div>
 
@@ -204,29 +188,10 @@ function TicketEditForm({
               <span className="font-consolas font-normal text-xs text-(--text-secondary) leading-3">
                 Категории
               </span>
-
-              <div className="w-full flex flex-col gap-3">
-                <FormDropdown
-                  options={categoryOptions}
-                  value={selectedCategory ?? ""}
-                  onChange={handleCategoryChange}
-                  placeholder="Выберите категорию"
-                />
-                <FormDropdown
-                  options={subcategoryOptions}
-                  value={selectedSubcategory ?? ""}
-                  onChange={handleSubcategoryChange}
-                  placeholder="Выберите подкатегорию"
-                  disabled={!selectedCategory}
-                />
-                <FormDropdown
-                  options={actionOptions}
-                  value={selectedActionState?.name ?? ""}
-                  onChange={handleActionChange}
-                  placeholder="Выберите действие"
-                  disabled={!selectedSubcategory}
-                />
+              <div className="flex justify-start items-center flex-wrap gap-2">
+                {editedTicket.breadcrumbs.map(getBreadcrumb)}
               </div>
+              {/* // TODO: вернуть выбор действия после ответа бэка (вопрос №34). */}
             </div>
           </div>
           <TicketForm
@@ -271,7 +236,7 @@ function TicketEditForm({
               disabled:bg-(--bg-disable-btn)
               `}
               onClick={handleSubmit}
-              disabled={isFormInvalid}
+              disabled={isFormInvalid || isSubmitting}
             />
           ) : (
             <FunctionBtn
@@ -287,7 +252,7 @@ function TicketEditForm({
               disabled:bg-(--bg-disable-btn)
               `}
               onClick={handleSubmit}
-              disabled={isFormInvalid}
+              disabled={isFormInvalid || isSubmitting}
             />
           )}
         </div>
