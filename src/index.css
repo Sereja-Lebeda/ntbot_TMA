@@ -30,6 +30,8 @@
   );
   --app-safe-bottom: var(--tg-safe-area-inset-bottom, 0px);
 
+  --scrollbar-thumb: var(--bg-border);
+  --scrollbar-thumb-hover: #a8a49c;
   /* Color bg */
   background: var(--bg-primary);
   --bg-primary: #ede8de;
@@ -73,6 +75,8 @@
 }
 
 .dark {
+  --scrollbar-thumb: var(--bg-inactive-btn);
+  --scrollbar-thumb-hover: #6a6666;
   /* Color bg */
   background: var(--bg-primary);
   --bg-primary: #0c0b0b;
@@ -117,15 +121,18 @@ body::-webkit-scrollbar {
 }
 
 .dropdown-scroll::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: 3px !important;
+  height: 2px !important;
 }
 .dropdown-scroll::-webkit-scrollbar-thumb {
-  background: var(--bg-inactive-btn);
-  border-radius: 2px;
+  background: var(--scrollbar-thumb) !important;
+  border-radius: 2px !important;
+}
+.dropdown-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover) !important;
 }
 .dropdown-scroll::-webkit-scrollbar-track {
-  background: transparent;
+  background: transparent !important;
 }
 
 .vertical-text {
