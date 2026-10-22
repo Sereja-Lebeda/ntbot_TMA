@@ -9,11 +9,12 @@ interface StatusInfoBtnProps {
   onClick: () => void;
   selectedItems: string[];
   className?: string;
+  label?: string;
 }
 
 const attentionColors: Partial<Record<StatusType, string>> = {
-  Pending: "[--blink-color:var(--bg-task-paused)]",
-  Complete: "[--blink-color:var(--bg-task-complete)]",
+  Pending: "[--blink-color:var(--text-primary)]",
+  Complete: "[--blink-color:var(--text-primary)]",
 };
 
 const textStyles = {
@@ -45,7 +46,7 @@ const textStyles = {
     statusLabel:
       "text-sm font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5",
     container:
-      "flex flex-row justify-center items-center gap-1 xl:items-baseline xl:gap-2",
+      "flex flex-col xl:flex-row justify-center items-center gap-1 xl:items-baseline xl:gap-2",
   },
   Complete: {
     quantity:
@@ -79,6 +80,7 @@ function StatusInfoBtn({
   selectedItems,
   onClick,
   className,
+  label,
 }: StatusInfoBtnProps) {
   const isSelected = selectedItems.includes(
     getStatusTitle(status, "statusBlock"),
@@ -87,7 +89,7 @@ function StatusInfoBtn({
   const blinkColor = attentionColors[status];
   const blinkStyle =
     quantity > 0 && !isSelected && blinkColor
-      ? `motion-safe:animate-attention ${blinkColor} group-hover:animate-none`
+      ? `animate-attention ${blinkColor} group-hover:animate-none`
       : "";
 
   return (
@@ -109,7 +111,7 @@ function StatusInfoBtn({
             className={`${textStyles[status].statusLabel} ${isSelected ? "text-(--bg-btn-primary) xl:text-(--text-primary)" : "text-(--text-secondary)"} group-hover:text-(--text-primary)
             ${blinkStyle}`}
           >
-            {getStatusTitle(status, "infoBlock")}
+            {label ?? getStatusTitle(status, "infoBlock")}
           </div>
         </div>
       </div>

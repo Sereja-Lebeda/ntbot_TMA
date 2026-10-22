@@ -3,6 +3,10 @@ import type { StatusType } from "../types/ticket.types";
 
 type FormType = "plural" | "singular" | "statusBlock" | "infoBlock";
 
+export const MOBILE_PILL_LABEL: Partial<Record<StatusType, string>> = {
+  Pending: "ожидание",
+};
+
 const titles: Record<string, Record<FormType, string>> = {
   New: {
     singular: "НОВАЯ",

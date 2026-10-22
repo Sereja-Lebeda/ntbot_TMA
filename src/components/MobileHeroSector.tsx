@@ -4,7 +4,10 @@ import { useNavigate } from "react-router";
 import type { ListStateVariant } from "../types/listState.types";
 import type { StatusType, Ticket, TicketViewType } from "../types/ticket.types";
 
-import getStatusTitle, { allStatuses } from "../utils/ticketBadgeHelpers";
+import getStatusTitle, {
+  allStatuses,
+  MOBILE_PILL_LABEL,
+} from "../utils/ticketBadgeHelpers";
 import getTicketQuantity from "../utils/getTicketQuantity";
 import handleStatusSelect from "../utils/statusSelectedHelper";
 import { hapticTap } from "../utils/haptics";
@@ -121,7 +124,7 @@ function MobileHeroSector({
 
   const ticketQuantities = getTicketQuantity(visibleTickets);
 
-  const pillStyle = "flex-1 min-w-19 h-full";
+  const pillStyle = "flex-1 min-w-28 h-full";
 
   return (
     <>
@@ -193,6 +196,7 @@ function MobileHeroSector({
                   setSelectedItems: setTicketStatuses,
                 });
               }}
+              label={MOBILE_PILL_LABEL[status]}
             />
           </div>
         ))}

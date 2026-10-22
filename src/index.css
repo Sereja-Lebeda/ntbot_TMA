@@ -5,6 +5,7 @@
 @theme {
   --font-jbmono: "JetBrains Mono", monospace;
   --font-consolas: "Consolas", monospace;
+
   --animate-attention: attention 3s ease-in-out infinite;
 
   @keyframes attention {
