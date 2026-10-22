@@ -11,6 +11,11 @@ interface StatusInfoBtnProps {
   className?: string;
 }
 
+const attentionColors: Partial<Record<StatusType, string>> = {
+  Pending: "[--blink-color:var(--bg-task-paused)]",
+  Complete: "[--blink-color:var(--bg-task-complete)]",
+};
+
 const textStyles = {
   New: {
     quantity:
@@ -39,7 +44,8 @@ const textStyles = {
       " font-jbmono text-sm xl:text-[22px] font-normal xl:font-extralight leading-5  xl:leading-7",
     statusLabel:
       "text-sm font-consolas xl:font-jbmono font-normal leading-3 xl:leading-5",
-    container: "flex flex-col items-center xl:h-full justify-center gap-1",
+    container:
+      "flex flex-row justify-center items-center gap-1 xl:items-baseline xl:gap-2",
   },
   Complete: {
     quantity:
@@ -78,6 +84,12 @@ function StatusInfoBtn({
     getStatusTitle(status, "statusBlock"),
   );
 
+  const blinkColor = attentionColors[status];
+  const blinkStyle =
+    quantity > 0 && !isSelected && blinkColor
+      ? `motion-safe:animate-attention ${blinkColor} group-hover:animate-none`
+      : "";
+
   return (
     <div
       onClick={onClick}
@@ -88,12 +100,14 @@ function StatusInfoBtn({
           className={`${textStyles[status].container} hover:text-(--text-primary)`}
         >
           <div
-            className={`${textStyles[status].quantity} ${isSelected ? "text-(--text-primary)" : "text-(--text-primary) xl:text-(--text-secondary) "} group-hover:text-(--text-primary)`}
+            className={`${textStyles[status].quantity} ${isSelected ? "text-(--text-primary)" : "text-(--text-primary) xl:text-(--text-secondary) "} group-hover:text-(--text-primary)
+            ${blinkStyle}`}
           >
             {quantity}
           </div>
           <div
-            className={`${textStyles[status].statusLabel} ${isSelected ? "text-(--bg-btn-primary) xl:text-(--text-primary)" : "text-(--text-secondary)"} group-hover:text-(--text-primary)`}
+            className={`${textStyles[status].statusLabel} ${isSelected ? "text-(--bg-btn-primary) xl:text-(--text-primary)" : "text-(--text-secondary)"} group-hover:text-(--text-primary)
+            ${blinkStyle}`}
           >
             {getStatusTitle(status, "infoBlock")}
           </div>
