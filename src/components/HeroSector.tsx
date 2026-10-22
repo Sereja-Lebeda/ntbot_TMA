@@ -75,9 +75,8 @@ interface OutletContextProps {
       priority: PriorityLevel;
       attachedFiles: TicketAttachmentType;
     },
-    ticket: Ticket | undefined,
     action: Action | undefined,
-  ) => void;
+  ) => Promise<boolean>;
   handleEditSubmit: (
     data: {
       formData: Record<string, string>;
@@ -282,9 +281,9 @@ export default function HeroSector({
             ticket={repeatTicket}
             action={repeatAction}
             onClose={handleRepeatCancel}
-            onSubmit={(data) =>
-              handleRepeatSubmit(data, repeatTicket, repeatAction)
-            }
+            onSubmit={async (data) => {
+              await handleRepeatSubmit(data, repeatAction);
+            }}
             mode="repeat"
             favoriteTickets={favoriteTickets}
             setFavoriteTickets={setFavoriteTickets}

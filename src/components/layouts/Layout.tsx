@@ -19,14 +19,12 @@ import MobileSidebar from "./MobileSidebar";
 import MobileFooter from "./MobileFooter";
 import ConfirmModal from "../pages/modalCardWindows/ConfirmModal";
 
-import getTicketDescription from "../../utils/getTicketDescription";
-
 import useTickets from "../../hooks/useTickets";
 import getVisibleTickets from "../../utils/getVisibleTickets";
-import { cancelTicket, updateTicket } from "../../api/requests";
+import { cancelTicket, createTicket, updateTicket } from "../../api/requests";
 import { ApiError } from "../../api/client";
 import InfoModal from "../pages/modalCardWindows/InfoModal";
-import { mapUpdateTicket } from "../../api/mappers";
+import { mapCreateTicket, mapUpdateTicket } from "../../api/mappers";
 
 type CancelErrorKind = "session" | "immutable" | "unknown";
 
@@ -42,6 +40,14 @@ const EDIT_ERROR_TEXT: Record<EditErrorKind, string> = {
   session: "Сессия истекла. Закройте приложение и откройте его заново",
   invalid: "Проверьте заполненные поля и попробуйте ещё раз",
   unknown: "Не удалось сохранить изменения. Попробуйте ещё раз",
+};
+
+type RepeatErrorKind = "session" | "invalid" | "unknown";
+
+const REPEAT_ERROR_TEXT: Record<RepeatErrorKind, string> = {
+  session: "Сессия истекла. Закройте приложение и откройте его заново",
+  invalid: "Проверьте заполненные поля и попробуйте ещё раз",
+  unknown: "Не удалось повторить заявку. Попробуйте ещё раз",
 };
 
 export default function Layout() {
@@ -116,6 +122,7 @@ export default function Layout() {
   const [errorText, setErrorText] = useState<string>("");
   const [isErrorOpen, setIsErrorOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isRepeating, setIsRepeating] = useState(false);
 
   function handleRequestCancel(ticketId: number) {
     setActiveModal({ type: "cancel", ticketId });
@@ -243,37 +250,43 @@ export default function Layout() {
     }
   }
 
-  function handleRepeatSubmit(
+  async function handleRepeatSubmit(
     data: {
       formData: Record<string, string>;
       multiData: Record<string, string[]>;
       priority: PriorityLevel;
       attachedFiles: TicketAttachmentType;
     },
-    repeatTicket: Ticket | undefined,
     repeatAction: Action | undefined,
-  ) {
-    if (!repeatTicket || !currentUser) return;
+  ): Promise<boolean> {
+    if (isRepeating || !repeatAction || !data.priority) return false;
 
-    const newTicket: Ticket = {
-      ...repeatTicket,
-      // TODO: change logic to receive ticketid from server
-      ticketId: Math.max(...tickets.map((t) => t.ticketId)) + 1,
-      createStamp: Date.now(),
-      createDate: new Date().toLocaleDateString("ru-RU"),
-      status: "New",
-      userId: currentUser.id,
-      userName: currentUser.name,
-      department: currentUser.department,
-      body: data.formData,
-      multiBody: data.multiData,
+    const dto = mapCreateTicket({
+      action: repeatAction,
+      formData: data.formData,
       priority: data.priority,
-      description: getTicketDescription(data.formData, repeatAction!),
-      attachedFiles: data.attachedFiles,
-    };
+    });
 
-    setTickets((prev) => [...prev, newTicket]);
-    setActiveModal(null);
+    setIsRepeating(true);
+    try {
+      await createTicket(dto);
+      setActiveModal(null);
+      ticketsReload();
+      return true;
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) {
+        setErrorText(REPEAT_ERROR_TEXT.session);
+      } else if (e instanceof ApiError && e.status === 400) {
+        setErrorText(REPEAT_ERROR_TEXT.invalid);
+      } else {
+        setErrorText(REPEAT_ERROR_TEXT.unknown);
+      }
+      console.error(e);
+      setIsErrorOpen(true);
+      return false;
+    } finally {
+      setIsRepeating(false);
+    }
   }
 
   async function handleEditSubmit(

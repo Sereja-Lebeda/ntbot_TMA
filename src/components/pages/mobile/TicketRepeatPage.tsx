@@ -42,9 +42,8 @@ interface OutletContextProps {
       priority: PriorityLevel;
       attachedFiles: TicketAttachmentType;
     },
-    repeatTicket: Ticket | undefined,
     repeatAction: Action | undefined,
-  ): void;
+  ): Promise<boolean>;
   isLoading: boolean;
   error: Error | null;
   reload: () => void;
@@ -86,14 +85,15 @@ function TicketRepeatForm({
     setFieldError,
     currentAction,
     isFormInvalid,
+    isSubmitting,
   } = useEditRepeatForm({
     ticket: repeatedTicket,
     action: repeatedAction,
     mode: "repeat",
     onClose,
-    onSubmit: (data) => {
-      handleRepeatSubmit(data, repeatedTicket, repeatedAction);
-      navigate("/");
+    onSubmit: async (data) => {
+      const isSaved = await handleRepeatSubmit(data, repeatedAction);
+      if (isSaved) navigate("/");
     },
   });
 
@@ -218,7 +218,7 @@ function TicketRepeatForm({
             disabled:bg-(--bg-disable-btn)
             `}
               onClick={handleSubmit}
-              disabled={isFormInvalid}
+              disabled={isFormInvalid || isSubmitting}
             />
           ) : (
             <FunctionBtn
@@ -234,7 +234,7 @@ function TicketRepeatForm({
             disabled:bg-(--bg-disable-btn)
             `}
               onClick={handleSubmit}
-              disabled={isFormInvalid}
+              disabled={isFormInvalid || isSubmitting}
             />
           )}
         </div>
