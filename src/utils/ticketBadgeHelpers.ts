@@ -26,7 +26,7 @@ const titles: Record<string, Record<FormType, string>> = {
     singular: "ОЖИДАНИЕ",
     plural: "ОЖИДАНИЕ",
     statusBlock: "Ожидание",
-    infoBlock: "ожидание",
+    infoBlock: "ждём вашего ответа",
   },
   Complete: {
     singular: "ГОТОВА",

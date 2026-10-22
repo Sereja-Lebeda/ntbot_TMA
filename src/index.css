@@ -5,6 +5,13 @@
 @theme {
   --font-jbmono: "JetBrains Mono", monospace;
   --font-consolas: "Consolas", monospace;
+  --animate-attention: attention 3s ease-in-out infinite;
+
+  @keyframes attention {
+    50% {
+      color: var(--blink-color);
+    }
+  }
 }
 
 @font-face {
