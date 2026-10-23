@@ -99,6 +99,32 @@ export const allStatuses: StatusType[] = [
   "Cancelled",
 ];
 
+export const STATUS_ORDER_DEFAULT: StatusType[] = [
+  "Complete",
+  "Pending",
+  "New",
+  "In progress",
+  "Paused",
+  "Closed",
+  "Cancelled",
+];
+
+export const STATUS_ORDER_BY_STATUS: StatusType[] = [
+  "New",
+  "In progress",
+  "Pending",
+  "Paused",
+  "Complete",
+  "Cancelled",
+  "Closed",
+];
+
+export function getStatusRank(status: StatusType, order: StatusType[]) {
+  const position = order.indexOf(status);
+  if (position === -1) return order.length;
+  return position;
+}
+
 export function buildStatusLabelMap(): Record<string, StatusType> {
   const map: Record<string, StatusType> = {};
   allStatuses.forEach((status) => {
