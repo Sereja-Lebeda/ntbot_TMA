@@ -17,6 +17,8 @@ import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 import ListStateMessage from "./ui/ListStateMessage";
 
 import MobilePlusIcon from "../icons/mobile/MobilePlusIcon";
+import useIsTyping from "../hooks/useIsTyping";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 interface MobileHeroSectorProps {
   tickets: Ticket[]; // уже отфильтрованный и отсортированный массив
@@ -57,6 +59,9 @@ function MobileHeroSector({
   visibleTickets,
 }: MobileHeroSectorProps) {
   const navigate = useNavigate();
+  const isTyping = useIsTyping();
+  const isTouch = useMediaQuery("(pointer: coarse)");
+  const hideCreateBtn = isTouch && isTyping;
 
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -235,19 +240,21 @@ function MobileHeroSector({
             />
           ))
         )}
-        <button
-          onClick={() => {
-            hapticTap();
-            navigate("/tickets/new/category");
-          }}
-          className="fixed right-5 bottom-24
-        w-15 h-15
-        bg-(--bg-btn-primary) rounded-xs
-        flex items-center p-5
-      cursor-pointer"
-        >
-          <MobilePlusIcon className="w-full h-full text-[#0C0B0B]" />
-        </button>
+        {!hideCreateBtn && (
+          <button
+            onClick={() => {
+              hapticTap();
+              navigate("/tickets/new/category");
+            }}
+            className="fixed right-5 bottom-24
+          w-15 h-15
+          bg-(--bg-btn-primary) rounded-xs
+          flex items-center p-5
+          cursor-pointer"
+          >
+            <MobilePlusIcon className="w-full h-full text-[#0C0B0B]" />
+          </button>
+        )}
       </div>
     </>
   );
