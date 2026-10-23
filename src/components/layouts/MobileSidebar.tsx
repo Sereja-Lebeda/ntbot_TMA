@@ -38,6 +38,7 @@ import TimeSortIcon from "../../icons/searchmenu/TimeSortIcon";
 import UserIcon from "../../icons/searchmenu/UserIcon";
 import displayOrDash from "../../utils/displayOrDash";
 import isEmptyValue from "../../utils/isEmptyValue";
+import PeriodDropdown from "../ui/PeriodDropdown";
 
 interface MobileSidebarProps {
   closeSidebar: () => void;
@@ -73,6 +74,11 @@ interface MobileSidebarProps {
   isPrivilegeUser: boolean;
 
   visibleTickets: Ticket[];
+
+  periodFrom: string;
+  setPeriodFrom: (value: string) => void;
+  periodTo: string;
+  setPeriodTo: (value: string) => void;
 }
 
 function getCurrentUsername(username: string) {
@@ -112,6 +118,10 @@ function MobileSidebar({
   changeFilter,
   isPrivilegeUser,
   visibleTickets,
+  periodFrom,
+  setPeriodFrom,
+  periodTo,
+  setPeriodTo,
 }: MobileSidebarProps) {
   useLockBodyScroll();
   useModalStackEntry(closeSidebar);
@@ -390,12 +400,13 @@ function MobileSidebar({
               showResetButton={true}
               isDropdownDisabled={isBlockedByRoute ? true : false}
             />
-            <DropdownList
-              title="Период"
+            <PeriodDropdown
               isOpen={filter === "Период"}
-              items={statuses}
-              onChange={(title) => changeFilter(title)}
-              showResetButton={true}
+              onToggle={() => changeFilter("Период")}
+              from={periodFrom}
+              setFrom={setPeriodFrom}
+              to={periodTo}
+              setTo={setPeriodTo}
               isDropdownDisabled={isBlockedByRoute ? true : false}
             />
             <DropdownList

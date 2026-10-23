@@ -28,6 +28,9 @@ import getStatusTitle, {
 import { allActions } from "../utils/allActions";
 import getListStateVariant from "../utils/getListStateVariant";
 import TicketUnavailableModal from "./pages/modalCardWindows/TicketUnavailableModal";
+import getPeriodError from "../utils/getPeriodError";
+import parseDateInput from "../utils/parseDateInput";
+import isInPeriod from "../utils/isInPeriod";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -99,6 +102,9 @@ interface OutletContextProps {
   reload: () => void;
 
   visibleTickets: Ticket[];
+
+  periodFrom: string;
+  periodTo: string;
 }
 
 export default function HeroSector({
@@ -145,6 +151,8 @@ export default function HeroSector({
     error: ticketsError,
     reload,
     visibleTickets,
+    periodFrom,
+    periodTo,
   } = useOutletContext<OutletContextProps>();
 
   const isLoading = isUserLoading || isTicketsLoading;
@@ -175,6 +183,10 @@ export default function HeroSector({
   const order =
     sortByStatus === "default" ? STATUS_ORDER_DEFAULT : STATUS_ORDER_BY_STATUS;
 
+  const periodError = getPeriodError(periodFrom, periodTo);
+  const fromStamp = periodError === null ? parseDateInput(periodFrom) : null;
+  const toStamp = periodError === null ? parseDateInput(periodTo) : null;
+
   const filteredTickets = visibleTickets
     // Filter by Searchbar
     .filter((ticket) => ticketMatchesSearch(ticket, searchRequest))
@@ -197,6 +209,14 @@ export default function HeroSector({
     // Filter by favorite tickets
     .filter(
       (ticket) => !showFavorites || favoriteTickets.includes(ticket.ticketId),
+    )
+    // Filter by period
+    .filter((ticket) =>
+      isInPeriod({
+        createStamp: ticket.createStamp,
+        from: fromStamp,
+        to: toStamp,
+      }),
     )
     .sort((a, b) => {
       const rankDiff =

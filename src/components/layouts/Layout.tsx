@@ -97,6 +97,8 @@ export default function Layout() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([
     "Все",
   ]);
+  const [periodFrom, setPeriodFrom] = useState<string>("");
+  const [periodTo, setPeriodTo] = useState<string>("");
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([
     "Все",
   ]);
@@ -168,6 +170,8 @@ export default function Layout() {
   const hasActiveFilters =
     selectedStatuses.some((i) => i !== "Все") ||
     selectedCategories.some((i) => i !== "Все") ||
+    periodFrom !== "" ||
+    periodTo !== "" ||
     (ticketView === "team" &&
       (selectedDepartments.some((i) => i !== "Все") ||
         selectedEmployees.some((i) => i !== "Все")));
@@ -177,6 +181,8 @@ export default function Layout() {
     setSelectedCategories(["Все"]);
     setSelectedDepartments(["Все"]);
     setSelectedEmployees(["Все"]);
+    setPeriodFrom("");
+    setPeriodTo("");
   }
 
   function changePrioritySort() {
@@ -367,6 +373,10 @@ export default function Layout() {
           changeFilter={changeFilter}
           filter={filter}
           visibleTickets={visibleTickets}
+          periodFrom={periodFrom}
+          setPeriodFrom={setPeriodFrom}
+          periodTo={periodTo}
+          setPeriodTo={setPeriodTo}
         />
       )}
       <ConfirmModal
@@ -388,6 +398,10 @@ export default function Layout() {
             setSelectedStatuses,
             selectedCategories,
             setSelectedCategories,
+            periodFrom,
+            setPeriodFrom,
+            periodTo,
+            setPeriodTo,
             selectedDepartments,
             setSelectedDepartments,
             selectedEmployees,
