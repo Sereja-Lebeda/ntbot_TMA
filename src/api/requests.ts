@@ -12,18 +12,21 @@ import {
 } from "./api.types";
 import { apiFetch } from "./client";
 import { buildCategoryMap, mapTicket, mapUser } from "./mappers";
+import { withCache } from "./withCache";
 
 export async function getCategories(
   signal?: AbortSignal,
 ): Promise<Record<number, string>> {
-  const list = await apiFetch<CategoryDto[]>("/cats", { signal });
+  const list = await getCategoryList(signal);
   return buildCategoryMap(list);
 }
 
 export async function getCategoryList(
   signal?: AbortSignal,
 ): Promise<CategoryDto[]> {
-  const categoryList = await apiFetch<CategoryDto[]>(`/cats`, { signal });
+  const categoryList = await withCache("cats", () =>
+    apiFetch<CategoryDto[]>(`/cats`, { signal }),
+  );
   return categoryList;
 }
 
@@ -37,9 +40,11 @@ export async function getSubcategories(
   categoryId: number,
   signal?: AbortSignal,
 ): Promise<SubcategoryDto[]> {
-  const subcategory = await apiFetch<SubcategoryDto[]>(`/cat/${categoryId}`, {
-    signal,
-  });
+  const subcategory = await withCache(`cat:${categoryId}`, () =>
+    apiFetch<SubcategoryDto[]>(`/cat/${categoryId}`, {
+      signal,
+    }),
+  );
   return subcategory;
 }
 
@@ -47,11 +52,10 @@ export async function getActions(
   subcategoryId: number,
   signal?: AbortSignal,
 ): Promise<ActionListItemDto[]> {
-  const action = await apiFetch<ActionListItemDto[]>(
-    `/subcat/${subcategoryId}`,
-    {
+  const action = await withCache(`subcat:${subcategoryId}`, () =>
+    apiFetch<ActionListItemDto[]>(`/subcat/${subcategoryId}`, {
       signal,
-    },
+    }),
   );
   return action;
 }
@@ -60,9 +64,11 @@ export async function getActionConfig(
   actionId: number,
   signal?: AbortSignal,
 ): Promise<ActionConfigDto> {
-  const config = await apiFetch<ActionConfigDto>(`/action/${actionId}`, {
-    signal,
-  });
+  const config = await withCache(`action:${actionId}`, () =>
+    apiFetch<ActionConfigDto>(`/action/${actionId}`, {
+      signal,
+    }),
+  );
   return config;
 }
 
