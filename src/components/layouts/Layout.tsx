@@ -25,6 +25,7 @@ import { cancelTicket, createTicket, updateTicket } from "../../api/requests";
 import { ApiError } from "../../api/client";
 import InfoModal from "../pages/modalCardWindows/InfoModal";
 import { mapCreateTicket, mapUpdateTicket } from "../../api/mappers";
+import useScrollFocusedIntoView from "../../hooks/useScrollFocusedIntoView";
 
 type CancelErrorKind = "session" | "immutable" | "unknown";
 
@@ -52,6 +53,7 @@ const REPEAT_ERROR_TEXT: Record<RepeatErrorKind, string> = {
 
 export default function Layout() {
   useIosEdgeSwipeBack();
+  useScrollFocusedIntoView();
   useTelegramBackButton();
 
   const {
