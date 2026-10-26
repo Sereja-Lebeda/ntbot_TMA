@@ -47,3 +47,40 @@ export interface CategoryDto {
   category_id: number;
   name: string;
 }
+
+export interface SubcategoryDto {
+  subcategory_id: number;
+  name: string;
+  category_id: number;
+}
+
+export interface ActionListItemDto {
+  action_id: number;
+  name: string;
+  category_id: number;
+  subcategory_id: number;
+  config_id: number;
+}
+
+// type FieldType = "select" | "textarea" | "";
+
+export interface FieldDto {
+  field_id: number;
+  semantic_id: number;
+  field_name: string;
+  field_type: string;
+  required: boolean;
+  condition: string;
+  options: string[] | null;
+  doubling: boolean;
+  default_value: string;
+  position: number;
+  block_doubling: string;
+}
+
+export interface ActionConfigDto {
+  config_id: number;
+  name: string;
+  has_block_doubling: boolean;
+  fields: FieldDto[];
+}

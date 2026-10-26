@@ -1,11 +1,14 @@
 import type { Ticket } from "../types/ticket.types";
 import type { UserType } from "../types/user.types";
-import type {
-  TicketDto,
-  CategoryDto,
-  UserDto,
-  CreateTicketDto,
-  UpdateTicketDto,
+import {
+  type TicketDto,
+  type CategoryDto,
+  type UserDto,
+  type CreateTicketDto,
+  type UpdateTicketDto,
+  type SubcategoryDto,
+  type ActionListItemDto,
+  type ActionConfigDto,
 } from "./api.types";
 import { apiFetch } from "./client";
 import { buildCategoryMap, mapTicket, mapUser } from "./mappers";
@@ -17,15 +20,54 @@ export async function getCategories(
   return buildCategoryMap(list);
 }
 
+export async function getCategoryList(
+  signal?: AbortSignal,
+): Promise<CategoryDto[]> {
+  const categoryList = await apiFetch<CategoryDto[]>(`/cats`, { signal });
+  return categoryList;
+}
+
 export async function getTicketList(signal?: AbortSignal): Promise<Ticket[]> {
   const categories = await getCategories(signal);
   const dtos = await apiFetch<TicketDto[]>("/ticketList", { signal });
   return dtos.map((dto) => mapTicket(dto, categories));
 }
 
+export async function getSubcategories(
+  categoryId: number,
+  signal?: AbortSignal,
+): Promise<SubcategoryDto[]> {
+  const subcategory = await apiFetch<SubcategoryDto[]>(`/cat/${categoryId}`, {
+    signal,
+  });
+  return subcategory;
+}
+
+export async function getActions(
+  subcategoryId: number,
+  signal?: AbortSignal,
+): Promise<ActionListItemDto[]> {
+  const action = await apiFetch<ActionListItemDto[]>(
+    `/subcat/${subcategoryId}`,
+    {
+      signal,
+    },
+  );
+  return action;
+}
+
+export async function getActionConfig(
+  actionId: number,
+  signal?: AbortSignal,
+): Promise<ActionConfigDto> {
+  const config = await apiFetch<ActionConfigDto>(`/action/${actionId}`, {
+    signal,
+  });
+  return config;
+}
+
 export async function getUser(signal?: AbortSignal): Promise<UserType> {
   const user = await apiFetch<UserDto>("/user", { signal });
-
   return mapUser(user);
 }
 
