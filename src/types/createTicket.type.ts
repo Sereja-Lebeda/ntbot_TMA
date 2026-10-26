@@ -24,7 +24,7 @@ export type CategoriesPool = CategoryName | null;
 
 export interface Action {
   id: number;
-  category: CategoryName;
+  category: string;
   categoryId: number;
   subcategory: string;
   subcategoryId: number;
@@ -38,6 +38,9 @@ export interface Field {
   label: string; // подпись для поля, которое заполняет юзер
   type: FieldType;
   subtype?: string;
+  condition?: string;
+  defaultValue?: string;
+  isInBlock?: boolean;
   required: boolean;
   validation?: ValidationType;
   placeholder?: string;

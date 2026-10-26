@@ -1,4 +1,9 @@
-import type { Action, PriorityLevel } from "../types/createTicket.type";
+import type {
+  Action,
+  FieldType,
+  PriorityLevel,
+  ValidationType,
+} from "../types/createTicket.type";
 import type { StatusType, Ticket } from "../types/ticket.types";
 import type { UserRole, UserType } from "../types/user.types";
 import type {
@@ -38,6 +43,28 @@ const ROLE_MAP: Record<string, UserRole> = {
   base: "employee",
   manager: "manager",
   admin: "admin",
+};
+
+const FIELDS_MAP: Record<string, FieldType> = {
+  text: "short text",
+  textarea: "long text",
+  select: "select",
+  radio: "radio",
+  multi_select: "multiselect",
+  integer: "short text",
+  float: "short text",
+  tel: "short text",
+  url: "short text",
+  date: "short text",
+  date_period: "short text",
+  datetime: "short text",
+  file: "short text",
+  user_picker: "short text",
+};
+
+const VALIDATION_MAP: Record<string, ValidationType> = {
+  tel: "phone",
+  url: "url",
 };
 
 function normalizeKey(raw: string): string {
@@ -166,4 +193,22 @@ export function mapUser(dto: UserDto): UserType {
         : "-",
   };
   return user;
+}
+
+export function mapFieldType(raw: string, doubling: boolean): FieldType {
+  //todo: add cases for new fields
+  const field = FIELDS_MAP[raw];
+  if (field === "short text" && doubling) return "multi text";
+  if (!field) {
+    console.warn("Unable to find related field", raw);
+    return "short text";
+  }
+
+  return field;
+}
+
+export function mapValidation(raw: string): ValidationType | undefined {
+  const validation = VALIDATION_MAP[raw];
+
+  return validation;
 }
