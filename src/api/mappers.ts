@@ -8,6 +8,8 @@ import type {
 import type { StatusType, Ticket } from "../types/ticket.types";
 import type { UserRole, UserType } from "../types/user.types";
 import type {
+  ActionConfigDto,
+  ActionListItemDto,
   CategoryDto,
   CreateTicketDto,
   FieldDto,
@@ -137,6 +139,13 @@ interface CreateTicketInput {
   priority: NonNullable<PriorityLevel>;
 }
 
+interface MapActionInput {
+  item: ActionListItemDto;
+  config: ActionConfigDto;
+  categoryName: string;
+  subcategoryName: string;
+}
+
 interface UpdateTicketInput {
   formData: Record<string, string>;
   priority: NonNullable<PriorityLevel>;
@@ -232,5 +241,26 @@ export function mapField(dto: FieldDto): Field {
     condition: dto.condition || undefined,
     defaultValue: dto.default_value || undefined,
     isInBlock: isBlockField(dto.block_doubling),
+  };
+}
+
+export function mapAction({
+  item,
+  config,
+  categoryName,
+  subcategoryName,
+}: MapActionInput): Action {
+  const fields = [...config.fields]
+    .sort((a, b) => a.position - b.position)
+    .map(mapField);
+
+  return {
+    id: item.action_id,
+    categoryId: item.category_id,
+    category: categoryName,
+    subcategoryId: item.subcategory_id,
+    subcategory: subcategoryName,
+    name: item.name,
+    fields: fields,
   };
 }
