@@ -21,6 +21,8 @@ function FormDropdown({
 }: FormDropownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (!dropdownRef.current?.contains(e.target as Node)) {
@@ -32,6 +34,15 @@ function FormDropdown({
     }
 
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      listRef.current?.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
   }, [isOpen]);
 
   return (
@@ -72,7 +83,11 @@ function FormDropdown({
       </div>
 
       {isOpen && (
-        <div className="absolute top-full mt-px -left-px -right-px z-30 max-h-50 overflow-y-auto scrollbar-none bg-(--bg-secondary) border border-(--bg-border)">
+        <div
+          ref={listRef}
+          className="absolute top-full mt-px -left-px -right-px z-30 max-h-50 overflow-y-auto scrollbar-none bg-(--bg-secondary) border border-(--bg-border)
+          scroll-mb-8"
+        >
           {options.map((option) => (
             <div
               key={option}

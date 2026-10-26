@@ -19,6 +19,7 @@ function MultiSelectDropdown({
 }: MultiSelectDropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -31,6 +32,15 @@ function MultiSelectDropdown({
     }
 
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      listRef.current?.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
   }, [isOpen]);
 
   function toggleOption(option: string) {
@@ -74,7 +84,11 @@ function MultiSelectDropdown({
       </div>
 
       {isOpen && (
-        <div className="absolute top-full mt-px -left-px -right-px z-50 max-h-50 overflow-y-auto scrollbar-none bg-(--bg-secondary) border border-(--bg-border)">
+        <div
+          ref={listRef}
+          className="absolute top-full mt-px -left-px -right-px z-50 max-h-50 overflow-y-auto scrollbar-none bg-(--bg-secondary) border border-(--bg-border)
+          scroll-mb-8"
+        >
           {options.map((option) => {
             const isSelected = value.includes(option);
             return (
