@@ -157,10 +157,13 @@ export function mapUser(dto: UserDto): UserType {
     id: dto.id,
     name: dto.name,
     role: mapRole(dto.role),
-    department: "",
-    localIp: "",
-    pcName: "",
-    remoteAccessDate: "",
+    department: dto.department,
+    localIp: dto.local_ip,
+    pcName: dto.pc_name,
+    remoteAccessDate:
+      dto.remote_access_timestamp > 0
+        ? formatDate(dto.remote_access_timestamp)
+        : "-",
   };
   return user;
 }

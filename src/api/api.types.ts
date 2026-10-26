@@ -37,6 +37,10 @@ export interface UserDto {
   role: string;
   tg_id: number;
   ticket_ids: number[];
+  department: string;
+  local_ip: string;
+  pc_name: string;
+  remote_access_timestamp: number;
 }
 
 export interface CategoryDto {

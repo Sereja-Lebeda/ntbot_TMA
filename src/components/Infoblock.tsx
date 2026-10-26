@@ -134,7 +134,7 @@ function Infoblock({
                     <AccessIcon className="xl:text-(--bg-task-complete) xl:dark:text-(--bg-btn-primary)" />
                   </div>
                   <span className={textStyle}>
-                    Доступ до {displayOrDash(currentUser.remoteAccessDate)}
+                    Доступ до {currentUser.remoteAccessDate}
                   </span>
                 </div>
               </div>

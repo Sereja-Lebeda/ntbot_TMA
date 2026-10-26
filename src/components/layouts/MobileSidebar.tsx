@@ -297,7 +297,7 @@ function MobileSidebar({
                     <AccessIcon className="text-(--bg-task-complete) dark:text-(--bg-btn-primary)" />
                   </div>
                   <span className={textStyle}>
-                    Доступ до {displayOrDash(currentUser.remoteAccessDate)}
+                    Доступ до {currentUser.remoteAccessDate}
                   </span>
                 </div>
               </div>

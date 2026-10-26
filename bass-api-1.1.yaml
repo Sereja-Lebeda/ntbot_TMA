@@ -1,0 +1,991 @@
+openapi: 3.0.0
+info:
+  title: BASS-API
+  version: 1.0.0
+  description: ''
+servers:
+  - url: '{{host}}'
+paths:
+  /:
+    get:
+      summary: index
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: integer
+          example: 785
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Server:
+              schema:
+                type: string
+              example: nginx/1.28.2
+            Date:
+              schema:
+                type: string
+              example: Fri, 23 Oct 2026 13:43:31 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 16
+            Connection:
+              schema:
+                type: string
+              example: keep-alive
+  /user:
+    get:
+      summary: User
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: ''
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:11:10 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 83
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  tg_id:
+                    type: integer
+                  name:
+                    type: string
+                  role:
+                    type: string
+                  department:
+                    type: string
+                  local_ip:
+                    type: string
+                    format: ip-address
+                  pc_name:
+                    type: string
+                  remote_access_timestamp:
+                    type: integer
+                  ticket_ids:
+                    type: array
+                    items:
+                      type: integer
+              example:
+                id: 1
+                tg_id: 234428660
+                name: Лебедянский Сергей СвятойОтецович
+                role: admin
+                department: IT
+                local_ip: 192.168.4.229
+                pc_name: NewTech205
+                remote_access_timestamp: 0
+                ticket_ids:
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                  - 6
+                  - 7
+                  - 8
+        '401':
+          description: '401'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:09:17 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 48
+  /ticket/{id}:
+    get:
+      summary: Ticket
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: integer
+          example: 785
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:24:00 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 436
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                  ticket_id:
+                    type: integer
+                  ticket_name:
+                    type: string
+                  priority:
+                    type: string
+                  status:
+                    type: string
+                  creation_timestamp:
+                    type: integer
+                  category_id:
+                    type: integer
+                  subcategory_id:
+                    type: integer
+                  action_id:
+                    type: integer
+                  body:
+                    type: object
+                    properties:
+                      Название таблицы:
+                        type: string
+                      Путь для выгрузки:
+                        type: string
+                        format: uri
+                      СУБД:
+                        type: string
+                      Фильтры/условия:
+                        type: string
+                      Формат выгрузки:
+                        type: string
+                  msg_ids:
+                    nullable: true
+              example:
+                user_id: 1
+                ticket_id: 2
+                ticket_name: <set name>
+                priority: low
+                status: to do
+                creation_timestamp: 1141725100
+                category_id: 2
+                subcategory_id: 6
+                action_id: 16
+                body:
+                  Название таблицы: slug1
+                  Путь для выгрузки: C:/
+                  СУБД: PostgreSQL
+                  Фильтры/условия: slug2
+                  Формат выгрузки: CSV
+                msg_ids: null
+        '404':
+          description: 404 - not existing ticket
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:28:27 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 46
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                404 - not existing ticket:
+                  value:
+                    error: >-
+                      getting ticket from db - making get request to db - dbconn
+                      returned error - getting ticket from db - not found
+                404 - foreign ticket:
+                  value:
+                    error: getting ticket from db - not found
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2
+    put:
+      summary: Ticket
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:31:56 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 2
+        '400':
+          description: 400 - missing field
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:34:19 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 127
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ticket_name:
+                  type: string
+                priority:
+                  type: string
+                body:
+                  type: object
+                  properties:
+                    Название БД:
+                      type: string
+                    Обоснование запроса:
+                      type: string
+                    Описание проблемы:
+                      type: string
+                    Уровень доступа:
+                      type: string
+            example:
+              ticket_name: Запрос доступа к БД
+              priority: normal
+              body:
+                Название БД: PG
+                Обоснование запроса: Горит
+                Описание проблемы: Не работает
+                Уровень доступа: Чтение
+    delete:
+      summary: Ticket
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: integer
+          example: 785
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:37:36 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 2
+        '404':
+          description: '404'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:38:02 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 46
+        '409':
+          description: '409'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:37:50 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 31
+        '500':
+          description: 500 (404)
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:38:19 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 139
+  /ticketList:
+    get:
+      summary: Tickets List
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: integer
+          example: 785
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:22:05 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 1290
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                    ticket_id:
+                      type: integer
+                    ticket_name:
+                      type: string
+                    priority:
+                      type: string
+                    status:
+                      type: string
+                    creation_timestamp:
+                      type: integer
+                    category_id:
+                      type: integer
+                    subcategory_id:
+                      type: integer
+                    action_id:
+                      type: integer
+                    body:
+                      type: object
+                      properties:
+                        Название таблицы:
+                          type: string
+                        Путь для выгрузки:
+                          type: string
+                          format: uri
+                        СУБД:
+                          type: string
+                        Фильтры/условия:
+                          type: string
+                        Формат выгрузки:
+                          type: string
+                    msg_ids:
+                      nullable: true
+              example:
+                - user_id: 1
+                  ticket_id: 2
+                  ticket_name: <set name>
+                  priority: low
+                  status: to do
+                  creation_timestamp: 1141725100
+                  category_id: 2
+                  subcategory_id: 6
+                  action_id: 16
+                  body:
+                    Название таблицы: slug1
+                    Путь для выгрузки: C:/
+                    СУБД: PostgreSQL
+                    Фильтры/условия: slug2
+                    Формат выгрузки: CSV
+                  msg_ids: null
+                - user_id: 1
+                  ticket_id: 3
+                  ticket_name: <set name2>
+                  priority: low
+                  status: cancelled
+                  creation_timestamp: 1241725100
+                  category_id: 2
+                  subcategory_id: 6
+                  action_id: 16
+                  body:
+                    Название таблицы: slug1
+                    Путь для выгрузки: C:/
+                    СУБД: PostgreSQL
+                    Фильтры/условия: slug2
+                    Формат выгрузки: CSV
+                  msg_ids: null
+                - user_id: 1
+                  ticket_id: 4
+                  ticket_name: <set name3>
+                  priority: low
+                  status: in progress
+                  creation_timestamp: 1341725100
+                  category_id: 1
+                  subcategory_id: 2
+                  action_id: 4
+                  body:
+                    Загрузить файл: CSV
+                    Причина запроса: slug2
+                    Требуемые изменения: slug1
+                    Функция: Список функций
+                  msg_ids: null
+                - user_id: 1
+                  ticket_id: 5
+                  ticket_name: <set name3>
+                  priority: low
+                  status: on hold
+                  creation_timestamp: 1441725100
+                  category_id: 1
+                  subcategory_id: 2
+                  action_id: 5
+                  body:
+                    Загрузить файл: CSV
+                    Кто будет использовать: CSV
+                    Описание запроса: slug1
+                    Рабочее название: Список функций
+                    Цель: slug2
+                  msg_ids: null
+                - user_id: 1
+                  ticket_id: 6
+                  ticket_name: <set name4>
+                  priority: low
+                  status: rejected
+                  creation_timestamp: 1541725100
+                  category_id: 3
+                  subcategory_id: 9
+                  action_id: 10
+                  body:
+                    ФИО сотрудника: Иванов Иван Иванович
+                  msg_ids: null
+                - user_id: 1
+                  ticket_id: 7
+                  ticket_name: <set name5>
+                  priority: low
+                  status: to do
+                  creation_timestamp: 1641725100
+                  category_id: 4
+                  subcategory_id: 12
+                  action_id: 32
+                  body:
+                    Для чего требуется: Иванов Иван Иванович
+                    Количество: 67
+                    Ссылка на товар: Ссылка на товар
+                    Что требуется: Иванов Иван Иванович
+                  msg_ids: null
+                - user_id: 1
+                  ticket_id: 8
+                  ticket_name: <set name6>
+                  priority: low
+                  status: complete
+                  creation_timestamp: 1741725100
+                  category_id: 5
+                  subcategory_id: 13
+                  action_id: 37
+                  body:
+                    Как давно наблюдается: Несколько часов
+                    Описание проблемы: '67'
+                    Текст ошибки: Иванов Иван Иванович
+                    Тип проблемы: Подключается, но нет доступа
+                  msg_ids: null
+  /ticket:
+    post:
+      summary: Ticket
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:21:15 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 2
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                  ticket_id:
+                    type: integer
+                  ticket_name:
+                    type: string
+                  priority:
+                    type: string
+                  status:
+                    type: string
+                  creation_timestamp:
+                    type: integer
+                  category_id:
+                    type: integer
+                  subcategory_id:
+                    type: integer
+                  action_id:
+                    type: integer
+                  body:
+                    type: object
+                    properties:
+                      Как давно наблюдается:
+                        type: string
+                      Описание проблемы:
+                        type: string
+                        format: utc-millisec
+                      Текст ошибки:
+                        type: string
+                      Тип проблемы:
+                        type: string
+                  msg_ids:
+                    nullable: true
+              example:
+                user_id: 1
+                ticket_id: 10
+                ticket_name: <set name8>
+                priority: low
+                status: to do
+                creation_timestamp: 1741725100
+                category_id: 5
+                subcategory_id: 13
+                action_id: 37
+                body:
+                  Как давно наблюдается: Несколько часов
+                  Описание проблемы: '67'
+                  Текст ошибки: Иванов Иван Иванович
+                  Тип проблемы: Подключается, но нет доступа
+                msg_ids: null
+        '400':
+          description: 400 - wrong dropdown value
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:39:29 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 120
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ticket_name:
+                  type: string
+                priority:
+                  type: string
+                creation_timestamp:
+                  type: integer
+                category_id:
+                  type: integer
+                subcategory_id:
+                  type: integer
+                action_id:
+                  type: integer
+                body:
+                  type: object
+                  properties:
+                    Название БД:
+                      type: string
+                    Обоснование запроса:
+                      type: string
+                    Описание проблемы:
+                      type: string
+                    Уровень доступа:
+                      type: string
+            example:
+              ticket_name: <set name8>
+              priority: low
+              creation_timestamp: 1741725100
+              category_id: 5
+              subcategory_id: 13
+              action_id: 37
+              body:
+                Как давно наблюдается: Несколько часов
+                Описание проблемы: '67'
+                Текст ошибки: Иванов Иван Иванович
+                Тип проблемы: Подключается, но нет доступа
+  /ticket/{id}/userComment:
+    post:
+      summary: User Comment
+      parameters:
+        - name: Authorization
+          in: header
+          required: false
+          deprecated: false
+          schema: {}
+          example: '785'
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Wed, 19 Aug 2026 11:49:34 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 2
+        '400':
+          description: 400 - bad tg msg id
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Wed, 19 Aug 2026 12:03:04 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 78
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+                timestamp:
+                  type: integer
+                tg_msg_id:
+                  type: integer
+            example:
+              body: Lorem Ipsum
+              timestamp: 1741638723
+              tg_msg_id: 190471
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 8
+  /cats:
+    get:
+      summary: Categories
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: integer
+          example: 785
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Server:
+              schema:
+                type: string
+              example: nginx/1.28.2
+            Date:
+              schema:
+                type: string
+              example: Fri, 23 Oct 2026 13:40:59 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 652
+            Connection:
+              schema:
+                type: string
+              example: keep-alive
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    category_id:
+                      type: integer
+                    name:
+                      type: string
+              example:
+                - category_id: 1
+                  name: NTMincer
+                - category_id: 2
+                  name: Базы данных
+                - category_id: 3
+                  name: Доступы и коммуникация
+                - category_id: 4
+                  name: Закупка
+                - category_id: 5
+                  name: Интернет
+                - category_id: 6
+                  name: Компьютер и устройства
+                - category_id: 7
+                  name: Папки и файлы
+                - category_id: 8
+                  name: Парсинг
+                - category_id: 9
+                  name: Программы и сервисы
+                - category_id: 10
+                  name: Разработка и нестандартные запросы
+                - category_id: 11
+                  name: Сайты
+                - category_id: 12
+                  name: Сотрудники
+  /cat/{id}:
+    get:
+      summary: Category
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: integer
+          example: 785
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Server:
+              schema:
+                type: string
+              example: nginx/1.28.2
+            Date:
+              schema:
+                type: string
+              example: Fri, 23 Oct 2026 13:42:03 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 272
+            Connection:
+              schema:
+                type: string
+              example: keep-alive
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    subcategory_id:
+                      type: integer
+                    name:
+                      type: string
+                    category_id:
+                      type: integer
+              example:
+                - subcategory_id: 17
+                  name: Аксессуары
+                  category_id: 6
+                - subcategory_id: 18
+                  name: Компьютер
+                  category_id: 6
+                - subcategory_id: 19
+                  name: Монитор
+                  category_id: 6
+                - subcategory_id: 20
+                  name: Принтер/сканер
+                  category_id: 6
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2
+  /subcat/{id}:
+    get:
+      summary: Subcategory
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: integer
+          example: 785
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Server:
+              schema:
+                type: string
+              example: nginx/1.28.2
+            Date:
+              schema:
+                type: string
+              example: Fri, 23 Oct 2026 13:42:22 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 253
+            Connection:
+              schema:
+                type: string
+              example: keep-alive
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    action_id:
+                      type: integer
+                    name:
+                      type: string
+                    category_id:
+                      type: integer
+                    subcategory_id:
+                      type: integer
+                    config_id:
+                      type: integer
+              example:
+                - action_id: 4
+                  name: Изменить существующую функцию
+                  category_id: 1
+                  subcategory_id: 2
+                  config_id: 2
+                - action_id: 5
+                  name: Предложить новую функцию
+                  category_id: 1
+                  subcategory_id: 2
+                  config_id: 3
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 2
+  /action/{id}:
+    get:
+      summary: Action
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: integer
+          example: 785
+      responses:
+        '200':
+          description: '200'
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Mon, 10 Aug 2026 09:18:40 GMT
+            Content-Length:
+              schema:
+                type: integer
+              example: 636
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  config_id:
+                    type: integer
+                  name:
+                    type: string
+                  has_block_doubling:
+                    type: boolean
+                  fields:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        field_id:
+                          type: integer
+                        semantic_id:
+                          type: integer
+                        field_name:
+                          type: string
+                        field_type:
+                          type: string
+                        required:
+                          type: boolean
+                        condition:
+                          type: string
+                        options:
+                          type: array
+                          items:
+                            type: string
+                        doubling:
+                          type: boolean
+                        default_value:
+                          type: string
+                        position:
+                          type: integer
+                        block_doubling:
+                          type: string
+              example:
+                config_id: 30
+                name: ''
+                has_block_doubling: false
+                fields:
+                  - field_id: 70
+                    semantic_id: 65
+                    field_name: Тип проблемы
+                    field_type: select
+                    required: true
+                    condition: ''
+                    options:
+                      - Не подключается
+                      - Подключается, но нет доступа
+                      - Разрывается соединение
+                      - Другое
+                    doubling: false
+                    default_value: ''
+                    position: 1
+                    block_doubling: '-'
+                  - field_id: 42
+                    semantic_id: 37
+                    field_name: Текст ошибки
+                    field_type: textarea
+                    required: false
+                    condition: ''
+                    options: null
+                    doubling: false
+                    default_value: ''
+                    position: 2
+                    block_doubling: '-'
+                  - field_id: 10
+                    semantic_id: 10
+                    field_name: Как давно наблюдается
+                    field_type: select
+                    required: true
+                    condition: ''
+                    options:
+                      - Только что
+                      - Несколько часов
+                      - Сегодня
+                      - Несколько дней
+                      - Неделя и более
+                    doubling: false
+                    default_value: ''
+                    position: 3
+                    block_doubling: '-'
+                  - field_id: 12
+                    semantic_id: 12
+                    field_name: Описание проблемы
+                    field_type: textarea
+                    required: true
+                    condition: ''
+                    options: null
+                    doubling: false
+                    default_value: ''
+                    position: 4
+                    block_doubling: '-'
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 37
