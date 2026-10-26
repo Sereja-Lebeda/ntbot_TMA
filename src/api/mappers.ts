@@ -1,5 +1,6 @@
 import type {
   Action,
+  Field,
   FieldType,
   PriorityLevel,
   ValidationType,
@@ -9,6 +10,7 @@ import type { UserRole, UserType } from "../types/user.types";
 import type {
   CategoryDto,
   CreateTicketDto,
+  FieldDto,
   PriorityDto,
   TicketDto,
   UpdateTicketDto,
@@ -211,4 +213,24 @@ export function mapValidation(raw: string): ValidationType | undefined {
   const validation = VALIDATION_MAP[raw];
 
   return validation;
+}
+
+function isBlockField(blockField: string | boolean): boolean {
+  if (blockField === true || blockField === "Да") return true;
+  else return false;
+}
+
+export function mapField(dto: FieldDto): Field {
+  return {
+    name: dto.field_name,
+    label: dto.field_name,
+    type: mapFieldType(dto.field_type, dto.doubling),
+    required: dto.required,
+    validation: mapValidation(dto.field_type),
+    options: dto.options ?? undefined,
+    semanticId: String(dto.semantic_id),
+    condition: dto.condition || undefined,
+    defaultValue: dto.default_value || undefined,
+    isInBlock: isBlockField(dto.block_doubling),
+  };
 }
