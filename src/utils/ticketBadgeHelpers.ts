@@ -3,6 +3,10 @@ import type { StatusType } from "../types/ticket.types";
 
 type FormType = "plural" | "singular" | "statusBlock" | "infoBlock";
 
+export const MOBILE_PILL_LABEL: Partial<Record<StatusType, string>> = {
+  Pending: "ожидание",
+};
+
 const titles: Record<string, Record<FormType, string>> = {
   New: {
     singular: "НОВАЯ",
@@ -26,7 +30,7 @@ const titles: Record<string, Record<FormType, string>> = {
     singular: "ОЖИДАНИЕ",
     plural: "ОЖИДАНИЕ",
     statusBlock: "Ожидание",
-    infoBlock: "ожидание",
+    infoBlock: "ждём вашего ответа",
   },
   Complete: {
     singular: "ГОТОВА",
@@ -94,6 +98,32 @@ export const allStatuses: StatusType[] = [
   "Closed",
   "Cancelled",
 ];
+
+export const STATUS_ORDER_DEFAULT: StatusType[] = [
+  "Complete",
+  "Pending",
+  "New",
+  "In progress",
+  "Paused",
+  "Closed",
+  "Cancelled",
+];
+
+export const STATUS_ORDER_BY_STATUS: StatusType[] = [
+  "New",
+  "In progress",
+  "Pending",
+  "Paused",
+  "Complete",
+  "Cancelled",
+  "Closed",
+];
+
+export function getStatusRank(status: StatusType, order: StatusType[]) {
+  const position = order.indexOf(status);
+  if (position === -1) return order.length;
+  return position;
+}
 
 export function buildStatusLabelMap(): Record<string, StatusType> {
   const map: Record<string, StatusType> = {};

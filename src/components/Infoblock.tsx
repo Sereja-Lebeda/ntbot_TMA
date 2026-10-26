@@ -5,7 +5,7 @@ import { textPressAnimationStyle } from "../styles/pressAnimation";
 
 import handleStatusSelect from "../utils/statusSelectedHelper";
 import getTicketQuantity from "../utils/getTicketQuantity";
-import getStatusTitle, { allStatuses } from "../utils/ticketBadgeHelpers";
+import getStatusTitle from "../utils/ticketBadgeHelpers";
 
 import StatusInfoBtn from "./ui/Buttons/StatusInfoBtn";
 
@@ -23,6 +23,26 @@ interface InfoblockProps {
   setTicketStatuses: (status: string[]) => void;
   visibleTickets: Ticket[];
 }
+
+const STATUS_PLATE: Record<StatusType, { span: string; height: string }> = {
+  New: { span: "col-span-2", height: "xl:h-28" },
+  "In progress": { span: "col-span-3", height: "xl:h-28" },
+  Pending: { span: "col-span-5", height: "xl:h-18" },
+  Complete: { span: "col-span-3", height: "xl:h-25" },
+  Paused: { span: "col-span-2", height: "xl:h-25" },
+  Cancelled: { span: "col-span-2", height: "xl:h-18" },
+  Closed: { span: "col-span-3", height: "xl:h-18" },
+};
+
+const STATUS_DISPLAY_ORDER: StatusType[] = [
+  "New",
+  "In progress",
+  "Pending",
+  "Complete",
+  "Paused",
+  "Cancelled",
+  "Closed",
+];
 
 function Infoblock({
   ticketStatuses,
@@ -43,24 +63,6 @@ function Infoblock({
   const copyHintIpAnimation = `${copyHintBase} ${copiedField === "ip" ? "xl:opacity-100" : "xl:opacity-0"} `;
   const copyHintPcNameAnimation = `${copyHintBase} ${copiedField === "pcName" ? "xl:opacity-100" : "xl:opacity-0"} `;
 
-  const spans = [
-    "col-span-2",
-    "col-span-3",
-    "col-span-3",
-    "col-span-2",
-    "col-span-2",
-    "col-span-3",
-  ];
-
-  const plateHeights = [
-    "xl:h-28",
-    "xl:h-28",
-    "xl:h-25",
-    "xl:h-25",
-    "xl:h-18",
-    "xl:h-18",
-  ];
-  const ticketStatusOrder = allStatuses;
   const ticketQuantities = getTicketQuantity(visibleTickets);
 
   return (
@@ -159,12 +161,12 @@ function Infoblock({
 
         {/* Status of tickets */}
         <div className="xl:w-69 xl:grid xl:grid-cols-5 xl:gap-2">
-          {ticketStatusOrder.map((status, index) => (
-            <div key={status} className={`${spans[index]}`}>
+          {STATUS_DISPLAY_ORDER.map((status) => (
+            <div key={status} className={STATUS_PLATE[status].span}>
               <StatusInfoBtn
                 quantity={ticketQuantities[status]}
-                status={status as StatusType}
-                plateHeight={plateHeights[index]}
+                status={status}
+                plateHeight={STATUS_PLATE[status].height}
                 selectedItems={ticketStatuses}
                 onClick={() =>
                   handleStatusSelect({

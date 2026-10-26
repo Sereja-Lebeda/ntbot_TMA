@@ -58,12 +58,15 @@ function DropdownList({
     selectedItems?.filter((i) => i !== "Все").length ?? 0;
 
   return (
-    <div className="w-full flex flex-col items-start bg-(--bg-primary-second) group/dropdown cursor-pointer">
+    <div
+      className={`w-full flex flex-col items-start bg-(--bg-primary-second) group/dropdown 
+    ${isDropdownDisabled ? "" : "cursor-pointer"}`}
+    >
       <div
         className={`w-full flex justify-between items-center border-b border-(--bg-border)  px-5 py-3.75
-          
-          ${isDropdownDisabled ? "bg-(--bg-disable-btn) select-none" : "bg-(--bg-primary-second)"}
-          ${isDropdownOpen ? "" : "group-hover/dropdown:border-b group-hover/dropdown:border-(--text-primary)"}`}
+
+          ${isDropdownDisabled ? "bg-(--bg-disable-btn) select-none" : "bg-(--bg-primary-second) group-hover/dropdown:border-(--text-primary)"}
+          ${isDropdownOpen ? "" : "group-hover/dropdown:border-b "}`}
         onClick={
           isDropdownDisabled
             ? undefined
@@ -75,29 +78,35 @@ function DropdownList({
       >
         <div className="flex gap-2 items-center">
           <span
-            className={`font-jbmono text-sm font-normal leading-4 select-none ${isDropdownOpen ? "text-(--text-primary)" : "group-hover/dropdown:text-(--text-primary) text-(--text-secondary)"}`}
+            className={`font-jbmono text-sm font-normal leading-4 select-none
+              ${isDropdownOpen ? "text-(--text-primary)" : "text-(--text-secondary)"}
+              ${isDropdownDisabled ? "" : "group-hover/dropdown:text-(--text-primary) "}`}
           >
             {title}
           </span>
 
           {/* reset filter btn */}
-          {showResetButton && selectedItems && amountOfItems() > 0 && (
-            <button
-              className="w-7.5 h-4 flex justify-center items-center bg-(--text-secondary) rounded-xs px-1 py-0.5 gap-1.5 cursor-pointer select-none"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSelect("Все");
-              }}
-            >
-              <span className="font-consolas font-normal text-xs text-(--bg-primary) leading-4">
-                {amountOfItems()}
-              </span>
-              <CrossIcon className="w-2 h-2 text-(--bg-primary) block" />
-            </button>
-          )}
+          {showResetButton &&
+            selectedItems &&
+            amountOfItems() > 0 &&
+            !isDropdownDisabled && (
+              <button
+                className="w-7.5 h-4 flex justify-center items-center bg-(--text-secondary) rounded-xs px-1 py-0.5 gap-1.5 cursor-pointer select-none"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSelect("Все");
+                }}
+              >
+                <span className="font-consolas font-normal text-xs text-(--bg-primary) leading-4">
+                  {amountOfItems()}
+                </span>
+                <CrossIcon className="w-2 h-2 text-(--bg-primary) block" />
+              </button>
+            )}
         </div>
         <ArrowIcon
-          className={`${isDropdownOpen ? "text-(--text-primary)" : "rotate-180 dark:text-(--text-secondary) text-(--text-secondary)"}  group-hover/dropdown:text-(--text-primary)`}
+          className={`${isDropdownOpen ? "text-(--text-primary)" : "rotate-180 dark:text-(--text-secondary) text-(--text-secondary)"}
+          ${isDropdownDisabled ? "" : "group-hover/dropdown:text-(--text-primary)"}`}
         />
       </div>
 

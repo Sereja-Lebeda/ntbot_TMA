@@ -6,6 +6,7 @@ import {
 } from "../types/ticket.types";
 import getFilterOptions from "../utils/getFilterOptions";
 import DropdownList from "./ui/DropdownList";
+import PeriodDropdown from "./ui/PeriodDropdown";
 
 export interface OpenDropdownFilterProps {
   openDropdownFilter: string | null;
@@ -25,6 +26,10 @@ export interface OpenDropdownFilterProps {
 interface OutletContextProps {
   changeFilter: (status: string) => void;
   visibleTickets: Ticket[];
+  periodFrom: string;
+  setPeriodFrom: (value: string) => void;
+  periodTo: string;
+  setPeriodTo: (value: string) => void;
 }
 
 function SortFilterBlock({
@@ -40,8 +45,14 @@ function SortFilterBlock({
   isPrivilegeUser,
   ticketView,
 }: OpenDropdownFilterProps) {
-  const { changeFilter, visibleTickets } =
-    useOutletContext<OutletContextProps>();
+  const {
+    changeFilter,
+    visibleTickets,
+    periodFrom,
+    setPeriodFrom,
+    periodTo,
+    setPeriodTo,
+  } = useOutletContext<OutletContextProps>();
 
   const statuses = StatusesOfTicket;
 
@@ -64,12 +75,13 @@ function SortFilterBlock({
           setSelectedItems={setTicketStatuses}
           showResetButton={true}
         />
-        <DropdownList
-          title="Период"
+        <PeriodDropdown
           isOpen={openDropdownFilter === "Период"}
-          items={statuses}
-          onChange={(title) => changeFilter(title)}
-          showResetButton={true}
+          onToggle={() => changeFilter("Период")}
+          from={periodFrom}
+          setFrom={setPeriodFrom}
+          to={periodTo}
+          setTo={setPeriodTo}
         />
         <DropdownList
           title="Категории"

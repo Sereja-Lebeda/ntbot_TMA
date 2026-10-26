@@ -20,10 +20,17 @@ import EditRepeatModal from "./pages/modalCardWindows/EditRepeatModal";
 import DesktopHeroSector from "./DesktopHeroSector";
 import MobileHeroSector from "./MobileHeroSector";
 
-import getStatusTitle from "../utils/ticketBadgeHelpers";
+import getStatusTitle, {
+  getStatusRank,
+  STATUS_ORDER_BY_STATUS,
+  STATUS_ORDER_DEFAULT,
+} from "../utils/ticketBadgeHelpers";
 import { allActions } from "../utils/allActions";
 import getListStateVariant from "../utils/getListStateVariant";
 import TicketUnavailableModal from "./pages/modalCardWindows/TicketUnavailableModal";
+import getPeriodError from "../utils/getPeriodError";
+import parseDateInput from "../utils/parseDateInput";
+import isInPeriod from "../utils/isInPeriod";
 
 interface selectedTicketStatusesProps {
   className?: string;
@@ -95,6 +102,9 @@ interface OutletContextProps {
   reload: () => void;
 
   visibleTickets: Ticket[];
+
+  periodFrom: string;
+  periodTo: string;
 }
 
 export default function HeroSector({
@@ -141,6 +151,8 @@ export default function HeroSector({
     error: ticketsError,
     reload,
     visibleTickets,
+    periodFrom,
+    periodTo,
   } = useOutletContext<OutletContextProps>();
 
   const isLoading = isUserLoading || isTicketsLoading;
@@ -168,15 +180,12 @@ export default function HeroSector({
 
   const navigate = useNavigate();
 
-  const statusPriority = {
-    New: 0,
-    "In progress": 1,
-    Paused: 2,
-    Pending: 2,
-    Closed: 3,
-    Cancelled: 4,
-    Complete: 5,
-  };
+  const order =
+    sortByStatus === "default" ? STATUS_ORDER_DEFAULT : STATUS_ORDER_BY_STATUS;
+
+  const periodError = getPeriodError(periodFrom, periodTo);
+  const fromStamp = periodError === null ? parseDateInput(periodFrom) : null;
+  const toStamp = periodError === null ? parseDateInput(periodTo) : null;
 
   const filteredTickets = visibleTickets
     // Filter by Searchbar
@@ -201,21 +210,23 @@ export default function HeroSector({
     .filter(
       (ticket) => !showFavorites || favoriteTickets.includes(ticket.ticketId),
     )
-    .sort((a, b) =>
-      sortOldToNew
-        ? a.createStamp - b.createStamp
-        : b.createStamp - a.createStamp,
+    // Filter by period
+    .filter((ticket) =>
+      isInPeriod({
+        createStamp: ticket.createStamp,
+        from: fromStamp,
+        to: toStamp,
+      }),
     )
     .sort((a, b) => {
-      if (sortByStatus === "default") return 0;
-      if (sortByStatus === "new") {
-        return statusPriority[a.status] - statusPriority[b.status];
+      const rankDiff =
+        getStatusRank(a.status, order) - getStatusRank(b.status, order);
+      if (rankDiff !== 0) {
+        return sortByStatus === "complete" ? -rankDiff : rankDiff;
       }
-
-      if (sortByStatus === "complete") {
-        return statusPriority[b.status] - statusPriority[a.status];
-      }
-      return 0;
+      return sortOldToNew
+        ? a.createStamp - b.createStamp
+        : b.createStamp - a.createStamp;
     });
 
   const listState = getListStateVariant({
