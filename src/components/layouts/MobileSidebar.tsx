@@ -39,6 +39,8 @@ import UserIcon from "../../icons/searchmenu/UserIcon";
 import displayOrDash from "../../utils/displayOrDash";
 import isEmptyValue from "../../utils/isEmptyValue";
 import PeriodDropdown from "../ui/PeriodDropdown";
+import useIsTyping from "../../hooks/useIsTyping";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 interface MobileSidebarProps {
   closeSidebar: () => void;
@@ -124,6 +126,8 @@ function MobileSidebar({
   setPeriodTo,
 }: MobileSidebarProps) {
   useLockBodyScroll();
+  const isTyping = useIsTyping();
+  const isTouch = useMediaQuery("(pointer: coarse)");
   useModalStackEntry(closeSidebar);
 
   const location = useLocation();
@@ -147,6 +151,8 @@ function MobileSidebar({
   }, [isAnimatingIn]);
 
   const { user: currentUser, isLoading } = useUser();
+
+  const hideSupportBtns = isTyping && isTouch;
 
   const [copiedField, setCopiedField] = useState<"ip" | "pcName" | null>(null);
 
@@ -447,9 +453,11 @@ function MobileSidebar({
         </div>
 
         {/* Theme and tg btns */}
-        <div className="w-full flex justify-center items-end p-5 bg-(--bg-primary-second) rounded-xs gap-2.5">
-          <SupportButtons />
-        </div>
+        {!hideSupportBtns && (
+          <div className="w-full flex justify-center items-end p-5 bg-(--bg-primary-second) rounded-xs gap-2.5">
+            <SupportButtons />
+          </div>
+        )}
       </div>
     </div>,
     document.body,
