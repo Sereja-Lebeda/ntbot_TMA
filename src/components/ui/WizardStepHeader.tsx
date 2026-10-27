@@ -31,7 +31,9 @@ function WizardStepHeader({
   const stepKey = foundEntry?.[0];
   const activeStepKey = currentStep ? stepKey : currentStepKey;
   const currentMeta = stepMeta[activeStepKey as keyof typeof stepMeta];
-  const categoryData = categories.find((c) => c.name === selectedCategory);
+  const categoryData = categories.find(
+    (c) => c.name === selectedCategory?.name,
+  );
 
   return (
     <>

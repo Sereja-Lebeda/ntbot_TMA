@@ -1,14 +1,19 @@
 import { useNavigate, useOutletContext } from "react-router";
 import useTheme from "../../../hooks/useTheme";
+import useCategoryList from "../../../hooks/useCategoryList";
 
+import { ApiError } from "../../../api/client";
+import { categories as categoryIcons } from "../../../data/categories";
 import type { CategoriesPool } from "../../../types/createTicket.type";
 import { hapticTap } from "../../../utils/haptics";
 
-import { categories } from "../../../data/categories";
-
 import CategoryGridCard from "../../ui/CategoryGridCard";
-import useIsTablet from "../../../hooks/useIsTablet";
+import CategoryCardSkeleton from "../../ui/CategoryCardSkeleton";
+import ListStateMessage from "../../ui/ListStateMessage";
 import CrossIcon from "../../../icons/card/CrossIcon";
+
+const SKELETON_COUNT = 12;
+const GRID_CLASS_NAME = "grid grid-cols-2 gap-3 py-3 w-full";
 
 interface OutletContextProps {
   setSelectedCategory: (category: CategoriesPool) => void;
@@ -17,7 +22,7 @@ interface OutletContextProps {
 function MobileStepCategory() {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const isTablet = useIsTablet();
+  const { categories, isLoading, error, reload } = useCategoryList();
 
   const { setSelectedCategory } = useOutletContext<OutletContextProps>();
 
@@ -30,28 +35,60 @@ function MobileStepCategory() {
     navigate("/");
   }
 
-  return (
-    // Grid of categories
-    <>
-      <div
-        className={`w-full
-        flex justify-center items-center
-        ${isTablet && ""}
-        `}
-      >
-        <div className="grid grid-cols-2 gap-3 py-3">
-          {categories.map((category) => (
+  function renderContent() {
+    if (error) {
+      const isUnauthorized = error instanceof ApiError && error.status === 401;
+      return (
+        <ListStateMessage
+          variant={isUnauthorized ? "unauthorized" : "error"}
+          onRetry={reload}
+        />
+      );
+    }
+
+    if (isLoading) {
+      return (
+        <div className={GRID_CLASS_NAME}>
+          {Array.from({ length: SKELETON_COUNT }, (_, i) => (
+            <CategoryCardSkeleton key={i} />
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div className={GRID_CLASS_NAME}>
+        {categories.map((category) => {
+          const iconData =
+            categoryIcons.find((c) => c.name === category.name) ??
+            categoryIcons[0];
+
+          return (
             <CategoryGridCard
-              key={category.name}
-              iconPng={theme === "light" ? category.iconLight : category.icon}
+              key={category.category_id}
+              iconPng={theme === "light" ? iconData.iconLight : iconData.icon}
               title={category.name}
               onClick={() => {
-                setSelectedCategory(category.name);
+                setSelectedCategory({
+                  id: category.category_id,
+                  name: category.name,
+                });
                 onNext();
               }}
             />
-          ))}
-        </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div
+        className={`w-full
+        flex justify-center items-center`}
+      >
+        {renderContent()}
       </div>
       {/* Back btn */}
       <button

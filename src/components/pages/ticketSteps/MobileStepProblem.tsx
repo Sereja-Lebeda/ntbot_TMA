@@ -41,7 +41,7 @@ function MobileStepProblem() {
   if (!selectedCategory) return null;
 
   const categoryActions = allActions.filter(
-    (a) => a.category === selectedCategory,
+    (a) => a.category === selectedCategory.name,
   );
 
   const filteredActions = categoryActions.filter((a) =>

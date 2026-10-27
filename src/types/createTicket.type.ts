@@ -20,7 +20,12 @@ export type ValidationType = "url" | "email" | "phone" | "path";
 
 export type AttachedFile = { file: File; url: string };
 
-export type CategoriesPool = CategoryName | null;
+export type CategoriesPool = SelectedCategory | null;
+
+export interface SelectedCategory {
+  id: number;
+  name: string;
+}
 
 export interface Action {
   id: number;

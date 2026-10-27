@@ -9,7 +9,7 @@ export function getWizardStepMeta(selectedCategory: CategoriesPool) {
     },
     problem: {
       number: 2,
-      title: selectedCategory ?? "Выбранная категория",
+      title: selectedCategory?.name ?? "Выбранная категория",
       subtitle: "Выберите проблему или найдите через поиск",
     },
     details: { number: 3, title: "Заполните форму", subtitle: undefined },

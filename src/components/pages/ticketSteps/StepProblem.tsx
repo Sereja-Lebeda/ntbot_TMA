@@ -38,10 +38,10 @@ function StepProblem({
     return null;
   }
 
-  const categoryData = categories.find((c) => c.name === selectedCategory);
+  const categoryData = categories.find((c) => c.name === selectedCategory.name);
 
   const categoryActions = allActions.filter(
-    (a) => a.category === selectedCategory,
+    (a) => a.category === selectedCategory.name,
   );
 
   const filteredActions = categoryActions.filter((a) =>
@@ -74,7 +74,7 @@ function StepProblem({
               className="bg-(--text-primary) rounded-xs w-5 h-5"
             />
             <span className="font-jbmono font-normal text-xl text-(--text-primary) tracking-[0.8px]">
-              {selectedCategory}
+              {selectedCategory.name}
             </span>
           </div>
           {/* Text hint */}
