@@ -1,3 +1,4 @@
+import type { CatalogSubcategory } from "../types/catalog.types";
 import type { Ticket } from "../types/ticket.types";
 import type { UserType } from "../types/user.types";
 import {
@@ -28,6 +29,20 @@ export async function getCategoryList(
     apiFetch<CategoryDto[]>(`/cats`, { signal }),
   );
   return categoryList;
+}
+
+export async function getCatalogTree(
+  categoryId: number,
+  signal?: AbortSignal,
+): Promise<CatalogSubcategory[]> {
+  const subcategories = await getSubcategories(categoryId, signal);
+
+  return Promise.all(
+    subcategories.map(async (sub) => {
+      const actions = await getActions(sub.subcategory_id, signal);
+      return { id: sub.subcategory_id, name: sub.name, actions };
+    }),
+  );
 }
 
 export async function getTicketList(signal?: AbortSignal): Promise<Ticket[]> {
