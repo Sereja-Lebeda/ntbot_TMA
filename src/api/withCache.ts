@@ -1,12 +1,15 @@
-const cache = new Map<string, unknown>();
+const cache = new Map<string, Promise<unknown>>();
 
-export async function withCache<T>(
-  key: string,
-  load: () => Promise<T>,
-): Promise<T> {
-  if (cache.has(key)) return cache.get(key) as T;
+export function withCache<T>(key: string, load: () => Promise<T>): Promise<T> {
+  const cached = cache.get(key);
+  if (cached) return cached as Promise<T>;
 
-  const value = await load();
-  cache.set(key, value);
-  return value;
+  const promise = load().catch((e) => {
+    cache.delete(key);
+    throw e;
+  });
+
+  cache.set(key, promise);
+
+  return promise;
 }

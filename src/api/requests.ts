@@ -10,6 +10,7 @@ import {
   type SubcategoryDto,
   type ActionListItemDto,
   type ActionConfigDto,
+  type CatalogCategoryDto,
 } from "./api.types";
 import { apiFetch } from "./client";
 import { buildCategoryMap, mapTicket, mapUser } from "./mappers";
@@ -43,6 +44,10 @@ export async function getCatalogTree(
       return { id: sub.subcategory_id, name: sub.name, actions };
     }),
   );
+}
+
+export function getCatalog(): Promise<CatalogCategoryDto[]> {
+  return withCache("catalog", () => apiFetch<CatalogCategoryDto[]>("/catalog"));
 }
 
 export async function getTicketList(signal?: AbortSignal): Promise<Ticket[]> {

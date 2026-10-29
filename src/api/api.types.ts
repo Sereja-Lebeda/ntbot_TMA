@@ -43,6 +43,30 @@ export interface UserDto {
   remote_access_timestamp: number;
 }
 
+export interface CatalogCategoryDto {
+  category_id: number;
+  name: string;
+  subcategories?: CatalogSubcategoryDto[];
+}
+
+export interface CatalogSubcategoryDto {
+  subcategory_id: number;
+  name: string;
+  actions?: CatalogActionDto[];
+}
+
+export interface CatalogActionDto {
+  action_id: number;
+  name: string;
+  config?: ActionConfigDto;
+}
+
+export interface ActionConfigDto {
+  config_id: number;
+  has_block_doubling: boolean;
+  fields: FieldDto[];
+}
+
 export interface CategoryDto {
   category_id: number;
   name: string;
@@ -75,12 +99,8 @@ export interface FieldDto {
   doubling: boolean;
   default_value: string;
   position: number;
-  block_doubling: string;
-}
-
-export interface ActionConfigDto {
-  config_id: number;
-  name: string;
-  has_block_doubling: boolean;
-  fields: FieldDto[];
+  block_doubling: boolean;
+  hint: string;
+  placeholder: string;
+  description_mark: boolean;
 }
