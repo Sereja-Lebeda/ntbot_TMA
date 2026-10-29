@@ -269,3 +269,12 @@ export function mapAction({
     fields,
   };
 }
+
+export function hasForm(action: CatalogActionDto): boolean {
+  const fields = action.config?.fields ?? [];
+
+  if (fields.length === 0) return false;
+
+  const isAutoAction = fields.every((field) => field.field_type === "-");
+  return !isAutoAction;
+}
