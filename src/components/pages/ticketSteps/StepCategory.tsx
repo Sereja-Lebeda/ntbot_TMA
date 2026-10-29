@@ -7,7 +7,7 @@ import { categories as categoryIcons } from "../../../data/categories";
 import type { CategoriesPool } from "../../../types/createTicket.type";
 
 import CategoryGridCard from "../../ui/CategoryGridCard";
-import CategoryCardSkeleton from "../../ui/CategoryCardSkeleton";
+import CategoryCardSkeleton from "../../ui/Skeletons/CategoryCardSkeleton";
 import ListStateMessage from "../../ui/ListStateMessage";
 
 const SKELETON_COUNT = 12;

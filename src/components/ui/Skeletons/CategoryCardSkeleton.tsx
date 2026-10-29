@@ -1,4 +1,4 @@
-import useMediaQuery from "../../hooks/useMediaQuery";
+import useMediaQuery from "../../../hooks/useMediaQuery";
 
 function CategoryCardSkeleton() {
   const isMobile = useMediaQuery("(max-width: 550px)");

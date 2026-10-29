@@ -39,7 +39,7 @@ function ListStateMessage({ variant, onRetry }: ListStateMessageProps) {
         <FunctionBtn
           Icon={RepeatIcon}
           iconClassName={
-            "w-5 h-5 dark:text-(--bg-primary) text-(--text-primary)"
+            "w-5 h-5 dark:text-(--bg-primary) text-(--text-primary) hover:dark:text-(--bg-primary) hover:text-(--text-primary)"
           }
           text={"Повторить"}
           textClassName={

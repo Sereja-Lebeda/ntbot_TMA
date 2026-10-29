@@ -8,7 +8,7 @@ import type { CategoriesPool } from "../../../types/createTicket.type";
 import { hapticTap } from "../../../utils/haptics";
 
 import CategoryGridCard from "../../ui/CategoryGridCard";
-import CategoryCardSkeleton from "../../ui/CategoryCardSkeleton";
+import CategoryCardSkeleton from "../../ui/Skeletons/CategoryCardSkeleton";
 import ListStateMessage from "../../ui/ListStateMessage";
 import CrossIcon from "../../../icons/card/CrossIcon";
 
