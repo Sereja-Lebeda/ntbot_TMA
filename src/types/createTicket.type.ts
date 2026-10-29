@@ -16,7 +16,13 @@ export type CategoryName =
   | "Сотрудники"
   | "Разработка и нестандартные запросы";
 
-export type ValidationType = "url" | "email" | "phone" | "path";
+export type ValidationType =
+  | "url"
+  | "email"
+  | "phone"
+  | "path"
+  | "integer"
+  | "float";
 
 export type AttachedFile = { file: File; url: string };
 
@@ -59,7 +65,9 @@ export type FieldType =
   | "long text"
   | "select"
   | "multiselect"
-  | "radio";
+  | "radio"
+  | "integer"
+  | "float";
 
 //Types for nested actions
 export interface CategoryNode {

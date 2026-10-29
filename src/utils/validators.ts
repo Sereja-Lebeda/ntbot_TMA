@@ -5,4 +5,6 @@ export const validators: Record<ValidationType, (value: string) => boolean> = {
   email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
   phone: (value) => /^\d{11}$/.test(value), // NOTE: Покрывает форматы +371 12345678, (123) 456-7890
   path: (value) => /^[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\?)*$/.test(value),
+  integer: (value) => /^-?\d+$/.test(value),
+  float: (value) => /^-?\d+([.,]\d+)?$/.test(value),
 };

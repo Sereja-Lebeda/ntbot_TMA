@@ -54,8 +54,8 @@ const FIELDS_MAP: Record<string, FieldType> = {
   select: "select",
   radio: "radio",
   multi_select: "multiselect",
-  integer: "short text",
-  float: "short text",
+  integer: "integer",
+  float: "float",
   tel: "short text",
   url: "short text",
   date: "short text",
@@ -68,6 +68,8 @@ const FIELDS_MAP: Record<string, FieldType> = {
 const VALIDATION_MAP: Record<string, ValidationType> = {
   tel: "phone",
   url: "url",
+  integer: "integer",
+  float: "float",
 };
 
 function normalizeKey(raw: string): string {
@@ -151,6 +153,23 @@ interface UpdateTicketInput {
   priority: NonNullable<PriorityLevel>;
 }
 
+function buildBody(
+  action: Action,
+  formData: Record<string, string>,
+): Record<string, string | number> {
+  const entries = Object.entries(formData)
+    .filter(([, value]) => value !== "")
+    .map(([name, value]) => {
+      const field = action.fields.find((f) => f.name === name);
+      if (field?.type === "integer") return [name, Number(value)];
+      if (field?.type === "float")
+        return [name, Number(value.replace(",", "."))];
+
+      return [name, value];
+    });
+  return Object.fromEntries(entries);
+}
+
 export function mapCreateTicket({
   action,
   formData,
@@ -162,7 +181,7 @@ export function mapCreateTicket({
     subcategory_id: action.subcategoryId,
     ticket_name: action.name,
     priority: REVERSE_PRIORITY_MAP[priority],
-    body: formData,
+    body: buildBody(action, formData),
     creation_timestamp: Math.floor(Date.now() / 1000),
   };
 

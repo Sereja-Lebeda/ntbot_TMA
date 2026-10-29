@@ -71,6 +71,8 @@ function TicketForm({
   function renderField(field: Field) {
     switch (field.type) {
       case "short text":
+      case "integer":
+      case "float":
         return (
           <div className="w-full flex items-center gap-3">
             <div
@@ -78,6 +80,13 @@ function TicketForm({
               ${errors[field.name] ? "border-(--bg-task-error)!" : ""}`}
             >
               <input
+                inputMode={
+                  field.type === "integer"
+                    ? "numeric"
+                    : field.type === "float"
+                      ? "decimal"
+                      : undefined
+                }
                 onKeyDown={blurOnEnter}
                 enterKeyHint="done"
                 onFocus={hapticTap}

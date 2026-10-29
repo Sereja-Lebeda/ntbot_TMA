@@ -22,7 +22,7 @@ export interface CreateTicketDto {
   subcategory_id: number;
   ticket_name: string;
   priority: PriorityDto;
-  body: Record<string, string>;
+  body: Record<string, string | number>;
   creation_timestamp: number;
 }
 
