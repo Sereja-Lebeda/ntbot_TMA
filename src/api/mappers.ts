@@ -8,8 +8,7 @@ import type {
 import type { StatusType, Ticket } from "../types/ticket.types";
 import type { UserRole, UserType } from "../types/user.types";
 import type {
-  ActionConfigDto,
-  ActionListItemDto,
+  CatalogActionDto,
   CategoryDto,
   CreateTicketDto,
   FieldDto,
@@ -140,9 +139,10 @@ interface CreateTicketInput {
 }
 
 interface MapActionInput {
-  item: ActionListItemDto;
-  config: ActionConfigDto;
+  action: CatalogActionDto;
+  categoryId: number;
   categoryName: string;
+  subcategoryId: number;
   subcategoryName: string;
 }
 
@@ -245,22 +245,27 @@ export function mapField(dto: FieldDto): Field {
 }
 
 export function mapAction({
-  item,
-  config,
+  action,
+  categoryId,
   categoryName,
+  subcategoryId,
   subcategoryName,
 }: MapActionInput): Action {
+  const config = action.config;
+  if (!config) {
+    throw new Error(`Action ${action.action_id} has no config`);
+  }
   const fields = [...config.fields]
     .sort((a, b) => a.position - b.position)
     .map(mapField);
 
   return {
-    id: item.action_id,
-    categoryId: item.category_id,
+    id: action.action_id,
+    categoryId,
     category: categoryName,
-    subcategoryId: item.subcategory_id,
+    subcategoryId,
     subcategory: subcategoryName,
-    name: item.name,
-    fields: fields,
+    name: action.name,
+    fields,
   };
 }

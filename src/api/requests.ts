@@ -16,10 +16,8 @@ import { apiFetch } from "./client";
 import { buildCategoryMap, mapTicket, mapUser } from "./mappers";
 import { withCache } from "./withCache";
 
-export async function getCategories(
-  signal?: AbortSignal,
-): Promise<Record<number, string>> {
-  const list = await getCategoryList(signal);
+export async function getCategories(): Promise<Record<number, string>> {
+  const list = await getCatalog();
   return buildCategoryMap(list);
 }
 
@@ -51,7 +49,7 @@ export function getCatalog(): Promise<CatalogCategoryDto[]> {
 }
 
 export async function getTicketList(signal?: AbortSignal): Promise<Ticket[]> {
-  const categories = await getCategories(signal);
+  const categories = await getCategories();
   const dtos = await apiFetch<TicketDto[]>("/ticketList", { signal });
   return dtos.map((dto) => mapTicket(dto, categories));
 }
