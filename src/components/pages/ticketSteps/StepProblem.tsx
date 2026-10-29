@@ -16,6 +16,7 @@ import useCatalogTree from "../../../hooks/useCatalogTree";
 import ListStateMessage from "../../ui/ListStateMessage";
 import { ApiError } from "../../../api/client";
 import SubcategorySkeleton from "../../ui/Skeletons/SubcategorySkeleton";
+import { mapAction } from "../../../api/mappers";
 
 interface StepProblemProps {
   onPrev: () => void;
@@ -28,9 +29,9 @@ const SKELETON_COUNT = 4;
 
 function StepProblem({
   onPrev,
-  // onNext,
+  onNext,
   selectedCategory,
-  // selectAction,
+  selectAction,
 }: StepProblemProps) {
   const [openSubcategories, setOpenSubcategories] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -45,6 +46,8 @@ function StepProblem({
   if (!selectedCategory) {
     return null;
   }
+
+  const category = selectedCategory;
 
   const categoryData = categories.find((c) => c.name === selectedCategory.name);
 
@@ -93,7 +96,10 @@ function StepProblem({
             <div
               className={`w-full flex flex-col justify-start bg-(--bg-secondary) px-5 py-4 transition-transform duration-900 border border-(--bg-border) cursor-pointer ${isOpen ? "border-(--border-hover-btn)!" : "hover:border-(--border-hover-btn)"}`}
               key={sub.id}
-              onClick={() => toggleSubcategory(sub.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleSubcategory(sub.id);
+              }}
             >
               {/* Заголовок аккордеона */}
               <div
@@ -128,7 +134,18 @@ function StepProblem({
                       font-consolas font-bold text-sm text-(--text-tertiary) leading-4.5
                       ${shadowLiftCategoryStyle}
                     `}
-                        onClick={() => console.log(action)} // TEMP: B5.5
+                        onClick={() => {
+                          selectAction(
+                            mapAction({
+                              action,
+                              categoryId: category.id,
+                              categoryName: category.name,
+                              subcategoryId: sub.id,
+                              subcategoryName: sub.name,
+                            }),
+                          );
+                          onNext();
+                        }}
                       >
                         {action.name}
                       </div>
