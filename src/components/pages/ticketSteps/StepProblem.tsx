@@ -6,14 +6,16 @@ import { categories } from "../../../data/categories";
 
 import type { CategoriesPool, Action } from "../../../types/createTicket.type";
 
-import { allActions } from "../../../utils/allActions";
-
 import Searchbar from "../../ui/Searchbar";
 import { hoverAnimationStyle } from "../../../styles/pressAnimation";
 import { shadowLiftCategoryStyle } from "../../../styles/shadowLift";
 
 import ArrowIcon from "../../../icons/filterblock/ArrowIcon";
 import BackArrowIcon from "../../../icons/createTicket/BackArrowIcon";
+import useCatalogTree from "../../../hooks/useCatalogTree";
+import ListStateMessage from "../../ui/ListStateMessage";
+import { ApiError } from "../../../api/client";
+import SubcategorySkeleton from "../../ui/Skeletons/SubcategorySkeleton";
 
 interface StepProblemProps {
   onPrev: () => void;
@@ -22,17 +24,23 @@ interface StepProblemProps {
   selectAction: (action: Action) => void;
 }
 
+const SKELETON_COUNT = 4;
+
 function StepProblem({
   onPrev,
-  onNext,
+  // onNext,
   selectedCategory,
-  selectAction,
+  // selectAction,
 }: StepProblemProps) {
-  const [openSubcategories, setOpenSubcategories] = useState<string[]>([]);
+  const [openSubcategories, setOpenSubcategories] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const { theme } = useTheme();
   const isTablet = useIsTablet();
+
+  const { tree, isLoading, error, reload } = useCatalogTree(
+    selectedCategory?.id,
+  );
 
   if (!selectedCategory) {
     return null;
@@ -40,16 +48,102 @@ function StepProblem({
 
   const categoryData = categories.find((c) => c.name === selectedCategory.name);
 
-  const categoryActions = allActions.filter(
-    (a) => a.category === selectedCategory.name,
-  );
+  const query = searchQuery.toLowerCase();
+  const filteredTree = tree
+    .map((sub) => ({
+      ...sub,
+      actions: sub.actions.filter((action) =>
+        action.name.toLowerCase().includes(query),
+      ),
+    }))
+    .filter((sub) => sub.actions.length > 0);
 
-  const filteredActions = categoryActions.filter((a) =>
-    a.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
-  const subcategories = [...new Set(filteredActions.map((a) => a.subcategory))];
+  function renderContent() {
+    if (error) {
+      const isUnauthorized = error instanceof ApiError && error.status === 401;
+      return (
+        <ListStateMessage
+          variant={isUnauthorized ? "unauthorized" : "error"}
+          onRetry={reload}
+        />
+      );
+    }
 
-  function toggleSubcategory(sub: string) {
+    if (isLoading) {
+      return (
+        <div className="w-full flex flex-col gap-3">
+          {Array.from({ length: SKELETON_COUNT }, (_, i) => (
+            <SubcategorySkeleton key={i} />
+          ))}
+        </div>
+      );
+    }
+
+    if (filteredTree.length === 0) {
+      return <ListStateMessage variant="emptyFiltered" />;
+    }
+
+    return (
+      <div className="w-full flex flex-col gap-3">
+        {filteredTree.map((sub) => {
+          const isOpen =
+            searchQuery !== "" || openSubcategories.includes(sub.id);
+
+          return (
+            <div
+              className={`w-full flex flex-col justify-start bg-(--bg-secondary) px-5 py-4 transition-transform duration-900 border border-(--bg-border) cursor-pointer ${isOpen ? "border-(--border-hover-btn)!" : "hover:border-(--border-hover-btn)"}`}
+              key={sub.id}
+              onClick={() => toggleSubcategory(sub.id)}
+            >
+              {/* Заголовок аккордеона */}
+              <div
+                className={`w-full flex justify-between items-center ${isOpen ? "pb-6" : ""}`}
+              >
+                <div className="space-x-2 select-none">
+                  <span className="font-jbmono font-normal text-sm text-(--text-primary) tracking-[0.8px]">
+                    {sub.name}
+                  </span>
+                  <span className="font-jbmono font-light text-sm text-(--text-primary) tracking-[0.8px]">
+                    [{sub.actions.length}]
+                  </span>
+                </div>
+                <ArrowIcon
+                  className={`text-(--text-secondary) transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`}
+                />
+              </div>
+
+              {/* Список действий — если открыт */}
+              {isOpen && (
+                <div className="w-full space-y-2">
+                  {sub.actions.map((action) => (
+                    <div
+                      className="bg-(--text-primary) rounded-xs select-none"
+                      key={action.action_id}
+                    >
+                      <div
+                        className={`w-full py-5 px-4 rounded-xs
+                      bg-(--bg-secondary)
+                      border border-(--border-hover-btn) cursor-pointer
+                      hover:text-(--text-primary)
+                      font-consolas font-bold text-sm text-(--text-tertiary) leading-4.5
+                      ${shadowLiftCategoryStyle}
+                    `}
+                        onClick={() => console.log(action)} // TEMP: B5.5
+                      >
+                        {action.name}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  function toggleSubcategory(sub: number) {
     setOpenSubcategories(
       (prev) =>
         prev.includes(sub)
@@ -95,72 +189,7 @@ function StepProblem({
           ref={inputRef}
         />
         {/* Subcategory containter */}
-        <div className="w-full flex">
-          <div className="w-full flex flex-col gap-3">
-            {subcategories.map((sub) => {
-              // действия этой подкатегории
-              const subActions = filteredActions.filter(
-                (a) => a.subcategory === sub,
-              );
-              const isOpen =
-                searchQuery !== "" || openSubcategories.includes(sub);
-
-              return (
-                <div
-                  className={`w-full flex flex-col justify-start bg-(--bg-secondary) px-5 py-4 transition-transform duration-900 border border-(--bg-border) cursor-pointer ${isOpen ? "border-(--border-hover-btn)!" : "hover:border-(--border-hover-btn)"}`}
-                  key={sub}
-                  onClick={() => toggleSubcategory(sub)}
-                >
-                  {/* Заголовок аккордеона */}
-                  <div
-                    className={`w-full flex justify-between items-center ${isOpen ? "pb-6" : ""}`}
-                  >
-                    <div className="space-x-2 select-none">
-                      <span className="font-jbmono font-normal text-sm text-(--text-primary) tracking-[0.8px]">
-                        {sub}
-                      </span>
-                      <span className="font-jbmono font-light text-sm text-(--text-primary) tracking-[0.8px]">
-                        [{subActions.length}]{/* стрелка-индикатор */}
-                      </span>
-                    </div>
-                    <ArrowIcon
-                      className={`text-(--text-secondary) transition-transform duration-300 ${isOpen ? "" : "rotate-180"}`}
-                    />
-                  </div>
-
-                  {/* Список действий — если открыт */}
-                  {isOpen && (
-                    <div className="w-full space-y-2">
-                      {subActions.map((action) => (
-                        <div
-                          className="bg-(--text-primary) rounded-xs select-none"
-                          key={action.id}
-                        >
-                          <div
-                            // TODO: Узнать будет ли фиксированное количество и скролл бар, чтобы сделать анимацию через высоту
-                            className={`w-full py-5 px-4 rounded-xs
-                              bg-(--bg-secondary)
-                              border border-(--border-hover-btn) cursor-pointer
-                              hover:text-(--text-primary)
-                            font-consolas font-bold text-sm text-(--text-tertiary) leading-4.5
-                            ${shadowLiftCategoryStyle}
-                            `}
-                            onClick={() => {
-                              selectAction(action);
-                              onNext();
-                            }}
-                          >
-                            {action.name}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <div className="w-full flex">{renderContent()}</div>
         <button
           className="flex items-center justify-start gap-1 rounded-xs group cursor-pointer select-none pb-4"
           onClick={onPrev}
